@@ -85,6 +85,7 @@ public class Game {
 		processUninitializedUnits();
 		Map<String, Map<PerceptFilter, Set<Percept>>> unitPerceptHolder = new HashMap<>();
 		Map<PerceptFilter, Set<Percept>> globalPercepts = getGlobalPercepts(bwapi);
+		Map<PerceptFilter, Set<Percept>> gameSpeedPercept = getGameSpeedPercept();
 		Map<String, StarcraftUnit> unitList = this.units.getStarcraftUnits();
 		for (Entry<String, StarcraftUnit> unit : unitList.entrySet()) {
 			Map<PerceptFilter, Set<Percept>> thisUnitPercepts = new HashMap<>(unit.getValue().perceive());
@@ -105,7 +106,7 @@ public class Game {
 				if (this.framePercepts != null) {
 					thisUnitPercepts.putAll(this.framePercepts);
 				}
-				thisUnitPercepts.putAll(getGameSpeedPercept());
+				thisUnitPercepts.putAll(gameSpeedPercept);
 			}
 			unitPerceptHolder.put(unit.getKey(), thisUnitPercepts);
 		}
@@ -123,7 +124,7 @@ public class Game {
 			if (this.framePercepts != null) {
 				thisUnitPercepts.putAll(this.framePercepts);
 			}
-			thisUnitPercepts.putAll(getGameSpeedPercept());
+			thisUnitPercepts.putAll(gameSpeedPercept);
 			unitPerceptHolder.put("mapAgent", thisUnitPercepts);
 		}
 		this.percepts = unitPerceptHolder;
