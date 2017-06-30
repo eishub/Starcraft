@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import eis.exceptions.ActException;
 import eis.iilang.Action;
+import eis.iilang.EnvironmentState;
 import eisbw.actions.ActionProvider;
 import eisbw.actions.StarcraftAction;
 import eisbw.debugger.DebugWindow;
@@ -69,19 +70,6 @@ public class BwapiListener extends BwapiEvents {
 		}.start();
 	}
 
-	private int getInitialEntityCount() {
-		if (this.bwapi.getSelf() != null && this.bwapi.getSelf().getRace().getID() == RaceTypes.Zerg.getID()) {
-			return 9; // 4 drones, 3 larva, 1 overlord, 1 hatchery
-		} else {
-			return 5; // 4 scvs/probes, 1 commandcenter/nexus
-		}
-	}
-
-	private int getEntityCount() {
-		StarcraftEnvironmentImpl env = this.game.getEnvironment();
-		return (env == null) ? Integer.MAX_VALUE : env.getEntities().size();
-	}
-
 	@Override
 	public void matchStart() {
 		// SET INIT SPEED (DEFAULT IS 50 FPS, WHICH IS 20 SPEED)
@@ -113,7 +101,7 @@ public class BwapiListener extends BwapiEvents {
 
 	@Override
 	public void matchFrame() {
-		// UPDATE GLOBAL INFO
+		// GENERATE PERCEPTS
 		if ((++this.count % 50) == 0) {
 			this.game.updateConstructionSites(this.bwapi);
 			this.game.updateFrameCount(this.count);
@@ -122,20 +110,21 @@ public class BwapiListener extends BwapiEvents {
 			this.game.updateNukePerceiver(this.bwapi, null);
 			this.nuke = -1;
 		}
-		do { // always sleep 1ms to better facilitate running at speed 0
+		do {
 			this.game.update(this.bwapi);
-			try {
+			try { // always sleep 1ms to better facilitate running at speed 0
 				Thread.sleep(1);
 			} catch (InterruptedException ignore) {
-			}
-			// wait until all initial entities are launched in the first frame
-		} while (this.count == 1 && getEntityCount() < getInitialEntityCount());
+			} // wait until all the initial workers get an action request
+		} while (this.count == 1 && isRunning() && this.pendingActions.size() < 4);
 
 		// PERFORM ACTIONS
 		for (final Unit unit : this.pendingActions.keySet()) {
 			Action act = this.pendingActions.remove(unit);
 			StarcraftAction action = getAction(act);
-			action.execute(unit, act);
+			if (action != null) {
+				action.execute(unit, act);
+			}
 		}
 		if (this.debug != null) {
 			this.debug.debug(this.bwapi);
@@ -242,5 +231,10 @@ public class BwapiListener extends BwapiEvents {
 			this.logger.log(Level.WARNING,
 					"The Entity: " + name + " is not able to perform the action: " + act.getName());
 		}
+	}
+
+	private boolean isRunning() {
+		return this.game != null && this.game.getEnvironment() != null
+				&& this.game.getEnvironment().getState() != EnvironmentState.KILLED;
 	}
 }
