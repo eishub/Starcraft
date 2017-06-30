@@ -64,6 +64,7 @@ public class Units {
 		Unit unit = this.unitMap.remove(unitName);
 		this.unitNames.remove(id);
 		this.starcraftUnits.remove(unitName);
+		this.uninitializedUnits.remove(unit);
 		this.environment.deleteFromEnvironment(unitName);
 		return unit;
 	}
