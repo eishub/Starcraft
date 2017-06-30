@@ -4,7 +4,7 @@ import eis.iilang.Numeral;
 import eis.iilang.Percept;
 
 /**
- * @author Danny & Harm - The Chokepoint/6 percept.
+ * @author Danny & Harm - The Chokepoint percept.
  *
  */
 public class ChokepointRegionPercept extends Percept {

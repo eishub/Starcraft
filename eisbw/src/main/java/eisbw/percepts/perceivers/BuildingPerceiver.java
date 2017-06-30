@@ -9,11 +9,11 @@ import eis.iilang.Percept;
 import eisbw.percepts.Percepts;
 import eisbw.percepts.QueueSizePercept;
 import eisbw.percepts.ResearchingPercept;
-import eisbw.percepts.UpgradePercept;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
-import jnibwapi.types.TechType;
+import jnibwapi.types.TechType.TechTypes;
 import jnibwapi.types.UnitType.UnitTypes;
+import jnibwapi.types.UpgradeType.UpgradeTypes;
 
 /**
  * @author Danny & Harm - The perceiver which handles all the building percepts.
@@ -32,26 +32,20 @@ public class BuildingPerceiver extends UnitPerceiver {
 
 	@Override
 	public Map<PerceptFilter, Set<Percept>> perceive(Map<PerceptFilter, Set<Percept>> toReturn) {
-		queueSizePercept(toReturn);
-		upgradingPercept(toReturn);
 		researchedPercept(toReturn);
+		queueSizePercept(toReturn);
 		return toReturn;
 	}
 
 	private void researchedPercept(Map<PerceptFilter, Set<Percept>> toReturn) {
-		Set<Percept> researchedPercept = new HashSet<>(1);
-		if (this.unit.getTech() != null && !this.unit.getTech().equals(TechType.TechTypes.None)) {
-			researchedPercept.add(new ResearchingPercept(this.unit.getTech().getName()));
-			toReturn.put(new PerceptFilter(Percepts.RESEARCHING, Filter.Type.ALWAYS), researchedPercept);
+		Set<Percept> researchedPercepts = new HashSet<>(2);
+		if (this.unit.getTech() != null && !this.unit.getTech().equals(TechTypes.None)) {
+			researchedPercepts.add(new ResearchingPercept(this.unit.getTech().getName()));
 		}
-	}
-
-	private void upgradingPercept(Map<PerceptFilter, Set<Percept>> toReturn) {
-		Set<Percept> upgradingPercept = new HashSet<>(1);
-		if (this.unit.isUpgrading()) {
-			upgradingPercept.add(new UpgradePercept(this.unit.getUpgrade().getName()));
-			toReturn.put(new PerceptFilter(Percepts.UPGRADING, Filter.Type.ALWAYS), upgradingPercept);
+		if (this.unit.getUpgrade() != null && !this.unit.getUpgrade().equals(UpgradeTypes.None)) {
+			researchedPercepts.add(new ResearchingPercept(this.unit.getUpgrade().getName()));
 		}
+		toReturn.put(new PerceptFilter(Percepts.RESEARCHING, Filter.Type.ALWAYS), researchedPercepts);
 	}
 
 	private void queueSizePercept(Map<PerceptFilter, Set<Percept>> toReturn) {

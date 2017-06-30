@@ -37,7 +37,6 @@ public class ActionProvider {
 	public void loadActions(JNIBWAPI api) {
 		this.actions.put("attack/1", new Attack(api));
 		this.actions.put("attack/2", new AttackMove(api));
-		this.actions.put("upgrade/1", new Upgrade(api));
 		this.actions.put("build/3", new Build(api));
 		this.actions.put("gather/1", new Gather(api));
 		this.actions.put("move/2", new Move(api));
@@ -47,8 +46,8 @@ public class ActionProvider {
 		this.actions.put("ability/2", new UseOnTarget(api));
 		this.actions.put("ability/3", new UseOnPosition(api));
 		this.actions.put("research/1", new Research(api));
-		this.actions.put("setRallyPoint/2", new SetRallyPoint(api));
 		this.actions.put("setRallyPoint/1", new SetRallyUnit(api));
+		this.actions.put("setRallyPoint/2", new SetRallyPoint(api));
 		this.actions.put("lift/0", new Lift(api));
 		this.actions.put("land/2", new Land(api));
 		this.actions.put("buildAddon/1", new BuildAddon(api));

@@ -23,8 +23,6 @@ public class Percepts {
 	public static final String NEWUNIT = "underConstruction";
 
 	public static final String UNITLOADED = "unitLoaded";
-	public static final String LOADABLE = "loadable";
-	public static final String UPGRADING = "upgrading";
 	public static final String RESEARCHING = "researching";
 	public static final String WINNER = "winner";
 	public static final String FRAME = "gameframe";
