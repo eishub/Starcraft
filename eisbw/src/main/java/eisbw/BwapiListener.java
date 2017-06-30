@@ -32,7 +32,6 @@ public class BwapiListener extends BwapiEvents {
 	protected final boolean debugmode;
 	protected final boolean invulnerable;
 	protected final int speed;
-	protected UpdateThread updateThread;
 	protected int count = 0;
 	protected int nuke = -1;
 	protected DebugWindow debug;
@@ -70,13 +69,21 @@ public class BwapiListener extends BwapiEvents {
 		}.start();
 	}
 
+	private int getInitialEntityCount() {
+		if (this.bwapi.getSelf() != null && this.bwapi.getSelf().getRace().getID() == RaceTypes.Zerg.getID()) {
+			return 9; // 4 drones, 3 larva, 1 overlord, 1 hatchery
+		} else {
+			return 5; // 4 scvs/probes, 1 commandcenter/nexus
+		}
+	}
+
+	private int getEntityCount() {
+		StarcraftEnvironmentImpl env = this.game.getEnvironment();
+		return (env == null) ? Integer.MAX_VALUE : env.getEntities().size();
+	}
+
 	@Override
 	public void matchStart() {
-		this.updateThread = new UpdateThread(this.game, this.bwapi);
-		this.updateThread.start();
-		this.game.updateConstructionSites(this.bwapi);
-		this.game.updateMap(this.bwapi);
-
 		// SET INIT SPEED (DEFAULT IS 50 FPS, WHICH IS 20 SPEED)
 		if (this.speed > 0) {
 			this.bwapi.setGameSpeed(1000 / this.speed);
@@ -89,51 +96,49 @@ public class BwapiListener extends BwapiEvents {
 			this.bwapi.sendText("power overwhelming");
 		}
 
-		// START THE DEBUG TOOLS.
+		// START THE DEBUG TOOLS
 		if (this.debugmode) {
 			this.debug = new DebugWindow(this.game);
 			this.bwapi.enableUserInput();
 		}
 
+		// DO INITIAL UPDATES
 		this.game.mapAgent();
+		this.game.updateMap(this.bwapi);
+		this.game.updateConstructionSites(this.bwapi);
+		this.game.updateFrameCount(this.count);
 
 		// KnowledgeExport.export();
 	}
 
 	@Override
 	public void matchFrame() {
+		// UPDATE GLOBAL INFO
+		if ((++this.count % 50) == 0) {
+			this.game.updateConstructionSites(this.bwapi);
+			this.game.updateFrameCount(this.count);
+		}
+		if (this.nuke >= 0 && ++this.nuke == 50) {
+			this.game.updateNukePerceiver(this.bwapi, null);
+			this.nuke = -1;
+		}
+		do { // always sleep 1ms to better facilitate running at speed 0
+			this.game.update(this.bwapi);
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException ignore) {
+			}
+			// wait until all initial entities are launched in the first frame
+		} while (this.count == 1 && getEntityCount() < getInitialEntityCount());
+
+		// PERFORM ACTIONS
 		for (final Unit unit : this.pendingActions.keySet()) {
 			Action act = this.pendingActions.remove(unit);
 			StarcraftAction action = getAction(act);
 			action.execute(unit, act);
 		}
-
 		if (this.debug != null) {
 			this.debug.debug(this.bwapi);
-		}
-
-		if ((++this.count % 50) == 0) {
-			this.game.updateConstructionSites(this.bwapi);
-			this.game.updateFrameCount(this.count);
-		}
-
-		if (this.nuke > 0 && ++this.nuke == 50) {
-			this.game.updateNukePerceiver(this.bwapi, null);
-			this.nuke = -1;
-		}
-
-		signalUpdateThread();
-		try {
-			Thread.sleep(1); // prevent speed 0 from going too fast
-		} catch (InterruptedException ignore) {
-		}
-	}
-
-	private void signalUpdateThread() {
-		if (this.updateThread != null) {
-			synchronized (this.updateThread) {
-				this.updateThread.notifyAll();
-			}
 		}
 	}
 
@@ -142,7 +147,6 @@ public class BwapiListener extends BwapiEvents {
 		Unit unit = this.bwapi.getUnit(id);
 		if (this.bwapi.getMyUnits().contains(unit) && !this.game.getUnits().getUnitNames().containsKey(id)) {
 			this.game.getUnits().addUnit(unit, this.factory);
-			signalUpdateThread();
 		}
 	}
 
@@ -152,7 +156,6 @@ public class BwapiListener extends BwapiEvents {
 		if (unitName != null) {
 			Unit deleted = this.game.getUnits().deleteUnit(unitName, id);
 			this.pendingActions.remove(deleted);
-			signalUpdateThread();
 		}
 	}
 
@@ -179,7 +182,7 @@ public class BwapiListener extends BwapiEvents {
 	@Override
 	public void matchEnd(boolean winner) {
 		this.game.updateEndGamePerceiver(this.bwapi, winner);
-		signalUpdateThread();
+		this.game.update(this.bwapi);
 
 		// have the winner percept perceived for 1 second before all agents
 		// are removed
@@ -187,11 +190,7 @@ public class BwapiListener extends BwapiEvents {
 			TimeUnit.SECONDS.sleep(1);
 		} catch (InterruptedException ignore) {
 		}
-		this.updateThread.terminate();
-		try {
-			this.updateThread.join();
-		} catch (InterruptedException ignore) {
-		}
+
 		this.pendingActions.clear();
 		if (this.debug != null) {
 			this.debug.dispose();

@@ -25,6 +25,7 @@ import eisbw.units.StarcraftUnit;
 import eisbw.units.Units;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Position;
+import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - The game class where the percepts are updated.
@@ -81,6 +82,7 @@ public class Game {
 	 *            - the game bridge
 	 */
 	public void update(JNIBWAPI bwapi) {
+		processUninitializedUnits();
 		Map<String, Map<PerceptFilter, Set<Percept>>> unitPerceptHolder = new HashMap<>();
 		Map<PerceptFilter, Set<Percept>> globalPercepts = getGlobalPercepts(bwapi);
 		Map<String, StarcraftUnit> unitList = this.units.getStarcraftUnits();
@@ -125,6 +127,22 @@ public class Game {
 			unitPerceptHolder.put("mapAgent", thisUnitPercepts);
 		}
 		this.percepts = unitPerceptHolder;
+	}
+
+	private void processUninitializedUnits() {
+		if (this.units.getUninitializedUnits() != null) {
+			List<Unit> toAdd = new LinkedList<>();
+			Unit unit;
+			while ((unit = this.units.getUninitializedUnits().poll()) != null) {
+				String unitName = BwapiUtility.getUnitName(unit);
+				if (unit.isCompleted() && this.percepts.containsKey(unitName)) {
+					this.env.addToEnvironment(unitName, BwapiUtility.getEisUnitType(unit));
+				} else {
+					toAdd.add(unit);
+				}
+			}
+			this.units.getUninitializedUnits().addAll(toAdd);
+		}
 	}
 
 	private LinkedList<Percept> translatePercepts(String unitName, Map<PerceptFilter, Set<Percept>> map) {
@@ -303,14 +321,5 @@ public class Game {
 		speedpercept.add(new GameSpeedPercept(this.env.getFPS()));
 		toReturn.put(new PerceptFilter(Percepts.GAMESPEED, Filter.Type.ON_CHANGE), speedpercept);
 		return toReturn;
-	}
-
-	/**
-	 * @param entity
-	 *            The evaluated entity
-	 * @return boolean indicating whether the unit is initialized or not.
-	 */
-	public boolean isInitialized(String entity) {
-		return this.percepts.containsKey(entity);
 	}
 }
