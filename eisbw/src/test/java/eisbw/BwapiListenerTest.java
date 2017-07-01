@@ -153,6 +153,10 @@ public class BwapiListenerTest {
 
 	@Test
 	public void matchFrame_test() throws ActException {
+		listener.pendingActions.put(new Unit(1, null), new Action("stub"));
+		listener.pendingActions.put(new Unit(2, null), new Action("stub"));
+		listener.pendingActions.put(new Unit(3, null), new Action("stub"));
+		listener.pendingActions.put(new Unit(4, null), new Action("stub"));
 		listener.matchFrame();
 		verify(game, times(0)).updateConstructionSites(bwapi);
 		listener.count = 49;
