@@ -7,6 +7,8 @@ import eis.eis2java.translation.Translator;
 import eis.iilang.Parameter;
 import eis.iilang.Percept;
 import eisbw.Game;
+import jnibwapi.BaseLocation;
+import jnibwapi.ChokePoint;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Position;
 import jnibwapi.Position.PosType;
@@ -14,23 +16,46 @@ import jnibwapi.types.RaceType.RaceTypes;
 import jnibwapi.util.BWColor;
 
 /**
- * @author Danny & Harm - The class which handles the drawing of the
- *         construction sites of the dev. tool.
+ * @author Harm & Danny.
  *
  */
-public class DrawConstructionSite extends IDraw {
+public class DrawMapInfo extends IDraw {
 	/**
-	 * The DrawConstructionSite constructor.
+	 * Draw map information (bases, chokepoints, construction sites).
 	 *
 	 * @param game
-	 *            The current game.
+	 *            - the game object
 	 */
-	public DrawConstructionSite(Game game) {
+	public DrawMapInfo(Game game) {
 		super(game);
 	}
 
 	@Override
 	protected void drawOnMap(JNIBWAPI api) throws TranslationException {
+		drawBases(api);
+		drawChokepoints(api);
+		drawConstructionSites(api);
+	}
+
+	private void drawBases(JNIBWAPI api) throws TranslationException {
+		for (BaseLocation base : api.getMap().getBaseLocations()) {
+			api.drawCircle(base.getCenter(), 75, BWColor.Purple, false, false);
+			api.drawText(base.getPosition(), base.getPosition().getBX() + ", " + base.getPosition().getBY(), false);
+			if (base.isStartLocation()) {
+				api.drawText(base.getCenter(), "Starting Location", false);
+			}
+		}
+	}
+
+	private void drawChokepoints(JNIBWAPI api) throws TranslationException {
+		for (ChokePoint cp : api.getMap().getChokePoints()) {
+			api.drawLine(cp.getFirstSide(), cp.getSecondSide(), BWColor.Yellow, false);
+			api.drawCircle(cp.getCenter(), (int) cp.getRadius(), BWColor.Red, false, false);
+			api.drawText(cp.getCenter(), "(" + cp.getCenter().getBX() + "," + cp.getCenter().getBY() + ")", false);
+		}
+	}
+
+	private void drawConstructionSites(JNIBWAPI api) throws TranslationException {
 		Translator translator = Translator.getInstance();
 		List<Percept> percepts = this.game.getConstructionSites();
 		for (Percept percept : percepts) {

@@ -36,8 +36,8 @@ public class BwapiUtility {
 		return name.substring(0, 1).toLowerCase() + name.substring(1);
 	}
 
-	public static String getUnitType(Unit unit) {
-		String type = unit.getType().getName();
+	public static String getUnitTypeName(UnitType unittype) {
+		String type = unittype.getName();
 		if (type.length() > 17 && "Terran Siege Tank".equals(type.substring(0, 17))) {
 			return "Terran Siege Tank";
 		} else {

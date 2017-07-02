@@ -16,11 +16,8 @@ import javax.swing.SwingConstants;
 import eis.eis2java.exception.NoTranslatorException;
 import eis.eis2java.exception.TranslationException;
 import eisbw.Game;
-import eisbw.debugger.draw.AgentCounter;
-import eisbw.debugger.draw.DrawBases;
-import eisbw.debugger.draw.DrawUnitDetails;
-import eisbw.debugger.draw.DrawChokepoints;
-import eisbw.debugger.draw.DrawConstructionSite;
+import eisbw.debugger.draw.DrawMapInfo;
+import eisbw.debugger.draw.DrawUnitInfo;
 import eisbw.debugger.draw.IDraw;
 import jnibwapi.JNIBWAPI;
 
@@ -45,35 +42,22 @@ public class DrawButtons extends JPanel implements ActionListener {
 		JLabel label = new JLabel("Draw actions", SwingConstants.CENTER);
 		add(label, BorderLayout.NORTH);
 
-		this.draw = new HashMap<>(5);
-		this.draw.put(Draw.CONSTRUCTION_SITES.getName(), new DrawConstructionSite(game));
-		this.draw.put(Draw.CHOKEPOINTS.getName(), new DrawChokepoints(game));
-		this.draw.put(Draw.BASE_LOCATIONS.getName(), new DrawBases(game));
-		this.draw.put(Draw.BUILDING_DETAILS.getName(), new DrawUnitDetails(game));
-		this.draw.put("AgentCount", new AgentCounter(game));
+		this.draw = new HashMap<>(2);
+		this.draw.put(Draw.MAP.getName(), new DrawMapInfo(game));
+		this.draw.put(Draw.UNITS.getName(), new DrawUnitInfo(game));
 
-		JButton buildButton = new JButton("Build Locations");
-		buildButton.setActionCommand(Draw.CONSTRUCTION_SITES.getName());
-		buildButton.addActionListener(this);
-		JButton chokeButton = new JButton("Chokepoints");
-		chokeButton.setActionCommand(Draw.CHOKEPOINTS.getName());
-		chokeButton.addActionListener(this);
-		JButton baseButton = new JButton("Base Locations");
-		baseButton.setActionCommand(Draw.BASE_LOCATIONS.getName());
-		baseButton.addActionListener(this);
-		JButton buildingButton = new JButton("Unit Details");
-		buildingButton.setActionCommand(Draw.BUILDING_DETAILS.getName());
-		buildingButton.addActionListener(this);
+		JButton mapButton = new JButton("Map info");
+		mapButton.setActionCommand(Draw.MAP.getName());
+		mapButton.addActionListener(this);
+		JButton unitButton = new JButton("Unit info");
+		unitButton.setActionCommand(Draw.UNITS.getName());
+		unitButton.addActionListener(this);
 
-		this.buttonBackground = buildButton.getBackground();
+		this.buttonBackground = mapButton.getBackground();
 
 		JPanel drawPanel = new JPanel();
-
-		drawPanel.add(buildingButton);
-		drawPanel.add(baseButton);
-		drawPanel.add(chokeButton);
-		drawPanel.add(buildButton);
-
+		drawPanel.add(mapButton);
+		drawPanel.add(unitButton);
 		add(drawPanel);
 	}
 

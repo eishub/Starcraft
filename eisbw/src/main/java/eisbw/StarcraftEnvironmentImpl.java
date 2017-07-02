@@ -33,10 +33,10 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 	private static final long serialVersionUID = 1L;
 	private final Logger logger = Logger.getLogger("StarCraft Logger");
 
-	protected BwapiListener bwapiListener;
-	private Configuration configuration;
+	protected BwapiListener listener;
+	private Configuration config;
 	private final Game game;
-	private final Set<String> registeredEntities;
+	private final Set<String> entities;
 	private volatile boolean mapAgent = false;
 
 	/**
@@ -45,7 +45,7 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 	public StarcraftEnvironmentImpl() {
 		super();
 		installTranslators();
-		this.registeredEntities = new HashSet<>();
+		this.entities = new HashSet<>();
 		this.game = new Game(this);
 	}
 
@@ -62,19 +62,17 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 		setState(EnvironmentState.PAUSED);
 		Thread.currentThread().setPriority(3);
 		try {
-			this.configuration = new Configuration(parameters);
-			if (!"test".equals(this.configuration.getOwnRace())) {
-				this.bwapiListener = new BwapiListener(this.game, this.configuration.getScDir(),
-						this.configuration.getDebugMode(), this.configuration.getInvulnerable(),
-						this.configuration.getSpeed());
-				if (!"OFF".equals(this.configuration.getAutoMenu())
-						&& !WindowsTools.isProcessRunning("Chaoslauncher.exe")) {
-					WindowsTools.startChaoslauncher(this.configuration.getOwnRace(), this.configuration.getMap(),
-							this.configuration.getScDir(), this.configuration.getAutoMenu(),
-							this.configuration.getEnemyRace());
+			this.config = new Configuration(parameters);
+			if (!"test".equals(this.config.getOwnRace())) {
+				this.listener = new BwapiListener(this.game, this.config.getScDir(), this.config.getDebug(),
+						this.config.getDrawMapInfo(), this.config.getDrawUnitInfo(), this.config.getInvulnerable(),
+						this.config.getSpeed());
+				if (!"OFF".equals(this.config.getAutoMenu()) && !WindowsTools.isProcessRunning("Chaoslauncher.exe")) {
+					WindowsTools.startChaoslauncher(this.config.getOwnRace(), this.config.getMap(),
+							this.config.getScDir(), this.config.getAutoMenu(), this.config.getEnemyRace());
 				}
 			}
-			this.mapAgent = this.configuration.getMapAgent();
+			this.mapAgent = this.config.getMapAgent();
 			setState(EnvironmentState.RUNNING);
 		} catch (Exception ex) {
 			Logger.getLogger(StarcraftEnvironmentImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -92,7 +90,7 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 
 	@Override
 	protected boolean isSupportedByEnvironment(Action action) {
-		return this.bwapiListener.getAction(action) != null;
+		return this.listener.getAction(action) != null;
 	}
 
 	@Override
@@ -102,12 +100,12 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 
 	@Override
 	protected boolean isSupportedByEntity(Action action, String entity) {
-		return this.bwapiListener.isSupportedByEntity(action, entity);
+		return this.listener.isSupportedByEntity(action, entity);
 	}
 
 	@Override
 	protected Percept performEntityAction(String entity, Action action) throws ActException {
-		this.bwapiListener.performEntityAction(entity, action);
+		this.listener.performEntityAction(entity, action);
 		return null;
 	}
 
@@ -121,8 +119,8 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 	 */
 	public void addToEnvironment(String unitName, String eisUnitType) {
 		try {
-			if (!this.registeredEntities.contains(unitName)) {
-				this.registeredEntities.add(unitName);
+			if (!this.entities.contains(unitName)) {
+				this.entities.add(unitName);
 				addEntity(unitName, eisUnitType);
 			}
 		} catch (EntityException exception) {
@@ -137,7 +135,7 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 	 *            - the name of the unit
 	 */
 	public void deleteFromEnvironment(String unitName) {
-		if (!this.registeredEntities.contains(unitName)) {
+		if (!this.entities.contains(unitName)) {
 			return;
 		}
 		try {
@@ -146,7 +144,7 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 			for (String agent : agents) {
 				unregisterAgent(agent);
 			}
-			this.registeredEntities.remove(unitName);
+			this.entities.remove(unitName);
 		} catch (EntityException exception) {
 			this.logger.log(Level.WARNING, "Could not delete " + unitName + " from the environment", exception);
 		} catch (RelationException exception) {
@@ -157,6 +155,6 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 	}
 
 	public int getFPS() {
-		return this.bwapiListener.getFPS();
+		return this.listener.getFPS();
 	}
 }

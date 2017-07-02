@@ -17,7 +17,7 @@ public abstract class IDraw {
 																	// in test
 
 	protected final Game game;
-	protected boolean toggle = false;
+	private boolean toggle = false;
 
 	/**
 	 * The IDraw constructor.

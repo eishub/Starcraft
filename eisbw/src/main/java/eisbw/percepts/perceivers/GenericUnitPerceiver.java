@@ -72,8 +72,8 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	private void selfPercept(Map<PerceptFilter, Set<Percept>> toReturn) {
 		Set<Percept> selfPercept = new HashSet<>(1);
 		UnitType type = this.unit.getType();
-		selfPercept.add(new SelfPercept(this.unit.getID(), BwapiUtility.getUnitType(this.unit), type.getMaxHitPoints(),
-				type.getMaxShields(), type.getMaxEnergy()));
+		selfPercept.add(new SelfPercept(this.unit.getID(), BwapiUtility.getUnitTypeName(this.unit.getType()),
+				type.getMaxHitPoints(), type.getMaxShields(), type.getMaxEnergy()));
 		toReturn.put(new PerceptFilter(Percepts.SELF, Filter.Type.ONCE), selfPercept);
 	}
 

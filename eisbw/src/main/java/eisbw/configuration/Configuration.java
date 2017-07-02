@@ -19,6 +19,8 @@ public class Configuration {
 	protected String scDir = null;
 	protected String autoMenu = "OFF";
 	protected BooleanString debug = new BooleanString("false");
+	protected BooleanString drawMapInfo = new BooleanString("false");
+	protected BooleanString drawUnitInfo = new BooleanString("false");
 	protected int speed = 20;
 	protected BooleanString invulnerable = new BooleanString("false");
 	protected BooleanString mapAgent = new BooleanString("false");
@@ -41,7 +43,13 @@ public class Configuration {
 			ParamEnum param = translator.translate2Java(new Identifier(entry.getKey()), ParamEnum.class);
 			switch (param) {
 			case DEBUG:
-				setDebugMode(translator.translate2Java(entry.getValue(), BooleanString.class));
+				setDebug(translator.translate2Java(entry.getValue(), BooleanString.class));
+				break;
+			case DRAWMAPINFO:
+				setDrawMapInfo(translator.translate2Java(entry.getValue(), BooleanString.class));
+				break;
+			case DRAWUNITINFO:
+				setDrawUnitInfo(translator.translate2Java(entry.getValue(), BooleanString.class));
 				break;
 			case MAP:
 				setMap(translator.translate2Java(entry.getValue(), String.class));
@@ -94,8 +102,16 @@ public class Configuration {
 		this.scDir = dir;
 	}
 
-	private void setDebugMode(BooleanString debug) {
+	private void setDebug(BooleanString debug) {
 		this.debug = debug;
+	}
+
+	private void setDrawMapInfo(BooleanString draw) {
+		this.drawMapInfo = draw;
+	}
+
+	private void setDrawUnitInfo(BooleanString draw) {
+		this.drawUnitInfo = draw;
 	}
 
 	private void setMap(String map) {
@@ -122,8 +138,16 @@ public class Configuration {
 		return this.speed;
 	}
 
-	public boolean getDebugMode() {
+	public boolean getDebug() {
 		return this.debug.getValue();
+	}
+
+	public boolean getDrawMapInfo() {
+		return this.drawMapInfo.getValue();
+	}
+
+	public boolean getDrawUnitInfo() {
+		return this.drawUnitInfo.getValue();
 	}
 
 	public String getMap() {

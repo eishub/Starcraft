@@ -13,6 +13,9 @@ import eis.iilang.EnvironmentState;
 import eisbw.actions.ActionProvider;
 import eisbw.actions.StarcraftAction;
 import eisbw.debugger.DebugWindow;
+import eisbw.debugger.draw.DrawMapInfo;
+import eisbw.debugger.draw.DrawUnitInfo;
+import eisbw.debugger.draw.IDraw;
 import eisbw.units.StarcraftUnitFactory;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Position;
@@ -30,12 +33,14 @@ public class BwapiListener extends BwapiEvents {
 	protected final ActionProvider actionProvider;
 	protected final Map<Unit, Action> pendingActions;
 	protected final StarcraftUnitFactory factory;
-	protected final boolean debugmode;
+	protected final boolean debug;
+	protected final IDraw drawMapInfo;
+	protected final IDraw drawUnitInfo;
 	protected final boolean invulnerable;
 	protected final int speed;
 	protected int count = 0;
 	protected int nuke = -1;
-	protected DebugWindow debug;
+	protected DebugWindow debugwindow;
 
 	/**
 	 * Event listener for BWAPI.
@@ -45,7 +50,8 @@ public class BwapiListener extends BwapiEvents {
 	 * @param debugmode
 	 *            - true iff debugger should be attached
 	 */
-	public BwapiListener(Game game, String scDir, boolean debugmode, boolean invulnerable, int speed) {
+	public BwapiListener(Game game, String scDir, boolean debug, boolean drawMapInfo, boolean drawUnitInfo,
+			boolean invulnerable, int speed) {
 		File bwta = new File(scDir + File.separator + "bwapi-data" + File.separator + "BWTA");
 		if (!bwta.isDirectory()) {
 			bwta = new File("mapData");
@@ -56,7 +62,15 @@ public class BwapiListener extends BwapiEvents {
 		this.actionProvider.loadActions(this.bwapi);
 		this.pendingActions = new ConcurrentHashMap<>();
 		this.factory = new StarcraftUnitFactory(this.bwapi);
-		this.debugmode = debugmode;
+		this.debug = debug;
+		this.drawMapInfo = new DrawMapInfo(game);
+		if (drawMapInfo) {
+			this.drawMapInfo.toggle();
+		}
+		this.drawUnitInfo = new DrawUnitInfo(game);
+		if (drawUnitInfo) {
+			this.drawUnitInfo.toggle();
+		}
 		this.invulnerable = invulnerable;
 		this.speed = speed;
 
@@ -85,8 +99,8 @@ public class BwapiListener extends BwapiEvents {
 		}
 
 		// START THE DEBUG TOOLS
-		if (this.debugmode) {
-			this.debug = new DebugWindow(this.game);
+		if (this.debug) {
+			this.debugwindow = new DebugWindow(this.game);
 			this.bwapi.enableUserInput();
 		}
 
@@ -126,9 +140,11 @@ public class BwapiListener extends BwapiEvents {
 				action.execute(unit, act);
 			}
 		}
-		if (this.debug != null) {
-			this.debug.debug(this.bwapi);
+		if (this.debugwindow != null) {
+			this.debugwindow.debug(this.bwapi);
 		}
+		this.drawMapInfo.draw(this.bwapi);
+		this.drawUnitInfo.draw(this.bwapi);
 	}
 
 	@Override
@@ -181,8 +197,8 @@ public class BwapiListener extends BwapiEvents {
 		}
 
 		this.pendingActions.clear();
-		if (this.debug != null) {
-			this.debug.dispose();
+		if (this.debugwindow != null) {
+			this.debugwindow.dispose();
 		}
 		this.bwapi.leaveGame();
 		this.game.clean();
@@ -209,7 +225,7 @@ public class BwapiListener extends BwapiEvents {
 	 * @return the current FPS.
 	 */
 	public int getFPS() {
-		return (this.debug == null) ? this.speed : this.debug.getFPS();
+		return (this.debugwindow == null) ? this.speed : this.debugwindow.getFPS();
 	}
 
 	/**
