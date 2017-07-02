@@ -6,15 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import eis.iilang.Action;
-import eis.iilang.Identifier;
-import eis.iilang.Numeral;
-import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Player;
-import jnibwapi.Unit;
-import jnibwapi.types.RaceType.RaceTypes;
-import jnibwapi.types.UnitType;
+import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,80 +14,85 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import java.util.LinkedList;
+import bwapi.Player;
+import bwapi.Race;
+import bwapi.Unit;
+import bwapi.UnitType;
+import eis.iilang.Action;
+import eis.iilang.Identifier;
+import eis.iilang.Numeral;
+import eis.iilang.Parameter;
 
 public class MorphTest {
+	private Morph action;
+	private LinkedList<Parameter> params;
 
-  private Morph action;
-  private LinkedList<Parameter> params;
+	@Mock
+	private bwapi.Game bwapi;
+	@Mock
+	private Action act;
+	@Mock
+	private Unit unit;
+	@Mock
+	private UnitType unitType;
+	@Mock
+	private Player player;
+	@Mock
+	private UnitType type;
 
-  @Mock
-  private JNIBWAPI bwapi;
-  @Mock
-  private Action act;
-  @Mock
-  private Unit unit;
-  @Mock
-  private UnitType unitType;
-  @Mock
-  private Player player;
-  @Mock
-  private UnitType type;
-  
-  /**
-   * Initialize mocks.
-   */
-  @Before
-  public void start() {
-    MockitoAnnotations.initMocks(this);
-    action = new Morph(bwapi);
-    
-    params = new LinkedList<>();
-    params.add(new Identifier("Zerg Hydralisk"));
-    params.add(new Numeral(2));
-    
-    when(act.getParameters()).thenReturn(params);
-    when(unit.getType()).thenReturn(unitType);
-    when(bwapi.getSelf()).thenReturn(player);
-  }
+	/**
+	 * Initialize mocks.
+	 */
+	@Before
+	public void start() {
+		MockitoAnnotations.initMocks(this);
+		this.action = new Morph(this.bwapi);
 
-  @Test
-  public void isValid_test() {
-    StarcraftAction spyAction = Mockito.spy(action);
+		this.params = new LinkedList<>();
+		this.params.add(new Identifier("Zerg Hydralisk"));
+		this.params.add(new Numeral(2));
 
-    when(spyAction.getUnitType("Zerg Hydralisk")).thenReturn(unitType);
-    
-    params.removeLast();
-    assertTrue(spyAction.isValid(act));
-    params.add(new Numeral(2));
-    
-    assertFalse(action.isValid(act));
-    params.remove(1);
-    assertFalse(action.isValid(act));
-    params.set(0, new Numeral(1));
-    assertFalse(action.isValid(act));
-    params.set(0, new Identifier("Hero Mojo"));
-    assertFalse(action.isValid(act));
-  }
-  
-  @Test
-  public void canExecute_test() {
-    when(player.getRace()).thenReturn(RaceTypes.Terran);
-    assertFalse(action.canExecute(unit, act));
-    when(player.getRace()).thenReturn(RaceTypes.Zerg);
-    assertTrue(action.canExecute(unit, act));
-  }
-  
-  @Test
-  public void execute_test() {
-    params.set(0, new Identifier("null"));
-    action.execute(unit, act);
-    verify(unit).morph(null);
-  }
-  
-  @Test
-  public void toString_test() {
-    assertEquals("morph(Type)", action.toString());
-  }
+		when(this.act.getParameters()).thenReturn(this.params);
+		when(this.unit.getType()).thenReturn(this.unitType);
+		when(this.bwapi.self()).thenReturn(this.player);
+	}
 
+	@Test
+	public void isValid_test() {
+		StarcraftAction spyAction = Mockito.spy(this.action);
+
+		when(spyAction.getUnitType("Zerg Hydralisk")).thenReturn(this.unitType);
+
+		this.params.removeLast();
+		assertTrue(spyAction.isValid(this.act));
+		this.params.add(new Numeral(2));
+
+		assertFalse(this.action.isValid(this.act));
+		this.params.remove(1);
+		assertFalse(this.action.isValid(this.act));
+		this.params.set(0, new Numeral(1));
+		assertFalse(this.action.isValid(this.act));
+		this.params.set(0, new Identifier("Hero Mojo"));
+		assertFalse(this.action.isValid(this.act));
+	}
+
+	@Test
+	public void canExecute_test() {
+		when(this.player.getRace()).thenReturn(Race.Terran);
+		assertFalse(this.action.canExecute(this.unit, this.act));
+		when(this.player.getRace()).thenReturn(Race.Zerg);
+		assertTrue(this.action.canExecute(this.unit, this.act));
+	}
+
+	@Test
+	public void execute_test() {
+		this.params.set(0, new Identifier("null"));
+		this.action.execute(this.unit, this.act);
+		verify(this.unit).morph(null);
+	}
+
+	@Test
+	public void toString_test() {
+		assertEquals("morph(Type)", this.action.toString());
+	}
 }

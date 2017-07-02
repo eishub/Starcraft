@@ -1,8 +1,8 @@
 package eisbw.percepts.perceivers;
 
-import eis.eis2java.translation.Filter.Type;
-
 import org.junit.Test;
+
+import eis.eis2java.translation.Filter.Type;
 
 public class PerceptFilterTest {
   private PerceptFilter filter;

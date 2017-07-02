@@ -6,82 +6,79 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import eis.iilang.Action;
-import eis.iilang.Identifier;
-import eis.iilang.Numeral;
-import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
+import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.LinkedList;
+import bwapi.TilePosition;
+import bwapi.Unit;
+import bwapi.UnitType;
+import eis.iilang.Action;
+import eis.iilang.Identifier;
+import eis.iilang.Numeral;
+import eis.iilang.Parameter;
 
 public class LandTest {
+	private Land action;
+	private LinkedList<Parameter> params;
 
-  private Land action;
-  private LinkedList<Parameter> params;
+	@Mock
+	private bwapi.Game bwapi;
+	@Mock
+	private Action act;
+	@Mock
+	private Unit unit;
+	@Mock
+	private UnitType unitType;
 
-  @Mock
-  private JNIBWAPI bwapi;
-  @Mock
-  private Action act;
-  @Mock
-  private Unit unit;
-  @Mock
-  private UnitType unitType;
+	/**
+	 * Initialize mocks.
+	 */
+	@Before
+	public void start() {
+		MockitoAnnotations.initMocks(this);
+		this.action = new Land(this.bwapi);
 
-  /**
-   * Initialize mocks.
-   */
-  @Before
-  public void start() {
-    MockitoAnnotations.initMocks(this);
-    action = new Land(bwapi);
-    
-    params = new LinkedList<>();
-    params.add(new Numeral(1));
-    params.add(new Numeral(2));
-    
-    when(act.getParameters()).thenReturn(params);
-    when(unit.getType()).thenReturn(unitType);
-  }
+		this.params = new LinkedList<>();
+		this.params.add(new Numeral(1));
+		this.params.add(new Numeral(2));
 
-  @Test
-  public void isValid_test() {
-    assertTrue(action.isValid(act));
-    params.set(0, new Identifier("Not Working"));
-    assertFalse(action.isValid(act));
-    params.set(0, new Numeral(1));
-    params.set(1, new Identifier("Not Working"));
-    assertFalse(action.isValid(act));
-    params.set(1, new Numeral(2));
-    params.add(new Numeral(10));
-    assertFalse(action.isValid(act));
-  }
-  
-  @Test
-  public void canExecute_test() {
-    when(unit.isLifted()).thenReturn(false);
-    assertFalse(action.canExecute(unit, act));
-    when(unit.isLifted()).thenReturn(true);
-    assertTrue(action.canExecute(unit, act));
-  }
-  
-  @Test
-  public void execute_test() {
-    action.execute(unit, act);
-    verify(unit).land(new Position(1, 2, Position.PosType.BUILD));
-  }
-  
-  @Test
-  public void toString_test() {
-    assertEquals("land(x,y)", action.toString());
-  }
+		when(this.act.getParameters()).thenReturn(this.params);
+		when(this.unit.getType()).thenReturn(this.unitType);
+	}
 
+	@Test
+	public void isValid_test() {
+		assertTrue(this.action.isValid(this.act));
+		this.params.set(0, new Identifier("Not Working"));
+		assertFalse(this.action.isValid(this.act));
+		this.params.set(0, new Numeral(1));
+		this.params.set(1, new Identifier("Not Working"));
+		assertFalse(this.action.isValid(this.act));
+		this.params.set(1, new Numeral(2));
+		this.params.add(new Numeral(10));
+		assertFalse(this.action.isValid(this.act));
+	}
+
+	@Test
+	public void canExecute_test() {
+		when(this.unit.isLifted()).thenReturn(false);
+		assertFalse(this.action.canExecute(this.unit, this.act));
+		when(this.unit.isLifted()).thenReturn(true);
+		assertTrue(this.action.canExecute(this.unit, this.act));
+	}
+
+	@Test
+	public void execute_test() {
+		this.action.execute(this.unit, this.act);
+		verify(this.unit).land(new TilePosition(1, 2));
+	}
+
+	@Test
+	public void toString_test() {
+		assertEquals("land(x,y)", this.action.toString());
+	}
 }

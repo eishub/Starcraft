@@ -6,7 +6,7 @@
 //
 //import eis.iilang.Percept;
 //import eisbw.units.ConditionHandler;
-//import jnibwapi.JNIBWAPI;
+//import jnibwapi.bwapi.Game;
 //import jnibwapi.Position;
 //import jnibwapi.Position.PosType;
 //import jnibwapi.Unit;
@@ -31,7 +31,7 @@
 //  @Mock
 //  private Unit unit;
 //  @Mock
-//  private JNIBWAPI bwapi;
+//  private bwapi.Game bwapi;
 //  @Mock
 //  private UnitType unitType;
 //  @Mock

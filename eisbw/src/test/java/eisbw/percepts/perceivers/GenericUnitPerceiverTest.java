@@ -3,25 +3,25 @@ package eisbw.percepts.perceivers;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-import eis.iilang.Percept;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Player;
-import jnibwapi.Position;
-import jnibwapi.Position.PosType;
-import jnibwapi.Unit;
-import jnibwapi.types.RaceType;
-import jnibwapi.types.RaceType.RaceTypes;
-import jnibwapi.types.UnitType;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import bwapi.Player;
+import bwapi.Position;
+import bwapi.Unit;
+import bwapi.UnitType;
+import eis.iilang.Percept;
+import jnibwapi.bwapi.Game;
+import jnibwapi.Position.PosType;
+import jnibwapi.types.RaceType;
+import jnibwapi.types.RaceType.RaceTypes;
 
 public class GenericUnitPerceiverTest {
 
@@ -33,7 +33,7 @@ public class GenericUnitPerceiverTest {
   @Mock
   private Player self;
   @Mock
-  private JNIBWAPI api;
+  private bwapi.Game api;
   @Mock
   private RaceType race;
 

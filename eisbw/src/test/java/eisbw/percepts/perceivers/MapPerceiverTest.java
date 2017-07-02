@@ -3,29 +3,27 @@ package eisbw.percepts.perceivers;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.when;
 
-import eis.iilang.Percept;
-import jnibwapi.BaseLocation;
-import jnibwapi.ChokePoint;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Position.PosType;
-import jnibwapi.Region;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
+import bwta.BaseLocation;
+import eis.iilang.Percept;
+import jnibwapi.ChokePoint;
+import jnibwapi.bwapi.Game;
+import jnibwapi.Position.PosType;
 
 public class MapPerceiverTest {
 
 	private MapPerceiver perciever;
 	@Mock
-	private JNIBWAPI bwapi;
+	private bwapi.Game bwapi;
 	@Mock
 	private jnibwapi.Map map;
 	@Mock

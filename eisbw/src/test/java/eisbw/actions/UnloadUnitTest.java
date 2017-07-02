@@ -6,78 +6,75 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import eis.iilang.Action;
-import eis.iilang.Identifier;
-import eis.iilang.Numeral;
-import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
+import java.util.LinkedList;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.LinkedList;
+import bwapi.Unit;
+import bwapi.UnitType;
+import eis.iilang.Action;
+import eis.iilang.Identifier;
+import eis.iilang.Numeral;
+import eis.iilang.Parameter;
 
 public class UnloadUnitTest {
+	private UnloadUnit action;
+	private LinkedList<Parameter> params;
 
-  private UnloadUnit action;
-  private LinkedList<Parameter> params;
+	@Mock
+	private bwapi.Game bwapi;
+	@Mock
+	private Action act;
+	@Mock
+	private Unit unit;
+	@Mock
+	private UnitType unitType;
 
-  @Mock
-  private JNIBWAPI bwapi;
-  @Mock
-  private Action act;
-  @Mock
-  private Unit unit;
-  @Mock
-  private UnitType unitType;
+	/**
+	 * Initialize mocks.
+	 */
+	@Before
+	public void start() {
+		MockitoAnnotations.initMocks(this);
+		this.action = new UnloadUnit(this.bwapi);
 
-  /**
-   * Initialize mocks.
-   */
-  @Before
-  public void start() {
-    MockitoAnnotations.initMocks(this);
-    action = new UnloadUnit(bwapi);
+		this.params = new LinkedList<>();
+		this.params.add(new Numeral(1));
 
-    params = new LinkedList<>();
-    params.add(new Numeral(1));
+		when(this.act.getParameters()).thenReturn(this.params);
+		when(this.unit.getType()).thenReturn(this.unitType);
+	}
 
-    when(act.getParameters()).thenReturn(params);
-    when(unit.getType()).thenReturn(unitType);
-  }
+	@Test
+	public void isValid_test() {
+		assertTrue(this.action.isValid(this.act));
+		this.params.set(0, new Identifier("Not Working"));
+		assertFalse(this.action.isValid(this.act));
+		this.params.set(0, new Numeral(1));
+		this.params.add(new Numeral(10));
+		assertFalse(this.action.isValid(this.act));
+	}
 
-  @Test
-  public void isValid_test() {
-    assertTrue(action.isValid(act));
-    params.set(0, new Identifier("Not Working"));
-    assertFalse(action.isValid(act));
-    params.set(0, new Numeral(1));
-    params.add(new Numeral(10));
-    assertFalse(action.isValid(act));
-  }
+	@Test
+	public void canExecute_test() {
+		when(this.unitType.spaceProvided()).thenReturn(0);
+		assertFalse(this.action.canExecute(this.unit, this.act));
+		when(this.unitType.spaceProvided()).thenReturn(1);
+		assertTrue(this.action.canExecute(this.unit, this.act));
+	}
 
-  @Test
-  public void canExecute_test() {
-    when(unitType.getSpaceProvided()).thenReturn(0);
-    assertFalse(action.canExecute(unit, act));
-    when(unitType.getSpaceProvided()).thenReturn(1);
-    assertTrue(action.canExecute(unit, act));
-  }
+	@Test
+	public void execute_test() {
+		when(this.bwapi.getUnit(1)).thenReturn(this.unit);
+		this.action.execute(this.unit, this.act);
+		verify(this.unit).unload(this.unit);
+	}
 
-  @Test
-  public void execute_test() {
-    when(bwapi.getUnit(1)).thenReturn(unit);
-    action.execute(unit, act);
-    verify(unit).unload(unit);
-  }
-
-  @Test
-  public void toString_test() {
-    assertEquals("unload(targetId)", action.toString());
-  }
-
+	@Test
+	public void toString_test() {
+		assertEquals("unload(targetId)", this.action.toString());
+	}
 }

@@ -5,29 +5,28 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
-import eis.iilang.Percept;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Player;
-import jnibwapi.Position;
-import jnibwapi.Unit;
-import jnibwapi.types.RaceType.RaceTypes;
-import jnibwapi.types.UnitType;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import bwapi.Player;
+import bwapi.Unit;
+import bwapi.UnitType;
+import eis.iilang.Percept;
+import jnibwapi.bwapi.Game;
+import jnibwapi.types.RaceType.RaceTypes;
 
 public class ConstructionSitePercieverTest {
 
   private ConstructionSitePerceiver perciever;
   @Mock
-  private JNIBWAPI bwapi;
+  private bwapi.Game bwapi;
   @Mock
   private jnibwapi.Map map;
   @Mock

@@ -15,14 +15,14 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import bwapi.Player;
+import bwapi.Position;
+import bwapi.TechType;
+import bwapi.Unit;
+import bwapi.UnitType;
 import eis.iilang.Percept;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Player;
-import jnibwapi.Position;
+import jnibwapi.bwapi.Game;
 import jnibwapi.Position.Positions;
-import jnibwapi.Unit;
-import jnibwapi.types.TechType;
-import jnibwapi.types.UnitType;
 import jnibwapi.types.UpgradeType.UpgradeTypes;
 
 public class BuildingPerceiverTest {
@@ -33,7 +33,7 @@ public class BuildingPerceiverTest {
   @Mock
   private UnitType unitType;
   @Mock
-  private JNIBWAPI api;
+  private bwapi.Game api;
   @Mock
   private Player self;
 
