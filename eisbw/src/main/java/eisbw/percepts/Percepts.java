@@ -37,6 +37,7 @@ public class Percepts {
 	public static final String NUKE = "nuke";
 	public static final String REGION = "region";
 	public static final String UNITREGION = "unitRegion";
+	public static final String ORDER = "order";
 
 	private Percepts() {
 		// Private constructor because this is a static class

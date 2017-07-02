@@ -8,7 +8,7 @@ import eis.iilang.Parameter;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
 import jnibwapi.types.RaceType.RaceTypes;
-import jnibwapi.types.TechType;
+import jnibwapi.types.TechType.TechTypes;
 
 /**
  * @author Danny & Harm - Cancels the action of the current unit.
@@ -59,7 +59,7 @@ public class Cancel extends StarcraftAction {
 			unit.cancelUpgrade();
 		} else if (unit.isTraining()) {
 			unit.cancelTrain();
-		} else if (unit.getTech() != null && !TechType.TechTypes.None.equals(unit.getTech())) {
+		} else if (unit.getTech() != null && unit.getTech().getID() != TechTypes.None.getID()) {
 			unit.cancelResearch();
 		}
 	}

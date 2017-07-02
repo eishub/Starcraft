@@ -11,7 +11,7 @@ import eis.eis2java.translation.Filter;
 //import eis.iilang.Parameter;
 import eis.iilang.Percept;
 import eisbw.BwapiUtility;
-import eisbw.percepts.Attacking;
+import eisbw.percepts.AttackingPercept;
 import eisbw.percepts.EnemyPercept;
 import eisbw.percepts.FriendlyPercept;
 import eisbw.percepts.NewUnitPercept;
@@ -56,26 +56,26 @@ public class UnitsPerceiver extends Perceiver {
 	private void setUnitPercepts(List<Unit> units, Set<Percept> newunitpercepts, Set<Percept> unitpercepts,
 			Set<Percept> attackingpercepts, Set<Percept> regionpercepts) {
 		for (Unit u : units) {
-			if (u.isBeingConstructed() && u.isLoaded()) {
-				continue; // Fix for the phantom marines bug
+			if (!BwapiUtility.isValid(u)) {
+				continue;
 			}
 			ConditionHandler conditionHandler = new ConditionHandler(this.api, u);
 			if (newunitpercepts != null) {
 				String unittype = (u.getType().getID() == UnitTypes.Zerg_Egg.getID()) ? u.getBuildType().getName()
-						: BwapiUtility.getUnitTypeName(u.getType());
+						: BwapiUtility.getName(u.getType());
 				unitpercepts.add(new FriendlyPercept(unittype, u.getID(), conditionHandler.getConditions()));
 				if (u.isBeingConstructed()) {
 					newunitpercepts
 							.add(new NewUnitPercept(u.getID(), u.getPosition().getBX(), u.getPosition().getBY()));
 				}
 			} else {
-				unitpercepts.add(new EnemyPercept(BwapiUtility.getUnitTypeName(u.getType()), u.getID(),
-						u.getHitPoints(), u.getShields(), conditionHandler.getConditions(), u.getPosition().getBX(),
-						u.getPosition().getBY()));
+				unitpercepts.add(
+						new EnemyPercept(BwapiUtility.getName(u.getType()), u.getID(), u.getHitPoints(), u.getShields(),
+								conditionHandler.getConditions(), u.getPosition().getBX(), u.getPosition().getBY()));
 				if (u.getType().isAttackCapable()) {
 					Unit target = (u.getTarget() == null) ? u.getOrderTarget() : u.getTarget();
 					if (target != null && !units.contains(target)) {
-						attackingpercepts.add(new Attacking(u.getID(), target.getID()));
+						attackingpercepts.add(new AttackingPercept(u.getID(), target.getID()));
 					}
 				}
 			}

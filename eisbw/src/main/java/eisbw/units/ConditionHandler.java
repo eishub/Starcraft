@@ -195,6 +195,9 @@ public class ConditionHandler {
 		if (this.unit.isPatrolling()) {
 			conditions.add(new Identifier("patrolling"));
 		}
+		if (this.unit.isHoldingPosition()) {
+			conditions.add(new Identifier("holding"));
+		}
 		if (this.unit.isLoaded()) {
 			conditions.add(new Identifier("loaded"));
 		}

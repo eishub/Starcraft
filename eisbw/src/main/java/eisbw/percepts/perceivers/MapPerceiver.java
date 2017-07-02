@@ -12,6 +12,7 @@ import eis.eis2java.translation.Filter;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
 import eis.iilang.Percept;
+import eisbw.BwapiUtility;
 import eisbw.percepts.BasePercept;
 import eisbw.percepts.ChokepointCenterPercept;
 import eisbw.percepts.ChokepointPercept;
@@ -26,7 +27,6 @@ import jnibwapi.JNIBWAPI;
 import jnibwapi.Position;
 import jnibwapi.Region;
 import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - The perceiver which handles all the map percepts.
@@ -61,8 +61,7 @@ public class MapPerceiver extends Perceiver {
 		/** Distance calculation between resource groups and base location **/
 		Map<Integer, Position> distanceMatrix = new HashMap<>();
 		for (Unit u : this.api.getNeutralUnits()) {
-			UnitType unitType = u.getType();
-			if (unitType.isMineralField()) {
+			if (BwapiUtility.isValid(u) && u.getType().isMineralField()) {
 				if (!distanceMatrix.containsKey(u.getResourceGroup())) {
 					distanceMatrix.put(u.getResourceGroup(), u.getPosition());
 				}

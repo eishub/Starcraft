@@ -9,6 +9,7 @@ import java.util.Set;
 
 import eis.eis2java.translation.Filter;
 import eis.iilang.Percept;
+import eisbw.BwapiUtility;
 import eisbw.percepts.ConstructionSitePercept;
 import eisbw.percepts.Percepts;
 import jnibwapi.JNIBWAPI;
@@ -120,11 +121,9 @@ public class ConstructionSitePerceiver extends Perceiver {
 
 		List<Point> illegals = new LinkedList<>();
 		for (Unit u : this.api.getNeutralUnits()) {
-			if (u.isExists()) {
-				UnitType type = u.getType();
-				if (type.isMineralField() || type.getID() == UnitTypes.Resource_Vespene_Geyser.getID()) {
-					illegals.add(new Point(u.getTilePosition().getBX(), u.getTilePosition().getBY()));
-				}
+			if (BwapiUtility.isValid(u) && (u.getType().isMineralField()
+					|| u.getType().getID() == UnitTypes.Resource_Vespene_Geyser.getID())) {
+				illegals.add(new Point(u.getTilePosition().getBX(), u.getTilePosition().getBY()));
 			}
 		}
 

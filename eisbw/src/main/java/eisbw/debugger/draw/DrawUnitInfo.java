@@ -53,8 +53,8 @@ public class DrawUnitInfo extends IDraw {
 	 */
 	private void drawTimerInfo(JNIBWAPI api) {
 		for (final Unit unit : api.getMyUnits()) {
-			if (unit.isBeingConstructed() && unit.isLoaded()) {
-				continue; // Fix for the phantom marines bug
+			if (!BwapiUtility.isValid(unit)) {
+				continue;
 			}
 			int total = 0;
 			int done = 0;
@@ -88,8 +88,8 @@ public class DrawUnitInfo extends IDraw {
 	 */
 	private void drawHealth(JNIBWAPI api) {
 		for (final Unit unit : api.getAllUnits()) {
-			if (unit.isBeingConstructed() && unit.isLoaded()) {
-				continue; // Fix for the phantom marines bug
+			if (!BwapiUtility.isValid(unit)) {
+				continue;
 			}
 			int health = unit.getHitPoints();
 			int max = unit.getType().getMaxHitPoints();
@@ -126,8 +126,8 @@ public class DrawUnitInfo extends IDraw {
 	 */
 	private void drawTargets(JNIBWAPI api) {
 		for (final Unit unit : api.getAllUnits()) {
-			if (unit.isBeingConstructed() && unit.isLoaded()) {
-				continue; // Fix for the phantom marines bug
+			if (!BwapiUtility.isValid(unit)) {
+				continue;
 			}
 			boolean self = (unit.getPlayer().getID() == api.getSelf().getID());
 			Unit target = (unit.getTarget() == null) ? unit.getOrderTarget() : unit.getTarget();
@@ -146,8 +146,8 @@ public class DrawUnitInfo extends IDraw {
 	 */
 	private void drawIDs(JNIBWAPI api) {
 		for (final Unit unit : api.getAllUnits()) {
-			if (unit.isBeingConstructed() && unit.isLoaded()) {
-				continue; // Fix for the phantom marines bug
+			if (!BwapiUtility.isValid(unit)) {
+				continue;
 			}
 			api.drawText(unit.getPosition(), Integer.toString(unit.getID()), false);
 		}
@@ -166,8 +166,8 @@ public class DrawUnitInfo extends IDraw {
 		Set<Unit> previous = new HashSet<>(this.alive);
 		this.alive.clear();
 		for (final Unit unit : api.getMyUnits()) {
-			if (unit.isBeingConstructed() && unit.isLoaded()) {
-				continue; // Fix for the phantom marines bug
+			if (!BwapiUtility.isValid(unit)) {
+				continue;
 			}
 			this.alive.add(unit);
 			int type = unit.getType().getID();
@@ -199,7 +199,7 @@ public class DrawUnitInfo extends IDraw {
 			int livecount = count.containsKey(t) ? count.get(t).intValue() : 0;
 			int deadcount = this.dead.containsKey(t) ? this.dead.get(t).intValue() : 0;
 			if (livecount > 0 || deadcount > 0) {
-				api.drawText(new Position(x, y + 40 + ((yspace) * 10)), BwapiUtility.getUnitTypeName(type), true);
+				api.drawText(new Position(x, y + 40 + ((yspace) * 10)), BwapiUtility.getName(type), true);
 				api.drawText(new Position(x + 160, y + 40 + ((yspace) * 10)), Integer.toString(livecount), true);
 				api.drawText(new Position(x + 180, y + 40 + ((yspace++) * 10)), Integer.toString(deadcount), true);
 			}

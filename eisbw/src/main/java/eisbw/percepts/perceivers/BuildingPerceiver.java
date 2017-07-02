@@ -15,7 +15,7 @@ import eisbw.percepts.UpgradePercept;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Position.Positions;
 import jnibwapi.Unit;
-import jnibwapi.types.TechType;
+import jnibwapi.types.TechType.TechTypes;
 import jnibwapi.types.UnitType.UnitTypes;
 
 /**
@@ -45,7 +45,8 @@ public class BuildingPerceiver extends UnitPerceiver {
 
 	private void researchedPercept(Map<PerceptFilter, Set<Percept>> toReturn) {
 		Set<Percept> researchedPercept = new HashSet<>(1);
-		if (this.unit.getTech() != null && !this.unit.getTech().equals(TechType.TechTypes.None)) {
+		if (this.unit.getTech() != null && this.unit.getTech().getID() != TechTypes.None.getID()
+				&& this.unit.getTech().getID() != TechTypes.Unknown.getID()) {
 			researchedPercept.add(new ResearchingPercept(this.unit.getTech().getName()));
 			toReturn.put(new PerceptFilter(Percepts.RESEARCHING, Filter.Type.ALWAYS), researchedPercept);
 		}
