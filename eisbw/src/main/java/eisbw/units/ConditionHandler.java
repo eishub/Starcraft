@@ -250,6 +250,9 @@ public class ConditionHandler {
 		if (this.unit.isCarryingGas() || this.unit.isCarryingMinerals()) {
 			conditions.add(new Identifier("carrying"));
 		}
+		if (this.unit.isGatheringGas() || this.unit.isGatheringMinerals()) {
+			conditions.add(new Identifier("gathering"));
+		}
 		if (this.unit.isConstructing()) {
 			conditions.add(new Identifier("constructing"));
 		}
