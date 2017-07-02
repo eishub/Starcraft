@@ -51,7 +51,7 @@ public class BwapiListenerTest {
 	@Mock
 	private UnitType unitType;
 	@Mock
-	private DebugWindow debug;
+	private DebugWindow debugwindow;
 	@Mock
 	private Player self;
 
@@ -73,7 +73,7 @@ public class BwapiListenerTest {
 		list.add(unit);
 		when(bwapi.getMyUnits()).thenReturn(list);
 		when(bwapi.getUnit(0)).thenReturn(unit);
-		listener = new BwapiListener(game, "", false, false, 200);
+		listener = new BwapiListener(game, "", false, false, false, false, 200);
 		listener.bwapi = bwapi;
 	}
 
@@ -146,7 +146,7 @@ public class BwapiListenerTest {
 		listener.matchEnd(true);
 		verify(game, times(1)).clean();
 		listener.matchStart();
-		listener.debug = debug;
+		listener.debugwindow = debugwindow;
 		listener.matchEnd(true);
 		verify(game, times(2)).clean();
 	}
@@ -170,10 +170,10 @@ public class BwapiListenerTest {
 		when(unit.isBeingConstructed()).thenReturn(true);
 		listener.performEntityAction("unit", new Action("stop"));
 		assertTrue(listener.pendingActions.size() == 1);
-		listener.debug = debug;
+		listener.debugwindow = debugwindow;
 		listener.matchFrame();
 		assertTrue(listener.pendingActions.size() == 0);
-		verify(debug, times(1)).debug(bwapi);
+		verify(debugwindow, times(1)).debug(bwapi);
 	}
 
 }

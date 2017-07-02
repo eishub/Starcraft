@@ -55,7 +55,7 @@ public class StarcraftEnvironmentImplTest {
     env.registerAgent("none");
     env.associateEntity("none", "none");
     env.getAllPercepts("none", "none");
-    env.bwapiListener = bwapiListener;
+    env.listener = bwapiListener;
     when(bwapiListener.getAction(any(Action.class))).thenReturn(new Lift(null));
     assertTrue(env.isSupportedByType(new Action("lift"), null));
     when(bwapiListener.getAction(any(Action.class))).thenReturn(null);

@@ -12,7 +12,6 @@ import eisbw.percepts.Percepts;
 import eisbw.percepts.VespeneGeyserPercept;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 import jnibwapi.types.UnitType.UnitTypes;
 
 /**
@@ -39,13 +38,12 @@ public class WorkerPerceiver extends UnitPerceiver {
 		Set<Percept> minerals = new HashSet<>();
 		Set<Percept> geysers = new HashSet<>();
 		for (Unit u : this.api.getNeutralUnits()) {
-			UnitType unitType = u.getType();
-			if (unitType.isMineralField()) {
+			if (BwapiUtility.isValid(u) && u.getType().isMineralField()) {
 				int region = BwapiUtility.getRegion(u, this.api.getMap());
 				MineralFieldPercept mineralfield = new MineralFieldPercept(u.getID(), u.getResources(),
 						u.getPosition().getBX(), u.getPosition().getBY(), region);
 				minerals.add(mineralfield);
-			} else if (unitType.getID() == UnitTypes.Resource_Vespene_Geyser.getID()) {
+			} else if (BwapiUtility.isValid(u) && u.getType().getID() == UnitTypes.Resource_Vespene_Geyser.getID()) {
 				int region = BwapiUtility.getRegion(u, this.api.getMap());
 				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), u.getResources(),
 						u.getPosition().getBX(), u.getPosition().getBY(), region);
@@ -53,8 +51,7 @@ public class WorkerPerceiver extends UnitPerceiver {
 			}
 		}
 		for (Unit u : this.api.getMyUnits()) {
-			UnitType unitType = u.getType();
-			if (unitType.isRefinery()) {
+			if (BwapiUtility.isValid(u) && u.getType().isRefinery()) {
 				int region = BwapiUtility.getRegion(u, this.api.getMap());
 				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), u.getResources(),
 						u.getPosition().getBX(), u.getPosition().getBY(), region);

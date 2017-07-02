@@ -195,6 +195,9 @@ public class ConditionHandler {
 		if (this.unit.isPatrolling()) {
 			conditions.add(new Identifier("patrolling"));
 		}
+		if (this.unit.isHoldingPosition()) {
+			conditions.add(new Identifier("holding"));
+		}
 		if (this.unit.isLoaded()) {
 			conditions.add(new Identifier("loaded"));
 		}
@@ -246,6 +249,9 @@ public class ConditionHandler {
 	private void setWorkerConditions(List<Parameter> conditions) {
 		if (this.unit.isCarryingGas() || this.unit.isCarryingMinerals()) {
 			conditions.add(new Identifier("carrying"));
+		}
+		if (this.unit.isGatheringGas() || this.unit.isGatheringMinerals()) {
+			conditions.add(new Identifier("gathering"));
 		}
 		if (this.unit.isConstructing()) {
 			conditions.add(new Identifier("constructing"));

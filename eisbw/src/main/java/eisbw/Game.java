@@ -134,7 +134,7 @@ public class Game {
 			List<Unit> toAdd = new LinkedList<>();
 			Unit unit;
 			while ((unit = this.units.getUninitializedUnits().poll()) != null) {
-				String unitName = BwapiUtility.getUnitName(unit);
+				String unitName = BwapiUtility.getName(unit);
 				if (unit.isCompleted() && this.percepts.containsKey(unitName)) {
 					this.env.addToEnvironment(unitName, BwapiUtility.getEisUnitType(unit));
 				} else {

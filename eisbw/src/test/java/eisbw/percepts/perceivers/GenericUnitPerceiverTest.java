@@ -75,15 +75,15 @@ public class GenericUnitPerceiverTest {
     Map<PerceptFilter, Set<Percept>> ret = new HashMap<>();
     when(race.getName()).thenReturn("race");
     when(self.getRace()).thenReturn(race);
-    assertEquals(3, perciever.perceive(ret).size());
+    assertEquals(4, perciever.perceive(ret).size());
     toReturn = new HashSet<>();
     when(api.getEnemies()).thenReturn(toReturn);
     ret = new HashMap<>();
-    assertEquals(3, perciever.perceive(ret).size());
+    assertEquals(4, perciever.perceive(ret).size());
     when(unitType.getMaxEnergy()).thenReturn(0);
     when(unit.isDefenseMatrixed()).thenReturn(true);
     ret = new HashMap<>();
-    assertEquals(4, perciever.perceive(ret).size());
+    assertEquals(5, perciever.perceive(ret).size());
   }
 
 }

@@ -1,3 +1,4 @@
+
 package eisbw.configuration;
 
 import static org.junit.Assert.assertEquals;
@@ -46,7 +47,7 @@ public class ConfigurationTest {
     parameters.put("starcraft_location", new Identifier("scdir"));
     parameters.put("auto_menu", new Identifier("Single_Player"));
     Configuration config = new Configuration(parameters);
-    assertEquals(true,config.getDebugMode());
+    assertEquals(true,config.getDebug());
     assertEquals("terran",config.getOwnRace());
     assertEquals("zerg", config.getEnemyRace());
     assertEquals("map",config.getMap());

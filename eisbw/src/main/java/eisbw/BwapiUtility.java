@@ -25,6 +25,10 @@ public class BwapiUtility {
 		// Private constructor for static class.
 	}
 
+	public static boolean isValid(Unit unit) {
+		return unit.isExists() && unit.isVisible() && !(unit.isBeingConstructed() && unit.isLoaded());
+	}
+
 	/**
 	 * Get the name of a unit.
 	 *
@@ -32,13 +36,13 @@ public class BwapiUtility {
 	 *            - the unit that has to be named.
 	 * @return the name of the unit.
 	 */
-	public static String getUnitName(Unit unit) {
+	public static String getName(Unit unit) {
 		String name = (unit.getType().getName() + unit.getID()).replace("_", "").replace(" ", "");
 		return name.substring(0, 1).toLowerCase() + name.substring(1);
 	}
 
-	public static String getUnitType(Unit unit) {
-		String type = unit.getType().getName();
+	public static String getName(UnitType unittype) {
+		String type = unittype.getName();
 		if (type.length() > 17 && "Terran Siege Tank".equals(type.substring(0, 17))) {
 			return "Terran Siege Tank";
 		} else {

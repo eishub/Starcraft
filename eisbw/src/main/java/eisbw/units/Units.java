@@ -45,7 +45,7 @@ public class Units {
 	 *            The object which creates all starcraft units.
 	 */
 	public void addUnit(Unit unit, StarcraftUnitFactory factory) {
-		String unitName = BwapiUtility.getUnitName(unit);
+		String unitName = BwapiUtility.getName(unit);
 		this.unitMap.put(unitName, unit);
 		this.unitNames.put(unit.getID(), unitName);
 		this.starcraftUnits.put(unitName, factory.create(unit));

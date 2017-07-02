@@ -11,7 +11,7 @@ import eis.eis2java.translation.Filter;
 //import eis.iilang.Parameter;
 import eis.iilang.Percept;
 import eisbw.BwapiUtility;
-import eisbw.percepts.Attacking;
+import eisbw.percepts.AttackingPercept;
 import eisbw.percepts.EnemyPercept;
 import eisbw.percepts.FriendlyPercept;
 import eisbw.percepts.NewUnitPercept;
@@ -56,13 +56,13 @@ public class UnitsPerceiver extends Perceiver {
 	private void setUnitPercepts(List<Unit> units, Set<Percept> newunitpercepts, Set<Percept> unitpercepts,
 			Set<Percept> attackingpercepts) {
 		for (Unit u : units) {
-			if (u.isBeingConstructed() && u.isLoaded()) {
-				continue; // Fix for the phantom marines bug
+			if (!BwapiUtility.isValid(u)) {
+				continue;
 			}
 			ConditionHandler conditionHandler = new ConditionHandler(this.api, u);
 			if (newunitpercepts != null) {
 				String unittype = (u.getType().getID() == UnitTypes.Zerg_Egg.getID()) ? u.getBuildType().getName()
-						: BwapiUtility.getUnitType(u);
+						: BwapiUtility.getName(u.getType());
 				unitpercepts.add(new FriendlyPercept(u.getID(), unittype, conditionHandler.getConditions()));
 				if (u.isBeingConstructed()) {
 					int region = BwapiUtility.getRegion(u, this.api.getMap());
@@ -71,13 +71,13 @@ public class UnitsPerceiver extends Perceiver {
 				}
 			} else {
 				int region = BwapiUtility.getRegion(u, this.api.getMap());
-				unitpercepts.add(new EnemyPercept(u.getID(), BwapiUtility.getUnitType(u), u.getHitPoints(),
+				unitpercepts.add(new EnemyPercept(u.getID(), BwapiUtility.getName(u.getType()), u.getHitPoints(),
 						u.getShields(), u.getEnergy(), conditionHandler.getConditions(), u.getPosition().getBX(),
 						u.getPosition().getBY(), region));
 				if (u.getType().isAttackCapable()) {
 					Unit target = (u.getTarget() == null) ? u.getOrderTarget() : u.getTarget();
 					if (target != null && !units.contains(target)) {
-						attackingpercepts.add(new Attacking(u.getID(), target.getID()));
+						attackingpercepts.add(new AttackingPercept(u.getID(), target.getID()));
 					}
 				}
 			}

@@ -9,6 +9,7 @@ import eis.eis2java.translation.Filter;
 import eis.iilang.Percept;
 import eisbw.BwapiUtility;
 import eisbw.percepts.DefensiveMatrixPercept;
+import eisbw.percepts.OrderPercept;
 import eisbw.percepts.Percepts;
 import eisbw.percepts.SelfPercept;
 import eisbw.percepts.StatusPercept;
@@ -17,6 +18,8 @@ import eisbw.units.ConditionHandler;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Position;
 import jnibwapi.Unit;
+import jnibwapi.types.OrderType;
+import jnibwapi.types.OrderType.OrderTypes;
 
 /**
  * @author Danny & Harm - The perceiver which handles all the generic percepts.
@@ -38,6 +41,7 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 		defensiveMatrixPercept(toReturn);
 		selfPercept(toReturn);
 		statusPercept(toReturn);
+		orderPercept(toReturn);
 
 		if (this.unit.getType().getSpaceProvided() > 0) {
 			List<Unit> loadedUnits = this.unit.getLoadedUnits();
@@ -66,7 +70,7 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	 */
 	private void selfPercept(Map<PerceptFilter, Set<Percept>> toReturn) {
 		Set<Percept> selfPercept = new HashSet<>(1);
-		selfPercept.add(new SelfPercept(this.unit.getID(), BwapiUtility.getUnitType(this.unit)));
+		selfPercept.add(new SelfPercept(this.unit.getID(), BwapiUtility.getName(this.unit.getType())));
 		toReturn.put(new PerceptFilter(Percepts.SELF, Filter.Type.ONCE), selfPercept);
 	}
 
@@ -98,5 +102,19 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 		if (!unitLoadedPercept.isEmpty()) {
 			toReturn.put(new PerceptFilter(Percepts.UNITLOADED, Filter.Type.ALWAYS), unitLoadedPercept);
 		}
+	}
+
+	/**
+	 * @param toReturn
+	 *            The percept and reference of which kind of percept it is.
+	 */
+	private void orderPercept(Map<PerceptFilter, Set<Percept>> toReturn) {
+		Set<Percept> orderPercept = new HashSet<>(1);
+		OrderType primary = (this.unit.getOrder() == null) ? OrderTypes.None : this.unit.getOrder();
+		Unit target = (this.unit.getTarget() == null) ? this.unit.getOrderTarget() : this.unit.getTarget();
+		OrderType secondary = (this.unit.getSecondaryOrder() == null) ? OrderTypes.None : this.unit.getSecondaryOrder();
+		orderPercept
+				.add(new OrderPercept(primary.getName(), (target == null) ? -1 : target.getID(), secondary.getName()));
+		toReturn.put(new PerceptFilter(Percepts.ORDER, Filter.Type.ON_CHANGE), orderPercept);
 	}
 }
