@@ -2,19 +2,18 @@ package eisbw.debugger.draw;
 
 import java.util.List;
 
+import bwapi.ChokePoint;
+import bwapi.Position;
+import bwapi.Position.PosType;
+import bwapi.types.RaceType.RaceTypes;
+import bwapi.util.BWColor;
+import bwta.BaseLocation;
 import eis.eis2java.exception.TranslationException;
 import eis.eis2java.translation.Translator;
 import eis.iilang.Parameter;
 import eis.iilang.Percept;
 import eisbw.Game;
 import eisbw.percepts.perceivers.ConstructionSitePerceiver;
-import jnibwapi.BaseLocation;
-import jnibwapi.ChokePoint;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Position.PosType;
-import jnibwapi.types.RaceType.RaceTypes;
-import jnibwapi.util.BWColor;
 
 /**
  * @author Harm & Danny.
@@ -32,13 +31,13 @@ public class DrawMapInfo extends IDraw {
 	}
 
 	@Override
-	protected void drawOnMap(JNIBWAPI api) throws TranslationException {
+	protected void drawOnMap(bwapi.Game api) throws TranslationException {
 		drawBases(api);
 		drawChokepoints(api);
 		drawConstructionSites(api);
 	}
 
-	private void drawBases(JNIBWAPI api) throws TranslationException {
+	private void drawBases(bwapi.Game api) throws TranslationException {
 		for (BaseLocation base : api.getMap().getBaseLocations()) {
 			api.drawCircle(base.getCenter(), 75, BWColor.Purple, false, false);
 			api.drawText(base.getPosition(), base.getPosition().getBX() + ", " + base.getPosition().getBY(), false);
@@ -48,7 +47,7 @@ public class DrawMapInfo extends IDraw {
 		}
 	}
 
-	private void drawChokepoints(JNIBWAPI api) throws TranslationException {
+	private void drawChokepoints(bwapi.Game api) throws TranslationException {
 		for (ChokePoint cp : api.getMap().getChokePoints()) {
 			api.drawLine(cp.getFirstSide(), cp.getSecondSide(), BWColor.Yellow, false);
 			api.drawCircle(cp.getCenter(), (int) cp.getRadius(), BWColor.Red, false, false);
@@ -56,7 +55,7 @@ public class DrawMapInfo extends IDraw {
 		}
 	}
 
-	private void drawConstructionSites(JNIBWAPI api) throws TranslationException {
+	private void drawConstructionSites(bwapi.Game api) throws TranslationException {
 		Translator translator = Translator.getInstance();
 		List<Percept> percepts = this.game.getConstructionSites();
 		int size = ConstructionSitePerceiver.steps;

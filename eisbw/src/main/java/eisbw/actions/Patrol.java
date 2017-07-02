@@ -2,12 +2,11 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.TilePosition;
+import bwapi.Unit;
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - Makes the unit patrol between his current location and
@@ -21,7 +20,7 @@ public class Patrol extends StarcraftMovableAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Patrol(JNIBWAPI api) {
+	public Patrol(bwapi.Game api) {
 		super(api);
 	}
 
@@ -31,8 +30,7 @@ public class Patrol extends StarcraftMovableAction {
 		int xpos = ((Numeral) parameters.get(0)).getValue().intValue();
 		int ypos = ((Numeral) parameters.get(1)).getValue().intValue();
 
-		Position pos = new Position(xpos, ypos, Position.PosType.BUILD);
-		unit.patrol(pos, false);
+		unit.patrol(new TilePosition(xpos, ypos).toPosition(), false);
 	}
 
 	@Override

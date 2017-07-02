@@ -19,7 +19,6 @@ import eisbw.Game;
 import eisbw.debugger.draw.DrawMapInfo;
 import eisbw.debugger.draw.DrawUnitInfo;
 import eisbw.debugger.draw.IDraw;
-import jnibwapi.JNIBWAPI;
 
 /**
  * @author Danny & Harm.
@@ -82,7 +81,7 @@ public class DrawButtons extends JPanel implements ActionListener {
 	 * @throws TranslationException
 	 *             iff translation fails.
 	 */
-	public void draw(JNIBWAPI api) {
+	public void draw(bwapi.Game api) {
 		for (Entry<String, IDraw> drawable : this.draw.entrySet()) {
 			drawable.getValue().draw(api);
 		}

@@ -2,11 +2,10 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.Race;
+import bwapi.Unit;
 import eis.iilang.Action;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.RaceType.RaceTypes;
 
 /**
  * @author Danny & Harm - Lifts up the unit, making it a flying unit until it
@@ -20,7 +19,7 @@ public class Lift extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Lift(JNIBWAPI api) {
+	public Lift(bwapi.Game api) {
 		super(api);
 	}
 
@@ -32,7 +31,7 @@ public class Lift extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
-		return unit.getType().isBuilding() && unit.getType().getRaceID() == RaceTypes.Terran.getID();
+		return unit.getType().isBuilding() && unit.getType().getRace() == Race.Terran;
 	}
 
 	@Override

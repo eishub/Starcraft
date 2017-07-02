@@ -2,11 +2,10 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.Unit;
+import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Stops a unit from what it was doing.
@@ -19,7 +18,7 @@ public class Stop extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Stop(JNIBWAPI api) {
+	public Stop(bwapi.Game api) {
 		super(api);
 	}
 

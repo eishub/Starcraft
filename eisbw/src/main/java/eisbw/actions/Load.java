@@ -2,11 +2,10 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.Unit;
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - Loads a unit into a specified other unit.
@@ -19,7 +18,7 @@ public class Load extends StarcraftLoadingAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Load(JNIBWAPI api) {
+	public Load(bwapi.Game api) {
 		super(api);
 	}
 

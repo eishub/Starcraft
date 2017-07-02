@@ -7,6 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import bwapi.Position;
+import bwapi.Region;
+import bwapi.TilePosition;
+import bwapi.Unit;
+import bwta.BWTA;
+import bwta.BaseLocation;
+import bwta.Chokepoint;
 import eis.eis2java.translation.Filter;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
@@ -18,12 +25,6 @@ import eisbw.percepts.EnemyRacePercept;
 import eisbw.percepts.MapPercept;
 import eisbw.percepts.Percepts;
 import eisbw.percepts.RegionPercept;
-import jnibwapi.BaseLocation;
-import jnibwapi.ChokePoint;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Region;
-import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - The perceiver which handles all the map percepts.
@@ -36,24 +37,20 @@ public class MapPerceiver extends Perceiver {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public MapPerceiver(JNIBWAPI api) {
+	public MapPerceiver(bwapi.Game api) {
 		super(api);
 	}
 
 	@Override
 	public Map<PerceptFilter, Set<Percept>> perceive(Map<PerceptFilter, Set<Percept>> toReturn) {
-		jnibwapi.Map map = this.api.getMap();
 
 		Set<Percept> mapPercept = new HashSet<>(1);
-		mapPercept.add(new MapPercept(map.getSize().getBX(), map.getSize().getBY()));
+		mapPercept.add(new MapPercept(this.api.mapWidth(), this.api.mapHeight()));
 		toReturn.put(new PerceptFilter(Percepts.MAP, Filter.Type.ONCE), mapPercept);
 
-		if (!this.api.getEnemies().isEmpty()) {
-			Set<Percept> enemyRacePercept = new HashSet<>(1);
-			enemyRacePercept.add(
-					new EnemyRacePercept(this.api.getEnemies().iterator().next().getRace().getName().toLowerCase()));
-			toReturn.put(new PerceptFilter(Percepts.ENEMYRACE, Filter.Type.ONCE), enemyRacePercept);
-		} // FIXME: we only support 1 enemy now
+		Set<Percept> enemyRacePercept = new HashSet<>(1);
+		enemyRacePercept.add(new EnemyRacePercept(this.api.enemy().getRace().toString().toLowerCase()));
+		toReturn.put(new PerceptFilter(Percepts.ENEMYRACE, Filter.Type.ONCE), enemyRacePercept);
 
 		/** Distance calculation between resource groups and base location **/
 		Map<Integer, Position> distanceMatrix = new HashMap<>();
@@ -64,32 +61,40 @@ public class MapPerceiver extends Perceiver {
 				}
 			}
 		}
-		Set<Percept> basePercepts = new HashSet<>(map.getBaseLocations().size());
-		for (BaseLocation location : map.getBaseLocations()) {
-			Percept basePercept = new BasePercept(location.isStartLocation(), location.getPosition().getBX(),
-					location.getPosition().getBY(), location.getRegion().getID());
+		List<BaseLocation> baseLocations = BWTA.getBaseLocations();
+		Set<Percept> basePercepts = new HashSet<>(baseLocations.size());
+		for (BaseLocation location : baseLocations) {
+			Region region = this.api.getRegionAt(location.getPosition());
+			Percept basePercept = new BasePercept(location.isStartLocation(), location.getTilePosition().getX(),
+					location.getTilePosition().getY(), region.getID());
 			basePercepts.add(basePercept);
 		}
 		toReturn.put(new PerceptFilter(Percepts.BASE, Filter.Type.ONCE), basePercepts);
 
-		Set<Percept> chokepointPercepts = new HashSet<>(map.getChokePoints().size());
-		for (ChokePoint cp : map.getChokePoints()) {
-			Percept chokeRegionPercept = new ChokepointRegionPercept(cp.getFirstSide().getBX(),
-					cp.getFirstSide().getBY(), cp.getSecondSide().getBX(), cp.getSecondSide().getBY(),
-					cp.getFirstRegion().getID(), cp.getSecondRegion().getID());
+		List<Chokepoint> chokePoints = BWTA.getChokepoints();
+		Set<Percept> chokepointPercepts = new HashSet<>(chokePoints.size());
+		for (Chokepoint cp : chokePoints) {
+			TilePosition firstSide = cp.getSides().first.toTilePosition();
+			TilePosition secondSide = cp.getSides().second.toTilePosition();
+			Region firstRegion = this.api.getRegionAt(cp.getRegions().first.getPoint());
+			Region secondRegion = this.api.getRegionAt(cp.getRegions().second.getPoint());
+			Percept chokeRegionPercept = new ChokepointRegionPercept(firstSide.getX(), firstSide.getY(),
+					secondSide.getX(), secondSide.getY(), firstRegion.getID(), secondRegion.getID());
 			chokepointPercepts.add(chokeRegionPercept);
 		}
 		toReturn.put(new PerceptFilter(Percepts.CHOKEPOINT, Filter.Type.ONCE), chokepointPercepts);
 
-		Set<Percept> regionPercepts = new HashSet<>(map.getRegions().size());
-		for (Region r : map.getRegions()) {
-			Position center = r.getCenter();
-			int height = map.getGroundHeight(center);
-			List<Parameter> connected = new ArrayList<>(r.getConnectedRegions().size());
-			for (Region c : r.getConnectedRegions()) {
+		List<Region> regions = this.api.getAllRegions();
+		Set<Percept> regionPercepts = new HashSet<>(regions.size());
+		for (Region r : regions) {
+			TilePosition center = r.getCenter().toTilePosition();
+			boolean highground = r.isHigherGround();
+			List<Region> neighbors = r.getNeighbors();
+			List<Parameter> connected = new ArrayList<>(neighbors.size());
+			for (Region c : neighbors) {
 				connected.add(new Numeral(c.getID()));
 			}
-			Percept regionPercept = new RegionPercept(r.getID(), center.getBX(), center.getBY(), height, connected);
+			Percept regionPercept = new RegionPercept(r.getID(), center.getX(), center.getY(), highground, connected);
 			regionPercepts.add(regionPercept);
 		}
 		toReturn.put(new PerceptFilter(Percepts.REGION, Filter.Type.ONCE), regionPercepts);

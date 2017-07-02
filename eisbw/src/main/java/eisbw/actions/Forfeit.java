@@ -2,10 +2,9 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.Unit;
 import eis.iilang.Action;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - Forfeits the match (mapAgent only).
@@ -18,7 +17,7 @@ public class Forfeit extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Forfeit(JNIBWAPI api) {
+	public Forfeit(bwapi.Game api) {
 		super(api);
 	}
 

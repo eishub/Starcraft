@@ -7,9 +7,9 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import bwapi.Unit;
 import eisbw.BwapiUtility;
 import eisbw.StarcraftEnvironmentImpl;
-import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - The data class which keeps track of all the units.

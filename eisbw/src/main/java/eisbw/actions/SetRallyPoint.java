@@ -2,13 +2,11 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.TilePosition;
+import bwapi.Unit;
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Position.PosType;
-import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - Sets a rally point on a specified location.
@@ -21,7 +19,7 @@ public class SetRallyPoint extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public SetRallyPoint(JNIBWAPI api) {
+	public SetRallyPoint(bwapi.Game api) {
 		super(api);
 	}
 
@@ -42,7 +40,7 @@ public class SetRallyPoint extends StarcraftAction {
 		int xpos = ((Numeral) parameters.get(0)).getValue().intValue();
 		int ypos = ((Numeral) parameters.get(1)).getValue().intValue();
 
-		unit.setRallyPoint(new Position(xpos, ypos, PosType.BUILD));
+		unit.setRallyPoint(new TilePosition(xpos, ypos).toPosition());
 	}
 
 	@Override

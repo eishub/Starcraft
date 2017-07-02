@@ -2,12 +2,11 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.Unit;
+import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Builds an addon for the (terran) building.
@@ -20,7 +19,7 @@ public class BuildAddon extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public BuildAddon(JNIBWAPI api) {
+	public BuildAddon(bwapi.Game api) {
 		super(api);
 	}
 

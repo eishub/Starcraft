@@ -1,16 +1,14 @@
 package eisbw;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
-import jnibwapi.Region;
-import jnibwapi.Unit;
-import jnibwapi.types.TechType;
-import jnibwapi.types.TechType.TechTypes;
-import jnibwapi.types.UnitType;
-import jnibwapi.types.UnitType.UnitTypes;
-import jnibwapi.types.UpgradeType;
-import jnibwapi.types.UpgradeType.UpgradeTypes;
+import bwapi.TechType;
+import bwapi.Unit;
+import bwapi.UnitType;
+import bwapi.UpgradeType;
 
 /**
  * @author Danny & Harm - The Utility class of the BWAPI.
@@ -26,7 +24,7 @@ public class BwapiUtility {
 	}
 
 	public static boolean isValid(Unit unit) {
-		return unit.isExists() && unit.isVisible() && !(unit.isBeingConstructed() && unit.isLoaded());
+		return unit.exists() && unit.isVisible() && !(unit.isBeingConstructed() && unit.isLoaded());
 	}
 
 	/**
@@ -37,22 +35,17 @@ public class BwapiUtility {
 	 * @return the name of the unit.
 	 */
 	public static String getName(Unit unit) {
-		String name = (unit.getType().getName() + unit.getID()).replace("_", "").replace(" ", "");
+		String name = (unit.getType().toString() + unit.getID()).replace("_", "").replace(" ", "");
 		return name.substring(0, 1).toLowerCase() + name.substring(1);
 	}
 
 	public static String getName(UnitType unittype) {
-		String type = unittype.getName();
+		String type = unittype.toString();
 		if (type.length() > 17 && "Terran Siege Tank".equals(type.substring(0, 17))) {
 			return "Terran Siege Tank";
 		} else {
 			return type;
 		}
-	}
-
-	public static int getRegion(Unit unit, jnibwapi.Map map) {
-		Region region = (map == null) ? null : map.getRegion(unit.getPosition());
-		return (region == null) ? 0 : region.getID();
 	}
 
 	/**
@@ -63,7 +56,7 @@ public class BwapiUtility {
 	 * @return the type of a unit.
 	 */
 	public static String getEisUnitType(Unit unit) {
-		String type = unit.getType().getName().replace(" ", "");
+		String type = unit.getType().toString().replace(" ", "");
 		type = type.substring(0, 1).toLowerCase() + type.substring(1);
 		if ("terranSiegeTankTankMode".equals(type) || "terranSiegeTankSiegeMode".equals(type)) {
 			return "terranSiegeTank";
@@ -81,8 +74,15 @@ public class BwapiUtility {
 	 */
 	public static UnitType getUnitType(String type) {
 		if (unitTypeMap.isEmpty()) {
-			for (UnitType ut : UnitTypes.getAllUnitTypes()) {
-				unitTypeMap.put(ut.getName(), ut);
+			for (Field field : UnitType.class.getDeclaredFields()) {
+				if (Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers())) {
+					try {
+						UnitType ut = (UnitType) field.get(null);
+						unitTypeMap.put(ut.toString(), ut);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						e.printStackTrace(); // TODO Auto-generated
+					}
+				}
 			}
 		}
 		return unitTypeMap.get(type);
@@ -97,8 +97,15 @@ public class BwapiUtility {
 	 */
 	public static TechType getTechType(String type) {
 		if (techTypeMap.isEmpty()) {
-			for (TechType tt : TechTypes.getAllTechTypes()) {
-				techTypeMap.put(tt.getName(), tt);
+			for (Field field : TechType.class.getDeclaredFields()) {
+				if (Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers())) {
+					try {
+						TechType tt = (TechType) field.get(null);
+						techTypeMap.put(tt.toString(), tt);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						e.printStackTrace(); // TODO Auto-generated
+					}
+				}
 			}
 		}
 		return techTypeMap.get(type);
@@ -113,10 +120,18 @@ public class BwapiUtility {
 	 */
 	public static UpgradeType getUpgradeType(String type) {
 		if (upgradeTypeMap.isEmpty()) {
-			for (UpgradeType tt : UpgradeTypes.getAllUpgradeTypes()) {
-				upgradeTypeMap.put(tt.getName(), tt);
+			for (Field field : UpgradeType.class.getDeclaredFields()) {
+				if (Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers())) {
+					try {
+						UpgradeType ut = (UpgradeType) field.get(null);
+						upgradeTypeMap.put(ut.toString(), ut);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						e.printStackTrace(); // TODO Auto-generated
+					}
+				}
 			}
 		}
+
 		return upgradeTypeMap.get(type);
 	}
 }

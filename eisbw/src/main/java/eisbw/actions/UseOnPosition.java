@@ -2,14 +2,13 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.TechType;
+import bwapi.TilePosition;
+import bwapi.Unit;
 import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Unit;
-import jnibwapi.types.TechType;
 
 /**
  * @author Danny & Harm - Ability which can be used on a specified location.
@@ -22,7 +21,7 @@ public class UseOnPosition extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI.
 	 */
-	public UseOnPosition(JNIBWAPI api) {
+	public UseOnPosition(bwapi.Game api) {
 		super(api);
 	}
 
@@ -38,7 +37,7 @@ public class UseOnPosition extends StarcraftAction {
 	public boolean canExecute(Unit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
-		return techType.isTargetsPosition();
+		return techType.targetsPosition();
 	}
 
 	@Override
@@ -48,7 +47,7 @@ public class UseOnPosition extends StarcraftAction {
 		int xpos = ((Numeral) parameters.get(1)).getValue().intValue();
 		int ypos = ((Numeral) parameters.get(2)).getValue().intValue();
 
-		unit.useTech(techType, new Position(xpos, ypos, Position.PosType.BUILD));
+		unit.useTech(techType, new TilePosition(xpos, ypos).toPosition());
 	}
 
 	@Override

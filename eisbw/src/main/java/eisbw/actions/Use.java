@@ -2,12 +2,11 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.TechType;
+import bwapi.Unit;
 import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.TechType;
 
 /**
  * @author Danny & Harm - Use a researched TechType.
@@ -20,7 +19,7 @@ public class Use extends StarcraftTechAction {
 	 * @param api
 	 *            The BWAPI.
 	 */
-	public Use(JNIBWAPI api) {
+	public Use(bwapi.Game api) {
 		super(api);
 	}
 

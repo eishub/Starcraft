@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import bwapi.Order;
+import bwapi.Unit;
 import eis.eis2java.translation.Filter;
 import eis.iilang.Percept;
 import eisbw.BwapiUtility;
@@ -15,11 +17,6 @@ import eisbw.percepts.SelfPercept;
 import eisbw.percepts.StatusPercept;
 import eisbw.percepts.UnitLoadedPercept;
 import eisbw.units.ConditionHandler;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Unit;
-import jnibwapi.types.OrderType;
-import jnibwapi.types.OrderType.OrderTypes;
 
 /**
  * @author Danny & Harm - The perceiver which handles all the generic percepts.
@@ -32,7 +29,7 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	 * @param unit
 	 *            The perceiving unit.
 	 */
-	public GenericUnitPerceiver(JNIBWAPI api, Unit unit) {
+	public GenericUnitPerceiver(bwapi.Game api, Unit unit) {
 		super(api, unit);
 	}
 
@@ -43,7 +40,7 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 		statusPercept(toReturn);
 		orderPercept(toReturn);
 
-		if (this.unit.getType().getSpaceProvided() > 0) {
+		if (this.unit.getType().spaceProvided() > 0) {
 			List<Unit> loadedUnits = this.unit.getLoadedUnits();
 			unitLoadedPercept(toReturn, loadedUnits);
 		}
@@ -57,10 +54,9 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	 */
 	private void statusPercept(Map<PerceptFilter, Set<Percept>> toReturn) {
 		Set<Percept> statusPercept = new HashSet<>(1);
-		Position pos = this.unit.getPosition();
-		int region = BwapiUtility.getRegion(this.unit, this.api.getMap());
 		statusPercept.add(new StatusPercept(this.unit.getHitPoints(), this.unit.getShields(), this.unit.getEnergy(),
-				new ConditionHandler(this.api, this.unit).getConditions(), pos.getBX(), pos.getBY(), region));
+				new ConditionHandler(this.api, this.unit).getConditions(), this.unit.getTilePosition().getX(),
+				this.unit.getTilePosition().getY(), this.unit.getRegion().getID()));
 		toReturn.put(new PerceptFilter(Percepts.STATUS, Filter.Type.ON_CHANGE), statusPercept);
 	}
 
@@ -110,11 +106,11 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	 */
 	private void orderPercept(Map<PerceptFilter, Set<Percept>> toReturn) {
 		Set<Percept> orderPercept = new HashSet<>(1);
-		OrderType primary = (this.unit.getOrder() == null) ? OrderTypes.None : this.unit.getOrder();
+		Order primary = (this.unit.getOrder() == null) ? Order.None : this.unit.getOrder();
 		Unit target = (this.unit.getTarget() == null) ? this.unit.getOrderTarget() : this.unit.getTarget();
-		OrderType secondary = (this.unit.getSecondaryOrder() == null) ? OrderTypes.None : this.unit.getSecondaryOrder();
-		orderPercept
-				.add(new OrderPercept(primary.getName(), (target == null) ? -1 : target.getID(), secondary.getName()));
+		Order secondary = (this.unit.getSecondaryOrder() == null) ? Order.None : this.unit.getSecondaryOrder();
+		orderPercept.add(
+				new OrderPercept(primary.toString(), (target == null) ? -1 : target.getID(), secondary.toString()));
 		toReturn.put(new PerceptFilter(Percepts.ORDER, Filter.Type.ON_CHANGE), orderPercept);
 	}
 }

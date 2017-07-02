@@ -7,6 +7,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import bwapi.Mirror;
+import bwapi.Position;
+import bwapi.Race;
+import bwapi.Unit;
+import bwta.BWTA;
 import eis.exceptions.ActException;
 import eis.iilang.Action;
 import eis.iilang.EnvironmentState;
@@ -17,10 +22,6 @@ import eisbw.debugger.draw.DrawMapInfo;
 import eisbw.debugger.draw.DrawUnitInfo;
 import eisbw.debugger.draw.IDraw;
 import eisbw.units.StarcraftUnitFactory;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Unit;
-import jnibwapi.types.RaceType.RaceTypes;
 
 /**
  * @author Danny & Harm - The Listener of the BWAPI Events.
@@ -28,7 +29,8 @@ import jnibwapi.types.RaceType.RaceTypes;
  */
 public class BwapiListener extends BwapiEvents {
 	protected final Logger logger = Logger.getLogger("StarCraft Logger");
-	protected JNIBWAPI bwapi; // overridden in test
+	protected Mirror mirror; // overridden in test
+	protected bwapi.Game api;
 	protected final Game game;
 	protected final ActionProvider actionProvider;
 	protected final Map<Unit, Action> pendingActions;
@@ -56,12 +58,12 @@ public class BwapiListener extends BwapiEvents {
 		if (!bwta.isDirectory()) {
 			bwta = new File("mapData");
 		}
-		this.bwapi = new JNIBWAPI(this, bwta);
+		this.mirror = new Mirror();
 		this.game = game;
 		this.actionProvider = new ActionProvider();
-		this.actionProvider.loadActions(this.bwapi);
+		this.actionProvider.loadActions(this.api);
 		this.pendingActions = new ConcurrentHashMap<>();
-		this.factory = new StarcraftUnitFactory(this.bwapi);
+		this.factory = new StarcraftUnitFactory(this.api);
 		this.debug = debug;
 		this.drawMapInfo = new DrawMapInfo(game);
 		if (drawMapInfo) {
@@ -79,53 +81,58 @@ public class BwapiListener extends BwapiEvents {
 			public void run() {
 				Thread.currentThread().setPriority(MAX_PRIORITY);
 				Thread.currentThread().setName("BWAPI thread");
-				BwapiListener.this.bwapi.start();
+				BwapiListener.this.mirror.getModule().setEventListener(BwapiListener.this);
+				BwapiListener.this.mirror.startGame();
 			}
 		}.start();
 	}
 
 	@Override
-	public void matchStart() {
+	public void onStart() {
+		this.api = this.mirror.getGame();
+		BWTA.readMap();
+		BWTA.analyze();
+
 		// SET INIT SPEED (DEFAULT IS 50 FPS, WHICH IS 20 SPEED)
 		if (this.speed > 0) {
-			this.bwapi.setGameSpeed(1000 / this.speed);
+			this.api.setLocalSpeed(1000 / this.speed);
 		} else if (this.speed == 0) {
-			this.bwapi.setGameSpeed(this.speed);
+			this.api.setLocalSpeed(this.speed);
 		}
 
 		// SET INIT INVULNERABLE PARAMETER
 		if (this.invulnerable) {
-			this.bwapi.sendText("power overwhelming");
+			this.api.sendText("power overwhelming");
 		}
 
 		// START THE DEBUG TOOLS
 		if (this.debug) {
 			this.debugwindow = new DebugWindow(this.game);
-			this.bwapi.enableUserInput();
+			this.api.enableFlag(bwapi.Flag.Enum.UserInput.getValue());
 		}
 
 		// DO INITIAL UPDATES
 		this.game.mapAgent();
-		this.game.updateMap(this.bwapi);
-		this.game.updateConstructionSites(this.bwapi);
+		this.game.updateMap(this.api);
+		this.game.updateConstructionSites(this.api);
 		this.game.updateFrameCount(this.count);
 
 		// KnowledgeExport.export();
 	}
 
 	@Override
-	public void matchFrame() {
+	public void onFrame() {
 		// GENERATE PERCEPTS
 		if ((++this.count % 50) == 0) {
-			this.game.updateConstructionSites(this.bwapi);
+			this.game.updateConstructionSites(this.api);
 			this.game.updateFrameCount(this.count);
 		}
 		if (this.nuke >= 0 && ++this.nuke == 50) {
-			this.game.updateNukePerceiver(this.bwapi, null);
+			this.game.updateNukePerceiver(this.api, null);
 			this.nuke = -1;
 		}
 		do {
-			this.game.update(this.bwapi);
+			this.game.update(this.api);
 			try { // always sleep 1ms to better facilitate running at speed 0
 				Thread.sleep(1);
 			} catch (InterruptedException ignore) {
@@ -141,53 +148,52 @@ public class BwapiListener extends BwapiEvents {
 			}
 		}
 		if (this.debugwindow != null) {
-			this.debugwindow.debug(this.bwapi);
+			this.debugwindow.debug(this.api);
 		}
-		this.drawMapInfo.draw(this.bwapi);
-		this.drawUnitInfo.draw(this.bwapi);
+		this.drawMapInfo.draw(this.api);
+		this.drawUnitInfo.draw(this.api);
 	}
 
 	@Override
-	public void unitComplete(int id) {
-		Unit unit = this.bwapi.getUnit(id);
-		if (this.bwapi.getMyUnits().contains(unit) && !this.game.getUnits().getUnitNames().containsKey(id)) {
+	public void onUnitComplete(Unit unit) {
+		if (this.api.self().getUnits().contains(unit)
+				&& !this.game.getUnits().getUnitNames().containsKey(unit.getID())) {
 			this.game.getUnits().addUnit(unit, this.factory);
 		}
 	}
 
 	@Override
-	public void unitDestroy(int id) {
-		String unitName = this.game.getUnits().getUnitNames().get(id);
+	public void onUnitDestroy(Unit unit) {
+		String unitName = this.game.getUnits().getUnitNames().get(unit.getID());
 		if (unitName != null) {
-			Unit deleted = this.game.getUnits().deleteUnit(unitName, id);
+			Unit deleted = this.game.getUnits().deleteUnit(unitName, unit.getID());
 			this.pendingActions.remove(deleted);
 		}
 	}
 
 	@Override
-	public void unitMorph(int id) {
-		Unit unit = this.bwapi.getUnit(id);
-		if (unit.getType().getRaceID() != RaceTypes.Terran.getID()) {
-			unitDestroy(id);
-			unitComplete(id);
+	public void onUnitMorph(Unit unit) {
+		if (unit.getType().getRace() != Race.Terran) {
+			onUnitDestroy(unit);
+			onUnitComplete(unit);
 		}
 	}
 
 	@Override
-	public void unitRenegade(int id) {
-		unitDestroy(id);
+	public void onUnitRenegade(Unit unit) {
+		onUnitDestroy(unit);
 	}
 
 	@Override
-	public void nukeDetect(Position pos) {
-		this.game.updateNukePerceiver(this.bwapi, pos);
+	public void onNukeDetect(Position pos) {
+		this.game.updateNukePerceiver(this.api, pos);
 		this.nuke = 0;
 	}
 
 	@Override
-	public void matchEnd(boolean winner) {
-		this.game.updateEndGamePerceiver(this.bwapi, winner);
-		this.game.update(this.bwapi);
+	public void onEnd(boolean winner) {
+		this.game.updateEndGamePerceiver(this.api, winner);
+		this.game.update(this.api);
 
 		// have the winner percept perceived for 1 second before all agents
 		// are removed
@@ -200,7 +206,7 @@ public class BwapiListener extends BwapiEvents {
 		if (this.debugwindow != null) {
 			this.debugwindow.dispose();
 		}
-		this.bwapi.leaveGame();
+		this.api.leaveGame();
 		this.game.clean();
 	}
 

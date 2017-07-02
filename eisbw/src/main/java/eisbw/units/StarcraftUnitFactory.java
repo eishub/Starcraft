@@ -3,19 +3,18 @@ package eisbw.units;
 import java.util.LinkedList;
 import java.util.List;
 
+import bwapi.Unit;
 import eisbw.percepts.perceivers.BuildingPerceiver;
 import eisbw.percepts.perceivers.GenericUnitPerceiver;
 import eisbw.percepts.perceivers.IPerceiver;
 import eisbw.percepts.perceivers.WorkerPerceiver;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - The Starcraft Unit Factory which creates the units.
  *
  */
 public class StarcraftUnitFactory {
-	private final JNIBWAPI api;
+	private final bwapi.Game api;
 
 	/**
 	 * The StarcraftUnitFactory constructor.
@@ -23,7 +22,7 @@ public class StarcraftUnitFactory {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public StarcraftUnitFactory(JNIBWAPI api) {
+	public StarcraftUnitFactory(bwapi.Game api) {
 		this.api = api;
 	}
 

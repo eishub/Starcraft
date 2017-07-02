@@ -2,12 +2,11 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.TechType;
+import bwapi.Unit;
 import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.TechType;
 
 /**
  * @author Danny & Harm - Abstract class for Tech actions.
@@ -20,7 +19,7 @@ public abstract class StarcraftTechAction extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public StarcraftTechAction(JNIBWAPI api) {
+	public StarcraftTechAction(bwapi.Game api) {
 		super(api);
 	}
 
@@ -33,11 +32,12 @@ public abstract class StarcraftTechAction extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
-		if (!unit.isLoaded()) {
+		if (unit.isLoaded()) {
+			return false;
+		} else {
 			List<Parameter> parameters = action.getParameters();
 			TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
-			return !techType.isTargetsPosition() && !techType.isTargetsUnits();
+			return !techType.targetsPosition() && !techType.targetsUnit();
 		}
-		return false;
 	}
 }

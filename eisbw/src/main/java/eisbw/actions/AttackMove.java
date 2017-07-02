@@ -2,13 +2,12 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.TilePosition;
+import bwapi.Unit;
+import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Makes the unit move to the specified location,
@@ -23,14 +22,14 @@ public class AttackMove extends StarcraftMovableAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public AttackMove(JNIBWAPI api) {
+	public AttackMove(bwapi.Game api) {
 		super(api);
 	}
 
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
 		UnitType unitType = unit.getType();
-		return unitType.isCanMove() && unitType.isAttackCapable();
+		return unitType.canMove() && unitType.canAttack();
 	}
 
 	@Override
@@ -39,7 +38,7 @@ public class AttackMove extends StarcraftMovableAction {
 		int xpos = ((Numeral) parameters.get(0)).getValue().intValue();
 		int ypos = ((Numeral) parameters.get(1)).getValue().intValue();
 
-		unit.attack(new Position(xpos, ypos, Position.PosType.BUILD), false);
+		unit.attack(new TilePosition(xpos, ypos).toPosition(), false);
 	}
 
 	@Override

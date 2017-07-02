@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import bwapi.Player;
+import bwapi.Unit;
+import bwapi.UnitType;
 import eis.eis2java.translation.Filter;
 //import eis.iilang.Identifier;
 //import eis.iilang.Parameter;
@@ -18,10 +21,6 @@ import eisbw.percepts.NewUnitPercept;
 import eisbw.percepts.Percepts;
 import eisbw.percepts.ResourcesPercept;
 import eisbw.units.ConditionHandler;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Player;
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType.UnitTypes;
 
 /**
  * @author Danny & Harm - The perceiver which handles all the unit percepts.
@@ -32,7 +31,7 @@ public class UnitsPerceiver extends Perceiver {
 	 * @param api
 	 *            The BWAPI.
 	 */
-	public UnitsPerceiver(JNIBWAPI api) {
+	public UnitsPerceiver(bwapi.Game api) {
 		super(api);
 	}
 
@@ -61,20 +60,18 @@ public class UnitsPerceiver extends Perceiver {
 			}
 			ConditionHandler conditionHandler = new ConditionHandler(this.api, u);
 			if (newunitpercepts != null) {
-				String unittype = (u.getType().getID() == UnitTypes.Zerg_Egg.getID()) ? u.getBuildType().getName()
+				String unittype = (u.getType() == UnitType.Zerg_Egg) ? u.getBuildType().toString()
 						: BwapiUtility.getName(u.getType());
 				unitpercepts.add(new FriendlyPercept(u.getID(), unittype, conditionHandler.getConditions()));
 				if (u.isBeingConstructed()) {
-					int region = BwapiUtility.getRegion(u, this.api.getMap());
-					newunitpercepts.add(
-							new NewUnitPercept(u.getID(), u.getPosition().getBX(), u.getPosition().getBY(), region));
+					newunitpercepts.add(new NewUnitPercept(u.getID(), u.getTilePosition().getX(),
+							u.getTilePosition().getY(), u.getRegion().getID()));
 				}
 			} else {
-				int region = BwapiUtility.getRegion(u, this.api.getMap());
 				unitpercepts.add(new EnemyPercept(u.getID(), BwapiUtility.getName(u.getType()), u.getHitPoints(),
-						u.getShields(), u.getEnergy(), conditionHandler.getConditions(), u.getPosition().getBX(),
-						u.getPosition().getBY(), region));
-				if (u.getType().isAttackCapable()) {
+						u.getShields(), u.getEnergy(), conditionHandler.getConditions(), u.getTilePosition().getX(),
+						u.getTilePosition().getY(), u.getRegion().getID()));
+				if (u.getType().canAttack()) {
 					Unit target = (u.getTarget() == null) ? u.getOrderTarget() : u.getTarget();
 					if (target != null && !units.contains(target)) {
 						attackingpercepts.add(new AttackingPercept(u.getID(), target.getID()));
@@ -92,9 +89,11 @@ public class UnitsPerceiver extends Perceiver {
 		Set<Percept> attackingpercepts = new HashSet<>();
 
 		// perceive friendly units
-		setUnitPercepts(this.api.getMyUnits(), newunitpercepts, friendlypercepts, attackingpercepts);
+		Player self = this.api.self();
+		setUnitPercepts(self.getUnits(), newunitpercepts, friendlypercepts, attackingpercepts);
 		// perceive enemy units
-		setUnitPercepts(this.api.getEnemyUnits(), null, enemypercepts, attackingpercepts);
+		Player enemy = this.api.enemy();
+		setUnitPercepts(enemy.getUnits(), null, enemypercepts, attackingpercepts);
 
 		toReturn.put(new PerceptFilter(Percepts.FRIENDLY, Filter.Type.ALWAYS), friendlypercepts);
 		toReturn.put(new PerceptFilter(Percepts.ENEMY, Filter.Type.ALWAYS), enemypercepts);
@@ -102,9 +101,7 @@ public class UnitsPerceiver extends Perceiver {
 		toReturn.put(new PerceptFilter(Percepts.NEWUNIT, Filter.Type.ALWAYS), newunitpercepts);
 
 		Set<Percept> resourcePercept = new HashSet<>(1);
-		Player self = this.api.getSelf();
-		resourcePercept.add(
-				new ResourcesPercept(self.getMinerals(), self.getGas(), self.getSupplyUsed(), self.getSupplyTotal()));
+		resourcePercept.add(new ResourcesPercept(self.minerals(), self.gas(), self.supplyUsed(), self.supplyTotal()));
 		toReturn.put(new PerceptFilter(Percepts.RESOURCES, Filter.Type.ON_CHANGE), resourcePercept);
 
 		return toReturn;

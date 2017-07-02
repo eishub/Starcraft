@@ -2,13 +2,12 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.TechType;
+import bwapi.Unit;
+import bwapi.UpgradeType;
 import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.TechType;
-import jnibwapi.types.UpgradeType;
 
 /**
  * @author Danny & Harm - Researches a specified Tech Type.
@@ -21,7 +20,7 @@ public class Research extends StarcraftTechAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Research(JNIBWAPI api) {
+	public Research(bwapi.Game api) {
 		super(api);
 	}
 

@@ -2,13 +2,12 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.TechType;
+import bwapi.Unit;
 import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.TechType;
 
 /**
  * @author Danny & Harm - Ability which can be used on a specified unit.
@@ -21,7 +20,7 @@ public class UseOnTarget extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI.
 	 */
-	public UseOnTarget(JNIBWAPI api) {
+	public UseOnTarget(bwapi.Game api) {
 		super(api);
 	}
 
@@ -37,7 +36,7 @@ public class UseOnTarget extends StarcraftAction {
 	public boolean canExecute(Unit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
-		return techType.isTargetsUnits(); // check if unit has Tech?
+		return techType.targetsUnit(); // check if unit has Tech?
 	}
 
 	@Override

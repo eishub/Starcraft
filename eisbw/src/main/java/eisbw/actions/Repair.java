@@ -2,16 +2,15 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.Race;
+import bwapi.Unit;
+import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.RaceType;
-import jnibwapi.types.UnitType;
 
 public class Repair extends StarcraftAction {
-	public Repair(JNIBWAPI api) {
+	public Repair(bwapi.Game api) {
 		super(api);
 	}
 
@@ -24,7 +23,7 @@ public class Repair extends StarcraftAction {
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
 		UnitType unitType = unit.getType();
-		return unitType.getRaceID() == RaceType.RaceTypes.Terran.getID() && unitType.isWorker();
+		return unitType.getRace() == Race.Terran && unitType.isWorker();
 	}
 
 	@Override

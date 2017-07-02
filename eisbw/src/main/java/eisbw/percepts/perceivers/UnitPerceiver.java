@@ -1,7 +1,6 @@
 package eisbw.percepts.perceivers;
 
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
+import bwapi.Unit;
 
 /**
  * @author Danny & Harm - Abstract class for Unit Perceivers.
@@ -16,7 +15,7 @@ public abstract class UnitPerceiver extends Perceiver {
 	 * @param unit
 	 *            The perceiving unit.
 	 */
-	public UnitPerceiver(JNIBWAPI api, Unit unit) {
+	public UnitPerceiver(bwapi.Game api, Unit unit) {
 		super(api);
 		this.unit = unit;
 	}

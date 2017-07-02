@@ -8,7 +8,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import eisbw.Game;
-import jnibwapi.JNIBWAPI;
 
 /**
  * @author Danny & Harm.
@@ -68,7 +67,7 @@ public class DebugWindow extends JFrame {
 	 * @param bwapi
 	 *            - the API.
 	 */
-	public void debug(JNIBWAPI bwapi) {
+	public void debug(bwapi.Game bwapi) {
 		Iterator<String> iter = getActions().iterator();
 		while (iter.hasNext()) {
 			bwapi.sendText(iter.next());

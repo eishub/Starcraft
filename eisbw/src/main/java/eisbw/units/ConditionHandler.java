@@ -3,11 +3,10 @@ package eisbw.units;
 import java.util.LinkedList;
 import java.util.List;
 
+import bwapi.Race;
+import bwapi.Unit;
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.RaceType.RaceTypes;
 
 /**
  * @author Danny & Harm - The condition perceiver.
@@ -15,7 +14,7 @@ import jnibwapi.types.RaceType.RaceTypes;
  */
 public class ConditionHandler {
 	protected final Unit unit;
-	protected final JNIBWAPI api;
+	protected final bwapi.Game api;
 
 	/**
 	 * @param api
@@ -23,7 +22,7 @@ public class ConditionHandler {
 	 * @param unit
 	 *            The unit.
 	 */
-	public ConditionHandler(JNIBWAPI api, Unit unit) {
+	public ConditionHandler(bwapi.Game api, Unit unit) {
 		this.unit = unit;
 		this.api = api;
 	}
@@ -48,9 +47,9 @@ public class ConditionHandler {
 			conditions.add(new Identifier("lifted"));
 		}
 		if (this.unit.getAddon() != null) {
-			conditions.add(new Identifier(this.unit.getAddon().getType().getName()));
+			conditions.add(new Identifier(this.unit.getAddon().getType().toString()));
 		}
-		if (this.unit.isNukeReady()) {
+		if (this.unit.hasNuke()) {
 			conditions.add(new Identifier("nukeReady"));
 		}
 		// for vultures
@@ -222,8 +221,7 @@ public class ConditionHandler {
 		if (this.unit.isCloaked()) {
 			conditions.add(new Identifier("cloaked"));
 		}
-		if (this.unit.getPlayer() != null && this.api.getSelf() != null
-				&& this.unit.getPlayer().getID() != this.api.getSelf().getID() && this.unit.isDetected()) {
+		if (this.unit.getPlayer() != null && !this.unit.getPlayer().equals(this.api.self()) && this.unit.isDetected()) {
 			conditions.add(new Identifier("detected"));
 		}
 		if (this.unit.isAttacking()) { // includes medic heal
@@ -268,18 +266,18 @@ public class ConditionHandler {
 		List<Parameter> conditions = new LinkedList<>();
 		setGenericConditions(conditions);
 
-		if (this.unit.getType().getRaceID() == RaceTypes.Terran.getID()) {
+		if (this.unit.getType().getRace() == Race.Terran) {
 			setTerranConditions(conditions);
-		} else if (this.unit.getType().getRaceID() == RaceTypes.Protoss.getID()) {
+		} else if (this.unit.getType().getRace() == Race.Protoss) {
 			setProtossConditions(conditions);
-		} else if (this.unit.getType().getRaceID() == RaceTypes.Zerg.getID()) {
+		} else if (this.unit.getType().getRace() == Race.Zerg) {
 			setZergConditions(conditions);
 		}
 
 		if (this.unit.getType().isWorker()) {
 			setWorkerConditions(conditions);
 		}
-		if (this.unit.getType().isCanMove()) {
+		if (this.unit.getType().canMove()) {
 			setMovingConditions(conditions);
 			setAbilityConditions(conditions);
 		}

@@ -2,12 +2,11 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.Unit;
+import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Makes the unit follow an other specified unit.
@@ -20,7 +19,7 @@ public class Follow extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Follow(JNIBWAPI api) {
+	public Follow(bwapi.Game api) {
 		super(api);
 	}
 
@@ -33,7 +32,7 @@ public class Follow extends StarcraftAction {
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
 		UnitType unitType = unit.getType();
-		return unitType.isCanMove();
+		return unitType.canMove();
 	}
 
 	@Override

@@ -2,12 +2,11 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.Unit;
+import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Makes the unit gather from a specified resource.
@@ -20,7 +19,7 @@ public class Gather extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Gather(JNIBWAPI api) {
+	public Gather(bwapi.Game api) {
 		super(api);
 	}
 

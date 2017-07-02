@@ -1,19 +1,17 @@
 package eisbw.percepts.perceivers;
 
-import jnibwapi.JNIBWAPI;
-
 /**
  * @author Danny & Harm - The abstract perceiver.
  *
  */
 public abstract class Perceiver implements IPerceiver {
-	protected final JNIBWAPI api;
+	protected final bwapi.Game api;
 
 	/**
 	 * @param api
 	 *            The BWAPI.
 	 */
-	public Perceiver(JNIBWAPI api) {
+	public Perceiver(bwapi.Game api) {
 		this.api = api;
 	}
 }

@@ -2,13 +2,12 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.Race;
+import bwapi.Unit;
+import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.RaceType.RaceTypes;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Makes the unit morph into a specified unit.
@@ -21,7 +20,7 @@ public class Morph extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Morph(JNIBWAPI api) {
+	public Morph(bwapi.Game api) {
 		super(api);
 	}
 
@@ -37,7 +36,7 @@ public class Morph extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
-		return this.api.getSelf().getRace().getID() == RaceTypes.Zerg.getID();
+		return this.api.self().getRace() == Race.Zerg;
 	}
 
 	@Override

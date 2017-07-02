@@ -6,7 +6,6 @@ import java.util.logging.Logger;
 import eis.eis2java.exception.NoTranslatorException;
 import eis.eis2java.exception.TranslationException;
 import eisbw.Game;
-import jnibwapi.JNIBWAPI;
 
 /**
  * @author Danny & Harm - The abstract class for the drawing classes.
@@ -29,7 +28,7 @@ public abstract class IDraw {
 		this.game = game;
 	}
 
-	protected abstract void drawOnMap(JNIBWAPI api) throws TranslationException;
+	protected abstract void drawOnMap(bwapi.Game api) throws TranslationException;
 
 	/**
 	 * Draw on the map.
@@ -37,7 +36,7 @@ public abstract class IDraw {
 	 * @param api
 	 *            - the StarCraft API.
 	 */
-	public void draw(JNIBWAPI api) {
+	public void draw(bwapi.Game api) {
 		if (this.toggle) {
 			try {
 				drawOnMap(api);

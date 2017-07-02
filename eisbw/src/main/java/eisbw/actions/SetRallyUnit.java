@@ -2,11 +2,10 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.Unit;
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - Sets a rally point on a specified unit.
@@ -19,7 +18,7 @@ public class SetRallyUnit extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public SetRallyUnit(JNIBWAPI api) {
+	public SetRallyUnit(bwapi.Game api) {
 		super(api);
 	}
 

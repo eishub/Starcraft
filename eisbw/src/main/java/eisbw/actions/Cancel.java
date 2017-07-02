@@ -2,13 +2,12 @@ package eisbw.actions;
 
 import java.util.List;
 
+import bwapi.Race;
+import bwapi.TechType;
+import bwapi.Unit;
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.RaceType.RaceTypes;
-import jnibwapi.types.TechType.TechTypes;
 
 /**
  * @author Danny & Harm - Cancels the action of the current unit.
@@ -21,7 +20,7 @@ public class Cancel extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Cancel(JNIBWAPI api) {
+	public Cancel(bwapi.Game api) {
 		super(api);
 	}
 
@@ -35,7 +34,7 @@ public class Cancel extends StarcraftAction {
 	public boolean canExecute(Unit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		if (parameters.isEmpty()) {
-			return unit.getType().isBuilding() || this.api.getSelf().getRace().getID() == RaceTypes.Zerg.getID();
+			return unit.getType().isBuilding() || this.api.self().getRace() == Race.Zerg;
 		} else {
 			return true;
 		}
@@ -59,7 +58,7 @@ public class Cancel extends StarcraftAction {
 			unit.cancelUpgrade();
 		} else if (unit.isTraining()) {
 			unit.cancelTrain();
-		} else if (unit.getTech() != null && unit.getTech().getID() != TechTypes.None.getID()) {
+		} else if (unit.getTech() != null && unit.getTech() != TechType.None) {
 			unit.cancelResearch();
 		}
 	}

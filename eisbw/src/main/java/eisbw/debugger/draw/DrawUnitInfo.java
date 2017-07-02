@@ -5,16 +5,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import bwapi.Position;
+import bwapi.Position.PosType;
+import bwapi.Unit;
+import bwapi.UnitType;
+import bwapi.types.UnitType.UnitTypes;
+import bwapi.util.BWColor;
 import eis.eis2java.exception.TranslationException;
 import eisbw.BwapiUtility;
 import eisbw.Game;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Position.PosType;
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
-import jnibwapi.types.UnitType.UnitTypes;
-import jnibwapi.util.BWColor;
 
 /**
  * @author Danny & Harm - The class which handles the drawing of the buildings
@@ -38,7 +37,7 @@ public class DrawUnitInfo extends IDraw {
 	}
 
 	@Override
-	protected void drawOnMap(JNIBWAPI api) throws TranslationException {
+	protected void drawOnMap(bwapi.Game api) throws TranslationException {
 		drawTimerInfo(api);
 		drawHealth(api);
 		drawTargets(api);
@@ -51,7 +50,7 @@ public class DrawUnitInfo extends IDraw {
 	 * Draws remaining research/upgrade times; unit building/training is already
 	 * covered by the health drawing
 	 */
-	private void drawTimerInfo(JNIBWAPI api) {
+	private void drawTimerInfo(bwapi.Game api) {
 		for (final Unit unit : api.getMyUnits()) {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
@@ -83,10 +82,10 @@ public class DrawUnitInfo extends IDraw {
 	}
 
 	/**
-	 * Draws health boxes for units (ported from JNIBWAPI native code); added a
+	 * Draws health boxes for units (ported from bwapi.Game native code); added a
 	 * max>0 check to prevent crashes on spell units (with health 255)
 	 */
-	private void drawHealth(JNIBWAPI api) {
+	private void drawHealth(bwapi.Game api) {
 		for (final Unit unit : api.getAllUnits()) {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
@@ -122,9 +121,9 @@ public class DrawUnitInfo extends IDraw {
 	}
 
 	/**
-	 * Draws the targets of each unit. (ported from JNIBWAPI native code)
+	 * Draws the targets of each unit. (ported from bwapi.Game native code)
 	 */
-	private void drawTargets(JNIBWAPI api) {
+	private void drawTargets(bwapi.Game api) {
 		for (final Unit unit : api.getAllUnits()) {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
@@ -142,9 +141,9 @@ public class DrawUnitInfo extends IDraw {
 	}
 
 	/**
-	 * Draws the IDs of each unit. (ported from JNIBWAPI native code)
+	 * Draws the IDs of each unit. (ported from bwapi.Game native code)
 	 */
-	private void drawIDs(JNIBWAPI api) {
+	private void drawIDs(bwapi.Game api) {
 		for (final Unit unit : api.getAllUnits()) {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
@@ -157,7 +156,7 @@ public class DrawUnitInfo extends IDraw {
 	 * Draws a list of all unit types, counting how many are still alive and how
 	 * many have died (ported from native code of the tournament manager)
 	 */
-	private void drawUnitInformation(JNIBWAPI api, int x, int y) {
+	private void drawUnitInformation(bwapi.Game api, int x, int y) {
 		api.drawText(new Position(x, y + 20), api.getSelf().getName() + "'s Units", true);
 		api.drawText(new Position(x + 160, y + 20), "#", true);
 		api.drawText(new Position(x + 180, y + 20), "X", true);
@@ -206,7 +205,7 @@ public class DrawUnitInfo extends IDraw {
 		}
 	}
 
-	private void drawAgentCount(JNIBWAPI api) {
+	private void drawAgentCount(bwapi.Game api) {
 		api.drawText(new Position(10, 10, PosType.PIXEL), "Agentcount: " + this.game.getAgentCount(), true);
 	}
 }

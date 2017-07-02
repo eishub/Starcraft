@@ -9,6 +9,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import bwapi.Position;
+import bwapi.TilePosition;
+import bwapi.Unit;
 import eis.eis2java.translation.Filter;
 import eis.exceptions.ManagementException;
 import eis.iilang.Percept;
@@ -22,9 +25,6 @@ import eisbw.percepts.perceivers.PerceptFilter;
 import eisbw.percepts.perceivers.UnitsPerceiver;
 import eisbw.units.StarcraftUnit;
 import eisbw.units.Units;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - The game class where the percepts are updated.
@@ -68,7 +68,7 @@ public class Game {
 	 * @param api
 	 *            - the API.
 	 */
-	public void updateMap(JNIBWAPI api) {
+	public void updateMap(bwapi.Game api) {
 		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>();
 		new MapPerceiver(api).perceive(toReturn);
 		this.mapPercepts = toReturn;
@@ -80,7 +80,7 @@ public class Game {
 	 * @param bwapi
 	 *            - the game bridge
 	 */
-	public void update(JNIBWAPI bwapi) {
+	public void update(bwapi.Game bwapi) {
 		processUninitializedUnits();
 		Map<String, Map<PerceptFilter, Set<Percept>>> unitPerceptHolder = new HashMap<>();
 		Map<PerceptFilter, Set<Percept>> globalPercepts = getGlobalPercepts(bwapi);
@@ -193,9 +193,9 @@ public class Game {
 	 * updates the constructionsites in the game.
 	 *
 	 * @param bwapi
-	 *            - the JNIBWAPI
+	 *            - the bwapi.Game
 	 */
-	public void updateConstructionSites(JNIBWAPI bwapi) {
+	public void updateConstructionSites(bwapi.Game bwapi) {
 		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>();
 		new ConstructionSitePerceiver(bwapi).perceive(toReturn);
 		this.constructionPercepts = toReturn;
@@ -219,9 +219,9 @@ public class Game {
 	 * Updates the endGame percept.
 	 *
 	 * @param bwapi
-	 *            - the JNIBWAPI
+	 *            - the bwapi.Game
 	 */
-	public void updateEndGamePerceiver(JNIBWAPI bwapi, boolean winner) {
+	public void updateEndGamePerceiver(bwapi.Game bwapi, boolean winner) {
 		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>(1);
 		Set<Percept> endgamepercept = new HashSet<>(1);
 		endgamepercept.add(new WinnerPercept(winner));
@@ -233,15 +233,16 @@ public class Game {
 	 * Updates the endGame percept.
 	 *
 	 * @param bwapi
-	 *            - the JNIBWAPI
+	 *            - the bwapi.Game
 	 */
-	public void updateNukePerceiver(JNIBWAPI bwapi, Position pos) {
+	public void updateNukePerceiver(bwapi.Game bwapi, Position pos) {
 		if (pos == null) {
 			this.nukePercepts = null;
 		} else {
 			Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>();
 			Set<Percept> nukepercept = new HashSet<>(1);
-			nukepercept.add(new NukePercept(pos.getBX(), pos.getBY()));
+			TilePosition tpos = pos.toTilePosition();
+			nukepercept.add(new NukePercept(tpos.getX(), tpos.getY()));
 			toReturn.put(new PerceptFilter(Percepts.NUKE, Filter.Type.ON_CHANGE), nukepercept);
 			if (this.nukePercepts == null) {
 				this.nukePercepts = toReturn;
@@ -251,7 +252,7 @@ public class Game {
 		}
 	}
 
-	private Map<PerceptFilter, Set<Percept>> getGlobalPercepts(JNIBWAPI bwapi) {
+	private Map<PerceptFilter, Set<Percept>> getGlobalPercepts(bwapi.Game bwapi) {
 		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>();
 		new UnitsPerceiver(bwapi).perceive(toReturn);
 		return toReturn;
