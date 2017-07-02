@@ -5,12 +5,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import bwapi.Color;
 import bwapi.Position;
-import bwapi.Position.PosType;
 import bwapi.Unit;
 import bwapi.UnitType;
-import bwapi.types.UnitType.UnitTypes;
-import bwapi.util.BWColor;
 import eis.eis2java.exception.TranslationException;
 import eisbw.BwapiUtility;
 import eisbw.Game;
@@ -22,9 +20,9 @@ import eisbw.Game;
  */
 public class DrawUnitInfo extends IDraw {
 	private final static int barHeight = 18;
-	private final static BWColor barColor = BWColor.Blue;
+	private final static Color barColor = Color.Blue;
 	private final Set<Unit> alive = new HashSet<>();
-	private final Map<Integer, Integer> dead = new HashMap<>();
+	private final Map<UnitType, Integer> dead = new HashMap<>();
 
 	/**
 	 * The DrawBuildingDetails constructor.
@@ -51,7 +49,7 @@ public class DrawUnitInfo extends IDraw {
 	 * covered by the health drawing
 	 */
 	private void drawTimerInfo(bwapi.Game api) {
-		for (final Unit unit : api.getMyUnits()) {
+		for (final Unit unit : api.self().getUnits()) {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
 			}
@@ -59,31 +57,29 @@ public class DrawUnitInfo extends IDraw {
 			int done = 0;
 			String txt = "";
 			if (unit.getRemainingResearchTime() > 0) {
-				total = unit.getTech().getResearchTime();
+				total = unit.getTech().researchTime();
 				done = total - unit.getRemainingResearchTime();
-				txt = unit.getTech().getName();
+				txt = unit.getTech().toString();
 			}
 			if (unit.getRemainingUpgradeTime() > 0) {
-				total = unit.getUpgrade().getUpgradeTimeBase();
+				total = unit.getUpgrade().upgradeTime();
 				done = total - unit.getRemainingUpgradeTime();
-				txt = unit.getUpgrade().getName();
+				txt = unit.getUpgrade().toString();
 			}
 			if (total > 0) {
-				int width = unit.getType().getTileWidth() * 32;
-				Position start = new Position(unit.getPosition().getPX() - width / 2, unit.getPosition().getPY() - 30);
-				api.drawBox(start, new Position(start.getPX() + width, start.getPY() + barHeight), barColor, false,
-						false);
+				int width = unit.getType().tileWidth() * 32;
+				Position start = new Position(unit.getPosition().getX() - width / 2, unit.getPosition().getY() - 30);
+				api.drawBoxMap(start, new Position(start.getX() + width, start.getY() + barHeight), barColor, false);
 				int progress = (int) ((double) done / (double) total * width);
-				api.drawBox(start, new Position(start.getPX() + progress, start.getPY() + barHeight), barColor, true,
-						false);
-				api.drawText(new Position(start.getPX() + 5, start.getPY() + 2), txt, false);
+				api.drawBoxMap(start, new Position(start.getX() + progress, start.getY() + barHeight), barColor, true);
+				api.drawTextMap(new Position(start.getX() + 5, start.getY() + 2), txt);
 			}
 		}
 	}
 
 	/**
-	 * Draws health boxes for units (ported from bwapi.Game native code); added a
-	 * max>0 check to prevent crashes on spell units (with health 255)
+	 * Draws health boxes for units (ported from bwapi.Game native code); added
+	 * a max>0 check to prevent crashes on spell units (with health 255)
 	 */
 	private void drawHealth(bwapi.Game api) {
 		for (final Unit unit : api.getAllUnits()) {
@@ -91,31 +87,30 @@ public class DrawUnitInfo extends IDraw {
 				continue;
 			}
 			int health = unit.getHitPoints();
-			int max = unit.getType().getMaxHitPoints();
+			int max = unit.getType().maxHitPoints();
 			if (health > 0 && max > 0) {
-				int x = unit.getPosition().getPX();
-				int y = unit.getPosition().getPY();
-				int l = unit.getType().getDimensionLeft();
-				int t = unit.getType().getDimensionUp();
-				int r = unit.getType().getDimensionRight();
-				int b = unit.getType().getDimensionDown();
+				int x = unit.getPosition().getX();
+				int y = unit.getPosition().getY();
+				int l = unit.getType().dimensionLeft();
+				int t = unit.getType().dimensionUp();
+				int r = unit.getType().dimensionRight();
+				int b = unit.getType().dimensionDown();
 				int width = ((r + l) * health) / max;
 				if (health * 3 < max) {
-					api.drawBox(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), BWColor.Red, true,
-							false);
+					api.drawBoxMap(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), Color.Red, true);
 				} else if (health * 3 < 2 * max) {
-					api.drawBox(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), BWColor.Yellow,
-							true, false);
+					api.drawBoxMap(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), Color.Yellow,
+							true);
 				} else {
-					api.drawBox(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), BWColor.Green, true,
-							false);
+					api.drawBoxMap(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), Color.Green,
+							true);
 				}
-				boolean self = (unit.getPlayer().getID() == api.getSelf().getID());
-				api.drawBox(new Position(x - l, y - t - 5), new Position(x + r, y - t),
-						self ? BWColor.White : BWColor.Red, false, false);
-				api.drawBox(new Position(x - l, y - t), new Position(x + r, y + b), self ? BWColor.White : BWColor.Red,
-						false, false);
-				api.drawText(new Position(x - l, y - t), unit.getType().getName(), false);
+				boolean self = unit.getPlayer() != null && unit.getPlayer().equals(api.self());
+				api.drawBoxMap(new Position(x - l, y - t - 5), new Position(x + r, y - t),
+						self ? Color.White : Color.Red, false);
+				api.drawBoxMap(new Position(x - l, y - t), new Position(x + r, y + b), self ? Color.White : Color.Red,
+						false);
+				api.drawTextMap(new Position(x - l, y - t), unit.getType().toString());
 			}
 		}
 	}
@@ -128,14 +123,14 @@ public class DrawUnitInfo extends IDraw {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
 			}
-			boolean self = (unit.getPlayer().getID() == api.getSelf().getID());
+			boolean self = unit.getPlayer() != null && unit.getPlayer().equals(api.self());
 			Unit target = (unit.getTarget() == null) ? unit.getOrderTarget() : unit.getTarget();
 			if (target != null) {
-				api.drawLine(unit.getPosition(), target.getPosition(), self ? BWColor.Yellow : BWColor.Purple, false);
+				api.drawLineMap(unit.getPosition(), target.getPosition(), self ? Color.Yellow : Color.Purple);
 			}
 			Position position = unit.getTargetPosition();
 			if (position != null) {
-				api.drawLine(unit.getPosition(), position, self ? BWColor.Yellow : BWColor.Purple, false);
+				api.drawLineMap(unit.getPosition(), position, self ? Color.Yellow : Color.Purple);
 			}
 		}
 	}
@@ -148,7 +143,7 @@ public class DrawUnitInfo extends IDraw {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
 			}
-			api.drawText(unit.getPosition(), Integer.toString(unit.getID()), false);
+			api.drawTextMap(unit.getPosition(), Integer.toString(unit.getID()));
 		}
 	}
 
@@ -157,21 +152,21 @@ public class DrawUnitInfo extends IDraw {
 	 * many have died (ported from native code of the tournament manager)
 	 */
 	private void drawUnitInformation(bwapi.Game api, int x, int y) {
-		api.drawText(new Position(x, y + 20), api.getSelf().getName() + "'s Units", true);
-		api.drawText(new Position(x + 160, y + 20), "#", true);
-		api.drawText(new Position(x + 180, y + 20), "X", true);
+		api.drawTextScreen(new Position(x, y + 20), api.self().getName() + "'s Units");
+		api.drawTextScreen(new Position(x + 160, y + 20), "#");
+		api.drawTextScreen(new Position(x + 180, y + 20), "X");
 
-		Map<Integer, Integer> count = new HashMap<>();
+		Map<UnitType, Integer> count = new HashMap<>();
 		Set<Unit> previous = new HashSet<>(this.alive);
 		this.alive.clear();
-		for (final Unit unit : api.getMyUnits()) {
+		for (final Unit unit : api.self().getUnits()) {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
 			}
 			this.alive.add(unit);
-			int type = unit.getType().getID();
-			if (type == UnitTypes.Terran_Siege_Tank_Siege_Mode.getID()) {
-				type = UnitTypes.Terran_Siege_Tank_Tank_Mode.getID();
+			UnitType type = unit.getType();
+			if (type == UnitType.Terran_Siege_Tank_Siege_Mode) {
+				type = UnitType.Terran_Siege_Tank_Tank_Mode;
 			}
 			if (count.containsKey(type)) {
 				count.put(type, count.get(type).intValue() + 1);
@@ -181,9 +176,9 @@ public class DrawUnitInfo extends IDraw {
 		}
 		previous.removeAll(this.alive);
 		for (final Unit unit : previous) {
-			int type = unit.getType().getID();
-			if (type == UnitTypes.Terran_Siege_Tank_Siege_Mode.getID()) {
-				type = UnitTypes.Terran_Siege_Tank_Tank_Mode.getID();
+			UnitType type = unit.getType();
+			if (type == UnitType.Terran_Siege_Tank_Siege_Mode) {
+				type = UnitType.Terran_Siege_Tank_Tank_Mode;
 			}
 			if (this.dead.containsKey(type)) {
 				this.dead.put(type, this.dead.get(type).intValue() + 1);
@@ -193,19 +188,16 @@ public class DrawUnitInfo extends IDraw {
 		}
 
 		int yspace = 0;
-		for (final UnitType type : UnitTypes.getAllUnitTypes()) {
-			int t = type.getID();
-			int livecount = count.containsKey(t) ? count.get(t).intValue() : 0;
+		for (final UnitType t : count.keySet()) {
+			int livecount = count.get(t).intValue();
 			int deadcount = this.dead.containsKey(t) ? this.dead.get(t).intValue() : 0;
-			if (livecount > 0 || deadcount > 0) {
-				api.drawText(new Position(x, y + 40 + ((yspace) * 10)), BwapiUtility.getName(type), true);
-				api.drawText(new Position(x + 160, y + 40 + ((yspace) * 10)), Integer.toString(livecount), true);
-				api.drawText(new Position(x + 180, y + 40 + ((yspace++) * 10)), Integer.toString(deadcount), true);
-			}
+			api.drawTextScreen(new Position(x, y + 40 + ((yspace) * 10)), BwapiUtility.getName(t));
+			api.drawTextScreen(new Position(x + 160, y + 40 + ((yspace) * 10)), Integer.toString(livecount));
+			api.drawTextScreen(new Position(x + 180, y + 40 + ((yspace++) * 10)), Integer.toString(deadcount));
 		}
 	}
 
 	private void drawAgentCount(bwapi.Game api) {
-		api.drawText(new Position(10, 10, PosType.PIXEL), "Agentcount: " + this.game.getAgentCount(), true);
+		api.drawTextScreen(new Position(10, 10), "Agentcount: " + this.game.getAgentCount());
 	}
 }

@@ -74,7 +74,7 @@ public class DebugWindow extends JFrame {
 			iter.remove();
 		}
 		if (this.speedSlider.speedChanged()) {
-			bwapi.setGameSpeed(this.speedSlider.getSpeed());
+			bwapi.setLocalSpeed(this.speedSlider.getSpeed());
 		}
 		this.draw.draw(bwapi);
 	}

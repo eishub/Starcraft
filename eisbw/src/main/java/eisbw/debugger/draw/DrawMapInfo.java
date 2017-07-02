@@ -2,12 +2,12 @@ package eisbw.debugger.draw;
 
 import java.util.List;
 
-import bwapi.ChokePoint;
-import bwapi.Position;
-import bwapi.Position.PosType;
-import bwapi.types.RaceType.RaceTypes;
-import bwapi.util.BWColor;
+import bwapi.Color;
+import bwapi.Race;
+import bwapi.TilePosition;
+import bwta.BWTA;
 import bwta.BaseLocation;
+import bwta.Chokepoint;
 import eis.eis2java.exception.TranslationException;
 import eis.eis2java.translation.Translator;
 import eis.iilang.Parameter;
@@ -38,20 +38,21 @@ public class DrawMapInfo extends IDraw {
 	}
 
 	private void drawBases(bwapi.Game api) throws TranslationException {
-		for (BaseLocation base : api.getMap().getBaseLocations()) {
-			api.drawCircle(base.getCenter(), 75, BWColor.Purple, false, false);
-			api.drawText(base.getPosition(), base.getPosition().getBX() + ", " + base.getPosition().getBY(), false);
+		for (BaseLocation base : BWTA.getBaseLocations()) {
+			api.drawCircleMap(base.getPosition(), 75, Color.Purple, false);
+			api.drawTextMap(base.getPosition(), base.getPosition().getX() + ", " + base.getPosition().getY());
 			if (base.isStartLocation()) {
-				api.drawText(base.getCenter(), "Starting Location", false);
+				api.drawTextMap(base.getPosition(), "Starting Location");
 			}
 		}
 	}
 
 	private void drawChokepoints(bwapi.Game api) throws TranslationException {
-		for (ChokePoint cp : api.getMap().getChokePoints()) {
-			api.drawLine(cp.getFirstSide(), cp.getSecondSide(), BWColor.Yellow, false);
-			api.drawCircle(cp.getCenter(), (int) cp.getRadius(), BWColor.Red, false, false);
-			api.drawText(cp.getCenter(), "(" + cp.getCenter().getBX() + "," + cp.getCenter().getBY() + ")", false);
+		for (Chokepoint cp : BWTA.getChokepoints()) {
+			api.drawLineMap(cp.getSides().first.getPoint(), cp.getSides().second.getPoint(), Color.Yellow);
+			api.drawCircleMap(cp.getCenter(), (int) cp.getWidth(), Color.Red, false);
+			api.drawTextMap(cp.getCenter(),
+					"(" + cp.getCenter().toTilePosition().getX() + "," + cp.getCenter().toTilePosition().getY() + ")");
 		}
 	}
 
@@ -63,17 +64,17 @@ public class DrawMapInfo extends IDraw {
 			List<Parameter> params = percept.getParameters();
 			int xpos = translator.translate2Java(params.get(0), Integer.class);
 			int ypos = translator.translate2Java(params.get(1), Integer.class);
-			if (api.getSelf().getRace().getID() == RaceTypes.Terran.getID()) {
-				api.drawBox(new Position(xpos, ypos, PosType.BUILD),
-						new Position(xpos + size, ypos + size, PosType.BUILD), BWColor.Blue, false, false);
+			if (api.self().getRace() == Race.Terran) {
+				api.drawBoxMap(new TilePosition(xpos, ypos).toPosition(),
+						new TilePosition(xpos + size, ypos + size).toPosition(), Color.Blue, false);
 			} else {
 				boolean bool = translator.translate2Java(params.get(3), Boolean.class);
 				if (bool) {
-					api.drawBox(new Position(xpos, ypos, PosType.BUILD),
-							new Position(xpos + size, ypos + size, PosType.BUILD), BWColor.Blue, false, false);
+					api.drawBoxMap(new TilePosition(xpos, ypos).toPosition(),
+							new TilePosition(xpos + size, ypos + size).toPosition(), Color.Blue, false);
 				} else {
-					api.drawBox(new Position(xpos, ypos, PosType.BUILD),
-							new Position(xpos + size, ypos + size, PosType.BUILD), BWColor.Red, false, false);
+					api.drawBoxMap(new TilePosition(xpos, ypos).toPosition(),
+							new TilePosition(xpos + size, ypos + size).toPosition(), Color.Red, false);
 				}
 			}
 		}
