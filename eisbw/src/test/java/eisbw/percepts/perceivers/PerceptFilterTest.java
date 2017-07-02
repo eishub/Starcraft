@@ -5,13 +5,12 @@ import org.junit.Test;
 import eis.eis2java.translation.Filter.Type;
 
 public class PerceptFilterTest {
-  private PerceptFilter filter;
+	private PerceptFilter filter;
 
-  @Test
-  public void test() {
-    filter = new PerceptFilter("self", Type.ONCE);
-    filter.equals(null);
-    filter.equals(new Integer(10));
-  }
-
+	@Test
+	public void test() {
+		this.filter = new PerceptFilter("self", Type.ONCE);
+		this.filter.equals(null);
+		this.filter.equals(new Integer(10));
+	}
 }

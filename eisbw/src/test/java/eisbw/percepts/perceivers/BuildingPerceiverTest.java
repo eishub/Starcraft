@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,71 +21,70 @@ import bwapi.Position;
 import bwapi.TechType;
 import bwapi.Unit;
 import bwapi.UnitType;
+import bwapi.UpgradeType;
 import eis.iilang.Percept;
-import jnibwapi.bwapi.Game;
-import jnibwapi.Position.Positions;
-import jnibwapi.types.UpgradeType.UpgradeTypes;
 
 public class BuildingPerceiverTest {
+	private BuildingPerceiver perciever;
 
-  private BuildingPerceiver perciever;
-  @Mock
-  private Unit unit;
-  @Mock
-  private UnitType unitType;
-  @Mock
-  private bwapi.Game api;
-  @Mock
-  private Player self;
+	@Mock
+	private Unit unit;
+	@Mock
+	private UnitType unitType;
+	@Mock
+	private bwapi.Game api;
+	@Mock
+	private Player self;
 
-  /**
-   * Initialize mocks.
-   */
-  @Before
-  public void start() {
-    MockitoAnnotations.initMocks(this);
+	/**
+	 * Initialize mocks.
+	 */
+	@Before
+	public void start() {
+		MockitoAnnotations.initMocks(this);
 
-    when(unit.getRallyPosition()).thenReturn(new Position(1, 1));
-    when(unit.getRallyUnit()).thenReturn(unit);
-    when(unit.getID()).thenReturn(1);
-    when(unit.getTrainingQueueSize()).thenReturn(1);
-    when(unit.isUpgrading()).thenReturn(true);
-    when(unit.getUpgrade()).thenReturn(UpgradeTypes.Adrenal_Glands);
-    when(api.getSelf()).thenReturn(self);
-    when(self.isResearched(any(TechType.class))).thenReturn(false);
-    when(unit.getType()).thenReturn(unitType);
-    when(unitType.getName()).thenReturn("name");
-    when(unitType.getSpaceProvided()).thenReturn(1);
-    when(unit.getLoadedUnits()).thenReturn(new LinkedList<Unit>());
+		when(this.unit.getRallyPosition()).thenReturn(new Position(1, 1));
+		when(this.unit.getRallyUnit()).thenReturn(this.unit);
+		when(this.unit.getID()).thenReturn(1);
+		List<UnitType> queue = new ArrayList<>(1);
+		queue.add(UnitType.Terran_Marine);
+		when(this.unit.getTrainingQueue()).thenReturn(queue);
+		when(this.unit.isUpgrading()).thenReturn(true);
+		when(this.unit.getUpgrade()).thenReturn(UpgradeType.Adrenal_Glands);
+		when(this.api.self()).thenReturn(this.self);
+		when(this.self.hasResearched(any(TechType.class))).thenReturn(false);
+		when(this.unit.getType()).thenReturn(this.unitType);
+		when(this.unitType.toString()).thenReturn("name");
+		when(this.unitType.spaceProvided()).thenReturn(1);
+		when(this.unit.getLoadedUnits()).thenReturn(new LinkedList<Unit>());
 
-    perciever = new BuildingPerceiver(api, unit);
-  }
+		this.perciever = new BuildingPerceiver(this.api, this.unit);
+	}
 
-  @Test
-  public void size_test() {
-    Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>();
-    assertEquals(4, perciever.perceive(toReturn).size());
-    when(unit.getRallyPosition()).thenReturn(Positions.None);
-    toReturn = new HashMap<>();
-    assertEquals(3, perciever.perceive(toReturn).size());
-    when(unit.getRallyUnit()).thenReturn(null);
-    toReturn = new HashMap<>();
-    assertEquals(2, perciever.perceive(toReturn).size());
-    toReturn = new HashMap<>();
-    when(unit.isUpgrading()).thenReturn(false);
-    assertEquals(1, perciever.perceive(toReturn).size());
-    toReturn = new HashMap<>();
-    List<Unit> loadedunits = new LinkedList<>();
-    loadedunits.add(unit);
-    loadedunits.add(null);
-    when(unit.getLoadedUnits()).thenReturn(loadedunits);
-    assertEquals(1, perciever.perceive(toReturn).size());
-    toReturn = new HashMap<>();
-    when(unitType.getSpaceProvided()).thenReturn(0);
-    assertEquals(1, perciever.perceive(toReturn).size());
-    toReturn = new HashMap<>();
-    when(self.isResearched(any(TechType.class))).thenReturn(true);
-    assertEquals(1, perciever.perceive(toReturn).size());
-  }
-  
+	@Test
+	public void size_test() {
+		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>();
+		assertEquals(4, this.perciever.perceive(toReturn).size());
+		when(this.unit.getRallyPosition()).thenReturn(Position.None);
+		toReturn = new HashMap<>();
+		assertEquals(3, this.perciever.perceive(toReturn).size());
+		when(this.unit.getRallyUnit()).thenReturn(null);
+		toReturn = new HashMap<>();
+		assertEquals(2, this.perciever.perceive(toReturn).size());
+		toReturn = new HashMap<>();
+		when(this.unit.isUpgrading()).thenReturn(false);
+		assertEquals(1, this.perciever.perceive(toReturn).size());
+		toReturn = new HashMap<>();
+		List<Unit> loadedunits = new LinkedList<>();
+		loadedunits.add(this.unit);
+		loadedunits.add(null);
+		when(this.unit.getLoadedUnits()).thenReturn(loadedunits);
+		assertEquals(1, this.perciever.perceive(toReturn).size());
+		toReturn = new HashMap<>();
+		when(this.unitType.spaceProvided()).thenReturn(0);
+		assertEquals(1, this.perciever.perceive(toReturn).size());
+		toReturn = new HashMap<>();
+		when(this.self.hasResearched(any(TechType.class))).thenReturn(true);
+		assertEquals(1, this.perciever.perceive(toReturn).size());
+	}
 }
