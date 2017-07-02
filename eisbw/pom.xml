@@ -78,9 +78,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>jnibwapi</groupId>
-			<artifactId>jnibwapi</artifactId>
-			<version>1.0</version>
+			<groupId>bwmirror</groupId>
+			<artifactId>bwmirror</artifactId>
+			<version>2.5</version>
 		</dependency>
 
 		<dependency>
