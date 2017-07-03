@@ -1,6 +1,7 @@
 package eisbw;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -135,7 +136,9 @@ public class BwapiListener extends BwapiEvents {
 		} while (this.count == 1 && isRunning() && this.pendingActions.size() < 4);
 
 		// PERFORM ACTIONS
-		for (final Unit unit : this.pendingActions.keySet()) {
+		Iterator<Unit> units = this.pendingActions.keySet().iterator();
+		while (units.hasNext()) {
+			Unit unit = units.next();
 			Action act = this.pendingActions.remove(unit);
 			StarcraftAction action = getAction(act);
 			if (action != null) {
