@@ -1,0 +1,3 @@
+To install this project, the jnibwapi.jar has to be installed on the local repository. 
+This can be done by using the following command:
+mvn install:install-file -Dfile=bwmirror.jar -DgroupId=bwmirror -DartifactId=bwmirror -Dversion=2.5 -Dpackaging=maven-plugin

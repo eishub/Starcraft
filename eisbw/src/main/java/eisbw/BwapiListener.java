@@ -77,7 +77,7 @@ public class BwapiListener extends BwapiEvents {
 				Thread.currentThread().setPriority(MAX_PRIORITY);
 				Thread.currentThread().setName("BWAPI thread");
 				BwapiListener.this.mirror.getModule().setEventListener(BwapiListener.this);
-				BwapiListener.this.mirror.startGame(true);
+				BwapiListener.this.mirror.startGame();
 			}
 		}.start();
 	}

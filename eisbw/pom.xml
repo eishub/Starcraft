@@ -78,9 +78,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.github.gered</groupId>
+			<groupId>bwmirror</groupId>
 			<artifactId>bwmirror</artifactId>
-			<version>2.7.1</version>
+			<version>2.5</version>
 		</dependency>
 
 		<dependency>
