@@ -42,8 +42,8 @@ public abstract class StarcraftAction {
 	/**
 	 * @param action
 	 *            The evaluated action.
-	 * @return A boolean which indicates whether the parameters of the action
-	 *         are valid.
+	 * @return A boolean which indicates whether the parameters of the action are
+	 *         valid.
 	 */
 	public abstract boolean isValid(Action action);
 
@@ -52,8 +52,8 @@ public abstract class StarcraftAction {
 	 *            The unit performing the action.
 	 * @param action
 	 *            The evaluated action.
-	 * @return A boolean which indicated wheter the specified unit can execute
-	 *         the action.
+	 * @return A boolean which indicated wheter the specified unit can execute the
+	 *         action.
 	 */
 	public abstract boolean canExecute(Unit unit, Action action);
 

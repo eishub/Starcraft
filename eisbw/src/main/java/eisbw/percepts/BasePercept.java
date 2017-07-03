@@ -13,8 +13,7 @@ public class BasePercept extends Percept {
 
 	/**
 	 * @param isStart
-	 *            Indicates whether the base location is a starting location or
-	 *            not.
+	 *            Indicates whether the base location is a starting location or not.
 	 * @param xpos
 	 *            The x coordinate of the base location.
 	 * @param ypos

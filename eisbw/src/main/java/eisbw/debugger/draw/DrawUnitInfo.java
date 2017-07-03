@@ -78,8 +78,8 @@ public class DrawUnitInfo extends IDraw {
 	}
 
 	/**
-	 * Draws health boxes for units (ported from bwapi.Game native code); added
-	 * a max>0 check to prevent crashes on spell units (with health 255)
+	 * Draws health boxes for units (ported from bwapi.Game native code); added a
+	 * max>0 check to prevent crashes on spell units (with health 255)
 	 */
 	private void drawHealth(bwapi.Game api) {
 		for (final Unit unit : api.getAllUnits()) {

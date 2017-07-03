@@ -235,8 +235,8 @@ public class BwapiListener extends BwapiEvents {
 	}
 
 	/**
-	 * Adds an action to the action queue, the action is then executed on the
-	 * next frame.
+	 * Adds an action to the action queue, the action is then executed on the next
+	 * frame.
 	 *
 	 * @param name
 	 *            - the name of the unit.

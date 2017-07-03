@@ -31,8 +31,7 @@ public class ConstructionSitePercept extends Percept {
 	 * @param region
 	 *            The region of the construction site.
 	 * @param isInRange
-	 *            Indicates whether the construction site is in range of a
-	 *            pylon.
+	 *            Indicates whether the construction site is in range of a pylon.
 	 */
 	public ConstructionSitePercept(int xpos, int ypos, int region, boolean isInRange) {
 		super(Percepts.CONSTRUCTIONSITE, new Numeral(xpos), new Numeral(ypos), new Numeral(region),

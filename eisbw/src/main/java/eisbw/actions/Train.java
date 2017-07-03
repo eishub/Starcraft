@@ -15,7 +15,7 @@ import eis.iilang.Parameter;
 public class Train extends StarcraftAction {
 	/**
 	 * The Train constructor.
-	 * 
+	 *
 	 * @param api
 	 *            The BWAPI
 	 */
@@ -32,7 +32,7 @@ public class Train extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
-	      return !unit.isBeingConstructed();
+		return !unit.isBeingConstructed();
 	}
 
 	@Override

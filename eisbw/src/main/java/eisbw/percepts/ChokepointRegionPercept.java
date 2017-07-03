@@ -22,8 +22,7 @@ public class ChokepointRegionPercept extends Percept {
 	 * @param region1
 	 *            The identifier of the region at one side of the chokepoint.
 	 * @param region2
-	 *            The identifier of the region at the other side of the
-	 *            chokepoint.
+	 *            The identifier of the region at the other side of the chokepoint.
 	 */
 	public ChokepointRegionPercept(int xpos1, int ypos1, int xpos2, int ypos2, int region1, int region2) {
 		super(Percepts.CHOKEPOINT, new Numeral(xpos1), new Numeral(ypos1), new Numeral(xpos2), new Numeral(ypos2),
