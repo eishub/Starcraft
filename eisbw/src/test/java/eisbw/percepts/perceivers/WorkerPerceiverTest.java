@@ -5,7 +5,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,7 +62,7 @@ public class WorkerPerceiverTest {
 		when(this.unit3.getResources()).thenReturn(2);
 		when(this.unit3.getTilePosition()).thenReturn(new TilePosition(1, 2));
 
-		this.units = new LinkedList<>();
+		this.units = new ArrayList<>(4);
 		this.units.add(this.unit);
 		this.units.add(this.unit4);
 		this.units.add(this.unit3);

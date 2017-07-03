@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -56,7 +55,7 @@ public class BuildingPerceiverTest {
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unitType.toString()).thenReturn("name");
 		when(this.unitType.spaceProvided()).thenReturn(1);
-		when(this.unit.getLoadedUnits()).thenReturn(new LinkedList<Unit>());
+		when(this.unit.getLoadedUnits()).thenReturn(new ArrayList<Unit>(0));
 
 		this.perciever = new BuildingPerceiver(this.api, this.unit);
 	}
@@ -75,7 +74,7 @@ public class BuildingPerceiverTest {
 		when(this.unit.isUpgrading()).thenReturn(false);
 		assertEquals(1, this.perciever.perceive(toReturn).size());
 		toReturn = new HashMap<>();
-		List<Unit> loadedunits = new LinkedList<>();
+		List<Unit> loadedunits = new ArrayList<>(2);
 		loadedunits.add(this.unit);
 		loadedunits.add(null);
 		when(this.unit.getLoadedUnits()).thenReturn(loadedunits);

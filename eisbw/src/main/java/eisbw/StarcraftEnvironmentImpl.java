@@ -64,9 +64,8 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 		try {
 			this.config = new Configuration(parameters);
 			if (!"test".equals(this.config.getOwnRace())) {
-				this.listener = new BwapiListener(this.game, this.config.getScDir(), this.config.getDebug(),
-						this.config.getDrawMapInfo(), this.config.getDrawUnitInfo(), this.config.getInvulnerable(),
-						this.config.getSpeed());
+				this.listener = new BwapiListener(this.game, this.config.getDebug(), this.config.getDrawMapInfo(),
+						this.config.getDrawUnitInfo(), this.config.getInvulnerable(), this.config.getSpeed());
 				if (!"OFF".equals(this.config.getAutoMenu()) && !WindowsTools.isProcessRunning("Chaoslauncher.exe")) {
 					WindowsTools.startChaoslauncher(this.config.getOwnRace(), this.config.getMap(),
 							this.config.getScDir(), this.config.getAutoMenu(), this.config.getEnemyRace());

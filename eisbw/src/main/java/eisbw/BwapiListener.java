@@ -1,6 +1,5 @@
 package eisbw;
 
-import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -52,12 +51,8 @@ public class BwapiListener extends BwapiEvents {
 	 * @param debugmode
 	 *            - true iff debugger should be attached
 	 */
-	public BwapiListener(Game game, String scDir, boolean debug, boolean drawMapInfo, boolean drawUnitInfo,
-			boolean invulnerable, int speed) {
-		File bwta = new File(scDir + File.separator + "bwapi-data" + File.separator + "BWTA");
-		if (!bwta.isDirectory()) {
-			bwta = new File("mapData");
-		}
+	public BwapiListener(Game game, boolean debug, boolean drawMapInfo, boolean drawUnitInfo, boolean invulnerable,
+			int speed) {
 		this.mirror = new Mirror();
 		this.game = game;
 		this.actionProvider = new ActionProvider();
