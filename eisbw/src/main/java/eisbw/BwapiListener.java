@@ -110,7 +110,6 @@ public class BwapiListener extends BwapiEvents {
 		}
 
 		// DO INITIAL UPDATES
-		this.game.mapAgent();
 		this.game.updateMap(this.api);
 		this.game.updateConstructionSites(this.api);
 		this.game.updateFrameCount(this.count);
@@ -129,9 +128,11 @@ public class BwapiListener extends BwapiEvents {
 			this.game.updateNukePerceiver(this.api, null);
 			this.nuke = -1;
 		}
-
 		do {
 			this.game.update(this.api);
+			if (this.count == 1) {
+				this.game.mapAgent();
+			}
 			try { // always sleep 1ms to better facilitate running at speed 0
 				Thread.sleep(1);
 			} catch (InterruptedException ignore) {
