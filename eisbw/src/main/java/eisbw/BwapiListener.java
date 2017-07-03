@@ -1,6 +1,7 @@
 package eisbw;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -105,7 +106,6 @@ public class BwapiListener extends BwapiEvents {
 		}
 
 		// DO INITIAL UPDATES
-		this.game.mapAgent();
 		this.game.updateMap(this.bwapi);
 		this.game.updateConstructionSites(this.bwapi);
 		this.game.updateFrameCount(this.count);
@@ -126,6 +126,9 @@ public class BwapiListener extends BwapiEvents {
 		}
 		do {
 			this.game.update(this.bwapi);
+			if (this.count == 1) {
+				this.game.mapAgent();
+			}
 			try { // always sleep 1ms to better facilitate running at speed 0
 				Thread.sleep(1);
 			} catch (InterruptedException ignore) {
@@ -133,7 +136,9 @@ public class BwapiListener extends BwapiEvents {
 		} while (this.count == 1 && isRunning() && this.pendingActions.size() < 4);
 
 		// PERFORM ACTIONS
-		for (final Unit unit : this.pendingActions.keySet()) {
+		Iterator<Unit> units = this.pendingActions.keySet().iterator();
+		while (units.hasNext()) {
+			Unit unit = units.next();
 			Action act = this.pendingActions.remove(unit);
 			StarcraftAction action = getAction(act);
 			if (action != null) {
@@ -229,8 +234,8 @@ public class BwapiListener extends BwapiEvents {
 	}
 
 	/**
-	 * Adds an action to the action queue, the action is then executed on the
-	 * next frame.
+	 * Adds an action to the action queue, the action is then executed on the next
+	 * frame.
 	 *
 	 * @param name
 	 *            - the name of the unit.
