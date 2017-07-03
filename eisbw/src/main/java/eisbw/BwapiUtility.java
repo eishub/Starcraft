@@ -36,13 +36,13 @@ public class BwapiUtility {
 	 * @return the name of the unit.
 	 */
 	public static String getName(Unit unit) {
-		String name = (unit.getType().getName() + unit.getID()).replace("_", "").replace(" ", "");
+		String name = (getName(unit.getType()) + unit.getID()).replace("_", "").replace(" ", "");
 		return name.substring(0, 1).toLowerCase() + name.substring(1);
 	}
 
 	public static String getName(UnitType unittype) {
 		String type = unittype.getName();
-		if (type.length() > 17 && "Terran Siege Tank".equals(type.substring(0, 17))) {
+		if (type.startsWith("Terran Siege Tank")) {
 			return "Terran Siege Tank";
 		} else {
 			return type;

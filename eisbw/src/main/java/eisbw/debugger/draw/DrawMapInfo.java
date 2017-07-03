@@ -12,6 +12,7 @@ import jnibwapi.ChokePoint;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Position;
 import jnibwapi.Position.PosType;
+import jnibwapi.Region;
 import jnibwapi.types.RaceType.RaceTypes;
 import jnibwapi.util.BWColor;
 
@@ -32,9 +33,21 @@ public class DrawMapInfo extends IDraw {
 
 	@Override
 	protected void drawOnMap(JNIBWAPI api) throws TranslationException {
+		drawRegions(api);
 		drawBases(api);
 		drawChokepoints(api);
 		drawConstructionSites(api);
+	}
+
+	private void drawRegions(JNIBWAPI api) throws TranslationException {
+		for (Region region : api.getMap().getRegions()) {
+			Position[] p = region.getPolygon();
+			for (int j = 0; j < p.length; ++j) {
+				api.drawLine(p[j], p[(j + 1) % p.length], BWColor.Green, false);
+			}
+			api.drawText(region.getCenter(), "Region " + region.getID() + " (" + region.getCenter().getBX() + ","
+					+ region.getCenter().getBY() + ")", false);
+		}
 	}
 
 	private void drawBases(JNIBWAPI api) throws TranslationException {
