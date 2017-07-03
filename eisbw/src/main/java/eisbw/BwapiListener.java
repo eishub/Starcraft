@@ -105,7 +105,6 @@ public class BwapiListener extends BwapiEvents {
 		}
 
 		// DO INITIAL UPDATES
-		this.game.mapAgent();
 		this.game.updateMap(this.bwapi);
 		this.game.updateConstructionSites(this.bwapi);
 		this.game.updateFrameCount(this.count);
@@ -126,6 +125,9 @@ public class BwapiListener extends BwapiEvents {
 		}
 		do {
 			this.game.update(this.bwapi);
+			if (this.count == 1) {
+				this.game.mapAgent();
+			}
 			try { // always sleep 1ms to better facilitate running at speed 0
 				Thread.sleep(1);
 			} catch (InterruptedException ignore) {
@@ -229,8 +231,8 @@ public class BwapiListener extends BwapiEvents {
 	}
 
 	/**
-	 * Adds an action to the action queue, the action is then executed on the
-	 * next frame.
+	 * Adds an action to the action queue, the action is then executed on the next
+	 * frame.
 	 *
 	 * @param name
 	 *            - the name of the unit.
