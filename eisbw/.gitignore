@@ -2,18 +2,5 @@
 /.settings/
 /target/
 /bin/
-/examples/Jason/bin/
-/*/build/
-/*/dist/
-/**/nbproject/private/
-*.asl~
-*.mas2j~
-StarterPack/JNIBWAPI Starter Pack/**
-/examples/Jason/SimpleAgentsAorta/*.log
-examples/GOAL/HeterogeneousAgents/.project
-examples/Jason/SimpleAgents/bin/build.xml
-examples/Jason/SimpleAgents/*.log
-examples/Jason/SimpleAgentsAorta/bin/build.xml
-examples/Jason/SimpleAgents/bin/build.xml
-StarterPack/JNIBWAPI 1.0/run.bat
-examples/GOAL/ZergBot2/.project
+/bwapi-data/
+*.dll
