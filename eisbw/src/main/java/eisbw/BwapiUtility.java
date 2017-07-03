@@ -132,6 +132,7 @@ public class BwapiUtility {
 	}
 
 	public static int getRegionId(Region region, bwapi.Game api) {
-		return api.getRegionAt(region.getCenter()).getID();
+		bwapi.Region apiregion = (region == null) ? null : api.getRegionAt(region.getCenter());
+		return (apiregion == null) ? 0 : apiregion.getID();
 	}
 }
