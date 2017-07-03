@@ -6,7 +6,9 @@ import java.util.Map;
 import java.util.Set;
 
 import bwapi.Order;
+import bwapi.TilePosition;
 import bwapi.Unit;
+import bwta.BWTA;
 import eis.eis2java.translation.Filter;
 import eis.iilang.Percept;
 import eisbw.BwapiUtility;
@@ -54,9 +56,10 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	 */
 	private void statusPercept(Map<PerceptFilter, Set<Percept>> toReturn) {
 		Set<Percept> statusPercept = new HashSet<>(1);
+		TilePosition pos = this.unit.getTilePosition();
 		statusPercept.add(new StatusPercept(this.unit.getHitPoints(), this.unit.getShields(), this.unit.getEnergy(),
-				new ConditionHandler(this.api, this.unit).getConditions(), this.unit.getTilePosition().getX(),
-				this.unit.getTilePosition().getY(), this.unit.getRegion().getID()));
+				new ConditionHandler(this.api, this.unit).getConditions(), pos.getX(), pos.getY(),
+				BwapiUtility.getRegionId(BWTA.getRegion(pos), this.api)));
 		toReturn.put(new PerceptFilter(Percepts.STATUS, Filter.Type.ON_CHANGE), statusPercept);
 	}
 

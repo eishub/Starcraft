@@ -4,8 +4,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import bwapi.TilePosition;
 import bwapi.Unit;
 import bwapi.UnitType;
+import bwta.BWTA;
 import eis.eis2java.translation.Filter;
 import eis.iilang.Percept;
 import eisbw.BwapiUtility;
@@ -38,19 +40,22 @@ public class WorkerPerceiver extends UnitPerceiver {
 		Set<Percept> geysers = new HashSet<>();
 		for (Unit u : this.api.getNeutralUnits()) {
 			if (BwapiUtility.isValid(u) && u.getType().isMineralField()) {
-				MineralFieldPercept mineralfield = new MineralFieldPercept(u.getID(), u.getResources(),
-						u.getTilePosition().getX(), u.getTilePosition().getY(), u.getRegion().getID());
+				TilePosition pos = this.unit.getTilePosition();
+				MineralFieldPercept mineralfield = new MineralFieldPercept(u.getID(), u.getResources(), pos.getX(),
+						pos.getY(), BwapiUtility.getRegionId(BWTA.getRegion(pos), this.api));
 				minerals.add(mineralfield);
 			} else if (BwapiUtility.isValid(u) && u.getType() == UnitType.Resource_Vespene_Geyser) {
-				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), u.getResources(),
-						u.getTilePosition().getX(), u.getTilePosition().getY(), u.getRegion().getID());
+				TilePosition pos = this.unit.getTilePosition();
+				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), u.getResources(), pos.getX(),
+						pos.getY(), BwapiUtility.getRegionId(BWTA.getRegion(pos), this.api));
 				geysers.add(geyser);
 			}
 		}
 		for (Unit u : this.api.self().getUnits()) {
 			if (BwapiUtility.isValid(u) && u.getType().isRefinery()) {
-				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), u.getResources(),
-						u.getTilePosition().getX(), u.getTilePosition().getY(), u.getRegion().getID());
+				TilePosition pos = this.unit.getTilePosition();
+				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), u.getResources(), pos.getX(),
+						pos.getY(), BwapiUtility.getRegionId(BWTA.getRegion(pos), this.api));
 				geysers.add(geyser);
 
 			}

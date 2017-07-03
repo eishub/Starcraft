@@ -7,8 +7,10 @@ import java.util.Map;
 import java.util.Set;
 
 import bwapi.Player;
+import bwapi.TilePosition;
 import bwapi.Unit;
 import bwapi.UnitType;
+import bwta.BWTA;
 import eis.eis2java.translation.Filter;
 //import eis.iilang.Identifier;
 //import eis.iilang.Parameter;
@@ -60,17 +62,19 @@ public class UnitsPerceiver extends Perceiver {
 			}
 			ConditionHandler conditionHandler = new ConditionHandler(this.api, u);
 			if (newunitpercepts != null) {
-				String unittype = (u.getType() == UnitType.Zerg_Egg) ? u.getBuildType().toString()
+				String unittype = (u.getType() == UnitType.Zerg_Egg) ? BwapiUtility.getName(u.getBuildType())
 						: BwapiUtility.getName(u.getType());
 				unitpercepts.add(new FriendlyPercept(u.getID(), unittype, conditionHandler.getConditions()));
 				if (u.isBeingConstructed()) {
-					newunitpercepts.add(new NewUnitPercept(u.getID(), u.getTilePosition().getX(),
-							u.getTilePosition().getY(), u.getRegion().getID()));
+					TilePosition pos = u.getTilePosition();
+					newunitpercepts.add(new NewUnitPercept(u.getID(), pos.getX(), pos.getY(),
+							BwapiUtility.getRegionId(BWTA.getRegion(pos), this.api)));
 				}
 			} else {
+				TilePosition pos = u.getTilePosition();
 				unitpercepts.add(new EnemyPercept(u.getID(), BwapiUtility.getName(u.getType()), u.getHitPoints(),
-						u.getShields(), u.getEnergy(), conditionHandler.getConditions(), u.getTilePosition().getX(),
-						u.getTilePosition().getY(), u.getRegion().getID()));
+						u.getShields(), u.getEnergy(), conditionHandler.getConditions(), pos.getX(), pos.getY(),
+						BwapiUtility.getRegionId(BWTA.getRegion(pos), this.api)));
 				if (u.getType().canAttack()) {
 					Unit target = (u.getTarget() == null) ? u.getOrderTarget() : u.getTarget();
 					if (target != null && !units.contains(target)) {

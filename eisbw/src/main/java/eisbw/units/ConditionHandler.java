@@ -7,14 +7,15 @@ import bwapi.Race;
 import bwapi.Unit;
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
+import eisbw.BwapiUtility;
 
 /**
  * @author Danny & Harm - The condition perceiver.
  *
  */
 public class ConditionHandler {
-	protected final Unit unit;
 	protected final bwapi.Game api;
+	protected final Unit unit;
 
 	/**
 	 * @param api
@@ -23,8 +24,8 @@ public class ConditionHandler {
 	 *            The unit.
 	 */
 	public ConditionHandler(bwapi.Game api, Unit unit) {
-		this.unit = unit;
 		this.api = api;
+		this.unit = unit;
 	}
 
 	/**
@@ -47,7 +48,7 @@ public class ConditionHandler {
 			conditions.add(new Identifier("lifted"));
 		}
 		if (this.unit.getAddon() != null) {
-			conditions.add(new Identifier(this.unit.getAddon().getType().toString()));
+			conditions.add(new Identifier(BwapiUtility.getName(this.unit.getAddon().getType())));
 		}
 		if (this.unit.hasNuke()) {
 			conditions.add(new Identifier("nukeReady"));

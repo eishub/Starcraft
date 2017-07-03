@@ -9,6 +9,7 @@ import bwapi.TechType;
 import bwapi.Unit;
 import bwapi.UnitType;
 import bwapi.UpgradeType;
+import bwta.Region;
 
 /**
  * @author Danny & Harm - The Utility class of the BWAPI.
@@ -35,13 +36,13 @@ public class BwapiUtility {
 	 * @return the name of the unit.
 	 */
 	public static String getName(Unit unit) {
-		String name = (unit.getType().toString() + unit.getID()).replace("_", "").replace(" ", "");
+		String name = (getName(unit.getType()) + unit.getID()).replace("_", "").replace(" ", "");
 		return name.substring(0, 1).toLowerCase() + name.substring(1);
 	}
 
 	public static String getName(UnitType unittype) {
-		String type = unittype.toString();
-		if (type.length() > 17 && "Terran Siege Tank".equals(type.substring(0, 17))) {
+		String type = unittype.toString().replace("_", " ");
+		if (type.startsWith("Terran Siege Tank")) {
 			return "Terran Siege Tank";
 		} else {
 			return type;
@@ -52,17 +53,12 @@ public class BwapiUtility {
 	 * Get the EIS unittype of a unit.
 	 *
 	 * @param unit
-	 *            - the unit that you want yhe Type from.
+	 *            - the unit that you want the Type from.
 	 * @return the type of a unit.
 	 */
 	public static String getEisUnitType(Unit unit) {
-		String type = unit.getType().toString().replace(" ", "");
-		type = type.substring(0, 1).toLowerCase() + type.substring(1);
-		if ("terranSiegeTankTankMode".equals(type) || "terranSiegeTankSiegeMode".equals(type)) {
-			return "terranSiegeTank";
-		} else {
-			return type;
-		}
+		String type = unit.getType().toString().replace("_", "");
+		return type.substring(0, 1).toLowerCase() + type.substring(1);
 	}
 
 	/**
@@ -78,7 +74,7 @@ public class BwapiUtility {
 				if (Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers())) {
 					try {
 						UnitType ut = (UnitType) field.get(null);
-						unitTypeMap.put(ut.toString(), ut);
+						unitTypeMap.put(ut.toString().replace("_", " "), ut);
 					} catch (IllegalArgumentException | IllegalAccessException e) {
 						e.printStackTrace(); // TODO Auto-generated
 					}
@@ -101,7 +97,7 @@ public class BwapiUtility {
 				if (Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers())) {
 					try {
 						TechType tt = (TechType) field.get(null);
-						techTypeMap.put(tt.toString(), tt);
+						techTypeMap.put(tt.toString().replace("_", " "), tt);
 					} catch (IllegalArgumentException | IllegalAccessException e) {
 						e.printStackTrace(); // TODO Auto-generated
 					}
@@ -124,7 +120,7 @@ public class BwapiUtility {
 				if (Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers())) {
 					try {
 						UpgradeType ut = (UpgradeType) field.get(null);
-						upgradeTypeMap.put(ut.toString(), ut);
+						upgradeTypeMap.put(ut.toString().replace("_", " "), ut);
 					} catch (IllegalArgumentException | IllegalAccessException e) {
 						e.printStackTrace(); // TODO Auto-generated
 					}
@@ -133,5 +129,9 @@ public class BwapiUtility {
 		}
 
 		return upgradeTypeMap.get(type);
+	}
+
+	public static int getRegionId(Region region, bwapi.Game api) {
+		return api.getRegionAt(region.getCenter()).getID();
 	}
 }

@@ -1,5 +1,6 @@
 package eisbw;
 
+import java.io.File;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +34,7 @@ public class BwapiListener extends BwapiEvents {
 	protected final Game game;
 	protected final ActionProvider actionProvider;
 	protected final Map<Unit, Action> pendingActions;
-	protected final StarcraftUnitFactory factory;
+	protected StarcraftUnitFactory factory;
 	protected final boolean debug;
 	protected final IDraw drawMapInfo;
 	protected final IDraw drawUnitInfo;
@@ -51,14 +52,12 @@ public class BwapiListener extends BwapiEvents {
 	 * @param debugmode
 	 *            - true iff debugger should be attached
 	 */
-	public BwapiListener(Game game, boolean debug, boolean drawMapInfo, boolean drawUnitInfo, boolean invulnerable,
-			int speed) {
+	public BwapiListener(Game game, String scDir, boolean debug, boolean drawMapInfo, boolean drawUnitInfo,
+			boolean invulnerable, int speed) {
 		this.mirror = new Mirror();
 		this.game = game;
 		this.actionProvider = new ActionProvider();
-		this.actionProvider.loadActions(this.api);
 		this.pendingActions = new ConcurrentHashMap<>();
-		this.factory = new StarcraftUnitFactory(this.api);
 		this.debug = debug;
 		this.drawMapInfo = new DrawMapInfo(game);
 		if (drawMapInfo) {
@@ -71,20 +70,24 @@ public class BwapiListener extends BwapiEvents {
 		this.invulnerable = invulnerable;
 		this.speed = speed;
 
+		final File bwapidata = new File(scDir + File.separator + "bwapi-data");
 		new Thread() {
 			@Override
 			public void run() {
 				Thread.currentThread().setPriority(MAX_PRIORITY);
 				Thread.currentThread().setName("BWAPI thread");
 				BwapiListener.this.mirror.getModule().setEventListener(BwapiListener.this);
-				BwapiListener.this.mirror.startGame();
+				BwapiListener.this.mirror.startGame(bwapidata);
 			}
 		}.start();
 	}
 
 	@Override
 	public void onStart() {
+		// API INITIALISATION
 		this.api = this.mirror.getGame();
+		this.factory = new StarcraftUnitFactory(this.api);
+		this.actionProvider.loadActions(this.api);
 		BWTA.readMap();
 		BWTA.analyze();
 
@@ -126,6 +129,7 @@ public class BwapiListener extends BwapiEvents {
 			this.game.updateNukePerceiver(this.api, null);
 			this.nuke = -1;
 		}
+
 		do {
 			this.game.update(this.api);
 			try { // always sleep 1ms to better facilitate running at speed 0

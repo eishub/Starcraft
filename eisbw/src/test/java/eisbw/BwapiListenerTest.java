@@ -77,7 +77,7 @@ public class BwapiListenerTest {
 		when(this.bwapi.self()).thenReturn(this.self);
 		when(this.self.getUnits()).thenReturn(this.list);
 		when(this.bwapi.getUnit(0)).thenReturn(this.unit);
-		this.listener = new BwapiListener(this.game, false, false, false, false, 200);
+		this.listener = new BwapiListener(this.game, "", false, false, false, false, 200);
 		this.listener.api = this.bwapi;
 	}
 

@@ -3,15 +3,18 @@ package eisbw.debugger.draw;
 import java.util.List;
 
 import bwapi.Color;
+import bwapi.Position;
 import bwapi.Race;
 import bwapi.TilePosition;
 import bwta.BWTA;
 import bwta.BaseLocation;
 import bwta.Chokepoint;
+import bwta.Region;
 import eis.eis2java.exception.TranslationException;
 import eis.eis2java.translation.Translator;
 import eis.iilang.Parameter;
 import eis.iilang.Percept;
+import eisbw.BwapiUtility;
 import eisbw.Game;
 import eisbw.percepts.perceivers.ConstructionSitePerceiver;
 
@@ -32,9 +35,23 @@ public class DrawMapInfo extends IDraw {
 
 	@Override
 	protected void drawOnMap(bwapi.Game api) throws TranslationException {
+		drawRegions(api);
 		drawBases(api);
 		drawChokepoints(api);
 		drawConstructionSites(api);
+	}
+
+	private void drawRegions(bwapi.Game api) throws TranslationException {
+		for (Region region : BWTA.getRegions()) {
+			List<Position> p = region.getPolygon().getPoints();
+			for (int j = 0; j < p.size(); ++j) {
+				api.drawLineMap(p.get(j), p.get((j + 1) % p.size()), Color.Green);
+			}
+			api.drawTextMap(region.getCenter(),
+					"Region " + BwapiUtility.getRegionId(region, api) + " ("
+							+ region.getCenter().toTilePosition().getX() + ","
+							+ region.getCenter().toTilePosition().getY() + ")");
+		}
 	}
 
 	private void drawBases(bwapi.Game api) throws TranslationException {

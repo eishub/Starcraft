@@ -39,10 +39,10 @@ public class BuildingPerceiver extends UnitPerceiver {
 	private void researchedPercept(Map<PerceptFilter, Set<Percept>> toReturn) {
 		Set<Percept> researchedPercepts = new HashSet<>(2);
 		if (this.unit.getTech() != null && this.unit.getTech() != TechType.None) {
-			researchedPercepts.add(new ResearchingPercept(this.unit.getTech().toString()));
+			researchedPercepts.add(new ResearchingPercept(this.unit.getTech().toString().replace("_", " ")));
 		}
 		if (this.unit.getUpgrade() != null && this.unit.getUpgrade() != UpgradeType.None) {
-			researchedPercepts.add(new ResearchingPercept(this.unit.getUpgrade().toString()));
+			researchedPercepts.add(new ResearchingPercept(this.unit.getUpgrade().toString().replace("_", " ")));
 		}
 		toReturn.put(new PerceptFilter(Percepts.RESEARCHING, Filter.Type.ALWAYS), researchedPercepts);
 	}
