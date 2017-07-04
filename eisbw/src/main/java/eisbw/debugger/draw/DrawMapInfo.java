@@ -26,14 +26,14 @@ public class DrawMapInfo extends IDraw {
 	 * Draw map information (bases, chokepoints, construction sites).
 	 *
 	 * @param game
-	 *            - the game object
+	 *            The current game.
 	 */
 	public DrawMapInfo(Game game) {
 		super(game);
 	}
 
 	@Override
-	protected void drawOnMap(JNIBWAPI api) throws TranslationException {
+	protected void doDraw(JNIBWAPI api) throws TranslationException {
 		drawRegions(api);
 		drawBases(api);
 		drawChokepoints(api);

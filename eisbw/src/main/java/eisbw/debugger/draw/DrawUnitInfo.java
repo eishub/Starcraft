@@ -17,8 +17,7 @@ import jnibwapi.types.UnitType.UnitTypes;
 import jnibwapi.util.BWColor;
 
 /**
- * @author Danny & Harm - The class which handles the drawing of the buildings
- *         of the dev. tool.
+ * @author Harm & Danny.
  *
  */
 public class DrawUnitInfo extends IDraw {
@@ -28,7 +27,7 @@ public class DrawUnitInfo extends IDraw {
 	private final Map<Integer, Integer> dead = new HashMap<>();
 
 	/**
-	 * The DrawBuildingDetails constructor.
+	 * Draw unit information (health, movement, counts).
 	 *
 	 * @param game
 	 *            The current game.
@@ -38,7 +37,7 @@ public class DrawUnitInfo extends IDraw {
 	}
 
 	@Override
-	protected void drawOnMap(JNIBWAPI api) throws TranslationException {
+	protected void doDraw(JNIBWAPI api) throws TranslationException {
 		drawTimerInfo(api);
 		drawHealth(api);
 		drawTargets(api);

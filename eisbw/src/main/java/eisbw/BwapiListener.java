@@ -14,6 +14,7 @@ import eis.iilang.EnvironmentState;
 import eisbw.actions.ActionProvider;
 import eisbw.actions.StarcraftAction;
 import eisbw.debugger.DebugWindow;
+import eisbw.debugger.Draw;
 import eisbw.debugger.draw.DrawMapInfo;
 import eisbw.debugger.draw.DrawUnitInfo;
 import eisbw.debugger.draw.IDraw;
@@ -35,8 +36,7 @@ public class BwapiListener extends BwapiEvents {
 	protected final Map<Unit, Action> pendingActions;
 	protected final StarcraftUnitFactory factory;
 	protected final boolean debug;
-	protected final IDraw drawMapInfo;
-	protected final IDraw drawUnitInfo;
+	protected final Map<String, IDraw> draw;
 	protected final boolean invulnerable;
 	protected final int speed;
 	protected int count = 0;
@@ -60,17 +60,20 @@ public class BwapiListener extends BwapiEvents {
 		this.bwapi = new JNIBWAPI(this, bwta);
 		this.game = game;
 		this.actionProvider = new ActionProvider();
-		this.actionProvider.loadActions(this.bwapi);
+		this.actionProvider.loadActions(this.bwapi, this);
 		this.pendingActions = new ConcurrentHashMap<>();
 		this.factory = new StarcraftUnitFactory(this.bwapi);
 		this.debug = debug;
-		this.drawMapInfo = new DrawMapInfo(game);
+		this.draw = new ConcurrentHashMap<>();
+		IDraw mapInfo = new DrawMapInfo(game);
+		this.draw.put(Draw.MAP.name(), mapInfo);
 		if (drawMapInfo) {
-			this.drawMapInfo.toggle();
+			mapInfo.toggle();
 		}
-		this.drawUnitInfo = new DrawUnitInfo(game);
+		IDraw unitInfo = new DrawUnitInfo(game);
+		this.draw.put(Draw.UNITS.name(), unitInfo);
 		if (drawUnitInfo) {
-			this.drawUnitInfo.toggle();
+			unitInfo.toggle();
 		}
 		this.invulnerable = invulnerable;
 		this.speed = speed;
@@ -83,6 +86,10 @@ public class BwapiListener extends BwapiEvents {
 				BwapiListener.this.bwapi.start();
 			}
 		}.start();
+	}
+
+	public Game getGame() {
+		return this.game;
 	}
 
 	@Override
@@ -101,8 +108,8 @@ public class BwapiListener extends BwapiEvents {
 
 		// START THE DEBUG TOOLS
 		if (this.debug) {
-			this.debugwindow = new DebugWindow(this.game);
 			this.bwapi.enableUserInput();
+			this.debugwindow = new DebugWindow(this);
 		}
 
 		// DO INITIAL UPDATES
@@ -148,8 +155,10 @@ public class BwapiListener extends BwapiEvents {
 		if (this.debugwindow != null) {
 			this.debugwindow.debug(this.bwapi);
 		}
-		this.drawMapInfo.draw(this.bwapi);
-		this.drawUnitInfo.draw(this.bwapi);
+		Iterator<IDraw> draws = this.draw.values().iterator();
+		while (draws.hasNext()) {
+			draws.next().draw(this.bwapi);
+		}
 	}
 
 	@Override
@@ -167,6 +176,7 @@ public class BwapiListener extends BwapiEvents {
 			Unit deleted = this.game.getUnits().deleteUnit(unitName, id);
 			this.pendingActions.remove(deleted);
 		}
+		this.draw.remove(Integer.toString(id));
 	}
 
 	@Override
@@ -207,6 +217,18 @@ public class BwapiListener extends BwapiEvents {
 		}
 		this.bwapi.leaveGame();
 		this.game.clean();
+	}
+
+	public void addDraw(String draw, IDraw idraw) {
+		this.draw.put(draw, idraw);
+	}
+
+	public void removeDraw(String draw) {
+		this.draw.remove(draw);
+	}
+
+	public void toggleDraw(String draw) {
+		this.draw.get(draw).toggle();
 	}
 
 	protected boolean isSupportedByEntity(Action act, String name) {

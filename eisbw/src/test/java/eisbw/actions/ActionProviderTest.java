@@ -11,7 +11,7 @@ public class ActionProviderTest {
   @Test
   public void test() {
     actionProvider = new ActionProvider();
-    actionProvider.loadActions(null);
+    actionProvider.loadActions(null,null);
     assertEquals(new Attack(null).toString(), actionProvider.getAction("attack/1").toString());
   }
 

@@ -3,6 +3,7 @@ package eisbw.actions;
 import java.util.HashMap;
 import java.util.Map;
 
+import eisbw.BwapiListener;
 import jnibwapi.JNIBWAPI;
 
 /**
@@ -34,7 +35,7 @@ public class ActionProvider {
 	 * @param api
 	 *            the API to pass into the actions.
 	 */
-	public void loadActions(JNIBWAPI api) {
+	public void loadActions(JNIBWAPI api, BwapiListener listener) {
 		this.actions.put("attack/1", new Attack(api));
 		this.actions.put("attack/2", new AttackMove(api));
 		this.actions.put("build/3", new Build(api));
@@ -61,5 +62,6 @@ public class ActionProvider {
 		this.actions.put("cancel/1", new Cancel(api));
 		this.actions.put("repair/1", new Repair(api));
 		this.actions.put("forfeit/0", new Forfeit(api));
+		this.actions.put("debugdraw/1", new DebugDraw(api, listener));
 	}
 }
