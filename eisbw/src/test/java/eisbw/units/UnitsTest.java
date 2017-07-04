@@ -54,7 +54,7 @@ public class UnitsTest {
 		assertEquals("name0", this.units.getUnitName(0));
 		assertNotNull(this.units.getUnit("name0"));
 		verify(this.factory, times(1)).create(any(Unit.class));
-		this.units.deleteUnit("name0", 0);
+		this.units.deleteUnit("name0");
 		verify(this.env, times(1)).deleteFromEnvironment("name0");
 		this.units.addUnit(this.unit, this.factory);
 		this.units.clean();

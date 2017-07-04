@@ -52,7 +52,7 @@ public class ConfigurationTest {
 		assertEquals("zerg", config.getEnemyRace());
 		assertEquals("map", config.getMap());
 		assertEquals("scdir", config.getScDir());
-		assertEquals("Single_Player", config.getAutoMenu());
+		assertEquals("SINGLE_PLAYER", config.getAutoMenu());
 	}
 
 }

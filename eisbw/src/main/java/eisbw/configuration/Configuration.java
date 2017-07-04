@@ -103,11 +103,11 @@ public class Configuration {
 	}
 
 	public String getAutoMenu() {
-		return this.autoMenu;
+		return this.autoMenu.toUpperCase();
 	}
 
 	public String getGameType() {
-		return this.gameType;
+		return this.gameType.toUpperCase();
 	}
 
 	public int getSpeed() {

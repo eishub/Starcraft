@@ -1,7 +1,6 @@
 package eisbw.units;
 
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -60,9 +59,9 @@ public class Units {
 	 * @param id
 	 *            The id of the unit.
 	 */
-	public Unit deleteUnit(String unitName, int id) {
-		this.unitNames.remove(id);
+	public Unit deleteUnit(String unitName) {
 		Unit unit = this.unitMap.remove(unitName);
+		this.unitNames.remove(unit.getID());
 		this.starcraftUnits.remove(unit);
 		this.uninitializedUnits.remove(unit);
 
@@ -90,8 +89,8 @@ public class Units {
 	 * Clean units, let garbage collector remove the remains.
 	 */
 	public void clean() {
-		for (Entry<Integer, String> entry : this.unitNames.entrySet()) {
-			deleteUnit(entry.getValue(), entry.getKey());
+		for (String unit : this.unitNames.values()) {
+			deleteUnit(unit);
 		}
 	}
 }

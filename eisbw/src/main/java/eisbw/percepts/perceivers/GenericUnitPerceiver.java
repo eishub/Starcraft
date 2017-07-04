@@ -37,9 +37,9 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 
 	@Override
 	public void perceive(Map<PerceptFilter, List<Percept>> toReturn) {
-		defensiveMatrixPercept(toReturn);
 		selfPercept(toReturn);
 		statusPercept(toReturn);
+		defensiveMatrixPercept(toReturn);
 		orderPercept(toReturn);
 
 		if (this.unit.getType().getSpaceProvided() > 0) {

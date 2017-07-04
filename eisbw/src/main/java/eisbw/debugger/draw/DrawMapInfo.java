@@ -80,7 +80,7 @@ public class DrawMapInfo extends IDraw {
 				api.drawBox(new Position(xpos, ypos, PosType.BUILD),
 						new Position(xpos + size, ypos + size, PosType.BUILD), BWColor.Blue, false, false);
 			} else {
-				boolean bool = ((TruthValue) params.get(1)).getBooleanValue();
+				boolean bool = ((TruthValue) params.get(3)).getBooleanValue();
 				if (bool) {
 					api.drawBox(new Position(xpos, ypos, PosType.BUILD),
 							new Position(xpos + size, ypos + size, PosType.BUILD), BWColor.Blue, false, false);

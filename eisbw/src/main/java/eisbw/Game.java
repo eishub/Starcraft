@@ -318,6 +318,9 @@ public class Game {
 	 */
 	public void clean() {
 		this.units.clean();
+		if (this.env.mapAgent()) {
+			this.env.deleteFromEnvironment("mapAgent");
+		}
 		this.percepts = null;
 		this.constructionPercepts = null;
 		this.endGamePercepts = null;
