@@ -1,9 +1,7 @@
 package eisbw.debugger.draw;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import eis.eis2java.exception.TranslationException;
 import eisbw.Game;
 import jnibwapi.JNIBWAPI;
 
@@ -28,7 +26,7 @@ public abstract class IDraw {
 		this.game = game;
 	}
 
-	protected abstract void doDraw(JNIBWAPI api) throws TranslationException;
+	protected abstract void doDraw(JNIBWAPI api);
 
 	/**
 	 * Draw on the map.
@@ -38,11 +36,7 @@ public abstract class IDraw {
 	 */
 	public void draw(JNIBWAPI api) {
 		if (this.toggle) {
-			try {
-				doDraw(api);
-			} catch (TranslationException exception) {
-				this.logger.log(Level.WARNING, "Cannot translate in draw function", exception);
-			}
+			doDraw(api);
 		}
 	}
 

@@ -2,10 +2,10 @@ package eisbw.debugger.draw;
 
 import java.util.List;
 
-import eis.eis2java.exception.TranslationException;
-import eis.eis2java.translation.Translator;
+import eis.iilang.Numeral;
 import eis.iilang.Parameter;
 import eis.iilang.Percept;
+import eis.iilang.TruthValue;
 import eisbw.Game;
 import eisbw.percepts.perceivers.ConstructionSitePerceiver;
 import jnibwapi.BaseLocation;
@@ -33,14 +33,14 @@ public class DrawMapInfo extends IDraw {
 	}
 
 	@Override
-	protected void doDraw(JNIBWAPI api) throws TranslationException {
+	protected void doDraw(JNIBWAPI api) {
 		drawRegions(api);
 		drawBases(api);
 		drawChokepoints(api);
 		drawConstructionSites(api);
 	}
 
-	private void drawRegions(JNIBWAPI api) throws TranslationException {
+	private void drawRegions(JNIBWAPI api) {
 		for (Region region : api.getMap().getRegions()) {
 			Position[] p = region.getPolygon();
 			for (int j = 0; j < p.length; ++j) {
@@ -51,7 +51,7 @@ public class DrawMapInfo extends IDraw {
 		}
 	}
 
-	private void drawBases(JNIBWAPI api) throws TranslationException {
+	private void drawBases(JNIBWAPI api) {
 		for (BaseLocation base : api.getMap().getBaseLocations()) {
 			api.drawCircle(base.getCenter(), 75, BWColor.Purple, false, false);
 			api.drawText(base.getPosition(), base.getPosition().getBX() + ", " + base.getPosition().getBY(), false);
@@ -61,7 +61,7 @@ public class DrawMapInfo extends IDraw {
 		}
 	}
 
-	private void drawChokepoints(JNIBWAPI api) throws TranslationException {
+	private void drawChokepoints(JNIBWAPI api) {
 		for (ChokePoint cp : api.getMap().getChokePoints()) {
 			api.drawLine(cp.getFirstSide(), cp.getSecondSide(), BWColor.Yellow, false);
 			api.drawCircle(cp.getCenter(), (int) cp.getRadius(), BWColor.Red, false, false);
@@ -69,19 +69,18 @@ public class DrawMapInfo extends IDraw {
 		}
 	}
 
-	private void drawConstructionSites(JNIBWAPI api) throws TranslationException {
-		Translator translator = Translator.getInstance();
+	private void drawConstructionSites(JNIBWAPI api) {
 		List<Percept> percepts = this.game.getConstructionSites();
 		int size = ConstructionSitePerceiver.steps;
 		for (Percept percept : percepts) {
 			List<Parameter> params = percept.getParameters();
-			int xpos = translator.translate2Java(params.get(0), Integer.class);
-			int ypos = translator.translate2Java(params.get(1), Integer.class);
+			int xpos = ((Numeral) params.get(0)).getValue().intValue();
+			int ypos = ((Numeral) params.get(1)).getValue().intValue();
 			if (api.getSelf().getRace().getID() == RaceTypes.Terran.getID()) {
 				api.drawBox(new Position(xpos, ypos, PosType.BUILD),
 						new Position(xpos + size, ypos + size, PosType.BUILD), BWColor.Blue, false, false);
 			} else {
-				boolean bool = translator.translate2Java(params.get(3), Boolean.class);
+				boolean bool = ((TruthValue) params.get(1)).getBooleanValue();
 				if (bool) {
 					api.drawBox(new Position(xpos, ypos, PosType.BUILD),
 							new Position(xpos + size, ypos + size, PosType.BUILD), BWColor.Blue, false, false);

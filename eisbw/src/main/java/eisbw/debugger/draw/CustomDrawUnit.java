@@ -1,6 +1,5 @@
 package eisbw.debugger.draw;
 
-import eis.eis2java.exception.TranslationException;
 import eisbw.Game;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Position;
@@ -33,7 +32,7 @@ public class CustomDrawUnit extends IDraw {
 	}
 
 	@Override
-	protected void doDraw(JNIBWAPI api) throws TranslationException {
+	protected void doDraw(JNIBWAPI api) {
 		if (this.unit == null) {
 			api.drawText(new Position(10, 20, PosType.PIXEL), this.text, true);
 		} else {

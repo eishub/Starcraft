@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import eis.eis2java.exception.TranslationException;
 import eisbw.BwapiUtility;
 import eisbw.Game;
 import jnibwapi.JNIBWAPI;
@@ -37,7 +36,7 @@ public class DrawUnitInfo extends IDraw {
 	}
 
 	@Override
-	protected void doDraw(JNIBWAPI api) throws TranslationException {
+	protected void doDraw(JNIBWAPI api) {
 		drawTimerInfo(api);
 		drawHealth(api);
 		drawTargets(api);
