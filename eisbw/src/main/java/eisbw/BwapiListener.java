@@ -133,7 +133,8 @@ public class BwapiListener extends BwapiEvents {
 			}
 			try { // always sleep 1ms to better facilitate running at speed 0
 				Thread.sleep(1);
-			} catch (InterruptedException ignore) {
+			} catch (InterruptedException ie) {
+				break;
 			} // wait until all the initial workers get an action request
 		} while (this.count == 1 && isRunning() && this.pendingActions.size() < 4);
 
