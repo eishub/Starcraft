@@ -14,9 +14,9 @@ import eisbw.BwapiUtility;
 import eisbw.percepts.AttackingPercept;
 import eisbw.percepts.EnemyPercept;
 import eisbw.percepts.FriendlyPercept;
-import eisbw.percepts.NewUnitPercept;
 import eisbw.percepts.Percepts;
 import eisbw.percepts.ResourcesPercept;
+import eisbw.percepts.UnderConstructionPercept;
 import eisbw.units.ConditionHandler;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Player;
@@ -66,8 +66,8 @@ public class UnitsPerceiver extends Perceiver {
 				unitpercepts.add(new FriendlyPercept(u.getID(), unittype, conditionHandler.getConditions()));
 				if (u.isBeingConstructed()) {
 					int region = BwapiUtility.getRegion(u, this.api.getMap());
-					newunitpercepts.add(
-							new NewUnitPercept(u.getID(), u.getPosition().getBX(), u.getPosition().getBY(), region));
+					newunitpercepts.add(new UnderConstructionPercept(u.getID(), u.getHitPoints() + u.getShields(),
+							u.getPosition().getBX(), u.getPosition().getBY(), region));
 				}
 			} else {
 				int region = BwapiUtility.getRegion(u, this.api.getMap());
@@ -99,7 +99,7 @@ public class UnitsPerceiver extends Perceiver {
 		toReturn.put(new PerceptFilter(Percepts.FRIENDLY, Filter.Type.ALWAYS), friendlypercepts);
 		toReturn.put(new PerceptFilter(Percepts.ENEMY, Filter.Type.ALWAYS), enemypercepts);
 		toReturn.put(new PerceptFilter(Percepts.ATTACKING, Filter.Type.ALWAYS), attackingpercepts);
-		toReturn.put(new PerceptFilter(Percepts.NEWUNIT, Filter.Type.ALWAYS), newunitpercepts);
+		toReturn.put(new PerceptFilter(Percepts.UNDERCONSTRUCTION, Filter.Type.ALWAYS), newunitpercepts);
 
 		Set<Percept> resourcePercept = new HashSet<>(1);
 		Player self = this.api.getSelf();

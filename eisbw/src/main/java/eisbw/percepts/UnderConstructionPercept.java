@@ -8,7 +8,7 @@ import eis.iilang.Percept;
  *         other units.
  *
  */
-public class NewUnitPercept extends Percept {
+public class UnderConstructionPercept extends Percept {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -17,6 +17,8 @@ public class NewUnitPercept extends Percept {
 	 *
 	 * @param id
 	 *            The ID of the unit
+	 * @param vitality
+	 *            The combined health and sheald of the unit
 	 * @param x
 	 *            The (initial) X coordinate of the location of the unit
 	 * @param y
@@ -24,7 +26,8 @@ public class NewUnitPercept extends Percept {
 	 * @param region
 	 *            The region of the location of the unit
 	 */
-	public NewUnitPercept(int id, int x, int y, int region) {
-		super(Percepts.NEWUNIT, new Numeral(id), new Numeral(x), new Numeral(y), new Numeral(region));
+	public UnderConstructionPercept(int id, int vitality, int x, int y, int region) {
+		super(Percepts.UNDERCONSTRUCTION, new Numeral(id), new Numeral(vitality), new Numeral(x), new Numeral(y),
+				new Numeral(region));
 	}
 }
