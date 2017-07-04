@@ -1,7 +1,9 @@
 package eisbw;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import jnibwapi.Position;
 import jnibwapi.Region;
@@ -21,7 +23,7 @@ public class BwapiUtility {
 	private static final Map<String, UnitType> unitTypeMap = new HashMap<>();
 	private static final Map<String, TechType> techTypeMap = new HashMap<>();
 	private static final Map<String, UpgradeType> upgradeTypeMap = new HashMap<>();
-	private static final Map<Position, Integer> regionCache = new HashMap<>();
+	private static final Map<Entry<Integer, Integer>, Integer> regionCache = new HashMap<>();
 
 	private BwapiUtility() {
 		// Private constructor for static class.
@@ -53,11 +55,12 @@ public class BwapiUtility {
 	}
 
 	public static int getRegion(Position position, jnibwapi.Map map) {
-		Integer regionId = regionCache.get(position);
+		Entry<Integer, Integer> pos = new SimpleEntry<>(position.getBX(), position.getBY());
+		Integer regionId = regionCache.get(pos);
 		if (regionId == null) {
 			Region region = (map == null) ? null : map.getRegion(position);
 			regionId = (region == null) ? 0 : region.getID();
-			regionCache.put(position, regionId);
+			regionCache.put(pos, regionId);
 		}
 		return regionId.intValue();
 	}
