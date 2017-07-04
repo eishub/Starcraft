@@ -96,16 +96,26 @@ public class UnitsPerceiver extends Perceiver {
 		// perceive enemy units
 		setUnitPercepts(this.api.getEnemyUnits(), null, enemypercepts, attackingpercepts);
 
-		toReturn.put(new PerceptFilter(Percepts.FRIENDLY, Filter.Type.ALWAYS), friendlypercepts);
-		toReturn.put(new PerceptFilter(Percepts.ENEMY, Filter.Type.ALWAYS), enemypercepts);
-		toReturn.put(new PerceptFilter(Percepts.ATTACKING, Filter.Type.ALWAYS), attackingpercepts);
-		toReturn.put(new PerceptFilter(Percepts.UNDERCONSTRUCTION, Filter.Type.ALWAYS), newunitpercepts);
+		if (!friendlypercepts.isEmpty()) {
+			toReturn.put(new PerceptFilter(Percepts.FRIENDLY, Filter.Type.ALWAYS), friendlypercepts);
+		}
+		if (!enemypercepts.isEmpty()) {
+			toReturn.put(new PerceptFilter(Percepts.ENEMY, Filter.Type.ALWAYS), enemypercepts);
+		}
+		if (!attackingpercepts.isEmpty()) {
+			toReturn.put(new PerceptFilter(Percepts.ATTACKING, Filter.Type.ALWAYS), attackingpercepts);
+		}
+		if (!newunitpercepts.isEmpty()) {
+			toReturn.put(new PerceptFilter(Percepts.UNDERCONSTRUCTION, Filter.Type.ALWAYS), newunitpercepts);
+		}
 
-		Set<Percept> resourcePercept = new HashSet<>(1);
 		Player self = this.api.getSelf();
-		resourcePercept.add(
-				new ResourcesPercept(self.getMinerals(), self.getGas(), self.getSupplyUsed(), self.getSupplyTotal()));
-		toReturn.put(new PerceptFilter(Percepts.RESOURCES, Filter.Type.ON_CHANGE), resourcePercept);
+		if (self != null) { // for tests
+			Set<Percept> resourcePercept = new HashSet<>(1);
+			resourcePercept.add(new ResourcesPercept(self.getMinerals(), self.getGas(), self.getSupplyUsed(),
+					self.getSupplyTotal()));
+			toReturn.put(new PerceptFilter(Percepts.RESOURCES, Filter.Type.ON_CHANGE), resourcePercept);
+		}
 
 		return toReturn;
 	}

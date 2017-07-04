@@ -1,6 +1,5 @@
 package eisbw.units;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
@@ -16,10 +15,10 @@ import jnibwapi.Unit;
  *
  */
 public class Units {
-	protected final Map<String, Unit> unitMap;
-	protected final Map<Integer, String> unitNames;
-	protected final Map<String, StarcraftUnit> starcraftUnits;
 	protected final StarcraftEnvironmentImpl environment;
+	protected final Map<Integer, String> unitNames;
+	protected final Map<String, Unit> unitMap;
+	protected final Map<Unit, StarcraftUnit> starcraftUnits;
 	protected final Queue<Unit> uninitializedUnits;
 
 	/**
@@ -29,11 +28,11 @@ public class Units {
 	 *            - the SC environment
 	 */
 	public Units(StarcraftEnvironmentImpl environment) {
-		this.unitMap = new ConcurrentHashMap<>();
+		this.environment = environment;
 		this.unitNames = new ConcurrentHashMap<>();
+		this.unitMap = new ConcurrentHashMap<>();
 		this.starcraftUnits = new ConcurrentHashMap<>();
 		this.uninitializedUnits = new ConcurrentLinkedQueue<>();
-		this.environment = environment;
 	}
 
 	/**
@@ -46,9 +45,10 @@ public class Units {
 	 */
 	public void addUnit(Unit unit, StarcraftUnitFactory factory) {
 		String unitName = BwapiUtility.getName(unit);
-		this.unitMap.put(unitName, unit);
 		this.unitNames.put(unit.getID(), unitName);
-		this.starcraftUnits.put(unitName, factory.create(unit));
+		this.unitMap.put(unitName, unit);
+		StarcraftUnit scUnit = factory.create(unit);
+		this.starcraftUnits.put(unit, scUnit);
 		this.uninitializedUnits.add(unit);
 	}
 
@@ -61,24 +61,29 @@ public class Units {
 	 *            The id of the unit.
 	 */
 	public Unit deleteUnit(String unitName, int id) {
-		Unit unit = this.unitMap.remove(unitName);
 		this.unitNames.remove(id);
-		this.starcraftUnits.remove(unitName);
+		Unit unit = this.unitMap.remove(unitName);
+		this.starcraftUnits.remove(unit);
 		this.uninitializedUnits.remove(unit);
+
 		this.environment.deleteFromEnvironment(unitName);
 		return unit;
 	}
 
-	public Map<String, Unit> getUnits() {
-		return Collections.unmodifiableMap(this.unitMap);
+	public String getUnitName(int id) {
+		return this.unitNames.get(id);
 	}
 
-	public Map<Integer, String> getUnitNames() {
-		return Collections.unmodifiableMap(this.unitNames);
+	public Unit getUnit(String name) {
+		return this.unitMap.get(name);
 	}
 
-	public Map<String, StarcraftUnit> getStarcraftUnits() {
-		return Collections.unmodifiableMap(this.starcraftUnits);
+	public StarcraftUnit getStarcraftUnit(Unit unit) {
+		return this.starcraftUnits.get(unit);
+	}
+
+	public Queue<Unit> getUninitializedUnits() {
+		return this.uninitializedUnits;
 	}
 
 	/**
@@ -88,9 +93,5 @@ public class Units {
 		for (Entry<Integer, String> entry : this.unitNames.entrySet()) {
 			deleteUnit(entry.getValue(), entry.getKey());
 		}
-	}
-
-	public Queue<Unit> getUninitializedUnits() {
-		return this.uninitializedUnits;
 	}
 }

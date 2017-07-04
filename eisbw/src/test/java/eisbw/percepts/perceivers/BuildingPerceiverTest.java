@@ -18,8 +18,6 @@ import org.mockito.MockitoAnnotations;
 import eis.iilang.Percept;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Player;
-import jnibwapi.Position;
-import jnibwapi.Position.Positions;
 import jnibwapi.Unit;
 import jnibwapi.types.TechType;
 import jnibwapi.types.UnitType;
@@ -27,64 +25,54 @@ import jnibwapi.types.UpgradeType.UpgradeTypes;
 
 public class BuildingPerceiverTest {
 
-  private BuildingPerceiver perciever;
-  @Mock
-  private Unit unit;
-  @Mock
-  private UnitType unitType;
-  @Mock
-  private JNIBWAPI api;
-  @Mock
-  private Player self;
+	private BuildingPerceiver perciever;
+	@Mock
+	private Unit unit;
+	@Mock
+	private UnitType unitType;
+	@Mock
+	private JNIBWAPI api;
+	@Mock
+	private Player self;
 
-  /**
-   * Initialize mocks.
-   */
-  @Before
-  public void start() {
-    MockitoAnnotations.initMocks(this);
+	/**
+	 * Initialize mocks.
+	 */
+	@Before
+	public void start() {
+		MockitoAnnotations.initMocks(this);
 
-    when(unit.getRallyPosition()).thenReturn(new Position(1, 1));
-    when(unit.getRallyUnit()).thenReturn(unit);
-    when(unit.getID()).thenReturn(1);
-    when(unit.getTrainingQueueSize()).thenReturn(1);
-    when(unit.isUpgrading()).thenReturn(true);
-    when(unit.getUpgrade()).thenReturn(UpgradeTypes.Adrenal_Glands);
-    when(api.getSelf()).thenReturn(self);
-    when(self.isResearched(any(TechType.class))).thenReturn(false);
-    when(unit.getType()).thenReturn(unitType);
-    when(unitType.getName()).thenReturn("name");
-    when(unitType.getSpaceProvided()).thenReturn(1);
-    when(unit.getLoadedUnits()).thenReturn(new LinkedList<Unit>());
+		when(this.api.getSelf()).thenReturn(this.self);
+		when(this.unit.getID()).thenReturn(1);
+		when(this.unit.getType()).thenReturn(this.unitType);
+		when(this.unitType.getName()).thenReturn("name");
+		when(this.unitType.getSpaceProvided()).thenReturn(1);
+		when(this.unit.getTrainingQueueSize()).thenReturn(1);
+		when(this.unit.getUpgrade()).thenReturn(UpgradeTypes.Adrenal_Glands);
+		when(this.unit.getLoadedUnits()).thenReturn(new LinkedList<Unit>());
 
-    perciever = new BuildingPerceiver(api, unit);
-  }
+		this.perciever = new BuildingPerceiver(this.api, this.unit);
+	}
 
-  @Test
-  public void size_test() {
-    Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>();
-    assertEquals(4, perciever.perceive(toReturn).size());
-    when(unit.getRallyPosition()).thenReturn(Positions.None);
-    toReturn = new HashMap<>();
-    assertEquals(3, perciever.perceive(toReturn).size());
-    when(unit.getRallyUnit()).thenReturn(null);
-    toReturn = new HashMap<>();
-    assertEquals(2, perciever.perceive(toReturn).size());
-    toReturn = new HashMap<>();
-    when(unit.isUpgrading()).thenReturn(false);
-    assertEquals(1, perciever.perceive(toReturn).size());
-    toReturn = new HashMap<>();
-    List<Unit> loadedunits = new LinkedList<>();
-    loadedunits.add(unit);
-    loadedunits.add(null);
-    when(unit.getLoadedUnits()).thenReturn(loadedunits);
-    assertEquals(1, perciever.perceive(toReturn).size());
-    toReturn = new HashMap<>();
-    when(unitType.getSpaceProvided()).thenReturn(0);
-    assertEquals(1, perciever.perceive(toReturn).size());
-    toReturn = new HashMap<>();
-    when(self.isResearched(any(TechType.class))).thenReturn(true);
-    assertEquals(1, perciever.perceive(toReturn).size());
-  }
-  
+	@Test
+	public void size_test() {
+		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>();
+		assertEquals(2, this.perciever.perceive(toReturn).size());
+		toReturn = new HashMap<>();
+		when(this.unit.getUpgrade()).thenReturn(null);
+		assertEquals(1, this.perciever.perceive(toReturn).size());
+		toReturn = new HashMap<>();
+		List<Unit> loadedunits = new LinkedList<>();
+		loadedunits.add(this.unit);
+		loadedunits.add(null);
+		when(this.unit.getLoadedUnits()).thenReturn(loadedunits);
+		assertEquals(1, this.perciever.perceive(toReturn).size());
+		toReturn = new HashMap<>();
+		when(this.unitType.getSpaceProvided()).thenReturn(0);
+		assertEquals(1, this.perciever.perceive(toReturn).size());
+		toReturn = new HashMap<>();
+		when(this.self.isResearched(any(TechType.class))).thenReturn(true);
+		assertEquals(1, this.perciever.perceive(toReturn).size());
+	}
+
 }

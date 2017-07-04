@@ -3,9 +3,8 @@ package eisbw.actions;
 import java.util.List;
 
 import eis.iilang.Action;
-import eis.iilang.Identifier;
 import eis.iilang.Parameter;
-import eisbw.BwapiListener;
+import eisbw.Game;
 import eisbw.debugger.draw.CustomDrawUnit;
 import eisbw.debugger.draw.IDraw;
 import jnibwapi.JNIBWAPI;
@@ -16,7 +15,7 @@ import jnibwapi.Unit;
  *
  */
 public class DebugDraw extends StarcraftAction {
-	private final BwapiListener listener;
+	private final Game game;
 
 	/**
 	 * The DebugText constructor.
@@ -24,15 +23,15 @@ public class DebugDraw extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public DebugDraw(JNIBWAPI api, BwapiListener listener) {
+	public DebugDraw(JNIBWAPI api, Game game) {
 		super(api);
-		this.listener = listener;
+		this.game = game;
 	}
 
 	@Override
 	public boolean isValid(Action action) {
 		List<Parameter> parameters = action.getParameters();
-		return parameters.size() == 1 && parameters.get(0) instanceof Identifier;
+		return parameters.size() == 1;
 	}
 
 	@Override
@@ -40,16 +39,17 @@ public class DebugDraw extends StarcraftAction {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void execute(Unit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
-		String text = ((Identifier) parameters.get(0)).getValue();
+		String text = parameters.get(0).toProlog();
 		String id = (unit == null) ? "0" : Integer.toString(unit.getID());
 
-		IDraw draw = new CustomDrawUnit(this.listener.getGame(), unit, text);
-		this.listener.addDraw(id, draw);
+		IDraw draw = new CustomDrawUnit(this.game, unit, text);
+		this.game.addDraw(id, draw);
 		if (!text.isEmpty()) {
-			this.listener.toggleDraw(id);
+			this.game.toggleDraw(id);
 		}
 	}
 
@@ -57,5 +57,4 @@ public class DebugDraw extends StarcraftAction {
 	public String toString() {
 		return "debugdraw(Text)";
 	}
-
 }

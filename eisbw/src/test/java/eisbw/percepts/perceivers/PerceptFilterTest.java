@@ -1,17 +1,17 @@
 package eisbw.percepts.perceivers;
 
-import eis.eis2java.translation.Filter.Type;
-
 import org.junit.Test;
 
-public class PerceptFilterTest {
-  private PerceptFilter filter;
+import eis.eis2java.translation.Filter.Type;
 
-  @Test
-  public void test() {
-    filter = new PerceptFilter("self", Type.ONCE);
-    filter.equals(null);
-    filter.equals(new Integer(10));
-  }
+public class PerceptFilterTest {
+	private PerceptFilter filter;
+
+	@Test
+	public void test() {
+		this.filter = new PerceptFilter("self", Type.ONCE);
+		this.filter.equals(null);
+		this.filter.equals(new Integer(10));
+	}
 
 }

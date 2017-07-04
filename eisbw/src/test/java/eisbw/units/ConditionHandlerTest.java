@@ -16,256 +16,256 @@ import jnibwapi.types.UnitType;
 
 public class ConditionHandlerTest {
 
-  private ConditionHandler handler;
+	private ConditionHandler handler;
 
-  @Mock
-  private Unit unit;
-  @Mock
-  private JNIBWAPI api;
-  @Mock
-  private UnitType unitType;
-  @Mock
-  private Player self;
+	@Mock
+	private Unit unit;
+	@Mock
+	private JNIBWAPI api;
+	@Mock
+	private UnitType unitType;
+	@Mock
+	private Player self;
 
-  /**
-   * Init mocks.
-   */
-  @Before
-  public void start() {
-    MockitoAnnotations.initMocks(this);
+	/**
+	 * Init mocks.
+	 */
+	@Before
+	public void start() {
+		MockitoAnnotations.initMocks(this);
 
-    when(self.getRace()).thenReturn(RaceTypes.None);
+		when(this.self.getRace()).thenReturn(RaceTypes.None);
 
-    when(api.getSelf()).thenReturn(self);
-    when(unitType.getRaceID()).thenReturn(RaceTypes.Terran.getID());
-    when(unit.getType()).thenReturn(unitType);
-    when(unitType.getName()).thenReturn("name");
-    when(unit.getID()).thenReturn(0);
+		when(this.api.getSelf()).thenReturn(this.self);
+		when(this.unitType.getRaceID()).thenReturn(RaceTypes.Terran.getID());
+		when(this.unit.getType()).thenReturn(this.unitType);
+		when(this.unitType.getName()).thenReturn("name");
+		when(this.unit.getID()).thenReturn(0);
 
-    handler = new ConditionHandler(api, unit);
-  }
+		this.handler = new ConditionHandler(this.api, this.unit);
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void idle_test() {
-    when(unit.isIdle()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    assertEquals("idle", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void idle_test() {
+		when(this.unit.isIdle()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		assertEquals("idle", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void completed_test() {
-    when(unit.isCompleted()).thenReturn(false);
-    assertEquals("beingConstructed", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void completed_test() {
+		when(this.unit.isCompleted()).thenReturn(false);
+		assertEquals("beingConstructed", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void cloaked_test() {
-    when(unit.isCloaked()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    assertEquals("cloaked", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void cloaked_test() {
+		when(this.unit.isCloaked()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		assertEquals("cloaked", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void moving_test() {
-    when(unitType.isCanMove()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    when(unit.isMoving()).thenReturn(true);
-    assertEquals("moving", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void moving_test() {
+		when(this.unitType.isCanMove()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.unit.isMoving()).thenReturn(true);
+		assertEquals("moving", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void following_test() {
-    when(unitType.isCanMove()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    when(unit.isFollowing()).thenReturn(true);
-    assertEquals("following", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void following_test() {
+		when(this.unitType.isCanMove()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.unit.isFollowing()).thenReturn(true);
+		assertEquals("following", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void loaded_test() {
-    when(unitType.isCanMove()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    when(unit.isLoaded()).thenReturn(true);
-    assertEquals("loaded", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void loaded_test() {
+		when(this.unitType.isCanMove()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.unit.isLoaded()).thenReturn(true);
+		assertEquals("loaded", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void stimmed_test() {
-    when(unitType.isCanMove()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    when(self.getRace()).thenReturn(RaceTypes.Terran);
-    when(unit.isStimmed()).thenReturn(true);
-    assertEquals("stimmed", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void stimmed_test() {
+		when(this.unitType.isCanMove()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.self.getRace()).thenReturn(RaceTypes.Terran);
+		when(this.unit.isStimmed()).thenReturn(true);
+		assertEquals("stimmed", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void sieged_test() {
-    when(unitType.isCanMove()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    when(self.getRace()).thenReturn(RaceTypes.Terran);
-    when(unit.isSieged()).thenReturn(true);
-    assertEquals("sieged", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void sieged_test() {
+		when(this.unitType.isCanMove()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.self.getRace()).thenReturn(RaceTypes.Terran);
+		when(this.unit.isSieged()).thenReturn(true);
+		assertEquals("sieged", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void blinded_test() {
-    when(unitType.isCanMove()).thenReturn(true);
-    when(unit.isBlind()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    assertEquals("blinded", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void blinded_test() {
+		when(this.unitType.isCanMove()).thenReturn(true);
+		when(this.unit.isBlind()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		assertEquals("blinded", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void lockedDown_test() {
-    when(unitType.isCanMove()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    when(unit.isLockedDown()).thenReturn(true);
-    assertEquals("lockDowned", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void lockedDown_test() {
+		when(this.unitType.isCanMove()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.unit.isLockedDown()).thenReturn(true);
+		assertEquals("lockDowned", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void irradiated_test() {
-    when(unitType.isCanMove()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    when(unit.isIrradiated()).thenReturn(true);
-    assertEquals("irradiated", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void irradiated_test() {
+		when(this.unitType.isCanMove()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.unit.isIrradiated()).thenReturn(true);
+		assertEquals("irradiated", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void underStorm_test() {
-    when(unitType.isCanMove()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    when(unit.isUnderStorm()).thenReturn(true);
-    assertEquals("underStorm", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void underStorm_test() {
+		when(this.unitType.isCanMove()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.unit.isUnderStorm()).thenReturn(true);
+		assertEquals("underStorm", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void stasised_test() {
-    when(unitType.isCanMove()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    when(unit.isStasised()).thenReturn(true);
-    assertEquals("stasised", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void stasised_test() {
+		when(this.unitType.isCanMove()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.unit.isStasised()).thenReturn(true);
+		assertEquals("stasised", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void maelstrommed_test() {
-    when(unitType.isCanMove()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    when(unit.isMaelstrommed()).thenReturn(true);
-    assertEquals("maelstrommed", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void maelstrommed_test() {
+		when(this.unitType.isCanMove()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.unit.isMaelstrommed()).thenReturn(true);
+		assertEquals("maelstrommed", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void disruptionWebbed_test() {
-    when(unitType.isCanMove()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    when(unit.isUnderDisruptionWeb()).thenReturn(true);
-    assertEquals("disruptionWebbed", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void disruptionWebbed_test() {
+		when(this.unitType.isCanMove()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.unit.isUnderDisruptionWeb()).thenReturn(true);
+		assertEquals("disruptionWebbed", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void ensnared_test() {
-    when(unitType.isCanMove()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    when(unit.isEnsnared()).thenReturn(true);
-    assertEquals("ensnared", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void ensnared_test() {
+		when(this.unitType.isCanMove()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.unit.isEnsnared()).thenReturn(true);
+		assertEquals("ensnared", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void parasited_test() {
-    when(unitType.isCanMove()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    when(unit.isParasited()).thenReturn(true);
-    assertEquals("parasited", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void parasited_test() {
+		when(this.unitType.isCanMove()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.unit.isParasited()).thenReturn(true);
+		assertEquals("parasited", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void plagued_test() {
-    when(unitType.isCanMove()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    when(unit.isPlagued()).thenReturn(true);
-    assertEquals("plagued", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void plagued_test() {
+		when(this.unitType.isCanMove()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.unit.isPlagued()).thenReturn(true);
+		assertEquals("plagued", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @SuppressWarnings("deprecation")
-  @Test
-  public void darkSwarmed_test() {
-    when(unitType.isCanMove()).thenReturn(true);
-    when(unit.isCompleted()).thenReturn(true);
-    when(unit.isUnderDarkSwarm()).thenReturn(true);
-    assertEquals("darkSwarmed", handler.getConditions().get(0).toProlog());
-  }
+	@SuppressWarnings("deprecation")
+	@Test
+	public void darkSwarmed_test() {
+		when(this.unitType.isCanMove()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.unit.isUnderDarkSwarm()).thenReturn(true);
+		assertEquals("darkSwarmed", this.handler.getConditions().get(0).toProlog());
+	}
 
-  @Test
-  public void conditions_gas_test() {
-    when(unit.isCarryingGas()).thenReturn(true);
-    assertEquals(1, handler.getConditions().size());
-  }
+	@Test
+	public void conditions_gas_test() {
+		when(this.unit.isCarryingGas()).thenReturn(true);
+		assertEquals(1, this.handler.getConditions().size());
+	}
 
-  @Test
-  public void conditions_minerals_test() {
-    when(unit.isCarryingMinerals()).thenReturn(true);
-    assertEquals(1, handler.getConditions().size());
-  }
+	@Test
+	public void conditions_minerals_test() {
+		when(this.unit.isCarryingMinerals()).thenReturn(true);
+		assertEquals(1, this.handler.getConditions().size());
+	}
 
-  @Test
-  public void conditions_constructing_test() {
-    when(unit.isConstructing()).thenReturn(true);
-    assertEquals(1, handler.getConditions().size());
-  }
+	@Test
+	public void conditions_constructing_test() {
+		when(this.unit.isConstructing()).thenReturn(true);
+		assertEquals(1, this.handler.getConditions().size());
+	}
 
-  @Test
-  public void conditions_worker_test() {
-    when(unit.isCompleted()).thenReturn(true);
-    when(unitType.isWorker()).thenReturn(true);
-    when(unit.isCarryingGas()).thenReturn(true);
-    when(unit.isConstructing()).thenReturn(true);
-    assertEquals(2, handler.getConditions().size());
+	@Test
+	public void conditions_worker_test() {
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.unitType.isWorker()).thenReturn(true);
+		when(this.unit.isCarryingGas()).thenReturn(true);
+		when(this.unit.isConstructing()).thenReturn(true);
+		assertEquals(2, this.handler.getConditions().size());
 
-    when(unit.isCarryingGas()).thenReturn(false);
-    when(unit.isCarryingMinerals()).thenReturn(true);
-    when(unit.isConstructing()).thenReturn(false);
-    assertEquals(1, handler.getConditions().size());
-    when(unit.isCarryingMinerals()).thenReturn(false);
-    assertEquals(0, handler.getConditions().size());
-  }
+		when(this.unit.isCarryingGas()).thenReturn(false);
+		when(this.unit.isCarryingMinerals()).thenReturn(true);
+		when(this.unit.isConstructing()).thenReturn(false);
+		assertEquals(1, this.handler.getConditions().size());
+		when(this.unit.isCarryingMinerals()).thenReturn(false);
+		assertEquals(0, this.handler.getConditions().size());
+	}
 
-  @Test
-  public void conditions_building_test() {
-    when(unit.isCompleted()).thenReturn(true);
-    when(unitType.isBuilding()).thenReturn(true);
+	@Test
+	public void conditions_building_test() {
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.unitType.isBuilding()).thenReturn(true);
 
-    when(unit.isLifted()).thenReturn(true);
-    when(unit.getAddon()).thenReturn(unit);
+		when(this.unit.isLifted()).thenReturn(true);
+		when(this.unit.getAddon()).thenReturn(this.unit);
 
-    assertEquals(2, handler.getConditions().size());
+		assertEquals(2, this.handler.getConditions().size());
 
-    when(self.getRace()).thenReturn(RaceTypes.Terran);
+		when(this.self.getRace()).thenReturn(RaceTypes.Terran);
 
-    assertEquals(2, handler.getConditions().size());
+		assertEquals(2, this.handler.getConditions().size());
 
-    when(unit.isLifted()).thenReturn(false);
-    when(unit.getAddon()).thenReturn(null);
+		when(this.unit.isLifted()).thenReturn(false);
+		when(this.unit.getAddon()).thenReturn(null);
 
-    assertEquals(0, handler.getConditions().size());
-  }
+		assertEquals(0, this.handler.getConditions().size());
+	}
 
 }

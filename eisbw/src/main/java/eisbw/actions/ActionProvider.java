@@ -3,7 +3,8 @@ package eisbw.actions;
 import java.util.HashMap;
 import java.util.Map;
 
-import eisbw.BwapiListener;
+import eis.iilang.Action;
+import eisbw.Game;
 import jnibwapi.JNIBWAPI;
 
 /**
@@ -21,12 +22,12 @@ public class ActionProvider {
 	}
 
 	/**
-	 * @param actionName
-	 *            The name of the action.
-	 * @return The action object with the specified action name.
+	 * @param action
+	 *            An EIS action.
+	 * @return The StarcraftAction for the given EIS action
 	 */
-	public StarcraftAction getAction(String actionName) {
-		return this.actions.get(actionName);
+	public StarcraftAction getAction(Action action) {
+		return this.actions.get(action.getName() + "/" + action.getParameters().size());
 	}
 
 	/**
@@ -35,7 +36,7 @@ public class ActionProvider {
 	 * @param api
 	 *            the API to pass into the actions.
 	 */
-	public void loadActions(JNIBWAPI api, BwapiListener listener) {
+	public void loadActions(JNIBWAPI api, Game game) {
 		this.actions.put("attack/1", new Attack(api));
 		this.actions.put("attack/2", new AttackMove(api));
 		this.actions.put("build/3", new Build(api));
@@ -62,6 +63,6 @@ public class ActionProvider {
 		this.actions.put("cancel/1", new Cancel(api));
 		this.actions.put("repair/1", new Repair(api));
 		this.actions.put("forfeit/0", new Forfeit(api));
-		this.actions.put("debugdraw/1", new DebugDraw(api, listener));
+		this.actions.put("debugdraw/1", new DebugDraw(api, game));
 	}
 }

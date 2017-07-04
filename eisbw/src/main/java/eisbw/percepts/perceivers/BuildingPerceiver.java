@@ -47,7 +47,9 @@ public class BuildingPerceiver extends UnitPerceiver {
 				&& this.unit.getUpgrade().getID() != UpgradeTypes.Unknown.getID()) {
 			researchedPercepts.add(new ResearchingPercept(this.unit.getUpgrade().getName()));
 		}
-		toReturn.put(new PerceptFilter(Percepts.RESEARCHING, Filter.Type.ALWAYS), researchedPercepts);
+		if (!researchedPercepts.isEmpty()) {
+			toReturn.put(new PerceptFilter(Percepts.RESEARCHING, Filter.Type.ALWAYS), researchedPercepts);
+		}
 	}
 
 	private void queueSizePercept(Map<PerceptFilter, Set<Percept>> toReturn) {

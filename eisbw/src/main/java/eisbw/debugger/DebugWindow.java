@@ -7,7 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import eisbw.BwapiListener;
+import eisbw.Game;
 import jnibwapi.JNIBWAPI;
 
 /**
@@ -26,7 +26,7 @@ public class DebugWindow extends JFrame {
 	 * @param game
 	 *            - the game data.
 	 */
-	public DebugWindow(BwapiListener bwapi) {
+	public DebugWindow(Game game) {
 		setTitle("StarCraft GOAL development tools");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500, 300);
@@ -41,7 +41,7 @@ public class DebugWindow extends JFrame {
 		this.cheats = new CheatButtons();
 		contentPane.add(this.cheats);
 
-		this.draw = new DrawButtons(bwapi);
+		this.draw = new DrawButtons(game);
 		contentPane.add(this.draw);
 
 		setVisible(true);

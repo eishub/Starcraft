@@ -28,10 +28,14 @@ public class Research extends StarcraftAction {
 	@Override
 	public boolean isValid(Action action) {
 		List<Parameter> parameters = action.getParameters();
-		TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
-		UpgradeType upgradeType = getUpgradeType(((Identifier) parameters.get(0)).getValue());
-		return parameters.size() == 1 && parameters.get(0) instanceof Identifier
-				&& (techType != null || upgradeType != null);
+		boolean valid = parameters.size() == 1 && parameters.get(0) instanceof Identifier;
+		if (valid) {
+			TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
+			UpgradeType upgradeType = getUpgradeType(((Identifier) parameters.get(0)).getValue());
+			return techType != null || upgradeType != null;
+		} else {
+			return false;
+		}
 	}
 
 	@Override

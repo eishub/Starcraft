@@ -7,7 +7,7 @@ package eisbw.configuration;
 public enum ParamEnum {
 	MAP("map"), OWN_RACE("own_race"), DEBUG("debug"), DRAWMAPINFO("draw_mapinfo"),
 	//
-	DRAWUNITINFO("draw_unitinfo"), SC_DIR("starcraft_location"), AUTO_MENU("auto_menu"),
+	DRAWUNITINFO("draw_unitinfo"), SC_DIR("starcraft_location"), AUTO_MENU("auto_menu"), GAME_TYPE("game_type"),
 	//
 	ENEMY_RACE("enemy_race"), SPEED("game_speed"), INVULNERABLE("invulnerable"), MAPAGENT("map_agent");
 

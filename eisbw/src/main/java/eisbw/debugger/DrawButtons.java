@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import eisbw.BwapiListener;
+import eisbw.Game;
 
 /**
  * @author Danny & Harm.
@@ -18,7 +18,7 @@ import eisbw.BwapiListener;
 public class DrawButtons extends JPanel implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
-	private final BwapiListener listener;
+	private final Game game;
 	private final Color buttonBackground;
 
 	/**
@@ -27,8 +27,8 @@ public class DrawButtons extends JPanel implements ActionListener {
 	 * @param game
 	 *            - the game data.
 	 */
-	public DrawButtons(BwapiListener listener) {
-		this.listener = listener;
+	public DrawButtons(Game game) {
+		this.game = game;
 		setLayout(new BorderLayout());
 
 		JLabel label = new JLabel("Draw actions", SwingConstants.CENTER);
@@ -51,7 +51,7 @@ public class DrawButtons extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		this.listener.toggleDraw(event.getActionCommand());
+		this.game.toggleDraw(event.getActionCommand());
 		JButton buttonPressed = (JButton) event.getSource();
 		if (buttonPressed.getBackground().equals(Color.GRAY)) {
 			buttonPressed.setBackground(this.buttonBackground);
