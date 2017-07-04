@@ -3,6 +3,7 @@ package eisbw;
 import java.util.HashMap;
 import java.util.Map;
 
+import jnibwapi.Position;
 import jnibwapi.Region;
 import jnibwapi.Unit;
 import jnibwapi.types.TechType;
@@ -20,13 +21,14 @@ public class BwapiUtility {
 	private static final Map<String, UnitType> unitTypeMap = new HashMap<>();
 	private static final Map<String, TechType> techTypeMap = new HashMap<>();
 	private static final Map<String, UpgradeType> upgradeTypeMap = new HashMap<>();
+	private static final Map<Position, Integer> regionCache = new HashMap<>();
 
 	private BwapiUtility() {
 		// Private constructor for static class.
 	}
 
 	public static boolean isValid(Unit unit) {
-		return unit.isExists() && unit.isVisible() && !(unit.isBeingConstructed() && unit.isLoaded());
+		return unit != null && unit.isExists() && unit.isVisible() && !(unit.isBeingConstructed() && unit.isLoaded());
 	}
 
 	/**
@@ -50,9 +52,14 @@ public class BwapiUtility {
 		}
 	}
 
-	public static int getRegion(Unit unit, jnibwapi.Map map) {
-		Region region = (map == null) ? null : map.getRegion(unit.getPosition());
-		return (region == null) ? 0 : region.getID();
+	public static int getRegion(Position position, jnibwapi.Map map) {
+		Integer regionId = regionCache.get(position);
+		if (regionId == null) {
+			Region region = (map == null) ? null : map.getRegion(position);
+			regionId = (region == null) ? 0 : region.getID();
+			regionCache.put(position, regionId);
+		}
+		return regionId.intValue();
 	}
 
 	/**

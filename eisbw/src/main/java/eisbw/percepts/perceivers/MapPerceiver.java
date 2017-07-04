@@ -2,10 +2,8 @@ package eisbw.percepts.perceivers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import eis.eis2java.translation.Filter;
 import eis.iilang.Numeral;
@@ -41,15 +39,15 @@ public class MapPerceiver extends Perceiver {
 	}
 
 	@Override
-	public Map<PerceptFilter, Set<Percept>> perceive(Map<PerceptFilter, Set<Percept>> toReturn) {
+	public void perceive(Map<PerceptFilter, List<Percept>> toReturn) {
 		jnibwapi.Map map = this.api.getMap();
 
-		Set<Percept> mapPercept = new HashSet<>(1);
+		List<Percept> mapPercept = new ArrayList<>(1);
 		mapPercept.add(new MapPercept(map.getSize().getBX(), map.getSize().getBY()));
 		toReturn.put(new PerceptFilter(Percepts.MAP, Filter.Type.ONCE), mapPercept);
 
 		if (!this.api.getEnemies().isEmpty()) {
-			Set<Percept> enemyRacePercept = new HashSet<>(1);
+			List<Percept> enemyRacePercept = new ArrayList<>(1);
 			enemyRacePercept.add(
 					new EnemyRacePercept(this.api.getEnemies().iterator().next().getRace().getName().toLowerCase()));
 			toReturn.put(new PerceptFilter(Percepts.ENEMYRACE, Filter.Type.ONCE), enemyRacePercept);
@@ -58,13 +56,13 @@ public class MapPerceiver extends Perceiver {
 		/** Distance calculation between resource groups and base location **/
 		Map<Integer, Position> distanceMatrix = new HashMap<>();
 		for (Unit u : this.api.getNeutralUnits()) {
-			if (BwapiUtility.isValid(u) && u.getType().isMineralField()) {
+			if (u.getType().isMineralField() && BwapiUtility.isValid(u)) {
 				if (!distanceMatrix.containsKey(u.getResourceGroup())) {
 					distanceMatrix.put(u.getResourceGroup(), u.getPosition());
 				}
 			}
 		}
-		Set<Percept> basePercepts = new HashSet<>(map.getBaseLocations().size());
+		List<Percept> basePercepts = new ArrayList<>(map.getBaseLocations().size());
 		for (BaseLocation location : map.getBaseLocations()) {
 			Percept basePercept = new BasePercept(location.isStartLocation(), location.getPosition().getBX(),
 					location.getPosition().getBY(), location.getRegion().getID());
@@ -72,7 +70,7 @@ public class MapPerceiver extends Perceiver {
 		}
 		toReturn.put(new PerceptFilter(Percepts.BASE, Filter.Type.ONCE), basePercepts);
 
-		Set<Percept> chokepointPercepts = new HashSet<>(map.getChokePoints().size());
+		List<Percept> chokepointPercepts = new ArrayList<>(map.getChokePoints().size());
 		for (ChokePoint cp : map.getChokePoints()) {
 			Percept chokeRegionPercept = new ChokepointRegionPercept(cp.getFirstSide().getBX(),
 					cp.getFirstSide().getBY(), cp.getSecondSide().getBX(), cp.getSecondSide().getBY(),
@@ -81,7 +79,7 @@ public class MapPerceiver extends Perceiver {
 		}
 		toReturn.put(new PerceptFilter(Percepts.CHOKEPOINT, Filter.Type.ONCE), chokepointPercepts);
 
-		Set<Percept> regionPercepts = new HashSet<>(map.getRegions().size());
+		List<Percept> regionPercepts = new ArrayList<>(map.getRegions().size());
 		for (Region r : map.getRegions()) {
 			Position center = r.getCenter();
 			int height = map.getGroundHeight(center);
@@ -93,7 +91,5 @@ public class MapPerceiver extends Perceiver {
 			regionPercepts.add(regionPercept);
 		}
 		toReturn.put(new PerceptFilter(Percepts.REGION, Filter.Type.ONCE), regionPercepts);
-
-		return toReturn;
 	}
 }

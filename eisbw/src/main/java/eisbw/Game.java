@@ -2,13 +2,11 @@ package eisbw;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -38,13 +36,13 @@ public class Game {
 	protected final StarcraftEnvironmentImpl env;
 	protected Units units; // overriden in test
 	protected final Map<String, IDraw> draws;
-	protected volatile Map<String, Map<PerceptFilter, Set<Percept>>> percepts;
-	protected volatile Map<PerceptFilter, Set<Percept>> mapPercepts;
-	protected volatile Map<PerceptFilter, Set<Percept>> constructionPercepts;
-	protected volatile Map<PerceptFilter, Set<Percept>> framePercepts;
-	protected volatile Map<PerceptFilter, Set<Percept>> nukePercepts;
-	protected volatile Map<PerceptFilter, Set<Percept>> endGamePercepts;
-	private final Map<String, Map<String, Set<Percept>>> previous;
+	protected volatile Map<String, Map<PerceptFilter, List<Percept>>> percepts;
+	protected volatile Map<PerceptFilter, List<Percept>> mapPercepts;
+	protected volatile Map<PerceptFilter, List<Percept>> constructionPercepts;
+	protected volatile Map<PerceptFilter, List<Percept>> framePercepts;
+	protected volatile Map<PerceptFilter, List<Percept>> nukePercepts;
+	protected volatile Map<PerceptFilter, List<Percept>> endGamePercepts;
+	private final Map<String, Map<String, List<Percept>>> previous;
 
 	/**
 	 * Constructor.
@@ -90,14 +88,14 @@ public class Game {
 	 */
 	public void update(JNIBWAPI bwapi) {
 		processUninitializedUnits();
-		Map<String, Map<PerceptFilter, Set<Percept>>> unitPerceptHolder = new HashMap<>();
-		Map<PerceptFilter, Set<Percept>> globalPercepts = getGlobalPercepts(bwapi);
+		Map<String, Map<PerceptFilter, List<Percept>>> unitPerceptHolder = new HashMap<>();
+		Map<PerceptFilter, List<Percept>> globalPercepts = getGlobalPercepts(bwapi);
 		for (Unit unit : bwapi.getMyUnits()) {
 			StarcraftUnit scUnit = this.units.getStarcraftUnit(unit);
 			if (scUnit == null) {
 				continue;
 			}
-			Map<PerceptFilter, Set<Percept>> thisUnitPercepts = new HashMap<>(scUnit.perceive());
+			Map<PerceptFilter, List<Percept>> thisUnitPercepts = new HashMap<>(scUnit.perceive());
 			if (!this.env.mapAgent()) {
 				thisUnitPercepts.putAll(globalPercepts); // UnitsPerceiver
 				if (scUnit.isWorker() && this.constructionPercepts != null) {
@@ -119,7 +117,7 @@ public class Game {
 			unitPerceptHolder.put(this.units.getUnitName(unit.getID()), thisUnitPercepts);
 		}
 		if (this.env.mapAgent()) {
-			Map<PerceptFilter, Set<Percept>> thisUnitPercepts = new HashMap<>(globalPercepts);
+			Map<PerceptFilter, List<Percept>> thisUnitPercepts = new HashMap<>(globalPercepts);
 			if (this.constructionPercepts != null) {
 				thisUnitPercepts.putAll(this.constructionPercepts);
 			}
@@ -156,18 +154,18 @@ public class Game {
 		}
 	}
 
-	private LinkedList<Percept> translatePercepts(String unitName, Map<PerceptFilter, Set<Percept>> map) {
+	private LinkedList<Percept> translatePercepts(String unitName, Map<PerceptFilter, List<Percept>> map) {
 		LinkedList<Percept> percepts = new LinkedList<>();
-		Map<String, Set<Percept>> previousPercepts = this.previous.get(unitName);
+		Map<String, List<Percept>> previousPercepts = this.previous.get(unitName);
 		if (previousPercepts == null) {
-			this.previous.put(unitName, new HashMap<String, Set<Percept>>());
+			this.previous.put(unitName, new HashMap<String, List<Percept>>());
 			previousPercepts = this.previous.get(unitName);
 		}
-		Iterator<Entry<PerceptFilter, Set<Percept>>> entries = map.entrySet().iterator();
+		Iterator<Entry<PerceptFilter, List<Percept>>> entries = map.entrySet().iterator();
 		while (entries.hasNext()) {
-			Entry<PerceptFilter, Set<Percept>> entry = entries.next();
+			Entry<PerceptFilter, List<Percept>> entry = entries.next();
 			PerceptFilter key = entry.getKey();
-			Set<Percept> values = entry.getValue();
+			List<Percept> values = entry.getValue();
 			switch (key.getType()) {
 			case ALWAYS:
 				percepts.addAll(values);
@@ -178,8 +176,8 @@ public class Game {
 				}
 				break;
 			case ON_CHANGE:
-				Set<Percept> previous = previousPercepts.get(key.getName());
-				Set<Percept> changed = new HashSet<>(values);
+				List<Percept> previous = previousPercepts.get(key.getName());
+				List<Percept> changed = new ArrayList<>(values);
 				if (previous != null) {
 					changed.removeAll(previous);
 				}
@@ -194,8 +192,8 @@ public class Game {
 		return percepts;
 	}
 
-	private Map<PerceptFilter, Set<Percept>> getGlobalPercepts(JNIBWAPI bwapi) {
-		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>();
+	private Map<PerceptFilter, List<Percept>> getGlobalPercepts(JNIBWAPI bwapi) {
+		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
 		new UnitsPerceiver(bwapi).perceive(toReturn);
 		return toReturn;
 	}
@@ -207,7 +205,7 @@ public class Game {
 	 *            - the API.
 	 */
 	public void updateMap(JNIBWAPI api) {
-		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>();
+		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
 		new MapPerceiver(api).perceive(toReturn);
 		this.mapPercepts = toReturn;
 	}
@@ -219,7 +217,7 @@ public class Game {
 	 *            - the JNIBWAPI
 	 */
 	public void updateConstructionSites(JNIBWAPI bwapi) {
-		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>(1);
+		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(1);
 		new ConstructionSitePerceiver(bwapi).perceive(toReturn);
 		this.constructionPercepts = toReturn;
 	}
@@ -231,8 +229,8 @@ public class Game {
 	 *            The current frame count (per 50, matching c.site updates)
 	 */
 	public void updateFrameCount(int count) {
-		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>(1);
-		Set<Percept> framepercept = new HashSet<>(1);
+		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(1);
+		List<Percept> framepercept = new ArrayList<>(1);
 		framepercept.add(new FramePercept(count));
 		toReturn.put(new PerceptFilter(Percepts.FRAME, Filter.Type.ON_CHANGE), framepercept);
 		this.framePercepts = toReturn;
@@ -248,8 +246,8 @@ public class Game {
 		if (pos == null) {
 			this.nukePercepts = null;
 		} else {
-			Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>(1);
-			Set<Percept> nukepercept = new HashSet<>(1);
+			Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(1);
+			List<Percept> nukepercept = new ArrayList<>(1);
 			nukepercept.add(new NukePercept(pos.getBX(), pos.getBY()));
 			toReturn.put(new PerceptFilter(Percepts.NUKE, Filter.Type.ON_CHANGE), nukepercept);
 			if (this.nukePercepts == null) {
@@ -267,8 +265,8 @@ public class Game {
 	 *            - the JNIBWAPI
 	 */
 	public void updateEndGamePerceiver(boolean winner) {
-		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>(1);
-		Set<Percept> endgamepercept = new HashSet<>(1);
+		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(1);
+		List<Percept> endgamepercept = new ArrayList<>(1);
 		endgamepercept.add(new WinnerPercept(winner));
 		toReturn.put(new PerceptFilter(Percepts.WINNER, Filter.Type.ALWAYS), endgamepercept);
 		this.endGamePercepts = toReturn;
@@ -294,7 +292,7 @@ public class Game {
 	 * @return the percepts
 	 */
 	public LinkedList<Percept> getPercepts(String entity) {
-		Map<PerceptFilter, Set<Percept>> percepts = this.percepts.get(entity);
+		Map<PerceptFilter, List<Percept>> percepts = this.percepts.get(entity);
 		if (percepts == null) {
 			return new LinkedList<>();
 		} else {
@@ -309,7 +307,7 @@ public class Game {
 	 */
 	public List<Percept> getConstructionSites() {
 		List<Percept> perceptHolder = new LinkedList<>();
-		for (Set<Percept> percept : this.constructionPercepts.values()) {
+		for (List<Percept> percept : this.constructionPercepts.values()) {
 			perceptHolder.addAll(percept);
 		}
 		return perceptHolder;

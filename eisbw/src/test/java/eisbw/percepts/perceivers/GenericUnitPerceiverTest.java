@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,8 +25,8 @@ import jnibwapi.types.RaceType.RaceTypes;
 import jnibwapi.types.UnitType;
 
 public class GenericUnitPerceiverTest {
-
 	private GenericUnitPerceiver perciever;
+
 	@Mock
 	private Unit unit;
 	@Mock
@@ -45,7 +46,8 @@ public class GenericUnitPerceiverTest {
 	@Before
 	public void start() {
 		MockitoAnnotations.initMocks(this);
-		this.toReturn = new HashSet<>();
+
+		this.toReturn = new HashSet<>(1);
 		this.toReturn.add(this.self);
 		when(this.api.getEnemies()).thenReturn(this.toReturn);
 
@@ -72,18 +74,23 @@ public class GenericUnitPerceiverTest {
 
 	@Test
 	public void size_test() {
-		Map<PerceptFilter, Set<Percept>> ret = new HashMap<>();
+		Map<PerceptFilter, List<Percept>> ret = new HashMap<>();
 		when(this.race.getName()).thenReturn("race");
 		when(this.self.getRace()).thenReturn(this.race);
-		assertEquals(3, this.perciever.perceive(ret).size());
+		this.perciever.perceive(ret);
+		assertEquals(3, ret.size());
+
+		ret.clear();
 		this.toReturn = new HashSet<>();
 		when(this.api.getEnemies()).thenReturn(this.toReturn);
-		ret = new HashMap<>();
-		assertEquals(3, this.perciever.perceive(ret).size());
+		this.perciever.perceive(ret);
+		assertEquals(3, ret.size());
+
+		ret.clear();
 		when(this.unitType.getMaxEnergy()).thenReturn(0);
 		when(this.unit.isDefenseMatrixed()).thenReturn(true);
-		ret = new HashMap<>();
-		assertEquals(4, this.perciever.perceive(ret).size());
+		this.perciever.perceive(ret);
+		assertEquals(4, ret.size());
 	}
 
 }

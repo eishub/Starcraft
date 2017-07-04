@@ -6,11 +6,9 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +29,7 @@ import jnibwapi.types.UnitType;
 
 public class GameTest {
 	private Game game;
-	private Map<PerceptFilter, Set<Percept>> percepts;
+	private Map<PerceptFilter, List<Percept>> percepts;
 
 	@Mock
 	private StarcraftEnvironmentImpl env;
@@ -55,8 +53,8 @@ public class GameTest {
 	public void start() {
 		MockitoAnnotations.initMocks(this);
 
-		this.percepts = new HashMap<>();
-		Set<Percept> perc = new HashSet<>();
+		this.percepts = new HashMap<>(1);
+		List<Percept> perc = new ArrayList<>(1);
 		perc.add(new ConstructionSitePercept(1, 2, 3));
 		this.percepts.put(new PerceptFilter(Percepts.CONSTRUCTIONSITE, Filter.Type.ALWAYS), perc);
 

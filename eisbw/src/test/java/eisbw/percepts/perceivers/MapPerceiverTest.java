@@ -3,10 +3,10 @@ package eisbw.percepts.perceivers;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,8 +22,8 @@ import jnibwapi.Position.PosType;
 import jnibwapi.Region;
 
 public class MapPerceiverTest {
-
 	private MapPerceiver perciever;
+
 	@Mock
 	private JNIBWAPI bwapi;
 	@Mock
@@ -54,13 +54,14 @@ public class MapPerceiverTest {
 
 	@Test
 	public void mapsize_test() {
-		Map<PerceptFilter, Set<Percept>> ret = new HashMap<>();
-		assertFalse(this.perciever.perceive(ret).isEmpty());
+		Map<PerceptFilter, List<Percept>> ret = new HashMap<>();
+		this.perciever.perceive(ret);
+		assertFalse(ret.isEmpty());
 	}
 
 	@Test
 	public void baseLocation_test() {
-		LinkedList<BaseLocation> locs = new LinkedList<>();
+		List<BaseLocation> locs = new ArrayList<>(1);
 		locs.add(this.baselocation);
 		when(this.map.getBaseLocations()).thenReturn(locs);
 		when(this.baselocation.getPosition()).thenReturn(new Position(3, 4, PosType.BUILD));
@@ -68,13 +69,14 @@ public class MapPerceiverTest {
 		when(this.baselocation.getRegion()).thenReturn(this.region);
 		when(this.region.getID()).thenReturn(5);
 
-		Map<PerceptFilter, Set<Percept>> ret = new HashMap<>();
-		assertFalse(this.perciever.perceive(ret).isEmpty());
+		Map<PerceptFilter, List<Percept>> ret = new HashMap<>();
+		this.perciever.perceive(ret);
+		assertFalse(ret.isEmpty());
 	}
 
 	@Test
 	public void chokepoint_test() {
-		LinkedList<ChokePoint> locs = new LinkedList<>();
+		List<ChokePoint> locs = new ArrayList<>(1);
 		locs.add(this.chokepoint);
 		when(this.map.getChokePoints()).thenReturn(locs);
 		when(this.chokepoint.getFirstSide()).thenReturn(new Position(5, 6, PosType.BUILD));
@@ -83,8 +85,8 @@ public class MapPerceiverTest {
 		when(this.chokepoint.getFirstRegion()).thenReturn(new Region(new int[] { 1, 1, 1 }, 0, new int[] {}));
 		when(this.chokepoint.getSecondRegion()).thenReturn(new Region(new int[] { 2, 2, 2 }, 0, new int[] {}));
 
-		Map<PerceptFilter, Set<Percept>> ret = new HashMap<>();
-		assertFalse(this.perciever.perceive(ret).isEmpty());
+		Map<PerceptFilter, List<Percept>> ret = new HashMap<>();
+		this.perciever.perceive(ret);
+		assertFalse(ret.isEmpty());
 	}
-
 }

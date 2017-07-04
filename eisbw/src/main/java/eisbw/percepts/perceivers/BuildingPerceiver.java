@@ -1,8 +1,8 @@
 package eisbw.percepts.perceivers;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import eis.eis2java.translation.Filter;
 import eis.iilang.Percept;
@@ -31,14 +31,13 @@ public class BuildingPerceiver extends UnitPerceiver {
 	}
 
 	@Override
-	public Map<PerceptFilter, Set<Percept>> perceive(Map<PerceptFilter, Set<Percept>> toReturn) {
+	public void perceive(Map<PerceptFilter, List<Percept>> toReturn) {
 		researchedPercept(toReturn);
 		queueSizePercept(toReturn);
-		return toReturn;
 	}
 
-	private void researchedPercept(Map<PerceptFilter, Set<Percept>> toReturn) {
-		Set<Percept> researchedPercepts = new HashSet<>(2);
+	private void researchedPercept(Map<PerceptFilter, List<Percept>> toReturn) {
+		List<Percept> researchedPercepts = new ArrayList<>(2);
 		if (this.unit.getTech() != null && this.unit.getTech().getID() != TechTypes.None.getID()
 				&& this.unit.getTech().getID() != TechTypes.Unknown.getID()) {
 			researchedPercepts.add(new ResearchingPercept(this.unit.getTech().getName()));
@@ -52,8 +51,8 @@ public class BuildingPerceiver extends UnitPerceiver {
 		}
 	}
 
-	private void queueSizePercept(Map<PerceptFilter, Set<Percept>> toReturn) {
-		Set<Percept> queueSizePercept = new HashSet<>(1);
+	private void queueSizePercept(Map<PerceptFilter, List<Percept>> toReturn) {
+		List<Percept> queueSizePercept = new ArrayList<>(1);
 		if (this.unit.getType().getID() == UnitTypes.Zerg_Hatchery.getID()
 				|| this.unit.getType().getID() == UnitTypes.Zerg_Lair.getID()
 				|| this.unit.getType().getID() == UnitTypes.Zerg_Hive.getID()) {

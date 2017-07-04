@@ -120,8 +120,7 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 	 */
 	public void addToEnvironment(String unitName, String eisUnitType) {
 		try {
-			if (!this.entities.contains(unitName)) {
-				this.entities.add(unitName);
+			if (this.entities.add(unitName)) {
 				addEntity(unitName, eisUnitType);
 			}
 		} catch (EntityException exception) {
@@ -136,16 +135,14 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 	 *            - the name of the unit
 	 */
 	public void deleteFromEnvironment(String unitName) {
-		if (!this.entities.contains(unitName)) {
-			return;
-		}
 		try {
-			Set<String> agents = getAssociatedAgents(unitName);
-			deleteEntity(unitName);
-			for (String agent : agents) {
-				unregisterAgent(agent);
+			if (this.entities.remove(unitName)) {
+				Set<String> agents = getAssociatedAgents(unitName);
+				deleteEntity(unitName);
+				for (String agent : agents) {
+					unregisterAgent(agent);
+				}
 			}
-			this.entities.remove(unitName);
 		} catch (EntityException exception) {
 			this.logger.log(Level.WARNING, "Could not delete " + unitName + " from the environment", exception);
 		} catch (RelationException exception) {

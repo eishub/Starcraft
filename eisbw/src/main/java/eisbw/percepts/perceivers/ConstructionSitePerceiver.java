@@ -1,16 +1,16 @@
 package eisbw.percepts.perceivers;
 
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import eis.eis2java.translation.Filter;
 import eis.iilang.Percept;
+import eisbw.BwapiUtility;
 import eisbw.percepts.ConstructionSitePercept;
 import eisbw.percepts.Percepts;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Position;
-import jnibwapi.Region;
 import jnibwapi.types.RaceType.RaceTypes;
 import jnibwapi.types.UnitType;
 import jnibwapi.types.UnitType.UnitTypes;
@@ -33,50 +33,9 @@ public class ConstructionSitePerceiver extends Perceiver {
 		super(api);
 	}
 
-	/**
-	 * @param pos
-	 *            The current evaluated position
-	 * @param percepts
-	 *            The list of perceived constructionsites
-	 */
-	private void perceiveTerran(Position pos, Set<Percept> percepts) {
-		if (this.api.canBuildHere(pos, UnitType.UnitTypes.Terran_Missile_Turret, true)) {
-			Region region = this.api.getMap().getRegion(pos);
-			percepts.add(new ConstructionSitePercept(pos.getBX(), pos.getBY(), region.getID()));
-		}
-	}
-
-	/**
-	 * @param pos
-	 *            The current evaluated position
-	 * @param percepts
-	 *            The list of perceived constructionsites
-	 */
-	private void perceiveProtosss(Position pos, Set<Percept> percepts) {
-		boolean nearPylon = this.api.canBuildHere(pos, UnitType.UnitTypes.Protoss_Photon_Cannon, true);
-		if (nearPylon || this.api.canBuildHere(pos, UnitType.UnitTypes.Protoss_Pylon, true)) {
-			Region region = this.api.getMap().getRegion(pos);
-			percepts.add(new ConstructionSitePercept(pos.getBX(), pos.getBY(), region.getID(), nearPylon));
-		}
-	}
-
-	/**
-	 * @param pos
-	 *            The current evaluated position
-	 * @param percepts
-	 *            The list of perceived constructionsites
-	 */
-	private void perceiveZerg(Position pos, Set<Percept> percepts) {
-		boolean onCreep = this.api.canBuildHere(pos, UnitTypes.Zerg_Creep_Colony, true);
-		if (onCreep || this.api.canBuildHere(pos, UnitTypes.Terran_Missile_Turret, true)) {
-			Region region = this.api.getMap().getRegion(pos);
-			percepts.add(new ConstructionSitePercept(pos.getBX(), pos.getBY(), region.getID(), onCreep));
-		}
-	}
-
 	@Override
-	public Map<PerceptFilter, Set<Percept>> perceive(Map<PerceptFilter, Set<Percept>> toReturn) {
-		Set<Percept> percepts = new HashSet<>();
+	public void perceive(Map<PerceptFilter, List<Percept>> toReturn) {
+		List<Percept> percepts = new LinkedList<>();
 		jnibwapi.Map map = this.api.getMap();
 		int mapWidth = map.getSize().getBX();
 		int mapHeight = map.getSize().getBY();
@@ -96,6 +55,47 @@ public class ConstructionSitePerceiver extends Perceiver {
 			}
 		}
 		toReturn.put(new PerceptFilter(Percepts.CONSTRUCTIONSITE, Filter.Type.ALWAYS), percepts);
-		return toReturn;
+	}
+
+	/**
+	 * @param pos
+	 *            The current evaluated position
+	 * @param percepts
+	 *            The list of perceived constructionsites
+	 */
+	private void perceiveTerran(Position pos, List<Percept> percepts) {
+		if (this.api.canBuildHere(pos, UnitType.UnitTypes.Terran_Missile_Turret, true)) {
+			percepts.add(new ConstructionSitePercept(pos.getBX(), pos.getBY(), getRegion(pos)));
+		}
+	}
+
+	/**
+	 * @param pos
+	 *            The current evaluated position
+	 * @param percepts
+	 *            The list of perceived constructionsites
+	 */
+	private void perceiveProtosss(Position pos, List<Percept> percepts) {
+		boolean nearPylon = this.api.canBuildHere(pos, UnitType.UnitTypes.Protoss_Photon_Cannon, true);
+		if (nearPylon || this.api.canBuildHere(pos, UnitType.UnitTypes.Protoss_Pylon, true)) {
+			percepts.add(new ConstructionSitePercept(pos.getBX(), pos.getBY(), getRegion(pos), nearPylon));
+		}
+	}
+
+	/**
+	 * @param pos
+	 *            The current evaluated position
+	 * @param percepts
+	 *            The list of perceived constructionsites
+	 */
+	private void perceiveZerg(Position pos, List<Percept> percepts) {
+		boolean onCreep = this.api.canBuildHere(pos, UnitTypes.Zerg_Creep_Colony, true);
+		if (onCreep || this.api.canBuildHere(pos, UnitTypes.Terran_Missile_Turret, true)) {
+			percepts.add(new ConstructionSitePercept(pos.getBX(), pos.getBY(), getRegion(pos), onCreep));
+		}
+	}
+
+	private int getRegion(Position pos) {
+		return BwapiUtility.getRegion(pos, this.api.getMap());
 	}
 }

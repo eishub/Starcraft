@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,8 +23,8 @@ import jnibwapi.types.UnitType;
 import jnibwapi.types.UpgradeType.UpgradeTypes;
 
 public class BuildingPerceiverTest {
-
 	private BuildingPerceiver perciever;
+
 	@Mock
 	private Unit unit;
 	@Mock
@@ -56,23 +55,31 @@ public class BuildingPerceiverTest {
 
 	@Test
 	public void size_test() {
-		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>();
-		assertEquals(2, this.perciever.perceive(toReturn).size());
-		toReturn = new HashMap<>();
+		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
+		this.perciever.perceive(toReturn);
+		assertEquals(2, toReturn.size());
+
+		toReturn.clear();
 		when(this.unit.getUpgrade()).thenReturn(null);
-		assertEquals(1, this.perciever.perceive(toReturn).size());
-		toReturn = new HashMap<>();
+		this.perciever.perceive(toReturn);
+		assertEquals(1, toReturn.size());
+
+		toReturn.clear();
 		List<Unit> loadedunits = new LinkedList<>();
 		loadedunits.add(this.unit);
 		loadedunits.add(null);
 		when(this.unit.getLoadedUnits()).thenReturn(loadedunits);
-		assertEquals(1, this.perciever.perceive(toReturn).size());
-		toReturn = new HashMap<>();
-		when(this.unitType.getSpaceProvided()).thenReturn(0);
-		assertEquals(1, this.perciever.perceive(toReturn).size());
-		toReturn = new HashMap<>();
-		when(this.self.isResearched(any(TechType.class))).thenReturn(true);
-		assertEquals(1, this.perciever.perceive(toReturn).size());
-	}
+		this.perciever.perceive(toReturn);
+		assertEquals(1, toReturn.size());
 
+		toReturn.clear();
+		when(this.unitType.getSpaceProvided()).thenReturn(0);
+		this.perciever.perceive(toReturn);
+		assertEquals(1, toReturn.size());
+
+		toReturn.clear();
+		when(this.self.isResearched(any(TechType.class))).thenReturn(true);
+		this.perciever.perceive(toReturn);
+		assertEquals(1, toReturn.size());
+	}
 }

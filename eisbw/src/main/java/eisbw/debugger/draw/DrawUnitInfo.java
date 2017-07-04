@@ -1,9 +1,10 @@
 package eisbw.debugger.draw;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import eisbw.BwapiUtility;
 import eisbw.Game;
@@ -22,7 +23,7 @@ import jnibwapi.util.BWColor;
 public class DrawUnitInfo extends IDraw {
 	private final static int barHeight = 18;
 	private final static BWColor barColor = BWColor.Blue;
-	private final Set<Unit> alive = new HashSet<>();
+	private final List<Unit> alive = new LinkedList<>();
 	private final Map<Integer, Integer> dead = new HashMap<>();
 
 	/**
@@ -161,7 +162,7 @@ public class DrawUnitInfo extends IDraw {
 		api.drawText(new Position(x + 180, y + 20), "X", true);
 
 		Map<Integer, Integer> count = new HashMap<>();
-		Set<Unit> previous = new HashSet<>(this.alive);
+		List<Unit> previous = new ArrayList<>(this.alive);
 		this.alive.clear();
 		for (final Unit unit : api.getMyUnits()) {
 			if (!BwapiUtility.isValid(unit)) {

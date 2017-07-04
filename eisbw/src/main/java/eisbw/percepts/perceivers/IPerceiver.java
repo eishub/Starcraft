@@ -1,7 +1,7 @@
 package eisbw.percepts.perceivers;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import eis.iilang.Percept;
 
@@ -13,8 +13,7 @@ import eis.iilang.Percept;
 public interface IPerceiver {
 	/**
 	 * @param toReturn
-	 *            The percept and reference of which kind of percept it is.
-	 * @return A list of percepts.
+	 *            The percepts and reference of which kind of percepts they are.
 	 */
-	Map<PerceptFilter, Set<Percept>> perceive(Map<PerceptFilter, Set<Percept>> toReturn);
+	void perceive(Map<PerceptFilter, List<Percept>> toReturn);
 }

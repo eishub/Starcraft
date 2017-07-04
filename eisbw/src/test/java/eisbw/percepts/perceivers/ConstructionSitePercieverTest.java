@@ -7,8 +7,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,8 +24,8 @@ import jnibwapi.types.RaceType.RaceTypes;
 import jnibwapi.types.UnitType;
 
 public class ConstructionSitePercieverTest {
-
 	private ConstructionSitePerceiver perciever;
+
 	@Mock
 	private JNIBWAPI bwapi;
 	@Mock
@@ -45,7 +45,8 @@ public class ConstructionSitePercieverTest {
 	@Before
 	public void start() {
 		MockitoAnnotations.initMocks(this);
-		ArrayList<Unit> neutrals = new ArrayList<>();
+
+		List<Unit> neutrals = new ArrayList<>();
 		neutrals.add(this.unit);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unit.isExists()).thenReturn(true);
@@ -66,36 +67,51 @@ public class ConstructionSitePercieverTest {
 
 	@Test
 	public void terran_test() {
-		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>();
-		assertTrue(this.perciever.perceive(toReturn).size() > 0);
+		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
+		this.perciever.perceive(toReturn);
+		assertTrue(!toReturn.isEmpty());
+
+		toReturn.clear();
 		when(this.bwapi.canBuildHere(any(Position.class), any(UnitType.class), any(Boolean.class))).thenReturn(false);
-		toReturn = new HashMap<>();
-		assertTrue(!this.perciever.perceive(toReturn).isEmpty());
+		this.perciever.perceive(toReturn);
+		assertTrue(!toReturn.isEmpty());
 	}
 
 	@Test
 	public void zerg_test() {
-		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>();
+		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
 		when(this.player.getRace()).thenReturn(RaceTypes.Zerg);
-		assertTrue(!this.perciever.perceive(toReturn).isEmpty());
+		this.perciever.perceive(toReturn);
+		assertTrue(!toReturn.isEmpty());
+
+		toReturn.clear();
 		when(this.bwapi.hasCreep(any(Position.class))).thenReturn(true);
-		assertTrue(this.perciever.perceive(toReturn).size() > 0);
+		this.perciever.perceive(toReturn);
+		assertTrue(!toReturn.isEmpty());
+
+		toReturn.clear();
 		when(this.bwapi.canBuildHere(any(Position.class), any(UnitType.class), any(Boolean.class))).thenReturn(false);
-		toReturn = new HashMap<>();
-		assertTrue(!this.perciever.perceive(toReturn).isEmpty());
+		this.perciever.perceive(toReturn);
+		assertTrue(!toReturn.isEmpty());
 	}
 
 	@Test
 	public void protoss_test() {
+		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
 		when(this.player.getRace()).thenReturn(RaceTypes.Protoss);
-		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>();
-		assertTrue(this.perciever.perceive(toReturn).size() > 0);
+		this.perciever.perceive(toReturn);
+		assertTrue(!toReturn.isEmpty());
+
+		toReturn.clear();
 		when(this.bwapi.canBuildHere(any(Position.class), eq(UnitType.UnitTypes.Protoss_Gateway), any(Boolean.class)))
 				.thenReturn(false);
-		assertTrue(this.perciever.perceive(toReturn).size() > 0);
+		this.perciever.perceive(toReturn);
+		assertTrue(!toReturn.isEmpty());
+
+		toReturn.clear();
 		when(this.bwapi.canBuildHere(any(Position.class), any(UnitType.class), any(Boolean.class))).thenReturn(false);
-		toReturn = new HashMap<>();
-		assertTrue(!this.perciever.perceive(toReturn).isEmpty());
+		this.perciever.perceive(toReturn);
+		assertTrue(!toReturn.isEmpty());
 	}
 
 	@Test
@@ -103,8 +119,8 @@ public class ConstructionSitePercieverTest {
 		when(this.player.getRace()).thenReturn(RaceTypes.None);
 		when(this.unit.isExists()).thenReturn(false);
 		when(this.unitType.getName()).thenReturn("not illegal");
-		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>();
-		assertTrue(!this.perciever.perceive(toReturn).isEmpty());
+		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
+		this.perciever.perceive(toReturn);
+		assertTrue(!toReturn.isEmpty());
 	}
-
 }
