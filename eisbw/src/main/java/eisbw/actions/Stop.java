@@ -6,7 +6,6 @@ import eis.iilang.Action;
 import eis.iilang.Parameter;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Stops a unit from what it was doing.
@@ -31,8 +30,7 @@ public class Stop extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
-		UnitType unitType = unit.getType();
-		return !unitType.isBuilding();
+		return !unit.getType().isBuilding();
 	}
 
 	@Override

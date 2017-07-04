@@ -1,12 +1,8 @@
 package eisbw.actions;
 
 import eis.iilang.Action;
-import eisbw.BwapiUtility;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
-import jnibwapi.types.TechType;
-import jnibwapi.types.UnitType;
-import jnibwapi.types.UpgradeType;
 
 /**
  * @author Danny & Harm - Abstract class for all the actions.
@@ -23,21 +19,6 @@ public abstract class StarcraftAction {
 	 */
 	public StarcraftAction(JNIBWAPI api) {
 		this.api = api;
-	}
-
-	protected UpgradeType getUpgradeType(String type) {
-		return BwapiUtility.getUpgradeType(type);
-	}
-
-	protected TechType getTechType(String type) {
-		return BwapiUtility.getTechType(type);
-	}
-
-	protected UnitType getUnitType(String type) {
-		if ("Terran Siege Tank".equals(type)) {
-			type = "Terran Siege Tank Tank Mode";
-		}
-		return BwapiUtility.getUnitType(type);
 	}
 
 	/**

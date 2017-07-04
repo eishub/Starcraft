@@ -44,7 +44,7 @@ public class DebugDraw extends StarcraftAction {
 	public void execute(Unit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		String text = ((Identifier) parameters.get(0)).getValue();
-		String id = Integer.toString(unit.getID());
+		String id = (unit == null) ? "0" : Integer.toString(unit.getID());
 
 		IDraw draw = new CustomDrawUnit(this.listener.getGame(), unit, text);
 		this.listener.addDraw(id, draw);

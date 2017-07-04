@@ -7,8 +7,7 @@ import eis.iilang.Numeral;
 import eis.iilang.Parameter;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
-import jnibwapi.types.RaceType;
-import jnibwapi.types.UnitType;
+import jnibwapi.types.RaceType.RaceTypes;
 
 public class Repair extends StarcraftAction {
 	public Repair(JNIBWAPI api) {
@@ -23,8 +22,7 @@ public class Repair extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
-		UnitType unitType = unit.getType();
-		return unitType.getRaceID() == RaceType.RaceTypes.Terran.getID() && unitType.isWorker();
+		return unit.getType().isWorker() && unit.getType().getRaceID() == RaceTypes.Terran.getID();
 	}
 
 	@Override
@@ -32,6 +30,7 @@ public class Repair extends StarcraftAction {
 		List<Parameter> parameters = action.getParameters();
 		int targetId = ((Numeral) parameters.get(0)).getValue().intValue();
 		Unit target = this.api.getUnit(targetId);
+
 		if (target == null || target.isCompleted()) {
 			unit.repair(target, false);
 		} else {

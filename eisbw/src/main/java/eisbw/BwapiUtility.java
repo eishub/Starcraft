@@ -80,6 +80,9 @@ public class BwapiUtility {
 	 * @return the unit.
 	 */
 	public static UnitType getUnitType(String type) {
+		if (type.equals("Terran Siege Tank")) {
+			type += " Tank Mode";
+		}
 		if (unitTypeMap.isEmpty()) {
 			for (UnitType ut : UnitTypes.getAllUnitTypes()) {
 				unitTypeMap.put(ut.getName(), ut);

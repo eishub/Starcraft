@@ -7,7 +7,6 @@ import eis.iilang.Numeral;
 import eis.iilang.Parameter;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Makes the unit follow an other specified unit.
@@ -32,8 +31,7 @@ public class Follow extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
-		UnitType unitType = unit.getType();
-		return unitType.isCanMove();
+		return unit.getType().isCanMove();
 	}
 
 	@Override

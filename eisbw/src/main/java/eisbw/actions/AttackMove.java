@@ -8,7 +8,6 @@ import eis.iilang.Parameter;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Position;
 import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Makes the unit move to the specified location,
@@ -29,8 +28,7 @@ public class AttackMove extends StarcraftMovableAction {
 
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
-		UnitType unitType = unit.getType();
-		return unitType.isCanMove() && unitType.isAttackCapable();
+		return unit.getType().isCanMove() && unit.getType().isAttackCapable();
 	}
 
 	@Override
