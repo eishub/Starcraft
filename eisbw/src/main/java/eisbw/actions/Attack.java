@@ -47,6 +47,6 @@ public class Attack extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "attack(targetId)";
+		return "attack(TargetId)";
 	}
 }

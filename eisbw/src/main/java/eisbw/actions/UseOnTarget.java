@@ -51,6 +51,6 @@ public class UseOnTarget extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "abilityOnTarget(TechType, TargetId)";
+		return "abilityOnTarget(Type,TargetId)";
 	}
 }

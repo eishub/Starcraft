@@ -41,6 +41,6 @@ public class Repair extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "repair(targetID)";
+		return "repair(TargetID)";
 	}
 }

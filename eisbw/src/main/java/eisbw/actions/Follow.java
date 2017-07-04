@@ -47,6 +47,6 @@ public class Follow extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "follow(targetID)";
+		return "follow(TargetID)";
 	}
 }

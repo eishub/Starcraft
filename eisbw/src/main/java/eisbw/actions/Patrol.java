@@ -37,6 +37,6 @@ public class Patrol extends StarcraftMovableAction {
 
 	@Override
 	public String toString() {
-		return "patrol(x, y)";
+		return "patrol(X,Y)";
 	}
 }

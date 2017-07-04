@@ -33,6 +33,6 @@ public class Load extends StarcraftLoadingAction {
 
 	@Override
 	public String toString() {
-		return "load(targetID)";
+		return "load(TargetID)";
 	}
 }

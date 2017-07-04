@@ -43,8 +43,8 @@ public abstract class StarcraftAction {
 	/**
 	 * @param action
 	 *            The evaluated action.
-	 * @return A boolean which indicates whether the parameters of the action
-	 *         are valid.
+	 * @return A boolean which indicates whether the parameters of the action are
+	 *         valid.
 	 */
 	public abstract boolean isValid(Action action);
 
@@ -53,8 +53,8 @@ public abstract class StarcraftAction {
 	 *            The unit performing the action.
 	 * @param action
 	 *            The evaluated action.
-	 * @return A boolean which indicated wheter the specified unit can execute
-	 *         the action.
+	 * @return A boolean which indicated wheter the specified unit can execute the
+	 *         action.
 	 */
 	public abstract boolean canExecute(Unit unit, Action action);
 
@@ -68,4 +68,20 @@ public abstract class StarcraftAction {
 
 	@Override
 	public abstract String toString();
+
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		} else if (obj == null || !(obj instanceof StarcraftAction)) {
+			return false;
+		} else {
+			return toString().equals(obj.toString());
+		}
+	}
 }

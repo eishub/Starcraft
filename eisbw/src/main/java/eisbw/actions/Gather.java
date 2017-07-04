@@ -46,6 +46,6 @@ public class Gather extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "gather(targetID)";
+		return "gather(TargetID)";
 	}
 }

@@ -36,6 +36,6 @@ public class Move extends StarcraftMovableAction {
 
 	@Override
 	public String toString() {
-		return "move(x, y)";
+		return "move(X,Y)";
 	}
 }

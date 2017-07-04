@@ -44,6 +44,6 @@ public class SetRallyUnit extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "setRallyUnit(targetId)";
+		return "setRallyUnit(TargetId)";
 	}
 }
