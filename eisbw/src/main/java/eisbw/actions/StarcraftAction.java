@@ -1,8 +1,12 @@
 package eisbw.actions;
 
 import eis.iilang.Action;
+import eisbw.BwapiUtility;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
+import jnibwapi.types.TechType;
+import jnibwapi.types.UnitType;
+import jnibwapi.types.UpgradeType;
 
 /**
  * @author Danny & Harm - Abstract class for all the actions.
@@ -19,6 +23,21 @@ public abstract class StarcraftAction {
 	 */
 	public StarcraftAction(JNIBWAPI api) {
 		this.api = api;
+	}
+
+	// Mocked in tests
+	protected UnitType getUnitType(String name) {
+		return BwapiUtility.getUnitType(name);
+	}
+
+	// Mocked in tests
+	protected TechType getTechType(String name) {
+		return BwapiUtility.getTechType(name);
+	}
+
+	// Mocked in tests
+	protected UpgradeType getUpgradeType(String name) {
+		return BwapiUtility.getUpgradeType(name);
 	}
 
 	/**

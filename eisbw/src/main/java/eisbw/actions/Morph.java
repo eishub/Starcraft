@@ -5,7 +5,6 @@ import java.util.List;
 import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
-import eisbw.BwapiUtility;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
 import jnibwapi.types.RaceType.RaceTypes;
@@ -30,7 +29,7 @@ public class Morph extends StarcraftAction {
 	public boolean isValid(Action action) {
 		List<Parameter> parameters = action.getParameters();
 		if (parameters.size() == 1 && parameters.get(0) instanceof Identifier) {
-			UnitType ut = BwapiUtility.getUnitType(((Identifier) parameters.get(0)).getValue());
+			UnitType ut = getUnitType(((Identifier) parameters.get(0)).getValue());
 			return ut != null;
 		}
 		return false;
@@ -46,7 +45,7 @@ public class Morph extends StarcraftAction {
 		List<Parameter> parameters = action.getParameters();
 		String type = ((Identifier) parameters.get(0)).getValue();
 
-		unit.morph(BwapiUtility.getUnitType(type));
+		unit.morph(getUnitType(type));
 	}
 
 	@Override
