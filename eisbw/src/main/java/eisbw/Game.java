@@ -185,7 +185,7 @@ public class Game {
 				percepts.addAll(changed);
 				break;
 			default:
-				Logger.getLogger("StarCraft logger").warning("Unknown percept type " + key);
+				Logger.getLogger("StarCraft Logger").warning("Unknown percept type " + key);
 				break;
 			}
 		}

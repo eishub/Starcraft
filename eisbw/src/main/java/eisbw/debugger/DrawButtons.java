@@ -35,10 +35,10 @@ public class DrawButtons extends JPanel implements ActionListener {
 		add(label, BorderLayout.NORTH);
 
 		JButton mapButton = new JButton("Map info");
-		mapButton.setActionCommand(Draw.MAP.getName());
+		mapButton.setActionCommand(Draw.MAP.name());
 		mapButton.addActionListener(this);
 		JButton unitButton = new JButton("Unit info");
-		unitButton.setActionCommand(Draw.UNITS.getName());
+		unitButton.setActionCommand(Draw.UNITS.name());
 		unitButton.addActionListener(this);
 
 		this.buttonBackground = mapButton.getBackground();
