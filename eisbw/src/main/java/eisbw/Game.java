@@ -10,7 +10,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-import bwapi.Position;
 import bwapi.TilePosition;
 import bwapi.Unit;
 import eis.eis2java.translation.Filter;
@@ -236,14 +235,13 @@ public class Game {
 		this.framePercepts = toReturn;
 	}
 
-	public void updateNukePerceiver(Position pos) {
+	public void updateNukePerceiver(TilePosition pos) {
 		if (pos == null) {
 			this.nukePercepts = null;
 		} else {
 			Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
 			List<Percept> nukepercept = new ArrayList<>(1);
-			TilePosition tpos = pos.toTilePosition();
-			nukepercept.add(new NukePercept(tpos.getX(), tpos.getY()));
+			nukepercept.add(new NukePercept(pos.getX(), pos.getY()));
 			toReturn.put(new PerceptFilter(Percepts.NUKE, Filter.Type.ON_CHANGE), nukepercept);
 			if (this.nukePercepts == null) {
 				this.nukePercepts = toReturn;

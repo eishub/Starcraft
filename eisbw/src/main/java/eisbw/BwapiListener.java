@@ -192,7 +192,7 @@ public class BwapiListener extends BwapiEvents {
 
 	@Override
 	public void onNukeDetect(Position pos) {
-		this.game.updateNukePerceiver(pos);
+		this.game.updateNukePerceiver(pos.toTilePosition());
 		this.nuke = 0;
 	}
 

@@ -3,7 +3,6 @@ package eisbw.debugger.draw;
 import java.util.List;
 
 import bwapi.Color;
-import bwapi.Position;
 import bwapi.Race;
 import bwapi.TilePosition;
 import bwta.BWTA;
@@ -43,10 +42,11 @@ public class DrawMapInfo extends IDraw {
 
 	private void drawRegions(bwapi.Game api) {
 		for (Region region : BWTA.getRegions()) {
-			List<Position> p = region.getPolygon().getPoints();
-			for (int j = 0; j < p.size(); ++j) {
-				api.drawLineMap(p.get(j), p.get((j + 1) % p.size()), Color.Green);
-			}
+			// FIXME: very expensive draw
+			// List<Position> p = region.getPolygon().getPoints();
+			// for (int j = 0; j < p.size(); ++j) {
+			// api.drawLineMap(p.get(j), p.get((j + 1) % p.size()), Color.Green);
+			// }
 			api.drawTextMap(region.getCenter(),
 					"Region " + BwapiUtility.getRegion(region.getCenter().toTilePosition(), api) + " ("
 							+ region.getCenter().toTilePosition().getX() + ","

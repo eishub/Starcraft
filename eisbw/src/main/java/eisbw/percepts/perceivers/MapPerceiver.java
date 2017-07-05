@@ -1,13 +1,10 @@
 package eisbw.percepts.perceivers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import bwapi.Position;
 import bwapi.TilePosition;
-import bwapi.Unit;
 import bwta.BWTA;
 import bwta.BaseLocation;
 import bwta.Chokepoint;
@@ -48,16 +45,6 @@ public class MapPerceiver extends Perceiver {
 		List<Percept> enemyRacePercept = new ArrayList<>(1);
 		enemyRacePercept.add(new EnemyRacePercept(this.api.enemy().getRace().toString().toLowerCase()));
 		toReturn.put(new PerceptFilter(Percepts.ENEMYRACE, Filter.Type.ONCE), enemyRacePercept);
-
-		/** Distance calculation between resource groups and base location **/
-		Map<Integer, Position> distanceMatrix = new HashMap<>();
-		for (Unit u : this.api.getNeutralUnits()) {
-			if (u.getType().isMineralField() && BwapiUtility.isValid(u)) {
-				if (!distanceMatrix.containsKey(u.getResourceGroup())) {
-					distanceMatrix.put(u.getResourceGroup(), u.getPosition());
-				}
-			}
-		}
 
 		List<BaseLocation> baseLocations = BWTA.getBaseLocations();
 		List<Percept> basePercepts = new ArrayList<>(baseLocations.size());
