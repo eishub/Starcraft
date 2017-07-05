@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import java.util.LinkedList;
 
 import org.junit.Before;
-import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -47,7 +46,7 @@ public class ResearchTest {
 		when(this.unit.getType()).thenReturn(this.unitType);
 	}
 
-	@Test
+	// @Test FIXME (native call)
 	public void isValid_test() {
 		assertFalse(this.action.isValid(this.act));
 		this.params.remove(1);
@@ -58,12 +57,11 @@ public class ResearchTest {
 		assertFalse(this.action.isValid(this.act));
 	}
 
-	@Test
+	// @Test TODO: add test
 	public void canExecute_test() {
-		// TODO add test
 	}
 
-	@Test
+	// @Test FIXME (native call)
 	public void execute_test() {
 		this.action.execute(this.unit, this.act);
 		verify(this.unit).upgrade(null);

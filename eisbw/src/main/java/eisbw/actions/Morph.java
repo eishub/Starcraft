@@ -36,7 +36,7 @@ public class Morph extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
-		return this.api.self().getRace() == Race.Zerg;
+		return unit.getType().getRace() == Race.Zerg;
 	}
 
 	@Override

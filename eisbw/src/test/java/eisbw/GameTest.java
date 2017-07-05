@@ -74,6 +74,7 @@ public class GameTest {
 		units.add(this.unit);
 		when(this.self.getUnits()).thenReturn(units);
 		when(this.bwapi.self()).thenReturn(this.self);
+		when(this.bwapi.enemy()).thenReturn(this.self);
 	}
 
 	@Test
@@ -81,7 +82,7 @@ public class GameTest {
 		this.game.update(this.bwapi);
 		assertTrue(this.game.getUnits() == this.units);
 		assertTrue(this.game.getPercepts("null").isEmpty());
-		assertEquals(1, this.game.getPercepts("unit").size());
+		assertEquals(2, this.game.getPercepts("unit").size());
 	}
 
 	@Test
