@@ -76,7 +76,7 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 			this.mapAgent = this.config.getMapAgent();
 			setState(EnvironmentState.RUNNING);
 		} catch (Exception ex) {
-			Logger.getLogger(StarcraftEnvironmentImpl.class.getName()).log(Level.SEVERE, null, ex);
+			this.logger.log(Level.SEVERE, null, ex);
 		}
 	}
 
