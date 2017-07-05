@@ -2,13 +2,17 @@ package eisbw;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import bwapi.TechType;
+import bwapi.TilePosition;
 import bwapi.Unit;
 import bwapi.UnitType;
 import bwapi.UpgradeType;
+import bwta.BWTA;
 import bwta.Region;
 
 /**
@@ -19,13 +23,14 @@ public class BwapiUtility {
 	private static final Map<String, UnitType> unitTypeMap = new HashMap<>();
 	private static final Map<String, TechType> techTypeMap = new HashMap<>();
 	private static final Map<String, UpgradeType> upgradeTypeMap = new HashMap<>();
+	private static final Map<Entry<Integer, Integer>, Integer> regionCache = new HashMap<>();
 
 	private BwapiUtility() {
 		// Private constructor for static class.
 	}
 
 	public static boolean isValid(Unit unit) {
-		return unit.exists() && unit.isVisible() && !(unit.isBeingConstructed() && unit.isLoaded());
+		return unit != null && unit.exists() && unit.isVisible() && !(unit.isBeingConstructed() && unit.isLoaded());
 	}
 
 	/**
@@ -47,6 +52,18 @@ public class BwapiUtility {
 		} else {
 			return type;
 		}
+	}
+
+	public static int getRegion(TilePosition position, bwapi.Game api) {
+		Entry<Integer, Integer> pos = new SimpleEntry<>(position.getX(), position.getY());
+		Integer regionId = regionCache.get(pos);
+		if (regionId == null) {
+			Region region = BWTA.getRegion(position);
+			bwapi.Region apiregion = (region == null) ? null : api.getRegionAt(region.getCenter());
+			regionId = (apiregion == null) ? 0 : apiregion.getID();
+			regionCache.put(pos, regionId);
+		}
+		return regionId.intValue();
 	}
 
 	/**
@@ -74,6 +91,9 @@ public class BwapiUtility {
 	 * @return the unit.
 	 */
 	public static UnitType getUnitType(String type) {
+		if (type.equals("Terran Siege Tank")) {
+			type += " Tank Mode";
+		}
 		if (unitTypeMap.isEmpty()) {
 			for (Field field : UnitType.class.getDeclaredFields()) {
 				if (Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers())) {
@@ -134,10 +154,5 @@ public class BwapiUtility {
 		}
 
 		return upgradeTypeMap.get(type);
-	}
-
-	public static int getRegionId(Region region, bwapi.Game api) {
-		bwapi.Region apiregion = (region == null) ? null : api.getRegionAt(region.getCenter());
-		return (apiregion == null) ? 0 : apiregion.getID();
 	}
 }

@@ -54,6 +54,6 @@ public class Build extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "build(Type, X, Y)";
+		return "build(Type,X,Y)";
 	}
 }

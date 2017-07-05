@@ -19,17 +19,17 @@ public class RaceStringTranslatorTest {
 	}
 
 	@Test(expected = TranslationException.class)
-	public void translateException_test() throws Exception {
+	public void translateException_test() throws TranslationException {
 		this.translator.translate(new Numeral(0));
 	}
 
 	@Test(expected = TranslationException.class)
-	public void translateExceptionNotFound_test() throws Exception {
+	public void translateExceptionNotFound_test() throws TranslationException {
 		this.translator.translate(new Identifier("notFound"));
 	}
 
 	@Test
-	public void translate_test() throws Exception {
+	public void translate_test() throws TranslationException {
 		assertEquals(new RaceString("zerg").getData(), this.translator.translate(new Identifier("zerg")).getData());
 	}
 

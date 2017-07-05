@@ -1,6 +1,5 @@
 package eisbw.actions;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -67,11 +66,6 @@ public class ResearchTest {
 	@Test
 	public void execute_test() {
 		this.action.execute(this.unit, this.act);
-		verify(this.unit).research(null);
-	}
-
-	@Test
-	public void toString_test() {
-		assertEquals("research(Type)", this.action.toString());
+		verify(this.unit).upgrade(null);
 	}
 }

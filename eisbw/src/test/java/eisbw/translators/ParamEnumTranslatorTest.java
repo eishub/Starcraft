@@ -11,6 +11,7 @@ import eis.iilang.Numeral;
 import eisbw.configuration.ParamEnum;
 
 public class ParamEnumTranslatorTest {
+
 	private ParamEnumTranslator translator;
 
 	@Before
@@ -19,17 +20,17 @@ public class ParamEnumTranslatorTest {
 	}
 
 	@Test(expected = TranslationException.class)
-	public void translateException_test() throws Exception {
+	public void translateException_test() throws TranslationException {
 		this.translator.translate(new Numeral(0));
 	}
 
 	@Test(expected = TranslationException.class)
-	public void translateExceptionNotFound_test() throws Exception {
+	public void translateExceptionNotFound_test() throws TranslationException {
 		this.translator.translate(new Identifier("notFound"));
 	}
 
 	@Test
-	public void translate_test() throws Exception {
+	public void translate_test() throws TranslationException {
 		assertEquals(ParamEnum.MAP, this.translator.translate(new Identifier("map")));
 	}
 
@@ -37,4 +38,5 @@ public class ParamEnumTranslatorTest {
 	public void translatesTo_test() {
 		assertEquals(ParamEnum.class, this.translator.translatesTo());
 	}
+
 }

@@ -2,10 +2,8 @@ package eisbw.percepts.perceivers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import bwapi.Position;
 import bwapi.TilePosition;
@@ -42,65 +40,63 @@ public class MapPerceiver extends Perceiver {
 	}
 
 	@Override
-	public Map<PerceptFilter, Set<Percept>> perceive(Map<PerceptFilter, Set<Percept>> toReturn) {
-		Set<Percept> mapPercept = new HashSet<>(1);
+	public void perceive(Map<PerceptFilter, List<Percept>> toReturn) {
+		List<Percept> mapPercept = new ArrayList<>(1);
 		mapPercept.add(new MapPercept(this.api.mapWidth(), this.api.mapHeight()));
 		toReturn.put(new PerceptFilter(Percepts.MAP, Filter.Type.ONCE), mapPercept);
 
-		Set<Percept> enemyRacePercept = new HashSet<>(1);
+		List<Percept> enemyRacePercept = new ArrayList<>(1);
 		enemyRacePercept.add(new EnemyRacePercept(this.api.enemy().getRace().toString().toLowerCase()));
 		toReturn.put(new PerceptFilter(Percepts.ENEMYRACE, Filter.Type.ONCE), enemyRacePercept);
 
 		/** Distance calculation between resource groups and base location **/
 		Map<Integer, Position> distanceMatrix = new HashMap<>();
 		for (Unit u : this.api.getNeutralUnits()) {
-			if (BwapiUtility.isValid(u) && u.getType().isMineralField()) {
+			if (u.getType().isMineralField() && BwapiUtility.isValid(u)) {
 				if (!distanceMatrix.containsKey(u.getResourceGroup())) {
 					distanceMatrix.put(u.getResourceGroup(), u.getPosition());
 				}
 			}
 		}
+
 		List<BaseLocation> baseLocations = BWTA.getBaseLocations();
-		Set<Percept> basePercepts = new HashSet<>(baseLocations.size());
+		List<Percept> basePercepts = new ArrayList<>(baseLocations.size());
 		for (BaseLocation location : baseLocations) {
 			Percept basePercept = new BasePercept(location.isStartLocation(), location.getTilePosition().getX(),
-					location.getTilePosition().getY(), BwapiUtility.getRegionId(location.getRegion(), this.api));
+					location.getTilePosition().getY(), BwapiUtility.getRegion(location.getTilePosition(), this.api));
 			basePercepts.add(basePercept);
 		}
 		toReturn.put(new PerceptFilter(Percepts.BASE, Filter.Type.ONCE), basePercepts);
 
 		List<Chokepoint> chokePoints = BWTA.getChokepoints();
-		Set<Percept> chokepointPercepts = new HashSet<>(chokePoints.size());
+		List<Percept> chokepointPercepts = new ArrayList<>(chokePoints.size());
 		for (Chokepoint cp : chokePoints) {
 			TilePosition firstSide = cp.getSides().first.toTilePosition();
 			TilePosition secondSide = cp.getSides().second.toTilePosition();
-			Region firstRegion = cp.getRegions().first;
-			Region secondRegion = cp.getRegions().second;
+			int firstRegion = BwapiUtility.getRegion(cp.getRegions().first.getCenter().toTilePosition(), this.api);
+			int secondRegion = BwapiUtility.getRegion(cp.getRegions().second.getCenter().toTilePosition(), this.api);
 			Percept chokeRegionPercept = new ChokepointRegionPercept(firstSide.getX(), firstSide.getY(),
-					secondSide.getX(), secondSide.getY(), BwapiUtility.getRegionId(firstRegion, this.api),
-					BwapiUtility.getRegionId(secondRegion, this.api));
+					secondSide.getX(), secondSide.getY(), firstRegion, secondRegion);
 			chokepointPercepts.add(chokeRegionPercept);
 		}
 		toReturn.put(new PerceptFilter(Percepts.CHOKEPOINT, Filter.Type.ONCE), chokepointPercepts);
 
 		List<Region> regions = BWTA.getRegions();
-		Set<Percept> regionPercepts = new HashSet<>(regions.size());
+		List<Percept> regionPercepts = new ArrayList<>(regions.size());
 		for (Region r : regions) {
-			bwapi.Region apir = this.api.getRegionAt(r.getCenter());
 			TilePosition center = r.getCenter().toTilePosition();
+			bwapi.Region apir = this.api.getRegionAt(center.toPosition());
 			boolean highground = apir.isHigherGround();
 			List<Region> neighbors = r.getReachableRegions();
 			List<Parameter> connected = new ArrayList<>(neighbors.size());
 			for (Region c : neighbors) {
-				bwapi.Region apic = this.api.getRegionAt(c.getCenter());
-				connected.add(new Numeral(apic.getID()));
+				int apic = BwapiUtility.getRegion(c.getCenter().toTilePosition(), this.api);
+				connected.add(new Numeral(apic));
 			}
 			Percept regionPercept = new RegionPercept(apir.getID(), center.getX(), center.getY(), highground,
 					connected);
 			regionPercepts.add(regionPercept);
 		}
 		toReturn.put(new PerceptFilter(Percepts.REGION, Filter.Type.ONCE), regionPercepts);
-
-		return toReturn;
 	}
 }

@@ -30,11 +30,11 @@ public class Patrol extends StarcraftMovableAction {
 		int xpos = ((Numeral) parameters.get(0)).getValue().intValue();
 		int ypos = ((Numeral) parameters.get(1)).getValue().intValue();
 
-		unit.patrol(new TilePosition(xpos, ypos).toPosition(), false);
+		unit.patrol(new TilePosition(xpos, ypos).toPosition());
 	}
 
 	@Override
 	public String toString() {
-		return "patrol(x, y)";
+		return "patrol(X,Y)";
 	}
 }

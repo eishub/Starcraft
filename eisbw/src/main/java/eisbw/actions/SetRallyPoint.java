@@ -45,6 +45,6 @@ public class SetRallyPoint extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "setRallyPoint(x,y)";
+		return "setRallyPoint(X,Y)";
 	}
 }

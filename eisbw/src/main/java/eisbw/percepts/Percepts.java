@@ -20,7 +20,7 @@ public class Percepts {
 	public static final String ENEMYRACE = "enemyRace";
 	public static final String ENEMY = "enemy";
 	public static final String FRIENDLY = "friendly";
-	public static final String NEWUNIT = "underConstruction";
+	public static final String UNDERCONSTRUCTION = "underConstruction";
 
 	public static final String UNITLOADED = "unitLoaded";
 	public static final String RESEARCHING = "researching";

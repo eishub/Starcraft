@@ -41,6 +41,6 @@ public class Lift extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "lift()";
+		return "lift";
 	}
 }

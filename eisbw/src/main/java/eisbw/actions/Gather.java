@@ -3,7 +3,6 @@ package eisbw.actions;
 import java.util.List;
 
 import bwapi.Unit;
-import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
@@ -31,8 +30,7 @@ public class Gather extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
-		UnitType unitType = unit.getType();
-		return unitType.isWorker();
+		return unit.getType().isWorker();
 	}
 
 	@Override
@@ -40,11 +38,11 @@ public class Gather extends StarcraftAction {
 		List<Parameter> parameters = action.getParameters();
 		Unit target = this.api.getUnit(((Numeral) parameters.get(0)).getValue().intValue());
 
-		unit.gather(target, false);
+		unit.gather(target);
 	}
 
 	@Override
 	public String toString() {
-		return "gather(targetID)";
+		return "gather(TargetID)";
 	}
 }

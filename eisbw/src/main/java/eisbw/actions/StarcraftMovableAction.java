@@ -25,7 +25,11 @@ public abstract class StarcraftMovableAction extends StarcraftAction {
 	@Override
 	public boolean isValid(Action action) {
 		List<Parameter> parameters = action.getParameters();
-		return parameters.size() == 2 && parameters.get(0) instanceof Numeral && parameters.get(1) instanceof Numeral;
+		if (parameters.size() == 2) {
+			return parameters.get(0) instanceof Numeral && parameters.get(1) instanceof Numeral;
+		} else {
+			return false;
+		}
 	}
 
 	@Override

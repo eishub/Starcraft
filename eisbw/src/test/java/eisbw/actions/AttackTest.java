@@ -1,6 +1,5 @@
 package eisbw.actions;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -64,7 +63,6 @@ public class AttackTest {
 		assertTrue(this.action.canExecute(this.unit, this.act));
 		when(this.unitType.canAttack()).thenReturn(false);
 		assertFalse(this.action.canExecute(this.unit, this.act));
-
 	}
 
 	@Test
@@ -72,11 +70,6 @@ public class AttackTest {
 		when(this.bwapi.getUnit(1)).thenReturn(this.unit);
 		when(this.unitType.canAttack()).thenReturn(true);
 		this.action.execute(this.unit, this.act);
-		verify(this.unit).attack(this.unit, false);
-	}
-
-	@Test
-	public void toString_test() {
-		assertEquals("attack(targetId)", this.action.toString());
+		verify(this.unit).attack(this.unit);
 	}
 }

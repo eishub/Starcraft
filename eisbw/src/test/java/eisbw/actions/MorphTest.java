@@ -1,6 +1,5 @@
 package eisbw.actions;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -78,9 +77,9 @@ public class MorphTest {
 
 	@Test
 	public void canExecute_test() {
-		when(this.player.getRace()).thenReturn(Race.Terran);
+		when(this.unitType.getRace()).thenReturn(Race.Terran);
 		assertFalse(this.action.canExecute(this.unit, this.act));
-		when(this.player.getRace()).thenReturn(Race.Zerg);
+		when(this.unitType.getRace()).thenReturn(Race.Zerg);
 		assertTrue(this.action.canExecute(this.unit, this.act));
 	}
 
@@ -89,10 +88,5 @@ public class MorphTest {
 		this.params.set(0, new Identifier("null"));
 		this.action.execute(this.unit, this.act);
 		verify(this.unit).morph(null);
-	}
-
-	@Test
-	public void toString_test() {
-		assertEquals("morph(Type)", this.action.toString());
 	}
 }

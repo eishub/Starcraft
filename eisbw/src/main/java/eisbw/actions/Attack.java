@@ -3,7 +3,6 @@ package eisbw.actions;
 import java.util.List;
 
 import bwapi.Unit;
-import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
@@ -31,8 +30,7 @@ public class Attack extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
-		UnitType unitType = unit.getType();
-		return unitType.canAttack();
+		return unit.getType().canAttack();
 	}
 
 	@Override
@@ -41,11 +39,11 @@ public class Attack extends StarcraftAction {
 		int targetId = ((Numeral) parameters.get(0)).getValue().intValue();
 		Unit target = this.api.getUnit(targetId);
 
-		unit.attack(target, false);
+		unit.attack(target);
 	}
 
 	@Override
 	public String toString() {
-		return "attack(targetId)";
+		return "attack(TargetId)";
 	}
 }

@@ -29,11 +29,11 @@ public class Move extends StarcraftMovableAction {
 		int xpos = ((Numeral) parameters.get(0)).getValue().intValue();
 		int ypos = ((Numeral) parameters.get(1)).getValue().intValue();
 
-		unit.move(new TilePosition(xpos, ypos).toPosition(), false);
+		unit.move(new TilePosition(xpos, ypos).toPosition());
 	}
 
 	@Override
 	public String toString() {
-		return "move(x, y)";
+		return "move(X,Y)";
 	}
 }

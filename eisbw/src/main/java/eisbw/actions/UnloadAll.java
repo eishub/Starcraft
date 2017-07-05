@@ -29,7 +29,7 @@ public class UnloadAll extends StarcraftLoadingAction {
 
 	@Override
 	public void execute(Unit unit, Action action) {
-		unit.unloadAll(false);
+		unit.unloadAll();
 	}
 
 	@Override

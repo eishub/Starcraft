@@ -110,9 +110,4 @@ public class UseTest {
 		this.action.execute(this.unit, this.act);
 		verify(this.unit).useTech(null);
 	}
-
-	@Test
-	public void toString_test() {
-		assertEquals("ability(Type)", this.action.toString());
-	}
 }

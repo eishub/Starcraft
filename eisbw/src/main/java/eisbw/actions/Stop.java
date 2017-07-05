@@ -3,7 +3,6 @@ package eisbw.actions;
 import java.util.List;
 
 import bwapi.Unit;
-import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Parameter;
 
@@ -30,13 +29,12 @@ public class Stop extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
-		UnitType unitType = unit.getType();
-		return !unitType.isBuilding();
+		return !unit.getType().isBuilding();
 	}
 
 	@Override
 	public void execute(Unit unit, Action action) {
-		unit.stop(false);
+		unit.stop();
 	}
 
 	@Override

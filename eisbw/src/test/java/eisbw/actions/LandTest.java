@@ -1,6 +1,5 @@
 package eisbw.actions;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -75,10 +74,5 @@ public class LandTest {
 	public void execute_test() {
 		this.action.execute(this.unit, this.act);
 		verify(this.unit).land(new TilePosition(1, 2));
-	}
-
-	@Test
-	public void toString_test() {
-		assertEquals("land(x,y)", this.action.toString());
 	}
 }

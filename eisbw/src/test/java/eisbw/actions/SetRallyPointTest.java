@@ -1,6 +1,5 @@
 package eisbw.actions;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -75,10 +74,5 @@ public class SetRallyPointTest {
 	public void execute_test() {
 		this.action.execute(this.unit, this.act);
 		verify(this.unit).setRallyPoint(new TilePosition(1, 2).toPosition());
-	}
-
-	@Test
-	public void toString_test() {
-		assertEquals("setRallyPoint(x,y)", this.action.toString());
 	}
 }

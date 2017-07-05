@@ -36,7 +36,7 @@ public class UseOnTarget extends StarcraftAction {
 	public boolean canExecute(Unit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
-		return techType.targetsUnit(); // check if unit has Tech?
+		return techType.targetsUnit();
 	}
 
 	@Override
@@ -50,6 +50,6 @@ public class UseOnTarget extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "abilityOnTarget(TechType, TargetId)";
+		return "abilityOnTarget(Type,TargetId)";
 	}
 }

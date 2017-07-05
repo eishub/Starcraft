@@ -9,6 +9,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+import eis.eis2java.exception.NoTranslatorException;
 import eis.eis2java.exception.TranslationException;
 import eis.eis2java.translation.Translator;
 import eis.iilang.Identifier;
@@ -18,6 +19,10 @@ import eisbw.translators.ParamEnumTranslator;
 import eisbw.translators.RaceStringTranslator;
 
 public class ConfigurationTest {
+
+	/**
+	 * register Translators.
+	 */
 	@Before
 	public void start() {
 		Translator.getInstance().registerParameter2JavaTranslator(new ParamEnumTranslator());
@@ -26,15 +31,15 @@ public class ConfigurationTest {
 	}
 
 	@Test(expected = TranslationException.class)
-	public void exception_test() throws Exception {
-		Map<String, Parameter> parameters = new HashMap<>(1);
+	public void exception_test() throws NoTranslatorException, TranslationException {
+		Map<String, Parameter> parameters = new HashMap<>();
 		parameters.put("false_input", new Identifier("scdir"));
 		new Configuration(parameters);
 	}
 
 	@Test
-	public void noException_test() throws Exception {
-		Map<String, Parameter> parameters = new HashMap<>(6);
+	public void noException_test() throws NoTranslatorException, TranslationException {
+		Map<String, Parameter> parameters = new HashMap<>();
 		parameters.put("debug", new Identifier("true"));
 		parameters.put("own_race", new Identifier("terran"));
 		parameters.put("enemy_race", new Identifier("zerg"));
@@ -47,6 +52,7 @@ public class ConfigurationTest {
 		assertEquals("zerg", config.getEnemyRace());
 		assertEquals("map", config.getMap());
 		assertEquals("scdir", config.getScDir());
-		assertEquals("Single_Player", config.getAutoMenu());
+		assertEquals("SINGLE_PLAYER", config.getAutoMenu());
 	}
+
 }

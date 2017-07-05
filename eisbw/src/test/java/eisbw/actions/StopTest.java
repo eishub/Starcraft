@@ -1,6 +1,5 @@
 package eisbw.actions;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -65,11 +64,6 @@ public class StopTest {
 	@Test
 	public void execute_test() {
 		this.action.execute(this.unit, this.act);
-		verify(this.unit).stop(false);
-	}
-
-	@Test
-	public void toString_test() {
-		assertEquals("stop", this.action.toString());
+		verify(this.unit).stop();
 	}
 }

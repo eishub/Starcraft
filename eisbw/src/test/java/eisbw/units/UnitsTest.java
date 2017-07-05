@@ -50,23 +50,13 @@ public class UnitsTest {
 	@Test
 	public void addDeleteUnit_test() {
 		this.units.addUnit(this.unit, this.factory);
-		assertEquals("name0", this.units.getUnitNames().get(0));
-		assertNotNull(this.units.getUnits().get("name0"));
+		assertEquals("name0", this.units.getUnitName(0));
+		assertNotNull(this.units.getUnit("name0"));
 		verify(this.factory, times(1)).create(any(Unit.class));
-		this.units.deleteUnit("name0", 0);
+		this.units.deleteUnit("name0");
 		verify(this.env, times(1)).deleteFromEnvironment("name0");
 		this.units.addUnit(this.unit, this.factory);
 		this.units.clean();
 		verify(this.env, times(2)).deleteFromEnvironment("name0");
-	}
-
-	@Test
-	public void getStarcraftUnits_test() {
-		assertEquals(this.units.getStarcraftUnits(), this.units.starcraftUnits);
-	}
-
-	@Test
-	public void getUninitializedUnits_test() {
-		assertEquals(this.units.getUninitializedUnits(), this.units.uninitializedUnits);
 	}
 }

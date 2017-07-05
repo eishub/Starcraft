@@ -1,6 +1,5 @@
 package eisbw.actions;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -58,13 +57,13 @@ public class LiftTest {
 	@Test
 	public void canExecute_test() {
 		when(this.unitType.isBuilding()).thenReturn(false);
-		when(this.unitType.getRace()).thenReturn(Race.Protoss);
+		when(this.unitType.getRace()).thenReturn(Race.Zerg);
 		assertFalse(this.action.canExecute(this.unit, this.act));
 		when(this.unitType.getRace()).thenReturn(Race.Terran);
 		assertFalse(this.action.canExecute(this.unit, this.act));
 		when(this.unitType.isBuilding()).thenReturn(true);
 		assertTrue(this.action.canExecute(this.unit, this.act));
-		when(this.unitType.getRace()).thenReturn(Race.Protoss);
+		when(this.unitType.getRace()).thenReturn(Race.Zerg);
 		assertFalse(this.action.canExecute(this.unit, this.act));
 	}
 
@@ -72,10 +71,5 @@ public class LiftTest {
 	public void execute_test() {
 		this.action.execute(this.unit, this.act);
 		verify(this.unit).lift();
-	}
-
-	@Test
-	public void toString_test() {
-		assertEquals("lift()", this.action.toString());
 	}
 }

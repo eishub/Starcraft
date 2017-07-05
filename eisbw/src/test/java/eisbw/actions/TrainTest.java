@@ -1,6 +1,5 @@
 package eisbw.actions;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -73,9 +72,6 @@ public class TrainTest {
 
 	@Test
 	public void canExecute_test() {
-		when(this.unit.isBeingConstructed()).thenReturn(true);
-		assertFalse(this.action.canExecute(this.unit, this.act));
-		when(this.unit.isBeingConstructed()).thenReturn(false);
 		assertTrue(this.action.canExecute(this.unit, this.act));
 	}
 
@@ -83,10 +79,5 @@ public class TrainTest {
 	public void execute_test() {
 		this.action.execute(this.unit, this.act);
 		verify(this.unit).train(null);
-	}
-
-	@Test
-	public void toString_test() {
-		assertEquals("train(Type)", this.action.toString());
 	}
 }

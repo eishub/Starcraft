@@ -1,6 +1,5 @@
 package eisbw.actions;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -71,10 +70,5 @@ public class UnloadUnitTest {
 		when(this.bwapi.getUnit(1)).thenReturn(this.unit);
 		this.action.execute(this.unit, this.act);
 		verify(this.unit).unload(this.unit);
-	}
-
-	@Test
-	public void toString_test() {
-		assertEquals("unload(targetId)", this.action.toString());
 	}
 }

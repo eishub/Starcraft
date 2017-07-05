@@ -1,6 +1,5 @@
 package eisbw.actions;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -95,10 +94,5 @@ public class BuildTest {
 		this.params.add(new Numeral(2));
 		this.action.execute(this.unit, this.act);
 		verify(this.unit).build(null, new TilePosition(1, 2));
-	}
-
-	@Test
-	public void toString_test() {
-		assertEquals("build(Type, X, Y)", this.action.toString());
 	}
 }

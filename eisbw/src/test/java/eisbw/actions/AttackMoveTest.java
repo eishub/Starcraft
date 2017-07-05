@@ -1,6 +1,5 @@
 package eisbw.actions;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -81,11 +80,6 @@ public class AttackMoveTest {
 		when(this.bwapi.getUnit(1)).thenReturn(this.unit);
 		when(this.unitType.canAttack()).thenReturn(true);
 		this.action.execute(this.unit, this.act);
-		verify(this.unit).attack(new TilePosition(1, 2).toPosition(), false);
-	}
-
-	@Test
-	public void toString_test() {
-		assertEquals("attack(x,y)", this.action.toString());
+		verify(this.unit).attack(new TilePosition(1, 2).toPosition());
 	}
 }

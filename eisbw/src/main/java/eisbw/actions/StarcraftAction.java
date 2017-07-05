@@ -24,19 +24,19 @@ public abstract class StarcraftAction {
 		this.api = api;
 	}
 
-	protected UpgradeType getUpgradeType(String type) {
-		return BwapiUtility.getUpgradeType(type);
+	// Mocked in tests
+	protected UnitType getUnitType(String name) {
+		return BwapiUtility.getUnitType(name);
 	}
 
-	protected TechType getTechType(String type) {
-		return BwapiUtility.getTechType(type);
+	// Mocked in tests
+	protected TechType getTechType(String name) {
+		return BwapiUtility.getTechType(name);
 	}
 
-	protected UnitType getUnitType(String type) {
-		if ("Terran Siege Tank".equals(type)) {
-			type = "Terran Siege Tank Tank Mode";
-		}
-		return BwapiUtility.getUnitType(type);
+	// Mocked in tests
+	protected UpgradeType getUpgradeType(String name) {
+		return BwapiUtility.getUpgradeType(name);
 	}
 
 	/**
@@ -67,4 +67,20 @@ public abstract class StarcraftAction {
 
 	@Override
 	public abstract String toString();
+
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		} else if (obj == null || !(obj instanceof StarcraftAction)) {
+			return false;
+		} else {
+			return toString().equals(obj.toString());
+		}
+	}
 }

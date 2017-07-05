@@ -27,11 +27,11 @@ public class Load extends StarcraftLoadingAction {
 		List<Parameter> parameters = action.getParameters();
 		Unit target = this.api.getUnit(((Numeral) parameters.get(0)).getValue().intValue());
 
-		unit.load(target, false);
+		unit.load(target);
 	}
 
 	@Override
 	public String toString() {
-		return "load(targetID)";
+		return "load(TargetID)";
 	}
 }

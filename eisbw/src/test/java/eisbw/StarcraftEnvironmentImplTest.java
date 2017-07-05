@@ -1,6 +1,5 @@
 package eisbw;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -14,11 +13,15 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import eis.exceptions.ActException;
+import eis.exceptions.AgentException;
 import eis.exceptions.ManagementException;
+import eis.exceptions.NoEnvironmentException;
+import eis.exceptions.PerceiveException;
+import eis.exceptions.RelationException;
 import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
-import eisbw.actions.Lift;
 
 public class StarcraftEnvironmentImplTest {
 	private StarcraftEnvironmentImpl env;
@@ -33,7 +36,7 @@ public class StarcraftEnvironmentImplTest {
 	 *             - from environment
 	 */
 	@Before
-	public void start() throws Exception {
+	public void start() throws ManagementException {
 		MockitoAnnotations.initMocks(this);
 
 		this.env = new StarcraftEnvironmentImpl();
@@ -46,20 +49,19 @@ public class StarcraftEnvironmentImplTest {
 	}
 
 	@Test
-	public void test() throws Exception {
+	public void test()
+			throws PerceiveException, NoEnvironmentException, AgentException, RelationException, ActException {
 		this.env.addToEnvironment("none", "type");
 		this.env.registerAgent("none");
 		this.env.associateEntity("none", "none");
 		this.env.getAllPercepts("none", "none");
 		this.env.listener = this.bwapiListener;
-		when(this.bwapiListener.getAction(any(Action.class))).thenReturn(new Lift(null));
-		assertTrue(this.env.isSupportedByType(new Action("lift"), null));
-		when(this.bwapiListener.getAction(any(Action.class))).thenReturn(null);
-		assertFalse(this.env.isSupportedByType(new Action("fake"), null));
+		when(this.bwapiListener.isSupportedByEnvironment(new Action("lift"))).thenReturn(true);
 		doNothing().when(this.bwapiListener).performEntityAction(any(String.class), any(Action.class));
 		assertTrue(this.env.performEntityAction("entity", new Action("lift")) == null);
 		this.env.deleteFromEnvironment("none");
 		when(this.bwapiListener.isSupportedByEntity(any(Action.class), any(String.class))).thenReturn(true);
 		assertTrue(this.env.isSupportedByEntity(new Action("action"), "action"));
 	}
+
 }

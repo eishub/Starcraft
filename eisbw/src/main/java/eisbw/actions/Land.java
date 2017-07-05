@@ -39,6 +39,6 @@ public class Land extends StarcraftMovableAction {
 
 	@Override
 	public String toString() {
-		return "land(x,y)";
+		return "land(X,Y)";
 	}
 }

@@ -1,6 +1,5 @@
 package eisbw.actions;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -93,10 +92,5 @@ public class UseOnTargetTest {
 		this.params.add(new Numeral(2));
 		this.action.execute(this.unit, this.act);
 		verify(this.unit).useTech(null, (Unit) null);
-	}
-
-	@Test
-	public void toString_test() {
-		assertEquals("abilityOnTarget(TechType, TargetId)", this.action.toString());
 	}
 }

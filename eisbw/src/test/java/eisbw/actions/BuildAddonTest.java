@@ -1,6 +1,5 @@
 package eisbw.actions;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -98,10 +97,5 @@ public class BuildAddonTest {
 	public void execute_test() {
 		this.action.execute(this.unit, this.act);
 		verify(this.unit).buildAddon(null);
-	}
-
-	@Test
-	public void toString_test() {
-		assertEquals("buildAddon(Type)", this.action.toString());
 	}
 }

@@ -19,12 +19,12 @@ public class BooleanStringTranslatorTest {
 	}
 
 	@Test(expected = TranslationException.class)
-	public void translateException_test() throws Exception {
+	public void translateException_test() throws TranslationException {
 		this.translator.translate(new Numeral(0));
 	}
 
 	@Test(expected = TranslationException.class)
-	public void translateExceptionNotFound_test() throws Exception {
+	public void translateExceptionNotFound_test() throws TranslationException {
 		this.translator.translate(new Identifier("notFound"));
 	}
 
@@ -39,4 +39,5 @@ public class BooleanStringTranslatorTest {
 	public void translatesTo_test() {
 		assertEquals(BooleanString.class, this.translator.translatesTo());
 	}
+
 }

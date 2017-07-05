@@ -6,7 +6,8 @@ import org.junit.Test;
 import bwapi.Position;
 
 public class BwapiEventsTest {
-	private BwapiEvents events;
+
+	BwapiEvents events;
 
 	@Before
 	public void start() {
@@ -16,8 +17,8 @@ public class BwapiEventsTest {
 	@Test
 	public void eventTests() {
 		this.events.onStart();
-		this.events.onNukeDetect(new Position(0, 0));
 		this.events.onFrame();
+		this.events.onNukeDetect(new Position(0, 0));
 		this.events.onPlayerDropped(null);
 		this.events.onPlayerLeft(null);
 		this.events.onReceiveText(null, "0");

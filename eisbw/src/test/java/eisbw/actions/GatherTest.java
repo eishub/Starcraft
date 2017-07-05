@@ -1,6 +1,5 @@
 package eisbw.actions;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -71,11 +70,6 @@ public class GatherTest {
 		this.params.set(0, new Numeral(0));
 		when(this.bwapi.getUnit(0)).thenReturn(this.unit);
 		this.action.execute(this.unit, this.act);
-		verify(this.unit).gather(this.unit, false);
-	}
-
-	@Test
-	public void toString_test() {
-		assertEquals("gather(targetID)", this.action.toString());
+		verify(this.unit).gather(this.unit);
 	}
 }

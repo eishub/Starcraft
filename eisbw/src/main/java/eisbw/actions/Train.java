@@ -32,7 +32,7 @@ public class Train extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
-		return !unit.isBeingConstructed();
+		return true; // edge cases such as reavers or nuclear silos
 	}
 
 	@Override
@@ -48,5 +48,4 @@ public class Train extends StarcraftAction {
 	public String toString() {
 		return "train(Type)";
 	}
-
 }

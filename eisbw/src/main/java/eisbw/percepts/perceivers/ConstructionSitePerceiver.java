@@ -1,14 +1,13 @@
 package eisbw.percepts.perceivers;
 
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import bwapi.Race;
 import bwapi.TilePosition;
 import bwapi.Unit;
 import bwapi.UnitType;
-import bwta.BWTA;
 import eis.eis2java.translation.Filter;
 import eis.iilang.Percept;
 import eisbw.BwapiUtility;
@@ -39,10 +38,9 @@ public class ConstructionSitePerceiver extends Perceiver {
 	 * @param percepts
 	 *            The list of perceived constructionsites
 	 */
-	private void perceiveTerran(TilePosition pos, Unit worker, Set<Percept> percepts) {
+	private void perceiveTerran(TilePosition pos, Unit worker, List<Percept> percepts) {
 		if (this.api.canBuildHere(pos, UnitType.Terran_Missile_Turret, worker, true)) {
-			percepts.add(new ConstructionSitePercept(pos.getX(), pos.getY(),
-					BwapiUtility.getRegionId(BWTA.getRegion(pos), this.api)));
+			percepts.add(new ConstructionSitePercept(pos.getX(), pos.getY(), getRegion(pos)));
 		}
 	}
 
@@ -52,11 +50,10 @@ public class ConstructionSitePerceiver extends Perceiver {
 	 * @param percepts
 	 *            The list of perceived constructionsites
 	 */
-	private void perceiveProtosss(TilePosition pos, Unit worker, Set<Percept> percepts) {
+	private void perceiveProtosss(TilePosition pos, Unit worker, List<Percept> percepts) {
 		boolean nearPylon = this.api.canBuildHere(pos, UnitType.Protoss_Photon_Cannon, worker, true);
 		if (nearPylon || this.api.canBuildHere(pos, UnitType.Protoss_Pylon, worker, true)) {
-			percepts.add(new ConstructionSitePercept(pos.getX(), pos.getY(),
-					BwapiUtility.getRegionId(BWTA.getRegion(pos), this.api), nearPylon));
+			percepts.add(new ConstructionSitePercept(pos.getX(), pos.getY(), getRegion(pos), nearPylon));
 		}
 	}
 
@@ -66,16 +63,15 @@ public class ConstructionSitePerceiver extends Perceiver {
 	 * @param percepts
 	 *            The list of perceived constructionsites
 	 */
-	private void perceiveZerg(TilePosition pos, Unit worker, Set<Percept> percepts) {
+	private void perceiveZerg(TilePosition pos, Unit worker, List<Percept> percepts) {
 		boolean onCreep = this.api.canBuildHere(pos, UnitType.Zerg_Creep_Colony, worker, true);
 		if (onCreep || this.api.canBuildHere(pos, UnitType.Terran_Missile_Turret, worker, true)) {
-			percepts.add(new ConstructionSitePercept(pos.getX(), pos.getY(),
-					BwapiUtility.getRegionId(BWTA.getRegion(pos), this.api), onCreep));
+			percepts.add(new ConstructionSitePercept(pos.getX(), pos.getY(), getRegion(pos), onCreep));
 		}
 	}
 
 	@Override
-	public Map<PerceptFilter, Set<Percept>> perceive(Map<PerceptFilter, Set<Percept>> toReturn) {
+	public void perceive(Map<PerceptFilter, List<Percept>> toReturn) {
 		Unit worker = null;
 		for (Unit unit : this.api.self().getUnits()) {
 			if (unit.getType().isWorker()) {
@@ -86,7 +82,7 @@ public class ConstructionSitePerceiver extends Perceiver {
 		int mapWidth = (worker == null) ? 0 : this.api.mapWidth();
 		int mapHeight = (worker == null) ? 0 : this.api.mapHeight();
 
-		Set<Percept> percepts = new HashSet<>();
+		List<Percept> percepts = new LinkedList<>();
 		for (int x = 0; x < mapWidth; x += steps) {
 			for (int y = 0; y < mapHeight; y += steps) {
 				TilePosition pos = new TilePosition(x, y);
@@ -102,6 +98,9 @@ public class ConstructionSitePerceiver extends Perceiver {
 			}
 		}
 		toReturn.put(new PerceptFilter(Percepts.CONSTRUCTIONSITE, Filter.Type.ALWAYS), percepts);
-		return toReturn;
+	}
+
+	private int getRegion(TilePosition pos) {
+		return BwapiUtility.getRegion(pos, this.api);
 	}
 }
