@@ -42,10 +42,11 @@ public class DrawMapInfo extends IDraw {
 
 	private void drawRegions(JNIBWAPI api) {
 		for (Region region : api.getMap().getRegions()) {
-			Position[] p = region.getPolygon();
-			for (int j = 0; j < p.length; ++j) {
-				api.drawLine(p[j], p[(j + 1) % p.length], BWColor.Green, false);
-			}
+			// FIXME: very expensive draw
+			// Position[] p = region.getPolygon();
+			// for (int j = 0; j < p.length; ++j) {
+			// api.drawLine(p[j], p[(j + 1) % p.length], BWColor.Green, false);
+			// }
 			api.drawText(region.getCenter(), "Region " + region.getID() + " (" + region.getCenter().getBX() + ","
 					+ region.getCenter().getBY() + ")", false);
 		}

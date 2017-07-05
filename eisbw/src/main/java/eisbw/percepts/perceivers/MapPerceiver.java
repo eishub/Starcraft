@@ -1,7 +1,6 @@
 package eisbw.percepts.perceivers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +8,6 @@ import eis.eis2java.translation.Filter;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
 import eis.iilang.Percept;
-import eisbw.BwapiUtility;
 import eisbw.percepts.BasePercept;
 import eisbw.percepts.ChokepointRegionPercept;
 import eisbw.percepts.EnemyRacePercept;
@@ -21,7 +19,6 @@ import jnibwapi.ChokePoint;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Position;
 import jnibwapi.Region;
-import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - The perceiver which handles all the map percepts.
@@ -53,15 +50,6 @@ public class MapPerceiver extends Perceiver {
 			toReturn.put(new PerceptFilter(Percepts.ENEMYRACE, Filter.Type.ONCE), enemyRacePercept);
 		} // FIXME: we only support 1 enemy now
 
-		/** Distance calculation between resource groups and base location **/
-		Map<Integer, Position> distanceMatrix = new HashMap<>();
-		for (Unit u : this.api.getNeutralUnits()) {
-			if (u.getType().isMineralField() && BwapiUtility.isValid(u)) {
-				if (!distanceMatrix.containsKey(u.getResourceGroup())) {
-					distanceMatrix.put(u.getResourceGroup(), u.getPosition());
-				}
-			}
-		}
 		List<Percept> basePercepts = new ArrayList<>(map.getBaseLocations().size());
 		for (BaseLocation location : map.getBaseLocations()) {
 			Percept basePercept = new BasePercept(location.isStartLocation(), location.getPosition().getBX(),

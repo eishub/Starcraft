@@ -35,7 +35,7 @@ public class Cancel extends StarcraftAction {
 	public boolean canExecute(Unit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		if (parameters.isEmpty()) {
-			return unit.getType().isBuilding() || this.api.getSelf().getRace().getID() == RaceTypes.Zerg.getID();
+			return unit.getType().isBuilding() || unit.getType().getRaceID() == RaceTypes.Zerg.getID();
 		} else {
 			return true;
 		}
