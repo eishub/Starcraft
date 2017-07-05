@@ -57,7 +57,7 @@ public class DrawMapInfo extends IDraw {
 	private void drawBases(bwapi.Game api) {
 		for (BaseLocation base : BWTA.getBaseLocations()) {
 			api.drawCircleMap(base.getPosition(), 75, Color.Purple, false);
-			api.drawTextMap(base.getPosition(), base.getPosition().getX() + ", " + base.getPosition().getY());
+			api.drawTextMap(base.getPosition(), base.getTilePosition().getX() + ", " + base.getTilePosition().getY());
 			if (base.isStartLocation()) {
 				api.drawTextMap(base.getPosition(), "Starting Location");
 			}
