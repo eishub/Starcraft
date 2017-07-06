@@ -133,19 +133,18 @@ public class UnitsPerceiver extends Perceiver {
 			if (!BwapiUtility.isValid(u)) {
 				continue;
 			}
-			ConditionHandler conditionHandler = new ConditionHandler(this.api, u);
 			if (newunitpercepts != null) {
 				String unittype = (u.getType().getID() == UnitTypes.Zerg_Egg.getID()) ? u.getBuildType().getName()
 						: BwapiUtility.getName(u.getType());
-				unitpercepts.add(new FriendlyPercept(u.getID(), unittype, conditionHandler.getConditions()));
-				if (u.isBeingConstructed()) {
+				unitpercepts.add(new FriendlyPercept(u.getID(), unittype));
+				if (!u.isCompleted()) {
 					newunitpercepts.add(new UnderConstructionPercept(u.getID(), u.getHitPoints() + u.getShields(),
 							u.getPosition().getBX(), u.getPosition().getBY(), getRegion(u)));
 				}
 			} else {
 				unitpercepts.add(new EnemyPercept(u.getID(), BwapiUtility.getName(u.getType()), u.getHitPoints(),
-						u.getShields(), u.getEnergy(), conditionHandler.getConditions(), u.getPosition().getBX(),
-						u.getPosition().getBY(), getRegion(u)));
+						u.getShields(), u.getEnergy(), new ConditionHandler(this.api, u).getConditions(),
+						u.getPosition().getBX(), u.getPosition().getBY(), getRegion(u)));
 				if (u.getType().isAttackCapable()) {
 					Unit target = (u.getTarget() == null) ? u.getOrderTarget() : u.getTarget();
 					if (target != null && !units.contains(target)) {

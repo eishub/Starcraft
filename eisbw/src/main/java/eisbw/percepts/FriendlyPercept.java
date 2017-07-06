@@ -1,11 +1,7 @@
 package eisbw.percepts;
 
-import java.util.List;
-
 import eis.iilang.Identifier;
 import eis.iilang.Numeral;
-import eis.iilang.Parameter;
-import eis.iilang.ParameterList;
 import eis.iilang.Percept;
 
 /**
@@ -23,10 +19,8 @@ public class FriendlyPercept extends Percept {
 	 *            The ID of the unit
 	 * @param type
 	 *            The unit type
-	 * @param conditions
-	 *            The current conditions of the unit
 	 */
-	public FriendlyPercept(int id, String type, List<Parameter> conditions) {
-		super(Percepts.FRIENDLY, new Numeral(id), new Identifier(type), new ParameterList(conditions));
+	public FriendlyPercept(int id, String type) {
+		super(Percepts.FRIENDLY, new Numeral(id), new Identifier(type));
 	}
 }
