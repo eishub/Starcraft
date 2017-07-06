@@ -7,10 +7,15 @@ import java.nio.file.StandardOpenOption;
 import java.util.LinkedList;
 import java.util.List;
 
+import jnibwapi.Position.PosType;
+import jnibwapi.types.RaceType;
+import jnibwapi.types.RaceType.RaceTypes;
 import jnibwapi.types.TechType;
 import jnibwapi.types.TechType.TechTypes;
 import jnibwapi.types.UnitType;
 import jnibwapi.types.UnitType.UnitTypes;
+import jnibwapi.types.WeaponType;
+import jnibwapi.types.WeaponType.WeaponTypes;
 
 public class KnowledgeExport {
 
@@ -124,6 +129,9 @@ public class KnowledgeExport {
 				export += getUnitCosts(type) + "\n";
 				export += getUnitStats(type) + "\n";
 				export += getUnitMetrics(type) + "\n";
+				if (type.isAttackCapable()) {
+					export += getUnitCombat(type) + "\n";
+				}
 				export += "\n";
 				break;
 			default:
@@ -139,17 +147,9 @@ public class KnowledgeExport {
 		}
 	}
 
-	private static String getName(UnitType type) {
-		String name = type.getName();
-		if (name.length() > 17 && "Terran Siege Tank".equals(name.substring(0, 17))) {
-			return "Terran Siege Tank";
-		} else {
-			return name;
-		}
-	}
-
 	private static String getUnitType(UnitType type) {
-		return String.format("unitType('%s').", getName(type));
+		RaceType race = RaceTypes.getRaceType(type.getRaceID());
+		return String.format("type(%s,'%s').", race.getName().toLowerCase(), BwapiUtility.getName(type));
 	}
 
 	private static String getUnitCosts(UnitType type) {
@@ -172,15 +172,13 @@ public class KnowledgeExport {
 			}
 		}
 		requirements += "]";
-		return String.format("costs('%s',%d,%d,%d,%d,%s).", getName(type), type.getMineralPrice(), type.getGasPrice(),
-				type.getSupplyRequired() - type.getSupplyProvided(), type.getBuildTime(), requirements);
+		return String.format("costs('%s',%d,%d,%d,%d,%s).", BwapiUtility.getName(type), type.getMineralPrice(),
+				type.getGasPrice(), type.getSupplyRequired() - type.getSupplyProvided(), type.getBuildTime(),
+				requirements);
 	}
 
 	private static String getUnitStats(UnitType type) {
 		List<String> conditionlist = new LinkedList<>();
-		if (type.isAttackCapable()) {
-			conditionlist.add("canAttack");
-		}
 		if (type.isBuilding()) {
 			conditionlist.add("building");
 		}
@@ -221,15 +219,25 @@ public class KnowledgeExport {
 			conditions += "'" + condition + "'";
 		}
 		conditions += "]";
-		return String.format("stats('%s',%d,%d,%d,%s).", getName(type), type.getMaxHitPoints(), type.getMaxShields(),
-				type.getMaxEnergy(), conditions);
+		return String.format("stats('%s',%d,%d,%d,%d,%s).", BwapiUtility.getName(type), type.getMaxHitPoints(),
+				type.getMaxShields(), type.getMaxEnergy(), (int) (type.getTopSpeed() * 10), conditions);
 	}
 
 	private static String getUnitMetrics(UnitType type) {
 		int spaceRequired = (type.getSpaceRequired() >= 255) ? 0 : type.getSpaceRequired();
 		int spaceProvided = (type.getSpaceProvided() >= 255) ? 0 : type.getSpaceProvided();
-		// FIXME: use its weapon/spell range instead of its sight range?
-		return String.format("metrics('%s',%d,%d,%d,%d).", getName(type), type.getTileWidth(), type.getTileHeight(),
-				type.getSightRange(), spaceRequired - spaceProvided);
+		return String.format("metrics('%s',%d,%d,%d,%d).", BwapiUtility.getName(type), type.getTileWidth(),
+				type.getTileHeight(), type.getSightRange() / PosType.BUILD.scale, spaceRequired - spaceProvided);
+	}
+
+	private static String getUnitCombat(UnitType type) {
+		WeaponType ground = type.getGroundWeapon();
+		WeaponType air = WeaponTypes.getWeaponType(type.getAirWeaponID());
+		WeaponType generic = (ground == null || ground.getID() == WeaponTypes.Unknown.getID()
+				|| ground.getID() == WeaponTypes.None.getID()) ? air : ground;
+		return String.format("combat('%s',%d,%d,%d,%d,%d).", BwapiUtility.getName(type),
+				ground.getDamageAmount() * ground.getDamageFactor(), air.getDamageAmount() * air.getDamageFactor(),
+				generic.getDamageCooldown(), generic.getMaxRange() / PosType.BUILD.scale,
+				generic.getMedianSplashRadius() / PosType.BUILD.scale);
 	}
 }
