@@ -38,9 +38,8 @@ public class BwapiListener extends BwapiEvents {
 	protected final boolean debug;
 	protected final boolean invulnerable;
 	protected final int speed;
-	protected int count = 0;
-	protected int nuke = -1;
 	protected DebugWindow debugwindow;
+	protected int nuke = -1;
 
 	/**
 	 * Event listener for BWAPI.
@@ -90,6 +89,7 @@ public class BwapiListener extends BwapiEvents {
 	@Override
 	public void matchStart() {
 		// SET INIT SPEED (DEFAULT IS 50 FPS, WHICH IS 20 SPEED)
+		this.bwapi.setCommandOptimizationLevel(2);
 		if (this.speed > 0) {
 			this.bwapi.setGameSpeed(1000 / this.speed);
 		} else if (this.speed == 0) {
@@ -107,10 +107,8 @@ public class BwapiListener extends BwapiEvents {
 			this.debugwindow = new DebugWindow(this.game);
 		}
 
-		// DO INITIAL UPDATES
+		// UPDATE MAP INFO
 		this.game.updateMap(this.bwapi);
-		this.game.updateConstructionSites(this.bwapi);
-		this.game.updateFrameCount(this.count);
 
 		// KnowledgeExport.export();
 	}
@@ -118,9 +116,10 @@ public class BwapiListener extends BwapiEvents {
 	@Override
 	public void matchFrame() {
 		// GENERATE PERCEPTS
-		if ((++this.count % 50) == 0) {
+		int frame = this.bwapi.getFrameCount();
+		if ((frame % 50) == 0) {
+			this.game.updateFrameCount(this.bwapi);
 			this.game.updateConstructionSites(this.bwapi);
-			this.game.updateFrameCount(this.count);
 		}
 		if (this.nuke >= 0 && ++this.nuke == 50) {
 			this.game.updateNukePerceiver(null);
@@ -128,7 +127,7 @@ public class BwapiListener extends BwapiEvents {
 		}
 		do {
 			this.game.update(this.bwapi);
-			if (this.count == 1) {
+			if (frame == 0) {
 				this.game.mapAgent();
 			}
 			try { // always sleep 1ms to better facilitate running at speed 0
@@ -136,7 +135,7 @@ public class BwapiListener extends BwapiEvents {
 			} catch (InterruptedException ie) {
 				break;
 			} // wait until all the initial workers get an action request
-		} while (this.count == 1 && isRunning() && this.pendingActions.size() < 4);
+		} while (frame == 0 && isRunning() && this.pendingActions.size() < 4);
 
 		// PERFORM ACTIONS
 		Iterator<BwapiAction> actions = this.pendingActions.iterator();

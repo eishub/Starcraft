@@ -228,10 +228,10 @@ public class Game {
 	 * @param count
 	 *            The current frame count (per 50, matching c.site updates)
 	 */
-	public void updateFrameCount(int count) {
+	public void updateFrameCount(JNIBWAPI bwapi) {
 		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(1);
 		List<Percept> framepercept = new ArrayList<>(1);
-		framepercept.add(new FramePercept(count));
+		framepercept.add(new FramePercept(bwapi.getFrameCount()));
 		toReturn.put(new PerceptFilter(Percepts.FRAME, Filter.Type.ON_CHANGE), framepercept);
 		this.framePercepts = toReturn;
 	}

@@ -144,11 +144,10 @@ public class BwapiListenerTest {
 		this.listener.pendingActions.add(new BwapiAction(new Unit(3, null), new Action("stub")));
 		this.listener.pendingActions.add(new BwapiAction(new Unit(4, null), new Action("stub")));
 		this.listener.matchFrame();
-		verify(this.game, times(0)).updateConstructionSites(this.bwapi);
-		this.listener.count = 49;
-		this.listener.matchFrame();
-		assertTrue(this.listener.count == 50);
 		verify(this.game, times(1)).updateConstructionSites(this.bwapi);
+		when(this.bwapi.getFrameCount()).thenReturn(50);
+		this.listener.matchFrame();
+		verify(this.game, times(2)).updateConstructionSites(this.bwapi);
 		this.listener.performEntityAction("unit", new Action("stop"));
 		eis.iilang.Parameter[] list = new eis.iilang.Parameter[1];
 		list[0] = new Identifier("fail");
