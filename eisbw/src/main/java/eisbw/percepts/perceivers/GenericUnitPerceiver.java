@@ -108,10 +108,12 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	private void orderPercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> orderPercept = new ArrayList<>(1);
 		OrderType primary = (this.unit.getOrder() == null) ? OrderTypes.None : this.unit.getOrder();
-		Unit target = (this.unit.getTarget() == null) ? this.unit.getOrderTarget() : this.unit.getTarget();
+		Unit targetUnit = (this.unit.getTarget() == null) ? this.unit.getOrderTarget() : this.unit.getTarget();
+		Position targetPos = this.unit.getTargetPosition();
 		OrderType secondary = (this.unit.getSecondaryOrder() == null) ? OrderTypes.None : this.unit.getSecondaryOrder();
-		orderPercept
-				.add(new OrderPercept(primary.getName(), (target == null) ? -1 : target.getID(), secondary.getName()));
+		orderPercept.add(new OrderPercept(primary.getName(), (targetUnit == null) ? -1 : targetUnit.getID(),
+				(targetPos == null) ? -1 : targetPos.getBX(), (targetPos == null) ? -1 : targetPos.getBY(),
+				secondary.getName()));
 		toReturn.put(new PerceptFilter(Percepts.ORDER, Filter.Type.ON_CHANGE), orderPercept);
 	}
 }
