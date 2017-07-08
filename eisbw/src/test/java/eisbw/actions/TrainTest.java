@@ -73,6 +73,7 @@ public class TrainTest {
 
 	@Test
 	public void canExecute_test() {
+		when(this.unitType.isProduceCapable()).thenReturn(true);
 		assertTrue(this.action.canExecute(this.unit, this.act));
 	}
 

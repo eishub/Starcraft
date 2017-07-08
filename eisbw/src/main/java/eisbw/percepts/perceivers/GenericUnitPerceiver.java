@@ -10,6 +10,8 @@ import eisbw.BwapiUtility;
 import eisbw.percepts.DefensiveMatrixPercept;
 import eisbw.percepts.OrderPercept;
 import eisbw.percepts.Percepts;
+import eisbw.percepts.QueueSizePercept;
+import eisbw.percepts.ResearchingPercept;
 import eisbw.percepts.SelfPercept;
 import eisbw.percepts.StatusPercept;
 import eisbw.percepts.UnitLoadedPercept;
@@ -19,6 +21,9 @@ import jnibwapi.Position;
 import jnibwapi.Unit;
 import jnibwapi.types.OrderType;
 import jnibwapi.types.OrderType.OrderTypes;
+import jnibwapi.types.TechType.TechTypes;
+import jnibwapi.types.UnitType.UnitTypes;
+import jnibwapi.types.UpgradeType.UpgradeTypes;
 
 /**
  * @author Danny & Harm - The perceiver which handles all the generic percepts.
@@ -45,6 +50,13 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 		if (this.unit.getType().getSpaceProvided() > 0) {
 			List<Unit> loadedUnits = this.unit.getLoadedUnits();
 			unitLoadedPercept(toReturn, loadedUnits);
+		}
+		if (this.unit.getType().isProduceCapable()
+				|| this.unit.getType().getID() == UnitTypes.Terran_Nuclear_Silo.getID()) {
+			queueSizePercept(toReturn);
+		}
+		if (this.unit.getType().isBuilding()) {
+			researchingPercept(toReturn);
 		}
 	}
 
@@ -115,5 +127,32 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 				(targetPos == null) ? -1 : targetPos.getBX(), (targetPos == null) ? -1 : targetPos.getBY(),
 				secondary.getName()));
 		toReturn.put(new PerceptFilter(Percepts.ORDER, Filter.Type.ON_CHANGE), orderPercept);
+	}
+
+	private void researchingPercept(Map<PerceptFilter, List<Percept>> toReturn) {
+		List<Percept> researchPercepts = new ArrayList<>(2);
+		if (this.unit.getTech() != null && this.unit.getTech().getID() != TechTypes.None.getID()
+				&& this.unit.getTech().getID() != TechTypes.Unknown.getID()) {
+			researchPercepts.add(new ResearchingPercept(this.unit.getTech().getName()));
+		}
+		if (this.unit.getUpgrade() != null && this.unit.getUpgrade().getID() != UpgradeTypes.None.getID()
+				&& this.unit.getUpgrade().getID() != UpgradeTypes.Unknown.getID()) {
+			researchPercepts.add(new ResearchingPercept(this.unit.getUpgrade().getName()));
+		}
+		if (!researchPercepts.isEmpty()) {
+			toReturn.put(new PerceptFilter(Percepts.RESEARCHING, Filter.Type.ALWAYS), researchPercepts);
+		}
+	}
+
+	private void queueSizePercept(Map<PerceptFilter, List<Percept>> toReturn) {
+		List<Percept> queueSizePercept = new ArrayList<>(1);
+		if (this.unit.getType().getID() == UnitTypes.Zerg_Hatchery.getID()
+				|| this.unit.getType().getID() == UnitTypes.Zerg_Lair.getID()
+				|| this.unit.getType().getID() == UnitTypes.Zerg_Hive.getID()) {
+			queueSizePercept.add(new QueueSizePercept(this.unit.getLarvaCount()));
+		} else {
+			queueSizePercept.add(new QueueSizePercept(this.unit.getTrainingQueueSize()));
+		}
+		toReturn.put(new PerceptFilter(Percepts.QUEUESIZE, Filter.Type.ON_CHANGE), queueSizePercept);
 	}
 }
