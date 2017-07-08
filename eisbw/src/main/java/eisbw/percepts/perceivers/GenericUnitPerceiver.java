@@ -150,6 +150,8 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 				|| this.unit.getType().getID() == UnitTypes.Zerg_Lair.getID()
 				|| this.unit.getType().getID() == UnitTypes.Zerg_Hive.getID()) {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getLarvaCount()));
+		} else if (this.unit.getType().getID() == UnitTypes.Terran_Nuclear_Silo.getID()) {
+			queueSizePercept.add(new QueueSizePercept(this.unit.isNukeReady() ? 1 : 0));
 		} else {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getTrainingQueueSize()));
 		}
