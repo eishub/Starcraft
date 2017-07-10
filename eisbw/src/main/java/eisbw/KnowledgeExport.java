@@ -212,9 +212,6 @@ public class KnowledgeExport {
 		if (type.isBurrowable()) {
 			conditionlist.add("canBurrow");
 		}
-		if (type.isSpellcaster()) {
-			conditionlist.add("usesEnergy");
-		}
 		if (type.isDetector()) {
 			conditionlist.add("canDetect");
 		}
