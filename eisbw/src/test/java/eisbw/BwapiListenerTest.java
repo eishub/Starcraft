@@ -1,6 +1,5 @@
 package eisbw;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -19,7 +18,6 @@ import org.mockito.MockitoAnnotations;
 import eis.exceptions.ActException;
 import eis.iilang.Action;
 import eis.iilang.Identifier;
-import eis.iilang.Numeral;
 import eisbw.debugger.DebugWindow;
 import eisbw.units.StarcraftUnitFactory;
 import eisbw.units.Units;
@@ -67,19 +65,6 @@ public class BwapiListenerTest {
 		when(this.bwapi.getUnit(0)).thenReturn(this.unit);
 		this.listener = new BwapiListener(this.game, "", false, false, false, false, 200);
 		this.listener.bwapi = this.bwapi;
-	}
-
-	@Test
-	public void isSupportedByEntity_test() {
-		assertTrue(this.listener.isSupportedByEntity(new Action("stop"), "unit"));
-		eis.iilang.Parameter[] list = new eis.iilang.Parameter[1];
-		list[0] = new Identifier("fail");
-		assertFalse(this.listener.isSupportedByEntity(new Action("stop", list), "unit"));
-		assertFalse(this.listener.isSupportedByEntity(new Action("setRallyPoint", list), "unit"));
-		list[0] = new Numeral(1);
-		assertFalse(this.listener.isSupportedByEntity(new Action("setRallyPoint", list), "unit"));
-		when(this.unitType.isBuilding()).thenReturn(true);
-		assertTrue(this.listener.isSupportedByEntity(new Action("setRallyPoint", list), "unit"));
 	}
 
 	@Test
