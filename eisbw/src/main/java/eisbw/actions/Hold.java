@@ -8,18 +8,18 @@ import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
 
 /**
- * @author Danny & Harm - Lifts up the unit, making it a flying unit until it
- *         lands.
+ * @author Danny & Harm - Makes the unit patrol between his current location and
+ *         the specified location.
  *
  */
-public class Lift extends StarcraftAction {
+public class Hold extends StarcraftMovableAction {
 	/**
-	 * The Lift constructor.
+	 * The Patrol constructor.
 	 *
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Lift(JNIBWAPI api) {
+	public Hold(JNIBWAPI api) {
 		super(api);
 	}
 
@@ -30,17 +30,12 @@ public class Lift extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		return unit.getType().isFlyingBuilding();
-	}
-
-	@Override
 	public void execute(Unit unit, Action action) {
-		unit.lift();
+		unit.holdPosition(false);
 	}
 
 	@Override
 	public String toString() {
-		return "lift";
+		return "hold";
 	}
 }

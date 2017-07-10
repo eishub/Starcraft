@@ -35,6 +35,6 @@ public abstract class StarcraftMovableAction extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(Unit unit, Action action) {
-		return !unit.isBeingConstructed();
+		return unit.getType().isCanMove() || unit.isLifted();
 	}
 }

@@ -54,6 +54,7 @@ public class ActionProvider {
 		this.actions.put("land/2", new Land(api));
 		this.actions.put("buildAddon/1", new BuildAddon(api));
 		this.actions.put("follow/1", new Follow(api));
+		this.actions.put("hold/0/1", new Hold(api));
 		this.actions.put("load/1", new Load(api));
 		this.actions.put("unload/1", new UnloadUnit(api));
 		this.actions.put("unloadAll/0", new UnloadAll(api));

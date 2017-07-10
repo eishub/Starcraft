@@ -12,7 +12,7 @@ import jnibwapi.Unit;
  * @author Danny & Harm - Makes the unit follow an other specified unit.
  *
  */
-public class Follow extends StarcraftAction {
+public class Follow extends StarcraftMovableAction {
 	/**
 	 * The Follow constructor.
 	 *
@@ -27,11 +27,6 @@ public class Follow extends StarcraftAction {
 	public boolean isValid(Action action) {
 		List<Parameter> parameters = action.getParameters();
 		return parameters.size() == 1 && parameters.get(0) instanceof Numeral;
-	}
-
-	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		return unit.getType().isCanMove();
 	}
 
 	@Override
