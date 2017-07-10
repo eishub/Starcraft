@@ -110,7 +110,7 @@ public class BwapiListener extends BwapiEvents {
 		// UPDATE MAP INFO
 		this.game.updateMap(this.bwapi);
 
-		// KnowledgeExport.export();
+		KnowledgeExport.export();
 	}
 
 	@Override
@@ -175,7 +175,7 @@ public class BwapiListener extends BwapiEvents {
 	@Override
 	public void unitMorph(int id) {
 		Unit unit = this.bwapi.getUnit(id);
-		if (unit.getType().getRaceID() != RaceTypes.Terran.getID()) {
+		if (unit.getType().getRaceID() != RaceTypes.Terran.getID()) { // siege tank hack
 			unitDestroy(id);
 			unitComplete(id);
 		}

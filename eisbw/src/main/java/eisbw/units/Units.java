@@ -43,12 +43,14 @@ public class Units {
 	 *            The object which creates all starcraft units.
 	 */
 	public void addUnit(Unit unit, StarcraftUnitFactory factory) {
-		String unitName = BwapiUtility.getName(unit);
-		this.unitNames.put(unit.getID(), unitName);
-		this.unitMap.put(unitName, unit);
-		StarcraftUnit scUnit = factory.create(unit);
-		this.starcraftUnits.put(unit, scUnit);
-		this.uninitializedUnits.add(unit);
+		if (BwapiUtility.isValid(unit) && !unit.isInvincible()) {
+			String unitName = BwapiUtility.getName(unit);
+			this.unitNames.put(unit.getID(), unitName);
+			this.unitMap.put(unitName, unit);
+			StarcraftUnit scUnit = factory.create(unit);
+			this.starcraftUnits.put(unit, scUnit);
+			this.uninitializedUnits.add(unit);
+		}
 	}
 
 	/**
