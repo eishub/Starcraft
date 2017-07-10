@@ -41,7 +41,7 @@ public class BwapiUtility {
 	 * @return the name of the unit.
 	 */
 	public static String getName(Unit unit) {
-		String name = (getName(unit.getType()) + unit.getID()).replace("_", "").replace(" ", "");
+		String name = (getName(unit.getType()) + unit.getID()).replace(" ", "");
 		return name.substring(0, 1).toLowerCase() + name.substring(1);
 	}
 
@@ -66,20 +66,15 @@ public class BwapiUtility {
 	}
 
 	/**
-	 * Get the EIS unittype of a unit.
+	 * Get the EIS unittype.
 	 *
-	 * @param unit
-	 *            - the unit that you want yhe Type from.
+	 * @param unittype
+	 *            the unittype
 	 * @return the type of a unit.
 	 */
-	public static String getEisUnitType(Unit unit) {
-		String type = unit.getType().getName().replace(" ", "");
-		type = type.substring(0, 1).toLowerCase() + type.substring(1);
-		if ("terranSiegeTankTankMode".equals(type) || "terranSiegeTankSiegeMode".equals(type)) {
-			return "terranSiegeTank";
-		} else {
-			return type;
-		}
+	public static String getEisUnitType(UnitType type) {
+		String result = getName(type).replace(" ", "");
+		return result.substring(0, 1).toLowerCase() + result.substring(1);
 	}
 
 	/**
@@ -129,6 +124,9 @@ public class BwapiUtility {
 			for (UpgradeType tt : UpgradeTypes.getAllUpgradeTypes()) {
 				upgradeTypeMap.put(tt.getName(), tt);
 			}
+		}
+		if (type.length() > 2 && Character.isDigit(type.charAt(type.length() - 1))) {
+			type = type.substring(0, type.length() - 3);
 		}
 		return upgradeTypeMap.get(type);
 	}
