@@ -253,7 +253,7 @@ public class BwapiListener extends BwapiEvents {
 	public boolean isSupportedByEntity(Action action, String name) {
 		StarcraftAction act = this.actionProvider.getAction(action);
 		Unit unit = this.game.getUnits().getUnit(name);
-		return isSupportedByEnvironment(action) && act.canExecute(unit.getType(), action);
+		return isSupportedByEnvironment(action) && act.canExecute((unit == null) ? null : unit.getType(), action);
 	}
 
 	private boolean isRunning() {
