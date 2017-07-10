@@ -40,6 +40,8 @@ public class UnitsTest {
 		MockitoAnnotations.initMocks(this);
 
 		when(this.unit.getType()).thenReturn(this.unitType);
+		when(this.unit.isExists()).thenReturn(true);
+		when(this.unit.isVisible()).thenReturn(true);
 		when(this.unitType.getName()).thenReturn("name");
 		when(this.unit.getID()).thenReturn(0);
 
