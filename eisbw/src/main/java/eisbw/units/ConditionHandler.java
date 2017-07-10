@@ -65,6 +65,9 @@ public class ConditionHandler {
 	 * @return The conditions of a protoss unit.
 	 */
 	private void setProtossConditions(List<Parameter> conditions) {
+		if(this.unit.isUnpowered() {
+			conditions.add(new Identifier("unpowered"));
+		}
 		// for reavers
 		if (this.unit.getScarabCount() > 0) {
 			conditions.add(new Identifier("hasScarabs"));
