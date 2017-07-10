@@ -110,7 +110,7 @@ public class BwapiListener extends BwapiEvents {
 		// UPDATE MAP INFO
 		this.game.updateMap(this.bwapi);
 
-		KnowledgeExport.export();
+		//KnowledgeExport.export();
 	}
 
 	@Override
