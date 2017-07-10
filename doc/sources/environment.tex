@@ -1,19 +1,30 @@
 \chapter{Environment}
-This chapter will explain how to set up and start a bot with the StarCraft environment using a multi-agent system in the GOAL language.= For the latest installation instructions, we refer to: \\ \url{https://github.com/eishub/StarCraft/wiki/Install-Guide}
+This environment is the first Environment Interface Standard (EIS) compatible agent environment providing full access to StarCraft (Brood War). It brings the challenges of Real-Time Strategy (RTS) games to the field of multi-agent programming whilst also facilitating the development of AI solutions for such games, allowing the development of problem-solving techniques before being applied to similar but more complex real-world problems.
+
+The design of this environment was guided by two conflicting objectives:
+\begin{enumerate}
+ \item The environment should facilitate multi-agent systems that operate at a level of \textit{abstraction} that is as high as possible.
+ \item The environment should facilitate multi-agent system implementations with as many different \textit{strategies} as possible.
+\end{enumerate}
+In other words, it does not aim for a multi-agent system that operates at the same level of detail as bots written in C or Java, but such a system should in contrast also not consist of a single action `\textit{win}' that will delegate the control to some other subsystem instead. To make optimal use of the reasoning typically employed by cognitive agents, low-level details are handled in the environment whilst still allowing agents sufficiently fine grained control.
+
+RTS games like StarCraft involve very large amounts of units that can come and go during the game and that have to deal with major challenges such as uncertainty and long-term (collaborative) goals, requiring multiple levels of abstraction and reasoning in the vast space of actions and game states that such games have. Therefore, a major factor that was also considered is the performance of the environment; a substantial performance impact caused by for example an enormous amount of percepts will limit the amount of viable implementations (and thus possible strategies).
+
+The remainder of this chapter will demonstrate how to set-up and start a bot with the StarCraft environment using a multi-agent system in the GOAL language. For the latest installation instructions, we refer to: \\ \url{https://github.com/eishub/StarCraft/wiki/Install-Guide}
 
 \section{Chaoslauncher}
-In order to make use of all the StarCraft Brood War plugins, you can make use of the Chaoslauncher application. With this application, several plugins can be used like the \textit{BWAPI Injector} which is necessary for using the BWAPI library. It is also recommended to make use of the \textit{APMAlert} plugin, which shows the current actions per minute of all your units together. When the APM of your bot is suddenly very high, your agents might be executing too many actions in a row. It is also recommended to make use of the \textit{W-Mode} plugin. This plugin automatically starts your StarCraft game in windowed mode which is easier for debugging. You can also make use of the \textit{ChaosPlugin} to make use of its autoreplay function which automatically saves a replay at the end of each game. You can play these replays by first turning off the \textit{BWAPI Injector}. You can then start StarCraft (in the launcher) and select \textit{Single Player} with gametype \textit{Expansion}. Press the `Ok' button and then the `Load Replay' button. If you then open the \texttt{Autoreplay} directory in that screen you should be able to see all the replays which are saved by the autoreplay function.  Alternatively, view replays in your browser at \url{http://www.openbw.com/replay-viewer}
+The Chaoslauncher facilitates plug-ins for StarCraft Brood War, like the \textit{BWAPI Injector} which is necessary for using the BWAPI library that connects our environment to the game. It is also recommended to make use of the \textit{APMAlert} plugin, which shows the current actions per minute of all your units together. It is also recommended to make use of the \textit{W-Mode} plugin. This plugin automatically starts your StarCraft game in windowed mode which is easier for debugging. You can also make use of the \textit{ChaosPlugin} to make use of its autoreplay function which automatically saves a replay at the end of each game. You can play these replays by first turning off the \textit{BWAPI Injector}. You can then start StarCraft (in the launcher) and select \textit{Single Player} with gametype \textit{Expansion}. Press the `Ok' button and then the `Load Replay' button. If you then open the \texttt{Autoreplay} directory in that screen you should be able to see all the replays which are saved by the autoreplay function.  Alternatively, view replays in your browser at \url{http://www.openbw.com/replay-viewer}
 
 \section{Init Parameters}
 \label{mas2g}
-The StarCraft environment offers multiple configurable items through the init parametres of a mas2g file. When updating any parameters, do not forget to close the Chaoslauncher before launching a new game, as otherwise your changes will not be applied. The example below demonstrates all parameters and their defaults.
+The StarCraft environment offers multiple configurable items through the init parameters of a mas2g file. When updating any parameters, do not forget to close the Chaoslauncher before launching a new game, as otherwise your changes will not be applied. The example below demonstrates all parameters and their defaults.
 
 \begin{verbatim}
     use "connector.jar" as environment with
         own_race="",
         enemy_race="random",
         map="",
-        starcraft_location="C:\\StarCraft",
+        starcraft_location="C:\StarCraft",
         auto_menu="SINGLE_PLAYER",
         game_type="MELEE",
         game_speed=50.
@@ -38,7 +49,7 @@ You have to specify which map the Chaoslauncher will automatically load when sta
 
 \subsection{StarCraft Location}
 \label{StarCraft location}
-You have to specify the location of the StarCraft game if it is not installed in \textit{C:\\Starcraft}. Using this location, the Chaoslauncher will automatically start when launching a MAS. When the Chaoslauncher is already running, it will not start again until you close it, but this is fine as long as you use the same init parameters (although you have to start the next game manually then). You can specify the location of StarCraft by inserting \textit{StarCraft\_location = <FilePath>}, where \textit{<FilePath>} is the absolute path to the StarCraft installation folder.
+You have to specify the location of the StarCraft game if it is not installed in \textit{C:/Starcraft}. Using this location, the Chaoslauncher will automatically start when launching a MAS. When the Chaoslauncher is already running, it will not start again until you close it, but this is fine as long as you use the same init parameters (although you have to start the next game manually then). You can specify the location of StarCraft by inserting \textit{StarCraft\_location = <FilePath>}, where \textit{<FilePath>} is the absolute path to the StarCraft installation folder.
 
 \subsection{Auto Menu}
 \label{auto menu}
@@ -73,7 +84,11 @@ The invulnerable parameter can be used to automatically make your units invulner
 
 \subsection{Map Agent}
 \label{map agent}
-If enabled, the environment will generate an entity of name and type \textit{`mapAgent'}. This entity is not connected to a unit in the game, but will be the only entity to receive all global information (\textit{base/2, chokepoint/6, enemyrace/1, map/2, region/5, attacking/2, constructionSite/3-4, enemy/9, friendly/2, gameframe/1, mineralField/4, nuke/2, resources/4, underConstruction/5, vepseneGeyser/5, winner/1}), and can even take a few actions (\textit{cancel/1, forfeit/0}). Thus, when the map agent is enabled, all other entities will only receive their own local information (\textit{self/2, status/7, order/5, defensiveMatrix/1, queueSize/1, researching/1, unitLoaded/1}), whilst they can of course still take the same actions. The map agent entity can be enabled or disabled with \textit{map\_agent=<Boolean>}.
+If enabled, the environment will generate an entity of name and type \textit{`mapAgent'}. This entity is not connected to a unit in the game, but will be the only entity to receive all global information: \textit{base/2, chokepoint/6, enemyrace/1, map/2, region/5, attacking/2, constructionSite/3-4, enemy/9, friendly/2, gameframe/1, mineralField/4, nuke/2, resources/4, underConstruction/5, vepseneGeyser/5, winner/1}, and can even take a few actions: \textit{cancel/1, debugdraw/1, forfeit/0}. 
+
+Thus, when the map agent is enabled, all other entities will only receive their local information: \textit{self/2, status/7, order/5, defensiveMatrix/1, queueSize/1, researching/1, unitLoaded/1}, whilst they can of course still take the same actions. The map agent entity can be enabled or disabled with \textit{map\_agent=<Boolean>}.
+
+\newpage
 
 \section{Entity Types}
 When defining a launch rule it is important that a correct entity type is used (see \ref{unittype}). This value has to be the same type of the StarCraft unit without spaces and where the first letter is uncapitalised. So when you for example want to connect an agent to a \texttt{Terran SCV}, this can be done by using the entity type \textit{terranSCV}. Note that each unit type starts with the race of the unit, followed by the exact name of the unit type, and please be aware that the environment will wait in the first game frame until \textit{at least four actions} have been requested, e.g., until all initial workers have called \textit{gather/1}. This will allow all initial agents (including the \textit{`mapAgent'}) to fully start-up (and possible execute a few cycles already) before the game starts.
