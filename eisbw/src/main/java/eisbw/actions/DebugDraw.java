@@ -9,6 +9,7 @@ import eisbw.debugger.draw.CustomDrawUnit;
 import eisbw.debugger.draw.IDraw;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
+import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Enable or disable drawing text above a certain unit.
@@ -35,7 +36,7 @@ public class DebugDraw extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
+	public boolean canExecute(UnitType type, Action action) {
 		return true;
 	}
 

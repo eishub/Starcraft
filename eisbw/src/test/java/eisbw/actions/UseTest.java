@@ -85,25 +85,25 @@ public class UseTest {
 		when(this.tech.isTargetsPosition()).thenReturn(false);
 		when(this.tech.isTargetsUnits()).thenReturn(false);
 
-		assertEquals(spyAction.canExecute(this.unit, this.act), true);
+		assertEquals(spyAction.canExecute(this.unitType, this.act), true);
 
 		when(this.tech.isTargetsPosition()).thenReturn(true);
 		when(this.tech.isTargetsUnits()).thenReturn(false);
 
-		assertEquals(spyAction.canExecute(this.unit, this.act), false);
+		assertEquals(spyAction.canExecute(this.unitType, this.act), false);
 
 		when(this.tech.isTargetsPosition()).thenReturn(true);
 		when(this.tech.isTargetsUnits()).thenReturn(true);
 
-		assertEquals(spyAction.canExecute(this.unit, this.act), false);
+		assertEquals(spyAction.canExecute(this.unitType, this.act), false);
 
 		when(this.tech.isTargetsPosition()).thenReturn(false);
 		when(this.tech.isTargetsUnits()).thenReturn(true);
 
-		assertEquals(spyAction.canExecute(this.unit, this.act), false);
+		assertEquals(spyAction.canExecute(this.unitType, this.act), false);
 
 		when(this.unit.isLoaded()).thenReturn(true);
-		assertEquals(spyAction.canExecute(this.unit, this.act), false);
+		assertEquals(spyAction.canExecute(this.unitType, this.act), false);
 	}
 
 	@Test

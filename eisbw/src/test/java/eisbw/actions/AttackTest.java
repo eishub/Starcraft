@@ -61,9 +61,9 @@ public class AttackTest {
 	@Test
 	public void canExecute_test() {
 		when(this.unitType.isAttackCapable()).thenReturn(true);
-		assertTrue(this.action.canExecute(this.unit, this.act));
+		assertTrue(this.action.canExecute(this.unitType, this.act));
 		when(this.unitType.isAttackCapable()).thenReturn(false);
-		assertFalse(this.action.canExecute(this.unit, this.act));
+		assertFalse(this.action.canExecute(this.unitType, this.act));
 	}
 
 	@Test

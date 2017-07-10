@@ -58,13 +58,11 @@ public class LiftTest {
 	public void canExecute_test() {
 		when(this.unitType.isBuilding()).thenReturn(false);
 		when(this.unitType.getRaceID()).thenReturn(2);
-		assertFalse(this.action.canExecute(this.unit, this.act));
+		assertFalse(this.action.canExecute(this.unitType, this.act));
 		when(this.unitType.getRaceID()).thenReturn(1);
-		assertFalse(this.action.canExecute(this.unit, this.act));
-		when(this.unitType.isBuilding()).thenReturn(true);
-		assertTrue(this.action.canExecute(this.unit, this.act));
-		when(this.unitType.getRaceID()).thenReturn(2);
-		assertFalse(this.action.canExecute(this.unit, this.act));
+		assertFalse(this.action.canExecute(this.unitType, this.act));
+		when(this.unitType.isFlyingBuilding()).thenReturn(true);
+		assertTrue(this.action.canExecute(this.unitType, this.act));
 	}
 
 	@Test

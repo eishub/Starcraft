@@ -8,6 +8,8 @@ import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
 import jnibwapi.types.RaceType.RaceTypes;
 import jnibwapi.types.TechType.TechTypes;
+import jnibwapi.types.UnitType;
+import jnibwapi.types.UnitType.UnitTypes;
 import jnibwapi.types.UpgradeType.UpgradeTypes;
 
 /**
@@ -32,8 +34,8 @@ public class Cancel extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		return unit.getType().isBuilding();
+	public boolean canExecute(UnitType type, Action action) {
+		return type.isBuilding() || type.isProduceCapable() || type.getID() == UnitTypes.Terran_Nuclear_Silo.getID();
 	}
 
 	@Override

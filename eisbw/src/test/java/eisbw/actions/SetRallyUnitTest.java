@@ -61,9 +61,9 @@ public class SetRallyUnitTest {
 	@Test
 	public void canExecute_test() {
 		when(this.unitType.isBuilding()).thenReturn(false);
-		assertFalse(this.action.canExecute(this.unit, this.act));
+		assertFalse(this.action.canExecute(this.unitType, this.act));
 		when(this.unitType.isBuilding()).thenReturn(true);
-		assertTrue(this.action.canExecute(this.unit, this.act));
+		assertTrue(this.action.canExecute(this.unitType, this.act));
 	}
 
 	@Test

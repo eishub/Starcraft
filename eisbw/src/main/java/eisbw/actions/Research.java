@@ -8,6 +8,7 @@ import eis.iilang.Parameter;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
 import jnibwapi.types.TechType;
+import jnibwapi.types.UnitType;
 import jnibwapi.types.UpgradeType;
 
 /**
@@ -39,8 +40,8 @@ public class Research extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		return unit.getType().isBuilding();
+	public boolean canExecute(UnitType type, Action action) {
+		return type.isBuilding();
 	}
 
 	@Override

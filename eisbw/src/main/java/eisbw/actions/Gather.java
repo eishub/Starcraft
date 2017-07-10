@@ -7,6 +7,7 @@ import eis.iilang.Numeral;
 import eis.iilang.Parameter;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
+import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Makes the unit gather from a specified resource.
@@ -30,8 +31,8 @@ public class Gather extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		return unit.getType().isWorker();
+	public boolean canExecute(UnitType type, Action action) {
+		return type.isWorker();
 	}
 
 	@Override

@@ -56,10 +56,10 @@ public class StopTest {
 
 	@Test
 	public void canExecute_test() {
-		when(this.unitType.isBuilding()).thenReturn(false);
-		assertTrue(this.action.canExecute(this.unit, this.act));
-		when(this.unitType.isBuilding()).thenReturn(true);
-		assertFalse(this.action.canExecute(this.unit, this.act));
+		when(this.unitType.isCanMove()).thenReturn(false);
+		assertFalse(this.action.canExecute(this.unitType, this.act));
+		when(this.unitType.isCanMove()).thenReturn(true);
+		assertTrue(this.action.canExecute(this.unitType, this.act));
 	}
 
 	@Test

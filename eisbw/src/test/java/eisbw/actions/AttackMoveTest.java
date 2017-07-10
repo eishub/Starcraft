@@ -67,13 +67,13 @@ public class AttackMoveTest {
 	public void canExecute_test() {
 		when(this.unitType.isAttackCapable()).thenReturn(false);
 		when(this.unitType.isCanMove()).thenReturn(false);
-		assertFalse(this.action.canExecute(this.unit, this.act));
+		assertFalse(this.action.canExecute(this.unitType, this.act));
 		when(this.unitType.isCanMove()).thenReturn(true);
-		assertFalse(this.action.canExecute(this.unit, this.act));
+		assertFalse(this.action.canExecute(this.unitType, this.act));
 		when(this.unitType.isAttackCapable()).thenReturn(true);
-		assertTrue(this.action.canExecute(this.unit, this.act));
+		assertTrue(this.action.canExecute(this.unitType, this.act));
 		when(this.unitType.isCanMove()).thenReturn(false);
-		assertFalse(this.action.canExecute(this.unit, this.act));
+		assertFalse(this.action.canExecute(this.unitType, this.act));
 	}
 
 	@Test

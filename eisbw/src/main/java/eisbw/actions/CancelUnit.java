@@ -7,6 +7,7 @@ import eis.iilang.Numeral;
 import eis.iilang.Parameter;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
+import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Cancels the action of a given unit.
@@ -30,7 +31,7 @@ public class CancelUnit extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
+	public boolean canExecute(UnitType type, Action action) {
 		return true;
 	}
 

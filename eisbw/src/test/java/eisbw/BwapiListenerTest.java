@@ -58,6 +58,7 @@ public class BwapiListenerTest {
 		when(this.game.getUnits()).thenReturn(this.units);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unitType.getName()).thenReturn("Terran Siege Tank Tank Mode");
+		when(this.unitType.isCanMove()).thenReturn(true);
 		when(this.units.getUnitName(0)).thenReturn("unit");
 		when(this.units.getUnit("unit")).thenReturn(this.unit);
 		this.list = new LinkedList<>();

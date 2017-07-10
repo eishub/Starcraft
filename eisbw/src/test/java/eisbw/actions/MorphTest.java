@@ -79,9 +79,9 @@ public class MorphTest {
 	@Test
 	public void canExecute_test() {
 		when(this.unitType.getRaceID()).thenReturn(RaceTypes.Terran.getID());
-		assertFalse(this.action.canExecute(this.unit, this.act));
+		assertFalse(this.action.canExecute(this.unitType, this.act));
 		when(this.unitType.getRaceID()).thenReturn(RaceTypes.Zerg.getID());
-		assertTrue(this.action.canExecute(this.unit, this.act));
+		assertTrue(this.action.canExecute(this.unitType, this.act));
 	}
 
 	@Test

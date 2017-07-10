@@ -61,9 +61,9 @@ public class LoadTest {
 	@Test
 	public void canExecute_test() {
 		when(this.unitType.getSpaceProvided()).thenReturn(0);
-		assertFalse(this.action.canExecute(this.unit, this.act));
+		assertFalse(this.action.canExecute(this.unitType, this.act));
 		when(this.unitType.getSpaceProvided()).thenReturn(1);
-		assertTrue(this.action.canExecute(this.unit, this.act));
+		assertTrue(this.action.canExecute(this.unitType, this.act));
 	}
 
 	@Test

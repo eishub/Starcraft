@@ -83,15 +83,10 @@ public class BuildAddonTest {
 
 	@Test
 	public void canExecute_test() {
-		when(this.unitType.isBuilding()).thenReturn(false);
-		when(this.unit.getAddon()).thenReturn(this.unit);
-		assertFalse(this.action.canExecute(this.unit, this.act));
-		when(this.unitType.isBuilding()).thenReturn(true);
-		assertFalse(this.action.canExecute(this.unit, this.act));
-		when(this.unit.getAddon()).thenReturn(null);
-		assertTrue(this.action.canExecute(this.unit, this.act));
-		when(this.unitType.isBuilding()).thenReturn(false);
-		assertFalse(this.action.canExecute(this.unit, this.act));
+		when(this.unitType.isFlyingBuilding()).thenReturn(false);
+		assertFalse(this.action.canExecute(this.unitType, this.act));
+		when(this.unitType.isFlyingBuilding()).thenReturn(true);
+		assertTrue(this.action.canExecute(this.unitType, this.act));
 	}
 
 	@Test
