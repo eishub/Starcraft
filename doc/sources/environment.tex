@@ -1,11 +1,8 @@
 \chapter{Environment}
-This chapter will explain how to set up and start a bot with the StarCraft environment using a multi-agent system in the GOAL language.
-
-\section{Installation}
-For the latest installation instructions, please see: \\ \url{https://github.com/eishub/StarCraft/wiki/Install-Guide}
+This chapter will explain how to set up and start a bot with the StarCraft environment using a multi-agent system in the GOAL language.= For the latest installation instructions, we refer to: \\ \url{https://github.com/eishub/StarCraft/wiki/Install-Guide}
 
 \section{Chaoslauncher}
-In order to make use of all the StarCraft Brood War plugins, you can make use of the Chaoslauncher application. With this application, several plugins can be used like the \textit{BWAPI Injector} which is necessary for using the BWAPI library. It is also recommended to make use of the \textit{APMAlert} plugin, which shows the current actions per minute of all your units together. When the APM of your bot is suddenly very high, your agents might be executing too many actions in a row. It is also recommended to make use of the \textit{W-Mode} plugin. This plugin automatically starts your StarCraft game in windowed mode which is easier for debugging. You can also make use of the \textit{ChaosPlugin} to make use of its autoreplay function which automatically saves a replay at the end of each game. You can play these replays by first turning off the \textit{BWAPI Injector}. You can then start StarCraft (in the launcher) and select \textit{Single Player} with gametype \textit{Expansion}. Press the `Ok' button and then the `Load Replay' button. If you then open the \texttt{Autoreplay} directory in that screen you should be able to see all the replays which are saved by the autoreplay function. \\ Alternatively, use \url{http://www.openbw.com/replay-viewer} to view replays in your browser.
+In order to make use of all the StarCraft Brood War plugins, you can make use of the Chaoslauncher application. With this application, several plugins can be used like the \textit{BWAPI Injector} which is necessary for using the BWAPI library. It is also recommended to make use of the \textit{APMAlert} plugin, which shows the current actions per minute of all your units together. When the APM of your bot is suddenly very high, your agents might be executing too many actions in a row. It is also recommended to make use of the \textit{W-Mode} plugin. This plugin automatically starts your StarCraft game in windowed mode which is easier for debugging. You can also make use of the \textit{ChaosPlugin} to make use of its autoreplay function which automatically saves a replay at the end of each game. You can play these replays by first turning off the \textit{BWAPI Injector}. You can then start StarCraft (in the launcher) and select \textit{Single Player} with gametype \textit{Expansion}. Press the `Ok' button and then the `Load Replay' button. If you then open the \texttt{Autoreplay} directory in that screen you should be able to see all the replays which are saved by the autoreplay function.  Alternatively, view replays in your browser at \url{http://www.openbw.com/replay-viewer}
 
 \section{Init Parameters}
 \label{mas2g}
@@ -76,16 +73,14 @@ The invulnerable parameter can be used to automatically make your units invulner
 
 \subsection{Map Agent}
 \label{map agent}
-If enabled, the environment will generate an entity of name and type \textit{`mapAgent'}. This entity is not connected to a unit in the game, but will be the only entity to receive all global information (\textit{base/2, chokepoint/6, enemyrace/1, map/2, region/5, attacking/2, constructionSite/2-3, enemy/9, friendly/3, gameframe/1, mineralField/4, nuke/2, resources/4, underConstruction/5, vepseneGeyser/5, winner/1}), and can even take a few actions (\textit{cancel/1, forfeit/0}). Thus, when the map agent is enabled, all other entities will only receive their own local information (\textit{self/2, status/7, order/3, defensiveMatrix/1, queueSize/1, researching/1, unitLoaded/1}), whilst they can of course still take the same actions. The map agent entity can be enabled or disabled with \textit{map\_agent=<Boolean>}.
+If enabled, the environment will generate an entity of name and type \textit{`mapAgent'}. This entity is not connected to a unit in the game, but will be the only entity to receive all global information (\textit{base/2, chokepoint/6, enemyrace/1, map/2, region/5, attacking/2, constructionSite/3-4, enemy/9, friendly/2, gameframe/1, mineralField/4, nuke/2, resources/4, underConstruction/5, vepseneGeyser/5, winner/1}), and can even take a few actions (\textit{cancel/1, forfeit/0}). Thus, when the map agent is enabled, all other entities will only receive their own local information (\textit{self/2, status/7, order/5, defensiveMatrix/1, queueSize/1, researching/1, unitLoaded/1}), whilst they can of course still take the same actions. The map agent entity can be enabled or disabled with \textit{map\_agent=<Boolean>}.
 
 \section{Entity Types}
-When defining a launch rule it is important that a correct entity type is used. This value has to be the same type of the StarCraft unit without spaces and where the first letter is uncapitalised. So when you for example want to connect an agent to a \texttt{Terran SCV}, this can be done by using the entity type \textit{terranSCV}. Note that each unit type starts with the race of the unit, followed by the exact name of the unit type. Please note that the environment will wait in the first game frame until \textit{at least four actions} have been requested, e.g., until all initial workers have called \textit{gather/1}. This will allow all initial agents (including the \textit{`mapAgent'}) to fully start-up (and possible execute a few cycles already) before the game starts.
+When defining a launch rule it is important that a correct entity type is used (see \ref{unittype}). This value has to be the same type of the StarCraft unit without spaces and where the first letter is uncapitalised. So when you for example want to connect an agent to a \texttt{Terran SCV}, this can be done by using the entity type \textit{terranSCV}. Note that each unit type starts with the race of the unit, followed by the exact name of the unit type, and please be aware that the environment will wait in the first game frame until \textit{at least four actions} have been requested, e.g., until all initial workers have called \textit{gather/1}. This will allow all initial agents (including the \textit{`mapAgent'}) to fully start-up (and possible execute a few cycles already) before the game starts.
 
 \begin{verbatim}
     define myAgent as agent {
-        use MyAgentInit as init module.
-        use MyAgent as main module.
-        use MyAgentEvent as event module.
+        ...
     }
 
     launchpolicy {
@@ -93,12 +88,12 @@ When defining a launch rule it is important that a correct entity type is used. 
     }
 \end{verbatim}
 
-When using mind control (an advanced Protoss ability), some units from other races can be taken over. These units will also get an entity. An possible way to accomodate such entities is by making sure any other unit type is connected to some generic agent through a wildcard launch rule at the very end of your mas2g: \begin{verbatim}
-    while type=* launch ...
+With mind control (an advanced Protoss ability), units from other races can be taken over. These units will also get an entity. A possible way to accomodate such entities is by making sure any other unit type is connected to a generic agent through a wildcard launch rule at the end of your mas2g: \begin{verbatim}
+    when type=* launch ...
 \end{verbatim}
 
-
 \newpage
+
 \section{The Development Tool}
 \label{development tool}
 The development tool can be automatically launched by using the \textit{debug} init parameter. It provides several actions that are useful for debugging purposes.

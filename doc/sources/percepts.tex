@@ -216,7 +216,7 @@ These percepts represent information that changes during a match, but is still g
 
 \subsection{enemy/9}
 \begin{tabularx}{\textwidth}{lX}
- Description & Information about all visible (living) enemy units. Note that this also includes unfinished units (like buildings under construction) or cloaked units that cannot be attacked until they are detected (see \textit{<Conditions>}). Such `units' can also include spells: \textit{`Spell Dark Swarm', `Spell Distruption Web'}, and \textit{`Spell Scanner Sweep'}. \\
+ Description & Information about all visible (living) enemy units. Note that this also includes unfinished units (like buildings under construction) or cloaked units that cannot be attacked until they are detected (see \textit{<Conditions>}). \\
  Type & Send always \\
  Syntax & \verb|enemy(<Id>,<Type>,<Health>,<Shield>,<Energy>,| \\ & \quad \verb|<Conditions>,<X>,<Y>,<Region>)| \\
  Example & \verb|enemy(12, `Zerg Overlord', 200, 100, 0, [flying], 120, 96, 3)| \\
@@ -351,24 +351,24 @@ These percepts represent information that changes during a match, but is still g
 \begin{tabularx}{\textwidth}{lX}
  Description & The amount of minerals, gas and supply available to the player (i.e. shared by all units). Note that in order to avoid halves, supply is multiplied by 2 throughout this interface, so 10 supply in-game corresponds with 20 supply in this environment. \\
  Type & Send on change \\
- Syntax & \verb|resources(<M>, <G>, <CS>, <TS>)| \\
+ Syntax & \verb|resources(<Minerals>,<Gas>,<UsedSupply>,<TotalSupply>)| \\
  Example & \verb|resources(350, 100, 25, 41)| \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
  \cline{2-3}
- Parameters & \textbf{\verb|<M>|} & The current amount of minerals available. \\
+ Parameters & \textbf{\verb|<Minerals>|} & The current amount of minerals available. \\
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0--$\infty$] \\
             \cline{2-3}
-            & \textbf{\verb|<G>|} & The current amount of gas available. \\
+            & \textbf{\verb|<Gas>|} & The current amount of gas available. \\
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0--$\infty$] \\
             \cline{2-3}
-            & \textbf{\verb|<CS>|} & The amount of supply that is in use. \\
+            & \textbf{\verb|<UsedSupply>|} & The amount of supply that is in use. \\
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0--400] \\
             \cline{2-3}
-            & \textbf{\verb|<TS>|} & The total amount of supply that is available. Note that usually \verb|<TS>| is always greater or equal to \verb|<CS>|, but this can change when supply providing units are killed. \\
+            & \textbf{\verb|<TotalSupply>|} & The total amount of supply that is available. Note that usually \verb|<TS>| is always greater or equal to \verb|<CS>|, but this can change when supply providing units are killed. \\
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0--400] \\
             \cline{2-3}
@@ -462,7 +462,7 @@ These percepts are generated for all individual units in the game (thus excludin
 \begin{tabularx}{\textwidth}{lX}
  Description & Indicates the ID and type of the unit itself. \\
  Type & Send once \\
- Syntax & \verb|self(<ID>, <Type>)| \\
+ Syntax & \verb|self(<Id>,<Type>)| \\
  Example & \verb|self(21, `Terran SCV')|   \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
@@ -480,8 +480,8 @@ These percepts are generated for all individual units in the game (thus excludin
 \begin{tabularx}{\textwidth}{lX}
  Description & The current amount of health, shield and energy of the unit. The \verb|status| percept also shows the conditions of the unit and its current position. \\
  Type & Send on change \\
- Syntax & \verb|status(<Health>, <Shield>, <Energy>, <Conditions>,| \\
- & \quad \verb|<X>, <Y>, <Region>)| \\
+ Syntax & \verb|status(<Health>,<Shield>,<Energy>,<Conditions>,| \\
+ & \quad \verb|<X>,<Y>,<Region>)| \\
  Example & \verb|status(250, 0, 0, [moving, carrying], 24, 36, 1)|   \\
  \end{tabularx}\\
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
@@ -520,7 +520,7 @@ These percepts are generated for all individual units in the game (thus excludin
 \begin{tabularx}{\textwidth}{lX}
  Description & Indicates what the unit is ordered to do. A unit always has an order (e.g. even `Nothing' is an order). \\
  Type & Send on change \\
- Syntax & \verb|order(<Primary>, <TargetUnit>, <TargetX>, <TargetY>, <Secondary>)| \\
+ Syntax & \verb|order(<Primary>,<TargetUnit>,<TargetX>,<TargetY>,<Secondary>)| \\
  Example & \verb|order(`AttackMove', -1, 34, 8, `None')|   \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
@@ -558,12 +558,12 @@ These percepts are generated only for specific units in the game. All of these (
 \begin{tabularx}{\textwidth}{lX}
  Description & Information about how much health the defensive matrix has left on the unit. This only applies to friendly Terran units having received such a matrix from a Science Vessel. \\
  Type & Send always \\
- Syntax & \verb|defensiveMatrix(<health>)| \\
+ Syntax & \verb|defensiveMatrix(<Health>)| \\
  Example & \verb|defensiveMatrix(200)|   \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
  \cline{2-3}
- Parameters & \textbf{\verb|<health>|} & The amount of health left for the defensive matrix.\\
+ Parameters & \textbf{\verb|<Health>|} & The amount of health left for the defensive matrix.\\
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0--250] \\
             \cline{2-3}
@@ -598,6 +598,7 @@ These percepts are generated only for specific units in the game. All of these (
  Parameters & \textbf{\verb|<Type>|} & The technology or upgrade that is being researched. \\
             & \textbf{Type} & \verb|String| \\
             & \textbf{Range} & See Section \ref{techtype} and Section \ref{upgradetype} \\
+ 			& \textbf{Note} & The level of an upgrade type (if applicable) is not included. \\
             \cline{2-3}
 \end{tabularx}
 

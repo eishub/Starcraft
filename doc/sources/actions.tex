@@ -104,7 +104,8 @@ The actions in this section can only be executed by buildings (or by some specia
  Syntax & \verb|research(<Type>)| \\
  Parameters & \verb|<Type>|: The name of the tech or upgrade. See \ref{upgradetype} and \ref{techtype}. \\
  Pre & The unit is capable of researching the given tech or upgrade. \\
- Post & The unit starts researching the given tech or upgrade.
+ Post & The unit starts researching the given tech or upgrade. \\
+ Note & The level of an upgrade type (if applicable) is optional; this stacks automatically.
 \end{tabularx}
 
 \subsection{train/1}
@@ -235,6 +236,8 @@ The action in this section can only be executed by moving units (i.e. non-buildi
  Pre & The unit is performing some kind of action. \\
  Post & The unit stops performing its current action.
 \end{tabularx}
+
+\newpage
 
 %%%----------------------------------------------------------
 \section{Workers}
