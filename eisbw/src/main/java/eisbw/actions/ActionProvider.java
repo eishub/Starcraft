@@ -61,7 +61,7 @@ public class ActionProvider {
 		this.actions.put("morph/1", new Morph(api));
 		this.actions.put("patrol/2", new Patrol(api));
 		this.actions.put("cancel/0", new Cancel(api));
-		this.actions.put("cancel/1", new Cancel(api));
+		this.actions.put("cancel/1", new CancelUnit(api));
 		this.actions.put("repair/1", new Repair(api));
 		this.actions.put("forfeit/0", new Forfeit(api));
 		this.actions.put("debugdraw/1", new DebugDraw(api, game));
