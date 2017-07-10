@@ -1,63 +1,65 @@
 \newpage
 \section{Conditions}
 \label{conditions}
+The conditions a unit can potentially have. The race-specific conditions are either only applicable to or caused by units from that race.
 
-\subsection{Worker Units}
+\subsection{Workers}
 \begin{tabularx}{\textwidth}{lX}
  \verb|carrying| & Indicates when the worker unit is carrying minerals or vespene gas. \\
- \verb|gathering| & Show that the worker unit is busy gathering minerals or vespene gas. \\
  \verb|constructing| & Shows that the worker unit is busy constructing a building. \\
+ \verb|gathering| & Show that the worker unit is busy gathering minerals or vespene gas. \\
  \verb|repairing| & Shows that the (Terran) worker unit is busy repairing a building.
 \end{tabularx}
 
 \subsection{Generic}
 \begin{tabularx}{\textwidth}{lX}
- \verb|idle| & Indicates when the unit is idle (not doing anything).\\
- \verb|beingConstructed| & Indicates when a unit is being constructed (includes morphing). \\
- \verb|cloaked| & Indicates when a unit is cloaked.\\
- \verb|moving| & Shows that a unit is moving.\\
- \verb|following| & Shows that a unit is following an other unit.\\
- \verb|loaded| & Indicates when a unit is loaded.\\
- \verb|flying| & Shows that a unit is flying.\\
- \verb|patrolling| & Shows that a unit is patrolling between 2 positions.\\
- \verb|holding| & Shows that a unit is holding a position.\\
- \verb|underAttack| & Indicates when the unit is under attack.\\
- \verb|attacking| & Indicates when a unit is attacking an other unit (includes medic heal).\\
- \verb|coolingDown| & Indicates when a unit cannot attack due to cooldown.\\
-  \verb|detected| & Indicates when an enemy cloaked/burrowed unit has been detected (and thus can be attacked).
+ \verb|attacking| & Indicates when a unit is attacking an other unit (includes medic heal). \\
+ \verb|beingConstructed| & Indicates that a unit is incomplete (includes morphing). \\
+ \verb|cloaked| & Indicates that a unit is cloaked. \\
+ \verb|coolingDown| & Indicates that a unit cannot attack due to cooldown. \\
+ \verb|detected| & Indicates that an enemy cloaked/burrowed unit has been detected (and thus can be attacked). \\
+ \verb|flying| & Indicates that a unit is flying. \\
+ \verb|following| & Indicates that a unit is following an other unit. \\
+ \verb|holding| & Indicates that a unit is holding a position. \\
+ \verb|idle| & Indicates that the unit is idle (not doing anything). \\
+ \verb|loaded| & Indicates that a unit is loaded (i.e. has one or more units in it). \\
+ \verb|moving| & Indicates that a unit is moving. \\
+ \verb|patrolling| & Indicates that a unit is patrolling between 2 positions. \\
+ \verb|underAttack| & Indicates that a unit is under attack.
 \end{tabularx}
 
 \subsection{Zerg}
 \begin{tabularx}{\textwidth}{lX}
- \verb|burrowed| & Indicates when a Zerg unit is burrowed. \\
- \verb|ensnared| & Shows that the unit is ensnared by a Zerg Queen. \\
- \verb|parasited| & Shows that the unit is parasited by a Zerg Queen. \\
- \verb|plagued| & Indicates that the unit is plagued by a Zerg Defiler. \\
- \verb|darkSwarmed| & Indicates that the unit is under a Dark Swarm from a Zerg Defiler. \\
- \verb|acidSpored | & Indicates when a unit is under Acid Spores from a Zerg Defiler. \\
- \verb|morphing| & Indicates that a Zerg unit is morphing.
+ \verb|acidSpored | & Indicates that a unit is under Acid Spores from a Zerg Defiler. \\
+ \verb|burrowed| & Indicates that a Zerg unit is burrowed. \\
+ \verb|darkSwarmed| & Indicates that a unit is under a Dark Swarm from a Zerg Defiler. \\
+ \verb|ensnared| & Indicates that a unit is ensnared by a Zerg Queen. \\
+ \verb|morphing| & Indicates that a Zerg unit is morphing. \\
+ \verb|parasited| & Indicates that a unit is parasited by a Zerg Queen. \\
+ \verb|plagued| & Indicates that a unit is plagued by a Zerg Defiler.
 \end{tabularx}
 
 \subsection{Terran}
 \begin{tabularx}{\textwidth}{lX}
- \verb|<addonName>| & Indicates when an addon of a Terran building is present, giving the exact addonname.\\
- \verb|stimmed| & Indicates when a Terran Firebat or Marine is stimmed.\\
- \verb|sieged| & Indicates when a Terran Siegetank is in siegemode.\\
- \verb|defenseMatrixed| & Indicates when a Terran unit has a defense matrix on it.\\
- \verb|blinded| & Shows when a unit is blinded by a Terran Medic. \\
- \verb|lockDowned| & Indicates when a unit is under lockdown by Terran Ghost. \\
- \verb|lifted| & Indicates when a Terran building is lifted. \\
- \verb|irradiated| & Shows when a unit is irradiated by a Terran Science Vessel. \\
- \verb|nukeReady| & Indicates when Terran Nuclear Silo is ready to launch a Nuclear Missile. \\
- \verb|beingHealed| & Indicates when a Terran unit is healed by a Medic or repaired by a SCV. \\
- \verb|hasMines| & Indicates whether a Terran Vulture has mines.
+ \verb|<addonName>| & Indicates that an addon of a Terran building is present. \\
+ \verb|beingHealed| & Indicates that a Terran unit is being healed by a Medic or repaired by a SCV. \\
+ \verb|blinded| & Indicates that a unit is blinded by a Terran Medic. \\
+ \verb|defenseMatrixed| & Indicates that a Terran unit has a defensive matrix on it (from a Science Vessel).\\
+ \verb|hasMines| & Indicates that a Terran Vulture has at least one Spider Mine. \\
+ \verb|irradiated| & Indicates that a unit is irradiated by a Terran Science Vessel. \\
+ \verb|lifted| & Indicates that a Terran building is lifted (and thus can move). \\
+ \verb|lockDowned| & Indicates that a unit is under lockdown by Terran Ghost. \\
+ \verb|nukeReady| & Indicates that a Terran Nuclear Silo is ready to launch a Nuclear Missile. \\
+ \verb|sieged| & Indicates that a Terran Siegetank is in siegemode. \\
+ \verb|stimmed| & Indicates that a Terran Firebat or Marine is stimmed.
 \end{tabularx}
 
 \subsection{Protoss}
 \begin{tabularx}{\textwidth}{lX}
- \verb|underStorm| & Shows when a unit is under a storm from a Protoss High Templar. \\
- \verb|stasised| & Indicates when a unit is stuck in stasis from a Protoss Arbiter. \\
- \verb|maelstrommed| & Indicates when a unit is maelstrommed by a Protoss Dark Archon. \\
- \verb|disruptionWebbed| & Shows when a unit is in a disruption web from a Protoss Corsair. \\
- \verb|hasScarabs| & Indicates whether a Protoss Reaver has scarabs.
+ \verb|disruptionWebbed| & Indicates that a unit is in a disruption web from a Protoss Corsair. \\
+ \verb|hasScarabs| & Indicates that a Protoss Reaver has at least one Scarab. \\
+ \verb|maelstrommed| & Indicates that a unit is maelstrommed by a Protoss Dark Archon. \\
+ \verb|stasised| & Indicates that a unit is stuck in stasis from a Protoss Arbiter. \\
+ \verb|underStorm| & Indicates that a unit is under a storm from a Protoss High Templar. \\
+ \verb|unpowered| & Indicates that a Protoss building unit is no longer powered by a pylon (e.g. a Photon Cannon then no longer functions).
 \end{tabularx}
