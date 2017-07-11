@@ -183,13 +183,16 @@ public class KnowledgeExport {
 		}
 		for (int requiredUnit : type.getRequiredUnits().keySet()) {
 			UnitType required = UnitTypes.getUnitType(requiredUnit);
+			if (required.getID() > 202) {
+				continue;
+			}
 			for (int i = 0; i < type.getRequiredUnits().get(requiredUnit); ++i) {
 				if (hadFirst) {
 					requirements += ",";
 				} else {
 					hadFirst = true;
 				}
-				requirements += "'" + required.getName() + "'";
+				requirements += "'" + BwapiUtility.getName(required) + "'";
 			}
 		}
 		requirements += "]";
@@ -243,8 +246,6 @@ public class KnowledgeExport {
 			conditionlist.add("canTrain");
 		}
 		Collections.sort(conditionlist);
-		// TODO: add its abilities as can###
-		// TODO: add canTarget### for its weapon/spells
 		String conditions = "[";
 		boolean hadFirst = false;
 		for (String condition : conditionlist) {
@@ -281,13 +282,14 @@ public class KnowledgeExport {
 
 	private static String getTechType(TechType type) {
 		RaceType race = RaceTypes.getRaceType(type.getRaceID());
-		return String.format("tech('%s',%s).\n", type.getName(), race.getName().toLowerCase());
+		return String.format("research('%s',%s).\n", type.getName(), race.getName().toLowerCase());
 	}
 
 	private static String getTechCosts(TechType type) {
+		String required = (type.getWhatResearches().getID() > 202) ? ""
+				: ("'" + BwapiUtility.getName(type.getWhatResearches()) + "'");
 		return String.format("costs('%s',%d,%d,%d,%d,%s).\n", type.getName(), type.getMineralPrice(),
-				type.getGasPrice(), type.getEnergyUsed(), type.getResearchTime(),
-				"['" + BwapiUtility.getName(type.getWhatResearches()) + "']");
+				type.getGasPrice(), type.getEnergyUsed(), type.getResearchTime(), "[" + required + "]");
 	}
 
 	private static String getTechCombat(TechType type) {
@@ -305,20 +307,29 @@ public class KnowledgeExport {
 
 	private static String getUpgradeType(UpgradeType type) {
 		RaceType race = RaceTypes.getRaceType(type.getRaceID());
-		return String.format("upgrade('%s',%s).\n", type.getName(), race.getName().toLowerCase());
+		if (type.getMaxRepeats() > 1) {
+			String returned = "";
+			for (int i = 1; i <= type.getMaxRepeats(); ++i) {
+				returned += String.format("research('%s',%s).\n", type.getName() + " " + i,
+						race.getName().toLowerCase());
+			}
+			return returned;
+		} else {
+			return String.format("research('%s',%s).\n", type.getName(), race.getName().toLowerCase());
+		}
 	}
 
 	private static String getUpgradeCosts(UpgradeType type) {
 		String name = type.getName().replace("_", " ");
-		UnitType upgrader = UnitTypes.getUnitType(type.getWhatUpgradesTypeID());
+		String required = (type.getWhatUpgradesTypeID() > 202) ? ""
+				: ("'" + BwapiUtility.getName(UnitTypes.getUnitType(type.getWhatUpgradesTypeID())) + "'");
 		String returned = "";
 		for (int i = 1; i <= type.getMaxRepeats(); ++i) {
 			String toAdd = (type.getMaxRepeats() == 1) ? "" : (" " + i);
 			returned += String.format("costs('%s',%d,%d,%d,%d,%s).\n", name + toAdd,
 					type.getMineralPriceBase() + (type.getMineralPriceFactor() * i),
 					type.getGasPriceBase() + (type.getGasPriceFactor() * i), 0,
-					type.getUpgradeTimeBase() + (type.getUpgradeTimeFactor() * i),
-					"['" + BwapiUtility.getName(upgrader) + "']");
+					type.getUpgradeTimeBase() + (type.getUpgradeTimeFactor() * i), "[" + required + "]");
 		}
 		return returned;
 	}
