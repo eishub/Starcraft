@@ -4,7 +4,7 @@
 
 This chapter lists all the actions that are usable in the StarCraft environment, which vary per unit.
 
-%%%----------------------------------------------------------
+%%%-------------------f---------------------------------------
 \section{All Units}
 The following actions can be executed by any unit.
 %%%----------------------------------------------------------
@@ -106,13 +106,13 @@ The actions in this section can only be executed by buildings (or by some specia
 
 \subsection{research/1}
 \begin{tabularx}{\textwidth}{lX}
- Description & Research a tech or upgrade. \\
+ Description & Research an upgrade. \\
  Syntax & \verb|research(<Type>)| \\
  Example & \verb|research(`Cloaking Field')| \\
- Parameters & \verb|<Type>|: The name of the tech or upgrade. See \ref{upgradetype} and \ref{techtype}. \\
- Pre & The unit is capable of researching the given tech or upgrade. \\
- Post & The unit starts researching the given tech or upgrade. \\
- Note & The level of an upgrade type (if applicable) is optional; this stacks automatically.
+ Parameters & \verb|<Type>|: The type of upgrade to research. See \ref{upgradetype}. \\
+ Pre & The unit is capable of researching the given upgrade. \\
+ Post & The unit starts researching the given upgrade. \\
+ Note & The level of an upgrade (if applicable) is optional; this stacks automatically.
 \end{tabularx}
 
 \subsection{train/1}
@@ -150,35 +150,35 @@ The action in this section can only be executed by moving units (i.e. non-buildi
 
 \subsection{ability/1}
 \begin{tabularx}{\textwidth}{lX}
- Description & Use a (researched) ability. \\
+ Description & Use an ability. \\
  Syntax & \verb|ability(<Type>)| \\
  Example & \verb|ability(`Burrowing')| \\
- Parameters & \verb|<Type>|: The type of technology to use. See \ref{techtype}. \\
- Pre & The given TechType is researched and the unit is capable of performing the ability (without a target unit or location). \\
+ Parameters & \verb|<Type>|: The type of ability to use. See \ref{abilities}. \\
+ Pre & The unit is capable of performing the ability (on itself, i.e., without a target unit or location). \\
  Post & The unit performs the ability. \\
  Note & Behaviour that can be toggled on and off (e.g. Burrow/Cloak/Siege) is also executed by using this action (i.e. once for enabling and then again for disabling).
 \end{tabularx}
 
 \subsection{ability/2}
 \begin{tabularx}{\textwidth}{lX}
- Description & Use a (researched) ability on a target unit. \\
+ Description & Use an ability on a target unit. \\
  Syntax & \verb|ability(<Type>,<Target>)| \\
  Example & \verb|ability(`Archon Warp', 3)| \\
- Parameters & \verb|<Type>|: The type of technology to use. See \ref{techtype}. \\
+ Parameters & \verb|<Type>|: The type of ability to use. See \ref{abilities}. \\
             & \verb|<Target>|: The target to use the technology on.\\
- Pre & The given TechType is researched, the unit is capable of performing the ability (with some target unit), and the target unit is visible \\
+ Pre & The unit is capable of performing the ability (with some target unit), and the target unit is visible \\
  Post & The unit performs the ability on the target unit.
 \end{tabularx}
 
 \subsection{ability/3}
 \begin{tabularx}{\textwidth}{lX}
- Description & Use a (researched) ability on a location. \\
+ Description & Use an ability on a location. \\
  Syntax & \verb|ability(<Type>, <X>, <Y>)| \\
  Example & \verb|ability(`Dark Swarm', 11, 8)| \\
- Parameters & \verb|<Type>|: The type of technology to use. See \ref{techtype}. \\
+ Parameters & \verb|<Type>|: The type of ability to use. See \ref{abilities}. \\
             & \verb|<X>|: The x-coordinate of the chosen location. \\
             & \verb|<Y>|: The y-coordinate of the chosen location. \\
- Pre & The chosen TechType is researched, the unit is capable of performing the ability (with some target location), and the location is visible. \\
+ Pre & The unit is capable of performing the ability (with some target location), and the location is visible. \\
  Post & The unit performs the ability on the given location.
 \end{tabularx}
 

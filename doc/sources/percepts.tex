@@ -245,7 +245,7 @@ These percepts represent information that changes during a match, but is still g
             \cline{2-3}
             & \textbf{\verb|<Conditions>|} & A list representing the current conditions of the unit. Each unit can have multiple or no conditions depending on the unit and situation. Note that not all conditions are available for enemies.\\
             & \textbf{Type} & \verb|List of Strings| \\
-            & \textbf{Range} & See Section \ref{conditions} \\
+            & \textbf{Range} & See \ref{conditions} \\
             \cline{2-3}
             & \textbf{\verb|<X>|} & The x-coordinate of the unit.\\
             & \textbf{Type} & \verb|Integer| \\
@@ -283,7 +283,7 @@ These percepts represent information that changes during a match, but is still g
 
 \subsection{gameframe/1}
 \begin{tabularx}{\textwidth}{lX}
- Description & The current game frame, sent per 50 frames (which is also the interval at which construction sites are updated). For more information see Section \ref{game speed}. \\
+ Description & The current game frame, sent per 50 frames (which is also the interval at which construction sites are updated). For more information see \ref{game speed}. \\
  Type & Send on change \\
  Syntax & \verb|gameframe(<Number>)| \\
  Example & \verb|gameframe(150)|   \\
@@ -589,17 +589,17 @@ These percepts are generated only for specific units in the game. All of these (
 
 \subsection{researching/1}
 \begin{tabularx}{\textwidth}{lX}
- Description & Indicates which technology or upgrade is being researched by the unit (i.e. a building). \\
+ Description & Indicates which upgrade is being researched by the unit (i.e. a building). \\
  Type & Send always \\
  Syntax & \verb|researching(<Type>)| \\
  Example & \verb|researching(`Stim Packs')| \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
  \cline{2-3}
- Parameters & \textbf{\verb|<Type>|} & The technology or upgrade that is being researched. \\
+ Parameters & \textbf{\verb|<Type>|} & The upgrade that is being researched. \\
             & \textbf{Type} & \verb|String| \\
-            & \textbf{Range} & See Section \ref{techtype} and Section \ref{upgradetype} \\
- 			& \textbf{Note} & The level of an upgrade type (if applicable) is not included. \\
+            & \textbf{Range} & See \ref{upgradetype} \\
+ 			& \textbf{Note} & The level of the upgrade (if applicable) is not included. \\
             \cline{2-3}
 \end{tabularx}
 

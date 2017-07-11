@@ -1,27 +1,27 @@
 /* 
  - unit(name,race)
 	> all unit types for each race
- - tech(name,race)
-	> all tech types for each race
+	> if there is a matching combat/6 predicate, the unit is attack capable
  - upgrade(name,race)
 	> all upgrade types for each race
+	> if there is a matching combat/6 predicate, the upgrade represents an (offensive) ability
 
- - costs(name,minerals,gas,supplyOrEnergy,buildFrames,requiredUnitsAndOrTechList)
+ - costs(name,minerals,gas,supplyOrEnergy,buildFrames,requiredUnitsAndOrUpgradesList)
+	> minerals and gas are 0 for upgrade types representing (offensive) abilities that do not need to be researched
  	> supply can be negative for e.g. an overlord, pylon or supply depot
-	> energy is only applicable to tech types (i.e. when used as ability)
-	> upgrade types can have multiple levels which are appended to the name in this predicate only
+	> energy is only applicable to upgrade types (i.e. for offensive abilities)
+	> for upgrade types the requiredUnitsAndOrTechList indicates at which building (if any) the research needs to be done
  - stats(name,maxHealth,maxShield,maxEnergy,speed,conditionsList)
 	> only there for unit types; invincible units (such as spells) have a max health and shield of 0
 	> possible conditions are: [addon,building,canBurrow,canDetect,canLift,canMove,canTrain,flies,
 					mechanical,organic,requiresCreep,requiresPsi,robotic,spell]
  - metrics(name,width,height,sightRange,spaceRequired)
 	> only there for unit types; all measures are in (build)tiles
-	> spaceRequired can be negative for e.g. a overlord, shuttle or bunker
+	> spaceRequired can be negative for e.g. an overlord, shuttle or bunker
  - combat(name,groundDamage,airDamage,cooldownFrames,range,splashRadius)
-	> only there for units that can attack or specific tech types (i.e. offensive abilities)
-	> if the ground or air damage is 0, the unit cannot attack ground or air respectively
+	> only there for units that are attack capable or for upgrade types that represent an (offensive) ability
+	> if the ground or air damage is 0, the unit or ability cannot target ground or air respectively
 */
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%% UNIT TYPES %%%%%%%%
@@ -553,186 +553,214 @@ stats('Spell Dark Swarm',0,0,0,0,['spell']).
 metrics('Spell Dark Swarm',5,5,8,0).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%% TECH TYPES %%%%%%%%
+%%%%% RESEARCH TYPES %%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-tech('Stim Packs',terran).
+upgrade('Stim Packs',terran).
 costs('Stim Packs',100,100,0,1200,['Terran Academy']).
 
-tech('Lockdown',terran).
+upgrade('Lockdown',terran).
 costs('Lockdown',200,200,100,1500,['Terran Covert Ops']).
 combat('Lockdown',0,0,1,8,0).
 
-tech('EMP Shockwave',terran).
+upgrade('EMP Shockwave',terran).
 costs('EMP Shockwave',200,200,100,1800,['Terran Science Facility']).
 combat('EMP Shockwave',0,0,1,8,2).
 
-tech('Spider Mines',terran).
+upgrade('Spider Mines',terran).
 costs('Spider Mines',100,100,0,1200,['Terran Machine Shop']).
 combat('Spider Mines',125,0,22,0,2).
 
-tech('Scanner Sweep',terran).
-costs('Scanner Sweep',0,0,50,0,['None']).
+upgrade('Scanner Sweep',terran).
+costs('Scanner Sweep',0,0,50,0,[]).
 
-tech('Tank Siege Mode',terran).
+upgrade('Tank Siege Mode',terran).
 costs('Tank Siege Mode',150,150,0,1200,['Terran Machine Shop']).
 
-tech('Defensive Matrix',terran).
-costs('Defensive Matrix',0,0,100,0,['None']).
+upgrade('Defensive Matrix',terran).
+costs('Defensive Matrix',0,0,100,0,[]).
 
-tech('Irradiate',terran).
+upgrade('Irradiate',terran).
 costs('Irradiate',200,200,75,1200,['Terran Science Facility']).
 combat('Irradiate',250,250,75,9,0).
 
-tech('Yamato Gun',terran).
+upgrade('Yamato Gun',terran).
 costs('Yamato Gun',100,100,150,1800,['Terran Physics Lab']).
 combat('Yamato Gun',260,260,15,10,0).
 
-tech('Cloaking Field',terran).
+upgrade('Cloaking Field',terran).
 costs('Cloaking Field',150,150,25,1500,['Terran Control Tower']).
 
-tech('Personnel Cloaking',terran).
+upgrade('Personnel Cloaking',terran).
 costs('Personnel Cloaking',100,100,25,1200,['Terran Covert Ops']).
 
-tech('Burrowing',zerg).
+upgrade('Burrowing',zerg).
 costs('Burrowing',100,100,0,1200,['Zerg Hatchery']).
 
-tech('Infestation',zerg).
-costs('Infestation',0,0,0,0,['None']).
+upgrade('Infestation',zerg).
+costs('Infestation',0,0,0,0,[]).
 
-tech('Spawn Broodlings',zerg).
+upgrade('Spawn Broodlings',zerg).
 costs('Spawn Broodlings',100,100,150,1200,['Zerg Queens Nest']).
 combat('Spawn Broodlings',0,0,1,9,0).
 
-tech('Dark Swarm',zerg).
-costs('Dark Swarm',0,0,100,0,['None']).
+upgrade('Dark Swarm',zerg).
+costs('Dark Swarm',0,0,100,0,[]).
 combat('Dark Swarm',0,0,1,9,0).
 
-tech('Plague',zerg).
+upgrade('Plague',zerg).
 costs('Plague',200,200,150,1500,['Zerg Defiler Mound']).
 combat('Plague',300,300,1,9,0).
 
-tech('Consume',zerg).
+upgrade('Consume',zerg).
 costs('Consume',100,100,0,1500,['Zerg Defiler Mound']).
 combat('Consume',0,0,1,0,0).
 
-tech('Ensnare',zerg).
+upgrade('Ensnare',zerg).
 costs('Ensnare',100,100,75,1200,['Zerg Queens Nest']).
 combat('Ensnare',0,0,1,9,0).
 
-tech('Parasite',zerg).
-costs('Parasite',0,0,75,0,['None']).
+upgrade('Parasite',zerg).
+costs('Parasite',0,0,75,0,[]).
 combat('Parasite',0,0,1,12,0).
 
-tech('Psionic Storm',protoss).
+upgrade('Psionic Storm',protoss).
 costs('Psionic Storm',200,200,75,1800,['Protoss Templar Archives']).
 combat('Psionic Storm',14,14,45,9,1).
 
-tech('Hallucination',protoss).
+upgrade('Hallucination',protoss).
 costs('Hallucination',150,150,100,1200,['Protoss Templar Archives']).
 
-tech('Recall',protoss).
+upgrade('Recall',protoss).
 costs('Recall',150,150,150,1800,['Protoss Arbiter Tribunal']).
 
-tech('Stasis Field',protoss).
+upgrade('Stasis Field',protoss).
 costs('Stasis Field',150,150,100,1500,['Protoss Arbiter Tribunal']).
 combat('Stasis Field',0,0,1,9,0).
 
-tech('Archon Warp',protoss).
-costs('Archon Warp',0,0,0,0,['None']).
+upgrade('Archon Warp',protoss).
+costs('Archon Warp',0,0,0,0,[]).
 
-tech('Restoration',terran).
+upgrade('Restoration',terran).
 costs('Restoration',100,100,50,1200,['Terran Academy']).
 combat('Restoration',20,20,22,6,0).
 
-tech('Disruption Web',protoss).
+upgrade('Disruption Web',protoss).
 costs('Disruption Web',200,200,125,1200,['Protoss Fleet Beacon']).
 combat('Disruption Web',0,0,22,9,0).
 
-tech('Nuclear Strike',terran).
-costs('Nuclear Strike',0,0,0,0,['None']).
+upgrade('Nuclear Strike',terran).
+costs('Nuclear Strike',0,0,0,0,[]).
 combat('Nuclear Strike',600,600,1,0,6).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%% UPGRADE TYPES %%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-upgrade('Terran Infantry Armor',terran).
+upgrade('Terran Infantry Armor 1',terran).
+upgrade('Terran Infantry Armor 2',terran).
+upgrade('Terran Infantry Armor 3',terran).
 costs('Terran Infantry Armor 1',175,175,0,4480,['Terran Engineering Bay']).
 costs('Terran Infantry Armor 2',250,250,0,4960,['Terran Engineering Bay']).
 costs('Terran Infantry Armor 3',325,325,0,5440,['Terran Engineering Bay']).
 
-upgrade('Terran Vehicle Plating',terran).
+upgrade('Terran Vehicle Plating 1',terran).
+upgrade('Terran Vehicle Plating 2',terran).
+upgrade('Terran Vehicle Plating 3',terran).
 costs('Terran Vehicle Plating 1',175,175,0,4480,['Terran Armory']).
 costs('Terran Vehicle Plating 2',250,250,0,4960,['Terran Armory']).
 costs('Terran Vehicle Plating 3',325,325,0,5440,['Terran Armory']).
 
-upgrade('Terran Ship Plating',terran).
+upgrade('Terran Ship Plating 1',terran).
+upgrade('Terran Ship Plating 2',terran).
+upgrade('Terran Ship Plating 3',terran).
 costs('Terran Ship Plating 1',225,225,0,4480,['Terran Armory']).
 costs('Terran Ship Plating 2',300,300,0,4960,['Terran Armory']).
 costs('Terran Ship Plating 3',375,375,0,5440,['Terran Armory']).
 
-upgrade('Zerg Carapace',zerg).
+upgrade('Zerg Carapace 1',zerg).
+upgrade('Zerg Carapace 2',zerg).
+upgrade('Zerg Carapace 3',zerg).
 costs('Zerg Carapace 1',225,225,0,4480,['Zerg Evolution Chamber']).
 costs('Zerg Carapace 2',300,300,0,4960,['Zerg Evolution Chamber']).
 costs('Zerg Carapace 3',375,375,0,5440,['Zerg Evolution Chamber']).
 
-upgrade('Zerg Flyer Carapace',zerg).
+upgrade('Zerg Flyer Carapace 1',zerg).
+upgrade('Zerg Flyer Carapace 2',zerg).
+upgrade('Zerg Flyer Carapace 3',zerg).
 costs('Zerg Flyer Carapace 1',225,225,0,4480,['Zerg Spire']).
 costs('Zerg Flyer Carapace 2',300,300,0,4960,['Zerg Spire']).
 costs('Zerg Flyer Carapace 3',375,375,0,5440,['Zerg Spire']).
 
-upgrade('Protoss Ground Armor',protoss).
+upgrade('Protoss Ground Armor 1',protoss).
+upgrade('Protoss Ground Armor 2',protoss).
+upgrade('Protoss Ground Armor 3',protoss).
 costs('Protoss Ground Armor 1',175,175,0,4480,['Protoss Forge']).
 costs('Protoss Ground Armor 2',250,250,0,4960,['Protoss Forge']).
 costs('Protoss Ground Armor 3',325,325,0,5440,['Protoss Forge']).
 
-upgrade('Protoss Air Armor',protoss).
+upgrade('Protoss Air Armor 1',protoss).
+upgrade('Protoss Air Armor 2',protoss).
+upgrade('Protoss Air Armor 3',protoss).
 costs('Protoss Air Armor 1',225,225,0,4480,['Protoss Cybernetics Core']).
 costs('Protoss Air Armor 2',300,300,0,4960,['Protoss Cybernetics Core']).
 costs('Protoss Air Armor 3',375,375,0,5440,['Protoss Cybernetics Core']).
 
-upgrade('Terran Infantry Weapons',terran).
+upgrade('Terran Infantry Weapons 1',terran).
+upgrade('Terran Infantry Weapons 2',terran).
+upgrade('Terran Infantry Weapons 3',terran).
 costs('Terran Infantry Weapons 1',175,175,0,4480,['Terran Engineering Bay']).
 costs('Terran Infantry Weapons 2',250,250,0,4960,['Terran Engineering Bay']).
 costs('Terran Infantry Weapons 3',325,325,0,5440,['Terran Engineering Bay']).
 
-upgrade('Terran Vehicle Weapons',terran).
+upgrade('Terran Vehicle Weapons 1',terran).
+upgrade('Terran Vehicle Weapons 2',terran).
+upgrade('Terran Vehicle Weapons 3',terran).
 costs('Terran Vehicle Weapons 1',175,175,0,4480,['Terran Armory']).
 costs('Terran Vehicle Weapons 2',250,250,0,4960,['Terran Armory']).
 costs('Terran Vehicle Weapons 3',325,325,0,5440,['Terran Armory']).
 
-upgrade('Terran Ship Weapons',terran).
+upgrade('Terran Ship Weapons 1',terran).
+upgrade('Terran Ship Weapons 2',terran).
+upgrade('Terran Ship Weapons 3',terran).
 costs('Terran Ship Weapons 1',150,150,0,4480,['Terran Armory']).
 costs('Terran Ship Weapons 2',200,200,0,4960,['Terran Armory']).
 costs('Terran Ship Weapons 3',250,250,0,5440,['Terran Armory']).
 
-upgrade('Zerg Melee Attacks',zerg).
+upgrade('Zerg Melee Attacks 1',zerg).
+upgrade('Zerg Melee Attacks 2',zerg).
+upgrade('Zerg Melee Attacks 3',zerg).
 costs('Zerg Melee Attacks 1',150,150,0,4480,['Zerg Evolution Chamber']).
 costs('Zerg Melee Attacks 2',200,200,0,4960,['Zerg Evolution Chamber']).
 costs('Zerg Melee Attacks 3',250,250,0,5440,['Zerg Evolution Chamber']).
 
-upgrade('Zerg Missile Attacks',zerg).
+upgrade('Zerg Missile Attacks 1',zerg).
+upgrade('Zerg Missile Attacks 2',zerg).
+upgrade('Zerg Missile Attacks 3',zerg).
 costs('Zerg Missile Attacks 1',150,150,0,4480,['Zerg Evolution Chamber']).
 costs('Zerg Missile Attacks 2',200,200,0,4960,['Zerg Evolution Chamber']).
 costs('Zerg Missile Attacks 3',250,250,0,5440,['Zerg Evolution Chamber']).
 
-upgrade('Zerg Flyer Attacks',zerg).
+upgrade('Zerg Flyer Attacks 1',zerg).
+upgrade('Zerg Flyer Attacks 2',zerg).
+upgrade('Zerg Flyer Attacks 3',zerg).
 costs('Zerg Flyer Attacks 1',175,175,0,4480,['Zerg Spire']).
 costs('Zerg Flyer Attacks 2',250,250,0,4960,['Zerg Spire']).
 costs('Zerg Flyer Attacks 3',325,325,0,5440,['Zerg Spire']).
 
-upgrade('Protoss Ground Weapons',protoss).
+upgrade('Protoss Ground Weapons 1',protoss).
+upgrade('Protoss Ground Weapons 2',protoss).
+upgrade('Protoss Ground Weapons 3',protoss).
 costs('Protoss Ground Weapons 1',150,150,0,4480,['Protoss Forge']).
 costs('Protoss Ground Weapons 2',200,200,0,4960,['Protoss Forge']).
 costs('Protoss Ground Weapons 3',250,250,0,5440,['Protoss Forge']).
 
-upgrade('Protoss Air Weapons',protoss).
+upgrade('Protoss Air Weapons 1',protoss).
+upgrade('Protoss Air Weapons 2',protoss).
+upgrade('Protoss Air Weapons 3',protoss).
 costs('Protoss Air Weapons 1',175,175,0,4480,['Protoss Cybernetics Core']).
 costs('Protoss Air Weapons 2',250,250,0,4960,['Protoss Cybernetics Core']).
 costs('Protoss Air Weapons 3',325,325,0,5440,['Protoss Cybernetics Core']).
 
-upgrade('Protoss Plasma Shields',protoss).
+upgrade('Protoss Plasma Shields 1',protoss).
+upgrade('Protoss Plasma Shields 2',protoss).
+upgrade('Protoss Plasma Shields 3',protoss).
 costs('Protoss Plasma Shields 1',300,300,0,4480,['Protoss Forge']).
 costs('Protoss Plasma Shields 2',400,400,0,4960,['Protoss Forge']).
 costs('Protoss Plasma Shields 3',500,500,0,5440,['Protoss Forge']).

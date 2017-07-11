@@ -2,12 +2,12 @@
 \chapter{Knowledge}
 %%%----------------------------------------------------------
 
-This chapter lists the knowledge predicates that are supplied in a Prolog file with all the example agents in the environment installer. These represent static knowledge about StarCraft that does not change in between matches. For easy reference, this section also includes a list of all unit, tech, and upgrade types per race.
+This chapter lists the knowledge predicates that are supplied in a Prolog file with all the example agents in the environment installer. These represent static knowledge about StarCraft that does not change in between matches. For easy reference, this section also includes a list of all unit and upgrade types per race (and where they can be trained/researched). Moreover, the upgrade types that have a corresponding ability are listed at the end (including by which unit they can be used and at what target).
 
 \section{Predicates}
 \subsection{unit/2}
 \begin{tabularx}{\textwidth}{lX}
- Description & Indicates all possible unit types. \\
+ Description & Indicates all possible unit types. If a matching \textit{combat/6} predicate exists, units of this type are attack capable. \\
  Syntax & \verb|unit(<Name>,<Race>)| \\
  Example & \verb|unit(`Protoss Reaver',protoss)| \\
  \end{tabularx}
@@ -23,33 +23,15 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
             \cline{2-3}
 \end{tabularx}
 
-\subsection{tech/2}
-\begin{tabularx}{\textwidth}{lX}
- Description & Indicates all possible tech types. \\
- Syntax & \verb|tech(<Name>,<Race>)| \\
- Example & \verb|tech(`Tank Siege Mode',terran)| \\
- \end{tabularx}
- \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
- \cline{2-3}
- Parameters & \textbf{\verb|<Name>|} & The full name of the tech type (i.e. as used in actions and percepts). \\
-            & \textbf{Type} & \verb|String| \\
-            & \textbf{Range} & See \ref{techtype} \\
-            \cline{2-3}
- 			& \textbf{\verb|<Race>|} & The race the tech type belongs to.\\
-            & \textbf{Type} & \verb|String| \\
-            & \textbf{Range} & [terran,zerg,protoss] \\
-            \cline{2-3}
-\end{tabularx}
-
 \subsection{upgrade/2}
 \begin{tabularx}{\textwidth}{lX}
- Description & Indicates all possible upgrade types. \\
+ Description & Indicates all possible upgrade types. If a matching \textit{combat/6} predicate exists, the upgrade represents an ability. Not all abilities actually need their matching upgrade to be researched at a building first (costs in \textit{costs/6} will be zero for such abilities/upgrades). \\
  Syntax & \verb|upgrade(<Name>,<Race>)| \\
- Example & \verb|upgrade(`Ventral Sacs',zerg)| \\
+ Example & \verb|upgrade(`Tank Siege Mode',terran)| \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
  \cline{2-3}
- Parameters & \textbf{\verb|<Name>|} & The full name of the upgrade type (i.e. as used in actions and percepts). \\
+ Parameters & \textbf{\verb|<Name>|} & The full name of the upgrade type (i.e. as used in the research actions and percepts). \\
             & \textbf{Type} & \verb|String| \\
             & \textbf{Range} & See \ref{upgradetype} \\
             \cline{2-3}
@@ -61,15 +43,15 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
 
 \subsection{costs/6}
 \begin{tabularx}{\textwidth}{lX}
- Description & Information about the costs in resources, time and existing units or technology of a unit, tech, or upgrade type. \\
- Syntax & \verb|costs(<Name>,<Minerals>,<Gas>,<SupplyOrEnergy>,| \\ & \quad \verb|<BuildFrames>,<RequiredUnitsOrTech>)| \\
+ Description & Information about the costs in resources, time and existing units or upgrades of a unit or upgrade type. \\
+ Syntax & \verb|costs(<Name>,<Minerals>,<Gas>,<SupplyOrEnergy>,| \\ & \quad \verb|<BuildFrames>,<RequiredUnitsOrUpgrades>)| \\
  Example & \verb|costs(`Zerg Lurker', 50, 100, 4, 600,| \\ & \quad \verb|[`Lurker Aspect',`Zerg Hydralisk']).| \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
  \cline{2-3}
- Parameters & \textbf{\verb|<Name>|} & The name of the unit, tech, or upgrade type. \\
+ Parameters & \textbf{\verb|<Name>|} & The name of the unit or upgrade type. \\
             & \textbf{Type} & \verb|String| \\
-            & \textbf{Range} & See \ref{unittype}, \ref{techtype}, \ref{upgradetype} \\
+            & \textbf{Range} & See \ref{unittype} and \ref{upgradetype} \\
             \cline{2-3}
             & \textbf{\verb|<Minerals>|} & The required amount of minerals to train/research the type. \\
             & \textbf{Type} & \verb|Integer| \\
@@ -79,7 +61,7 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0--$\infty$] \\
             \cline{2-3}
-            & \textbf{\verb|<SupplyOrEnergy>|} & For units: the required (or supplied, represented with a negative number) amount of supply (x2 compared to what is visible in the game). For tech: the required amount of energy to use (as an ability). For upgrades: always 0. \\
+            & \textbf{\verb|<SupplyOrEnergy>|} & For units: the required (or supplied, represented with a negative number) amount of supply (x2 compared to what is visible in the game). For upgrades (if applicable): the required amount of energy to use (as an ability).\\
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0--$\infty$] \\
             \cline{2-3}
@@ -87,9 +69,9 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0--$\infty$] \\
             \cline{2-3}
-            & \textbf{\verb|<RequiredUnitsOrTech>|} & A (possibly empty) list of unit types and/or tech types that are required to be present when starting to train/research the type. \\
+            & \textbf{\verb|<RequiredUnitsOrUpgrades>|} & A (possibly empty) list of unit and/or upgrade types that are required to be present when starting to train/research the type. For upgrade types this is list is always either empty (for abilities that do not need to be research first) or of size one (indicating at which building type the upgrade needs to be researched). \\
             & \textbf{Type} & \verb|List of Strings| \\
-            & \textbf{Range} & See \ref{unittype} and \ref{techtype} \\
+            & \textbf{Range} & See \ref{unittype} and \ref{upgradetype} \\
             \cline{2-3}
 \end{tabularx}
 
@@ -97,7 +79,7 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
 \begin{tabularx}{\textwidth}{lX}
  Description & Information about the static properties of unit types. \\
  Syntax & \verb|stats(<Name>,<MaxHealth>,<MaxShield>,<MaxEnergy>,| \\ & \quad \verb|<TopSpeed>,<Conditions>)| \\
- Example & \verb|stats(`Protoss High Templar', 40, 40, 200, 32,| \\ & \quad \verb|[canMove,organic,usesEnergy]).| \\
+ Example & \verb|stats(`Protoss High Templar', 40, 40, 200, 32,| \\ & \quad \verb|[canMove,organic]).| \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
  \cline{2-3}
@@ -151,7 +133,7 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0--$\infty$] \\
             \cline{2-3}
-            & \textbf{\verb|<SpaceRequired>|} & The space required to load this unit into a loadable unit if positive; a negative number indicates the space a loadable unit provides for other units (although e.g. Overlords require an upgrade to actually use this space).\\
+            & \textbf{\verb|<SpaceRequired>|} & The space required to load the unit into a loadable unit if positive; a negative number indicates the space a loadable unit provides for other units (although e.g. Overlords require an upgrade to actually use this space).\\
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [-8--8] \\
             \cline{2-3}
@@ -159,15 +141,15 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
 
 \subsection{combat/6}
 \begin{tabularx}{\textwidth}{lX}
- Description & Information about the offensive capabilities of unit types or tech types (i.e abilities used on units or locations). All damages take attack speed into account, but not specific trade-offs (e.g. damage against organic vs. mechanic units). None of the properties take possible upgrades into account. \\
+ Description & Information about the offensive capabilities of unit types or upgrade types (i.e abilities used on units or locations). All damages take attack speed into account, but not specific trade-offs (e.g. damage against organic vs. mechanic units). None of the properties take possible upgrades into account. \\
  Syntax & \verb|combat(<Name>,<GroundDamage>,<AirDamage>,| \\ & \quad \verb|<CooldownFrames>,<Range>,<SplashRadius>)| \\
  Example & \verb|combat(`Psionic Storm', 14, 14, 45, 9, 1).| \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
  \cline{2-3}
- Parameters & \textbf{\verb|<Name>|} & The name of the unit\\
+ Parameters & \textbf{\verb|<Name>|} & The name of the unit or upgrade type (that can be used as an ability)\\
             & \textbf{Name} & \verb|String| \\
-            & \textbf{Range} & See \ref{unittype} \\
+            & \textbf{Range} & See \ref{unittype} and \ref{upgradetype} \\
             \cline{2-3}
             & \textbf{\verb|<GroundDamage>|} & The amount of damage the type does to ground units. 0 means it cannot attack ground. \\
             & \textbf{Type} & \verb|Integer| \\
@@ -185,7 +167,7 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0--$\infty$] \\
             \cline{2-3}
-            & \textbf{\verb|<SplashRadius>|} & The number of build tiles this type's attack can do splash damage (0 means no splash).\\
+            & \textbf{\verb|<SplashRadius>|} & The number of build tiles the type's attack can do splash damage (0 means no splash).\\
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0-$\infty$] \\
             \cline{2-3}
