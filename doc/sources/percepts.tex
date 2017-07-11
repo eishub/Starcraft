@@ -205,11 +205,11 @@ These percepts represent information that changes during a match, but is still g
             \cline{2-3}
             & \textbf{\verb|<InPylonRange>|} & Indicates whether the construction site is in range of a pylon (for Protoss only). \\
             & \textbf{Type} & \verb|Boolean| \\
-            & \textbf{Range} & [True-False] \\
+            & \textbf{Range} & [true,false] \\
             \cline{2-3}
             & \textbf{\verb|<OnCreep>|} & Indicates whether the construction site is on creep (for Zerg only). \\
             & \textbf{Type} & \verb|Boolean| \\
-            & \textbf{Range} & [True-False] \\
+            & \textbf{Range} & [true,false] \\
             \cline{2-3}
 \end{tabularx}
 
@@ -229,7 +229,7 @@ These percepts represent information that changes during a match, but is still g
             \cline{2-3}
             & \textbf{\verb|<Type>|} & The type of the unit. This consists of a string with the race of the unit and the name of the unit parted by a space. \\
             & \textbf{Type} & \verb|String| \\
-            & \textbf{Range} & See Section \ref{unittype} \\
+            & \textbf{Range} & See \ref{unittype} \\
             \cline{2-3}
             & \textbf{\verb|<Health>|} & The current amount of health of the unit.\\
             & \textbf{Type} & \verb|Integer| \\
@@ -277,7 +277,7 @@ These percepts represent information that changes during a match, but is still g
             \cline{2-3}
             & \textbf{\verb|<Type>|} & The type of the unit. This consists of a string with the race of the unit and the name of the unit parted by a space. \\
             & \textbf{Type} & \verb|String| \\
-            & \textbf{Range} & See Section \ref{unittype} \\
+            & \textbf{Range} & See \ref{unittype} \\
             \cline{2-3}
 \end{tabularx}
 
@@ -471,8 +471,9 @@ These percepts are generated for all individual units in the game (thus excludin
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [1--$\infty$] \\
             \cline{2-3}
-            & \textbf{\verb|<Type>|} & The type of the unit. The type of a unit consists of a string with the race of the unit and the name of the unit parted by a space. See Section \ref{unittype} for the list of all the unit types. \\
+            & \textbf{\verb|<Type>|} & The type of the unit. This consists of a string with the race of the unit and the name of the unit parted by a space. \\
             & \textbf{Type} & \verb|String| \\
+            & \textbf{Range} & See \ref{unittype} \\
             \cline{2-3}
 \end{tabularx}
 
@@ -500,7 +501,7 @@ These percepts are generated for all individual units in the game (thus excludin
             \cline{2-3}
             & \textbf{\verb|<Conditions>|} & A list representing the current conditions of the unit. Each unit can have multiple or no conditions depending on the unit and situation.\\
             & \textbf{Type} & \verb|List of Strings| \\
-            & \textbf{Range} & See Section \ref{conditions} \\
+            & \textbf{Range} & See \ref{conditions} \\
             \cline{2-3}
             & \textbf{\verb|<X>|} & The x-coordinate of the unit. \\
             & \textbf{Type} & \verb|Integer| \\

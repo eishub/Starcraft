@@ -153,7 +153,7 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
             \cline{2-3}
             & \textbf{\verb|<SpaceRequired>|} & The space required to load this unit into a loadable unit if positive; a negative number indicates the space a loadable unit provides for other units (although e.g. Overlords require an upgrade to actually use this space).\\
             & \textbf{Type} & \verb|Integer| \\
-            & \textbf{Range} & [$-$8-8] \\
+            & \textbf{Range} & [-8--8] \\
             \cline{2-3}
 \end{tabularx}
 
@@ -161,7 +161,7 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
 \begin{tabularx}{\textwidth}{lX}
  Description & Information about the offensive capabilities of unit types or tech types (i.e abilities used on units or locations). All damages take attack speed into account, but not specific trade-offs (e.g. damage against organic vs. mechanic units). None of the properties take possible upgrades into account. \\
  Syntax & \verb|combat(<Name>,<GroundDamage>,<AirDamage>,| \\ & \quad \verb|<CooldownFrames>,<Range>,<SplashRadius>)| \\
- Example & \verb|combat('Psionic Storm', 14, 14, 45, 9, 1).| \\
+ Example & \verb|combat(`Psionic Storm', 14, 14, 45, 9, 1).| \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
  \cline{2-3}

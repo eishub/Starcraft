@@ -13,6 +13,7 @@ The following actions can be executed by any unit.
 \begin{tabularx}{\textwidth}{lX}
  Description & Cancel the construction or morphing of a unit. \\
  Syntax & \verb|cancel(<TargetId>)| \\
+ Example & \verb|cancel(3)| \\
  Parameters & \verb|<TargetId>|: The ID of the unit of which the construction or morphing should be cancelled. \\
  Pre & The targeted unit is incomplete (not fully constructed or morphed). \\
  Post & The targeted unit's construction or morphing will be cancelled; resources will be refunded (and for Zerg the original unit will be restored). \\
@@ -23,6 +24,7 @@ The following actions can be executed by any unit.
 \begin{tabularx}{\textwidth}{lX}
  Description & Draw text above a unit in the game window. \\
  Syntax & \verb|debugdraw(<Text>)| \\
+ Example & \verb|debugdraw("Power Overwhelming")| \\
  Parameters & \verb|<Text>|: The text(string) that should be drawn. \\
  Pre & - \\
  Post & The given text will be drawn above the unit (i.e., it will stay with the unit) in the game window. If the given text is empty, the drawing will be cancelled. \\
@@ -42,6 +44,7 @@ The following actions can be executed by any unit.
 \begin{tabularx}{\textwidth}{lX}
  Description & Morph a unit into another unit(type). \\
  Syntax & \verb|morph(<Type>)| \\
+ Example & \verb|morph(`Zerg Lurker')| \\
  Parameters & \verb|<Type>|: The type to morph into. See \ref{unittype}. \\
  Pre & The unit is capable of morphing into the given unit type. \\
  Post & The unit's corresponding agent terminates and a new agent is created for the new unit when it is completed (with the same ID).
@@ -58,6 +61,7 @@ The actions in this section can only be executed by buildings (or by some specia
 \begin{tabularx}{\textwidth}{lX}
  Description & Build an addon. \\
  Syntax & \verb|buildAddon(<Name>)| \\
+ Example & \verb|buildAddon(`Terran Comsat Station')| \\
  Parameters & \verb|<Name>|: The name of the addon that is to be constructed. See \ref{unittype}. \\
  Pre & The building is capable of building the addon and does not already have an addon. \\
  Post & The building starts constructing the addon.
@@ -65,7 +69,7 @@ The actions in this section can only be executed by buildings (or by some specia
 
 \subsection{cancel/0}
 \begin{tabularx}{\textwidth}{lX}
- Desription & Cancel the last train or research action. \\
+ Description & Cancel the last train or research action. \\
  Syntax & \verb|cancel| \\
  Pre & The unit is training, researching, or constructing an add-on (Terran-only). \\
  Post & The last train, research, or add-on build is cancelled; the resources are refunded.
@@ -73,8 +77,9 @@ The actions in this section can only be executed by buildings (or by some specia
 
 \subsection{land/2 (Terran only)}
 \begin{tabularx}{\textwidth}{lX}
- Desription & Land a lifted building on a given location. \\
- Syntax & \verb|land(<X>, <Y>)| \\
+ Description & Land a lifted building on a given location. \\
+ Syntax & \verb|land(<X>,<Y>)| \\
+ Example & \verb|land(22, 33)| \\
  Parameters & \verb|<X>|: The x-coordinate of the chosen landing location. \\
             & \verb|<Y>|: The y-coordinate of the chosen landing location. \\
  Pre & The unit is currently lifted and the landing location is visible, not obstructed, and fitting for the building. \\
@@ -93,6 +98,7 @@ The actions in this section can only be executed by buildings (or by some specia
 \begin{tabularx}{\textwidth}{lX}
  Description & Load a given unit into the unit. \\
  Syntax & \verb|load(<Id>)| \\
+ Example & \verb|load(2)| \\
  Parameters & \verb|<Id>|: The ID of the unit to load into this unit. \\
  Pre & The unit is capable of loading the targeted unit and has enough space provided for the targeted unit. \\
  Post & The targeted unit moves towards to the loadable unit and loads into it.
@@ -102,6 +108,7 @@ The actions in this section can only be executed by buildings (or by some specia
 \begin{tabularx}{\textwidth}{lX}
  Description & Research a tech or upgrade. \\
  Syntax & \verb|research(<Type>)| \\
+ Example & \verb|research(`Cloaking Field')| \\
  Parameters & \verb|<Type>|: The name of the tech or upgrade. See \ref{upgradetype} and \ref{techtype}. \\
  Pre & The unit is capable of researching the given tech or upgrade. \\
  Post & The unit starts researching the given tech or upgrade. \\
@@ -112,6 +119,7 @@ The actions in this section can only be executed by buildings (or by some specia
 \begin{tabularx}{\textwidth}{lX}
  Description & Train a unit. \\
  Syntax & \verb|train(<Type>)| \\
+ Example & \verb|train(`Protoss Zealot')| \\
  Parameters & \verb|<Type>|: The type of unit to train. See \ref{unittype}. \\
  Pre & The unit is capable of producing the given unit. \\
  Post & The unit starts producing the given unit.
@@ -121,6 +129,7 @@ The actions in this section can only be executed by buildings (or by some specia
 \begin{tabularx}{\textwidth}{lX}
  Description & Unload a loaded unit from the unit. \\
  Syntax & \verb|unload(<Id>)| \\
+ Example & \verb|unload(3)| \\
  Parameters & \verb|<Id>|: The ID of the unit to unload from this unit.\\
  Pre & The given unit is currently loaded into the unit. \\
  Post & The targeted unit is unloaded from the unit.
@@ -143,6 +152,7 @@ The action in this section can only be executed by moving units (i.e. non-buildi
 \begin{tabularx}{\textwidth}{lX}
  Description & Use a (researched) ability. \\
  Syntax & \verb|ability(<Type>)| \\
+ Example & \verb|ability(`Burrowing')| \\
  Parameters & \verb|<Type>|: The type of technology to use. See \ref{techtype}. \\
  Pre & The given TechType is researched and the unit is capable of performing the ability (without a target unit or location). \\
  Post & The unit performs the ability. \\
@@ -152,7 +162,8 @@ The action in this section can only be executed by moving units (i.e. non-buildi
 \subsection{ability/2}
 \begin{tabularx}{\textwidth}{lX}
  Description & Use a (researched) ability on a target unit. \\
- Syntax & \verb|ability(<Type>, <Target>)| \\
+ Syntax & \verb|ability(<Type>,<Target>)| \\
+ Example & \verb|ability(`Archon Warp', 3)| \\
  Parameters & \verb|<Type>|: The type of technology to use. See \ref{techtype}. \\
             & \verb|<Target>|: The target to use the technology on.\\
  Pre & The given TechType is researched, the unit is capable of performing the ability (with some target unit), and the target unit is visible \\
@@ -163,6 +174,7 @@ The action in this section can only be executed by moving units (i.e. non-buildi
 \begin{tabularx}{\textwidth}{lX}
  Description & Use a (researched) ability on a location. \\
  Syntax & \verb|ability(<Type>, <X>, <Y>)| \\
+ Example & \verb|ability(`Dark Swarm', 11, 8)| \\
  Parameters & \verb|<Type>|: The type of technology to use. See \ref{techtype}. \\
             & \verb|<X>|: The x-coordinate of the chosen location. \\
             & \verb|<Y>|: The y-coordinate of the chosen location. \\
@@ -174,6 +186,7 @@ The action in this section can only be executed by moving units (i.e. non-buildi
 \begin{tabularx}{\textwidth}{lX}
  Description & Attack a given unit. \\
  Syntax & \verb|attack(<TargetId>)| \\
+ Example & \verb|attack(12)| \\
  Parameters & \verb|<TargetId>|: The ID of the unit that should be attacked. \\
  Pre & The unit is attack capable and the targeted unit is visible and reachable. \\
  Post & The targeted unit is being attacked by your unit. The unit will keep moving towards the enemy unit in order to attack it as long as it is visible and alive. \\
@@ -184,6 +197,7 @@ The action in this section can only be executed by moving units (i.e. non-buildi
 \begin{tabularx}{\textwidth}{lX}
  Description & Move to a given location and attack everything on the way. \\
  Syntax & \verb|attack(<X>,<Y>)| \\
+ Example & \verb|attack(9, 21)| \\
  Parameters & \verb|<X>|: The x-coordinate of the chosen location. \\
             & \verb|<Y>|: The y-coordinate of the chosen location. \\
  Pre & The unit is attack capable. \\
@@ -195,6 +209,7 @@ The action in this section can only be executed by moving units (i.e. non-buildi
 \begin{tabularx}{\textwidth}{lX}
  Description & Follow a given unit. \\
  Syntax & \verb|follow(<given>)| \\
+ Example & \verb|follow(5)| \\
  Parameters & \verb|<given>|: The ID of the unit that should be followed. \\
  Pre & The targeted unit is visible. \\
  Post & The unit follows the selected unit; any enemy will be ignored (i.e. the unit will not automatically attack anything).
@@ -212,6 +227,7 @@ The action in this section can only be executed by moving units (i.e. non-buildi
 \begin{tabularx}{\textwidth}{lX}
  Description & Move to a given location. \\
  Syntax & \verb|move(<X>,<Y>)| \\
+ Example & \verb|move(19, 1)| \\
  Parameters & \verb|<X>|: The x-coordinate of the chosen location. \\
             &  \verb|<Y>|: The y-coordinate of the chosen location. \\
  Pre & - \\
@@ -221,7 +237,8 @@ The action in this section can only be executed by moving units (i.e. non-buildi
 \subsection{patrol/2}
 \begin{tabularx}{\textwidth}{lX}
  Description & Patrol between a unit's current position and the given location. \\
- Syntax & \verb|patrol(<X>, <Y>)| \\
+ Syntax & \verb|patrol(<X>,<Y>)| \\
+ Example & \verb|patrol(7,8)| \\
  Parameters & \verb|<X>|: The x-coordinate of the chosen location. \\
             &  \verb|<Y>|: The y-coordinate of the chosen location. \\
  Pre & - \\
@@ -248,6 +265,7 @@ The actions in this section can only be executed by worker units.
 \begin{tabularx}{\textwidth}{lX}
  Description & Build a building on the given location. \\
  Syntax & \verb|build(<Type>,<X>,<Y>)| \\
+ Example & \verb|build(`Terran Supply Depot', 24, 6)| \\
  Parameters & \verb|<Type>|: The type of building that should be built. See \ref{unittype}. \\
             & \verb|<X>|: The x-coordinate of the build location \\
             & \verb|<Y>|: The y-coordinate of the build location \\
@@ -259,6 +277,7 @@ The actions in this section can only be executed by worker units.
 \begin{tabularx}{\textwidth}{lX}
  Description & Gather a specific resource (minerals or vespene gas building). \\
  Syntax & \verb|gather(<Id>)| \\
+ Example & \verb|gather(32)| \\
  Parameters & \verb|<Id>|: The ID of the chosen resource. \\
  Pre & The given resource is visible and reachable. \\
  Post & The unit starts gathering the chosen resource. It automatically moves back and forth between the resource and the closest resource center.
@@ -268,6 +287,7 @@ The actions in this section can only be executed by worker units.
 \begin{tabularx}{\textwidth}{lX}
  Description & Repair a unit or complete an unfinished building. \\
  Syntax & \verb|repair(<Id>)| \\
+ Example & \verb|repair(17)| \\
  Parameters & \verb|<Id>|: The ID of the unit to repair or of the building to complete construction of. \\
  Pre & The unit is a Terran SCV, has the resources to repair, and the target unit is visible (and reachable) \\
  Post & The SCV moves towards the selected unit (if needed) and repairs it or resumes its construction.
