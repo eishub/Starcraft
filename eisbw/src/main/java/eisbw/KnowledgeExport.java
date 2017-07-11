@@ -282,7 +282,7 @@ public class KnowledgeExport {
 
 	private static String getTechType(TechType type) {
 		RaceType race = RaceTypes.getRaceType(type.getRaceID());
-		return String.format("research('%s',%s).\n", type.getName(), race.getName().toLowerCase());
+		return String.format("upgrade('%s',%s).\n", type.getName(), race.getName().toLowerCase());
 	}
 
 	private static String getTechCosts(TechType type) {
@@ -310,12 +310,12 @@ public class KnowledgeExport {
 		if (type.getMaxRepeats() > 1) {
 			String returned = "";
 			for (int i = 1; i <= type.getMaxRepeats(); ++i) {
-				returned += String.format("research('%s',%s).\n", type.getName() + " " + i,
+				returned += String.format("upgrade('%s',%s).\n", type.getName() + " " + i,
 						race.getName().toLowerCase());
 			}
 			return returned;
 		} else {
-			return String.format("research('%s',%s).\n", type.getName(), race.getName().toLowerCase());
+			return String.format("upgrade('%s',%s).\n", type.getName(), race.getName().toLowerCase());
 		}
 	}
 
