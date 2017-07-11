@@ -7,13 +7,12 @@ import eis.iilang.Numeral;
 import eis.iilang.Parameter;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Makes the unit follow an other specified unit.
  *
  */
-public class Follow extends StarcraftAction {
+public class Follow extends StarcraftMovableAction {
 	/**
 	 * The Follow constructor.
 	 *
@@ -31,12 +30,6 @@ public class Follow extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		UnitType unitType = unit.getType();
-		return unitType.isCanMove();
-	}
-
-	@Override
 	public void execute(Unit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		int targetId = ((Numeral) parameters.get(0)).getValue().intValue();
@@ -47,6 +40,6 @@ public class Follow extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "follow(targetID)";
+		return "follow(TargetID)";
 	}
 }

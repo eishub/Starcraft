@@ -8,6 +8,7 @@ import eis.iilang.Parameter;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
 import jnibwapi.types.UnitType;
+import jnibwapi.types.UnitType.UnitTypes;
 
 /**
  * @author Danny & Harm - Trains a specified unit from a production facility.
@@ -16,7 +17,7 @@ import jnibwapi.types.UnitType;
 public class Train extends StarcraftAction {
 	/**
 	 * The Train constructor.
-	 * 
+	 *
 	 * @param api
 	 *            The BWAPI
 	 */
@@ -32,8 +33,8 @@ public class Train extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-	      return !unit.isBeingConstructed();
+	public boolean canExecute(UnitType type, Action action) {
+		return type.isProduceCapable() || type.getID() == UnitTypes.Terran_Nuclear_Silo.getID();
 	}
 
 	@Override

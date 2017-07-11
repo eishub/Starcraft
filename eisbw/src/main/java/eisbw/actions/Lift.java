@@ -6,7 +6,7 @@ import eis.iilang.Action;
 import eis.iilang.Parameter;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
-import jnibwapi.types.RaceType.RaceTypes;
+import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Lifts up the unit, making it a flying unit until it
@@ -31,8 +31,8 @@ public class Lift extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		return unit.getType().isBuilding() && unit.getType().getRaceID() == RaceTypes.Terran.getID();
+	public boolean canExecute(UnitType type, Action action) {
+		return type.isFlyingBuilding();
 	}
 
 	@Override
@@ -42,6 +42,6 @@ public class Lift extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "lift()";
+		return "lift";
 	}
 }

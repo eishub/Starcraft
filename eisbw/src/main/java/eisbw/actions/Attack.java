@@ -31,9 +31,8 @@ public class Attack extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		UnitType unitType = unit.getType();
-		return unitType.isAttackCapable();
+	public boolean canExecute(UnitType type, Action action) {
+		return type.isAttackCapable();
 	}
 
 	@Override
@@ -47,6 +46,6 @@ public class Attack extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "attack(targetId)";
+		return "attack(TargetId)";
 	}
 }

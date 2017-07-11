@@ -9,6 +9,7 @@ import eis.iilang.Parameter;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
 import jnibwapi.types.TechType;
+import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Ability which can be used on a specified unit.
@@ -34,10 +35,10 @@ public class UseOnTarget extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
+	public boolean canExecute(UnitType type, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
-		return techType.isTargetsUnits(); // check if unit has Tech?
+		return techType.isTargetsUnits();
 	}
 
 	@Override
@@ -51,6 +52,6 @@ public class UseOnTarget extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "abilityOnTarget(TechType, TargetId)";
+		return "ability(Type,TargetId)";
 	}
 }

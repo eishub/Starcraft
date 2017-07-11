@@ -3,6 +3,8 @@ package eisbw.actions;
 import java.util.HashMap;
 import java.util.Map;
 
+import eis.iilang.Action;
+import eisbw.Game;
 import jnibwapi.JNIBWAPI;
 
 /**
@@ -20,12 +22,12 @@ public class ActionProvider {
 	}
 
 	/**
-	 * @param actionName
-	 *            The name of the action.
-	 * @return The action object with the specified action name.
+	 * @param action
+	 *            An EIS action.
+	 * @return The StarcraftAction for the given EIS action
 	 */
-	public StarcraftAction getAction(String actionName) {
-		return this.actions.get(actionName);
+	public StarcraftAction getAction(Action action) {
+		return this.actions.get(action.getName() + "/" + action.getParameters().size());
 	}
 
 	/**
@@ -34,10 +36,9 @@ public class ActionProvider {
 	 * @param api
 	 *            the API to pass into the actions.
 	 */
-	public void loadActions(JNIBWAPI api) {
+	public void loadActions(JNIBWAPI api, Game game) {
 		this.actions.put("attack/1", new Attack(api));
 		this.actions.put("attack/2", new AttackMove(api));
-		this.actions.put("upgrade/1", new Upgrade(api));
 		this.actions.put("build/3", new Build(api));
 		this.actions.put("gather/1", new Gather(api));
 		this.actions.put("move/2", new Move(api));
@@ -47,20 +48,20 @@ public class ActionProvider {
 		this.actions.put("ability/2", new UseOnTarget(api));
 		this.actions.put("ability/3", new UseOnPosition(api));
 		this.actions.put("research/1", new Research(api));
-		this.actions.put("setRallyPoint/2", new SetRallyPoint(api));
-		this.actions.put("setRallyPoint/1", new SetRallyUnit(api));
 		this.actions.put("lift/0", new Lift(api));
 		this.actions.put("land/2", new Land(api));
 		this.actions.put("buildAddon/1", new BuildAddon(api));
 		this.actions.put("follow/1", new Follow(api));
+		this.actions.put("hold/0/1", new Hold(api));
 		this.actions.put("load/1", new Load(api));
 		this.actions.put("unload/1", new UnloadUnit(api));
 		this.actions.put("unloadAll/0", new UnloadAll(api));
 		this.actions.put("morph/1", new Morph(api));
 		this.actions.put("patrol/2", new Patrol(api));
 		this.actions.put("cancel/0", new Cancel(api));
-		this.actions.put("cancel/1", new Cancel(api));
+		this.actions.put("cancel/1", new CancelUnit(api));
 		this.actions.put("repair/1", new Repair(api));
 		this.actions.put("forfeit/0", new Forfeit(api));
+		this.actions.put("debugdraw/1", new DebugDraw(api, game));
 	}
 }

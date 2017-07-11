@@ -35,8 +35,8 @@ public class BuildAddon extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		return unit.getType().isBuilding() && unit.getAddon() == null;
+	public boolean canExecute(UnitType type, Action action) {
+		return type.isFlyingBuilding();
 	}
 
 	@Override

@@ -6,13 +6,12 @@ import eis.iilang.Action;
 import eis.iilang.Parameter;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Stops a unit from what it was doing.
  *
  */
-public class Stop extends StarcraftAction {
+public class Stop extends StarcraftMovableAction {
 	/**
 	 * The Stop constructor.
 	 *
@@ -27,12 +26,6 @@ public class Stop extends StarcraftAction {
 	public boolean isValid(Action action) {
 		List<Parameter> parameters = action.getParameters();
 		return parameters.isEmpty();
-	}
-
-	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		UnitType unitType = unit.getType();
-		return !unitType.isBuilding();
 	}
 
 	@Override

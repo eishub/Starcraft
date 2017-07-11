@@ -8,12 +8,14 @@ import eis.iilang.Parameter;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
 import jnibwapi.types.TechType;
+import jnibwapi.types.UnitType;
+import jnibwapi.types.UpgradeType;
 
 /**
  * @author Danny & Harm - Researches a specified Tech Type.
  *
  */
-public class Research extends StarcraftTechAction {
+public class Research extends StarcraftAction {
 	/**
 	 * The Research constructor.
 	 *
@@ -25,18 +27,35 @@ public class Research extends StarcraftTechAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
+	public boolean isValid(Action action) {
 		List<Parameter> parameters = action.getParameters();
-		TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
-		return techType != null;
+		boolean valid = parameters.size() == 1 && parameters.get(0) instanceof Identifier;
+		if (valid) {
+			TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
+			UpgradeType upgradeType = getUpgradeType(((Identifier) parameters.get(0)).getValue());
+			return techType != null || upgradeType != null;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean canExecute(UnitType type, Action action) {
+		return type.isBuilding();
 	}
 
 	@Override
 	public void execute(Unit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
+		UpgradeType upgradeType = getUpgradeType(((Identifier) parameters.get(0)).getValue());
 
-		unit.research(techType);
+		if (techType == null) {
+			unit.upgrade(upgradeType);
+		} else {
+			unit.research(techType);
+		}
+
 	}
 
 	@Override

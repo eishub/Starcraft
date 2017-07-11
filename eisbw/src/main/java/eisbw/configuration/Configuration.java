@@ -16,14 +16,15 @@ public class Configuration {
 	protected RaceString ownRace = null;
 	protected RaceString enemyRace = new RaceString("random");
 	protected String map = null;
-	protected String scDir = null;
-	protected String autoMenu = "OFF";
+	protected String scDir = "C:\\Starcraft";
+	protected String autoMenu = "SINGLE_PLAYER";
+	protected String gameType = "MELEE";
+	protected int speed = 50;
 	protected BooleanString debug = new BooleanString("false");
 	protected BooleanString drawMapInfo = new BooleanString("false");
 	protected BooleanString drawUnitInfo = new BooleanString("false");
-	protected int speed = 20;
 	protected BooleanString invulnerable = new BooleanString("false");
-	protected BooleanString mapAgent = new BooleanString("false");
+	protected BooleanString mapAgent = new BooleanString("true");
 
 	/**
 	 * The Configuration constructor.
@@ -42,38 +43,41 @@ public class Configuration {
 		for (Entry<String, Parameter> entry : parameters.entrySet()) {
 			ParamEnum param = translator.translate2Java(new Identifier(entry.getKey()), ParamEnum.class);
 			switch (param) {
-			case DEBUG:
-				setDebug(translator.translate2Java(entry.getValue(), BooleanString.class));
-				break;
-			case DRAWMAPINFO:
-				setDrawMapInfo(translator.translate2Java(entry.getValue(), BooleanString.class));
-				break;
-			case DRAWUNITINFO:
-				setDrawUnitInfo(translator.translate2Java(entry.getValue(), BooleanString.class));
-				break;
-			case MAP:
-				setMap(translator.translate2Java(entry.getValue(), String.class));
-				break;
 			case OWN_RACE:
-				setOwnRace(translator.translate2Java(entry.getValue(), RaceString.class));
+				this.ownRace = translator.translate2Java(entry.getValue(), RaceString.class);
 				break;
 			case ENEMY_RACE:
-				setEnemyRace(translator.translate2Java(entry.getValue(), RaceString.class));
+				this.enemyRace = translator.translate2Java(entry.getValue(), RaceString.class);
+				break;
+			case MAP:
+				this.map = translator.translate2Java(entry.getValue(), String.class);
 				break;
 			case SC_DIR:
-				setScDir(translator.translate2Java(entry.getValue(), String.class));
+				this.scDir = translator.translate2Java(entry.getValue(), String.class);
 				break;
 			case AUTO_MENU:
-				setAutoMenu(translator.translate2Java(entry.getValue(), String.class));
+				this.autoMenu = translator.translate2Java(entry.getValue(), String.class);
+				break;
+			case GAME_TYPE:
+				this.gameType = translator.translate2Java(entry.getValue(), String.class);
 				break;
 			case SPEED:
-				setSpeed(translator.translate2Java(entry.getValue(), int.class));
+				this.speed = translator.translate2Java(entry.getValue(), int.class);
+				break;
+			case DEBUG:
+				this.debug = translator.translate2Java(entry.getValue(), BooleanString.class);
+				break;
+			case DRAWMAPINFO:
+				this.drawMapInfo = translator.translate2Java(entry.getValue(), BooleanString.class);
+				break;
+			case DRAWUNITINFO:
+				this.drawUnitInfo = translator.translate2Java(entry.getValue(), BooleanString.class);
 				break;
 			case INVULNERABLE:
-				setInvulnerable(translator.translate2Java(entry.getValue(), BooleanString.class));
+				this.invulnerable = translator.translate2Java(entry.getValue(), BooleanString.class);
 				break;
 			case MAPAGENT:
-				setMapAgent(translator.translate2Java(entry.getValue(), BooleanString.class));
+				this.mapAgent = translator.translate2Java(entry.getValue(), BooleanString.class);
 				break;
 			default:
 				// Unreachable clause.
@@ -82,56 +86,28 @@ public class Configuration {
 		}
 	}
 
-	private void setEnemyRace(RaceString race) {
-		this.enemyRace = race;
+	public String getOwnRace() {
+		return this.ownRace.getData();
 	}
 
-	private void setInvulnerable(BooleanString inv) {
-		this.invulnerable = inv;
+	public String getEnemyRace() {
+		return this.enemyRace.getData();
 	}
 
-	private void setMapAgent(BooleanString mapagent) {
-		this.mapAgent = mapagent;
+	public String getMap() {
+		return this.map;
 	}
 
-	private void setSpeed(int speed) {
-		this.speed = speed;
+	public String getScDir() {
+		return this.scDir;
 	}
 
-	private void setScDir(String dir) {
-		this.scDir = dir;
+	public String getAutoMenu() {
+		return this.autoMenu.toUpperCase();
 	}
 
-	private void setDebug(BooleanString debug) {
-		this.debug = debug;
-	}
-
-	private void setDrawMapInfo(BooleanString draw) {
-		this.drawMapInfo = draw;
-	}
-
-	private void setDrawUnitInfo(BooleanString draw) {
-		this.drawUnitInfo = draw;
-	}
-
-	private void setMap(String map) {
-		this.map = map;
-	}
-
-	private void setAutoMenu(String autoMenu) {
-		this.autoMenu = autoMenu;
-	}
-
-	private void setOwnRace(RaceString race) {
-		this.ownRace = race;
-	}
-
-	public boolean getInvulnerable() {
-		return this.invulnerable.getValue();
-	}
-
-	public boolean getMapAgent() {
-		return this.mapAgent.getValue();
+	public String getGameType() {
+		return this.gameType.toUpperCase();
 	}
 
 	public int getSpeed() {
@@ -150,23 +126,11 @@ public class Configuration {
 		return this.drawUnitInfo.getValue();
 	}
 
-	public String getMap() {
-		return this.map;
+	public boolean getInvulnerable() {
+		return this.invulnerable.getValue();
 	}
 
-	public String getOwnRace() {
-		return this.ownRace.getData();
-	}
-
-	public String getEnemyRace() {
-		return this.enemyRace.getData();
-	}
-
-	public String getScDir() {
-		return this.scDir;
-	}
-
-	public String getAutoMenu() {
-		return this.autoMenu;
+	public boolean getMapAgent() {
+		return this.mapAgent.getValue();
 	}
 }

@@ -1,0 +1,192 @@
+%%%----------------------------------------------------------
+\chapter{Knowledge}
+%%%----------------------------------------------------------
+
+This chapter lists the knowledge predicates that are supplied in a Prolog file with all the example agents in the environment installer. These represent static knowledge about StarCraft that does not change in between matches. For easy reference, this section also includes a list of all unit, tech, and upgrade types per race.
+
+\section{Predicates}
+\subsection{unit/2}
+\begin{tabularx}{\textwidth}{lX}
+ Description & Indicates all possible unit types. \\
+ Syntax & \verb|unit(<Name>,<Race>)| \\
+ Example & \verb|unit(`Protoss Reaver',protoss)| \\
+ \end{tabularx}
+ \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
+ \cline{2-3}
+ Parameters & \textbf{\verb|<Name>|} & The full name of the unit type (i.e. as used in actions and percepts). \\
+            & \textbf{Type} & \verb|String| \\
+            & \textbf{Range} & See \ref{unittype} \\
+            \cline{2-3}
+ 			& \textbf{\verb|<Race>|} & The race the unit type belongs to.\\
+            & \textbf{Type} & \verb|String| \\
+            & \textbf{Range} & [terran,zerg,protoss] \\
+            \cline{2-3}
+\end{tabularx}
+
+\subsection{tech/2}
+\begin{tabularx}{\textwidth}{lX}
+ Description & Indicates all possible tech types. \\
+ Syntax & \verb|tech(<Name>,<Race>)| \\
+ Example & \verb|tech(`Tank Siege Mode',terran)| \\
+ \end{tabularx}
+ \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
+ \cline{2-3}
+ Parameters & \textbf{\verb|<Name>|} & The full name of the tech type (i.e. as used in actions and percepts). \\
+            & \textbf{Type} & \verb|String| \\
+            & \textbf{Range} & See \ref{techtype} \\
+            \cline{2-3}
+ 			& \textbf{\verb|<Race>|} & The race the tech type belongs to.\\
+            & \textbf{Type} & \verb|String| \\
+            & \textbf{Range} & [terran,zerg,protoss] \\
+            \cline{2-3}
+\end{tabularx}
+
+\subsection{upgrade/2}
+\begin{tabularx}{\textwidth}{lX}
+ Description & Indicates all possible upgrade types. \\
+ Syntax & \verb|upgrade(<Name>,<Race>)| \\
+ Example & \verb|upgrade(`Ventral Sacs',zerg)| \\
+ \end{tabularx}
+ \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
+ \cline{2-3}
+ Parameters & \textbf{\verb|<Name>|} & The full name of the upgrade type (i.e. as used in actions and percepts). \\
+            & \textbf{Type} & \verb|String| \\
+            & \textbf{Range} & See \ref{upgradetype} \\
+            \cline{2-3}
+ 			& \textbf{\verb|<Race>|} & The race the upgrade type belongs to.\\
+            & \textbf{Type} & \verb|String| \\
+            & \textbf{Range} & [terran,zerg,protoss] \\
+            \cline{2-3}
+\end{tabularx}
+
+\subsection{costs/6}
+\begin{tabularx}{\textwidth}{lX}
+ Description & Information about the costs in resources, time and existing units or technology of a unit, tech, or upgrade type. \\
+ Syntax & \verb|costs(<Name>,<Minerals>,<Gas>,<SupplyOrEnergy>,| \\ & \quad \verb|<BuildFrames>,<RequiredUnitsOrTech>)| \\
+ Example & \verb|costs(`Zerg Lurker', 50, 100, 4, 600,| \\ & \quad \verb|[`Lurker Aspect',`Zerg Hydralisk']).| \\
+ \end{tabularx}
+ \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
+ \cline{2-3}
+ Parameters & \textbf{\verb|<Name>|} & The name of the unit, tech, or upgrade type. \\
+            & \textbf{Type} & \verb|String| \\
+            & \textbf{Range} & See \ref{unittype}, \ref{techtype}, \ref{upgradetype} \\
+            \cline{2-3}
+            & \textbf{\verb|<Minerals>|} & The required amount of minerals to train/research the type. \\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<Gas>|} & The required amount of gas to train/research the type. \\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<SupplyOrEnergy>|} & For units: the required (or supplied, represented with a negative number) amount of supply (x2 compared to what is visible in the game). For tech: the required amount of energy to use (as an ability). For upgrades: always 0. \\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<BuildFrames>|} & The number of game frames that are required to complete training/researching the type.\\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<RequiredUnitsOrTech>|} & A (possibly empty) list of unit types and/or tech types that are required to be present when starting to train/research the type. \\
+            & \textbf{Type} & \verb|List of Strings| \\
+            & \textbf{Range} & See \ref{unittype} and \ref{techtype} \\
+            \cline{2-3}
+\end{tabularx}
+
+\subsection{stats/6}
+\begin{tabularx}{\textwidth}{lX}
+ Description & Information about the static properties of unit types. \\
+ Syntax & \verb|stats(<Name>,<MaxHealth>,<MaxShield>,<MaxEnergy>,| \\ & \quad \verb|<TopSpeed>,<Conditions>)| \\
+ Example & \verb|stats(`Protoss High Templar', 40, 40, 200, 32,| \\ & \quad \verb|[canMove,organic,usesEnergy]).| \\
+ \end{tabularx}
+ \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
+ \cline{2-3}
+ Parameters & \textbf{\verb|<Name>|} & The name of the unit. \\
+            & \textbf{Name} & \verb|String| \\
+            & \textbf{Range} & See \ref{unittype} \\
+            \cline{2-3}
+            & \textbf{\verb|<MaxHealth>|} & The maximum amount of health for units of the type. Invincible units (like spells) have 0 here. \\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<MaxShield>|} & The maximum amount of shield for units of the type. \\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<MaxEnergy>|} & The maximum amount of energy for units of the type. 0 for units that do not use energy at all. \\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<TopSpeed>|} & The top movement speed for units of the type (without upgrades).\\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<Conditions>|} & A (possibly empty) list static conditions for units of the type. \\
+            & \textbf{Type} & \verb|List of Strings| \\
+            & \textbf{Range} & [addon, building, canBurrow, canDetect, canLift, canMove, canTrain, flies, mechanical, organic, requiresCreep, requiresPsi, robotic, spell] \\
+            \cline{2-3}
+\end{tabularx}
+
+\subsection{metrics/5}
+\begin{tabularx}{\textwidth}{lX}
+ Description & Information about the metrics (i.e. on the map) of unit types. \\
+ Syntax & \verb|metrics(<Name>,<Width>,<Height>,<SightRange>,<SpaceRequired>)| \\
+ Example & \verb|metrics(`Terran Bunker', 3, 2, 10, -4).| \\
+ \end{tabularx}
+ \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
+ \cline{2-3}
+ Parameters & \textbf{\verb|<Name>|} & The name of the unit.\\
+            & \textbf{Name} & \verb|String| \\
+            & \textbf{Range} & See \ref{unittype} \\
+            \cline{2-3}
+            & \textbf{\verb|<Width>|} & The number of build tiles the unit is wide.\\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<Height>|} & The number of build tile the unit is high.\\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<SightRange>|} & The number of build tiles the unit's visibility reaches (without upgrades). \\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<SpaceRequired>|} & The space required to load this unit into a loadable unit if positive; a negative number indicates the space a loadable unit provides for other units (although e.g. Overlords require an upgrade to actually use this space).\\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [-8--8] \\
+            \cline{2-3}
+\end{tabularx}
+
+\subsection{combat/6}
+\begin{tabularx}{\textwidth}{lX}
+ Description & Information about the offensive capabilities of unit types or tech types (i.e abilities used on units or locations). All damages take attack speed into account, but not specific trade-offs (e.g. damage against organic vs. mechanic units). None of the properties take possible upgrades into account. \\
+ Syntax & \verb|combat(<Name>,<GroundDamage>,<AirDamage>,| \\ & \quad \verb|<CooldownFrames>,<Range>,<SplashRadius>)| \\
+ Example & \verb|combat(`Psionic Storm', 14, 14, 45, 9, 1).| \\
+ \end{tabularx}
+ \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
+ \cline{2-3}
+ Parameters & \textbf{\verb|<Name>|} & The name of the unit\\
+            & \textbf{Name} & \verb|String| \\
+            & \textbf{Range} & See \ref{unittype} \\
+            \cline{2-3}
+            & \textbf{\verb|<GroundDamage>|} & The amount of damage the type does to ground units. 0 means it cannot attack ground. \\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<AirDamage>|} & The amount of damage the type does to air units. 0 means it cannot attack air. \\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<CooldownFrames>|} & The number number of game frames the type needs to cool down after an attack (i.e. wait before launching another attack).\\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<Range>|} & The number of build tiles the type's attack can span. \\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<SplashRadius>|} & The number of build tiles this type's attack can do splash damage (0 means no splash).\\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0-$\infty$] \\
+            \cline{2-3}
+\end{tabularx}

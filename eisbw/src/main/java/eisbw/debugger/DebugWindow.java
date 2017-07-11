@@ -69,14 +69,13 @@ public class DebugWindow extends JFrame {
 	 *            - the API.
 	 */
 	public void debug(JNIBWAPI bwapi) {
-		Iterator<String> iter = getActions().iterator();
-		while (iter.hasNext()) {
-			bwapi.sendText(iter.next());
-			iter.remove();
+		Iterator<String> actions = getActions().iterator();
+		while (actions.hasNext()) {
+			bwapi.sendText(actions.next());
+			actions.remove();
 		}
 		if (this.speedSlider.speedChanged()) {
 			bwapi.setGameSpeed(this.speedSlider.getSpeed());
 		}
-		this.draw.draw(bwapi);
 	}
 }

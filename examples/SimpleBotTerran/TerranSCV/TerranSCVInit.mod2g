@@ -1,0 +1,7 @@
+use "../Shared" as knowledge.
+
+module TerranSCVInit {
+	% Let the mapAgent know we're here, initialize conditions belief, and subscribe to the 'workers' channel.
+	if percept(self(Id,Type)), percept(status(_,_,_,Conditions,_,_,_)) 
+		then (mapAgent).send(self(Id,Type)) + insert(conditions(Conditions)) +  subscribe(workers).
+}

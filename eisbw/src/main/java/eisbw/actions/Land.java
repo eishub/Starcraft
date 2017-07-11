@@ -9,6 +9,7 @@ import jnibwapi.JNIBWAPI;
 import jnibwapi.Position;
 import jnibwapi.Position.PosType;
 import jnibwapi.Unit;
+import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Lands the flying unit on the specified location.
@@ -26,8 +27,8 @@ public class Land extends StarcraftMovableAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		return unit.isLifted();
+	public boolean canExecute(UnitType type, Action action) {
+		return type.isFlyingBuilding();
 	}
 
 	@Override
@@ -41,6 +42,6 @@ public class Land extends StarcraftMovableAction {
 
 	@Override
 	public String toString() {
-		return "land(x,y)";
+		return "land(X,Y)";
 	}
 }

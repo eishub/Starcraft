@@ -1,8 +1,12 @@
 package eisbw;
 
+import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import jnibwapi.Position;
+import jnibwapi.Region;
 import jnibwapi.Unit;
 import jnibwapi.types.TechType;
 import jnibwapi.types.TechType.TechTypes;
@@ -19,13 +23,14 @@ public class BwapiUtility {
 	private static final Map<String, UnitType> unitTypeMap = new HashMap<>();
 	private static final Map<String, TechType> techTypeMap = new HashMap<>();
 	private static final Map<String, UpgradeType> upgradeTypeMap = new HashMap<>();
+	private static final Map<Entry<Integer, Integer>, Integer> regionCache = new HashMap<>();
 
 	private BwapiUtility() {
 		// Private constructor for static class.
 	}
 
 	public static boolean isValid(Unit unit) {
-		return unit.isExists() && unit.isVisible() && !(unit.isBeingConstructed() && unit.isLoaded());
+		return unit != null && unit.isExists() && unit.isVisible() && !(unit.isBeingConstructed() && unit.isLoaded());
 	}
 
 	/**
@@ -36,7 +41,7 @@ public class BwapiUtility {
 	 * @return the name of the unit.
 	 */
 	public static String getName(Unit unit) {
-		String name = (getName(unit.getType()) + unit.getID()).replace("_", "").replace(" ", "");
+		String name = (getName(unit.getType()) + unit.getID()).replace(" ", "");
 		return name.substring(0, 1).toLowerCase() + name.substring(1);
 	}
 
@@ -49,21 +54,27 @@ public class BwapiUtility {
 		}
 	}
 
+	public static int getRegion(Position position, jnibwapi.Map map) {
+		Entry<Integer, Integer> pos = new SimpleEntry<>(position.getBX(), position.getBY());
+		Integer regionId = regionCache.get(pos);
+		if (regionId == null) {
+			Region region = (map == null) ? null : map.getRegion(position);
+			regionId = (region == null) ? 0 : region.getID();
+			regionCache.put(pos, regionId);
+		}
+		return regionId.intValue();
+	}
+
 	/**
-	 * Get the EIS unittype of a unit.
+	 * Get the EIS unittype.
 	 *
-	 * @param unit
-	 *            - the unit that you want yhe Type from.
+	 * @param unittype
+	 *            the unittype
 	 * @return the type of a unit.
 	 */
-	public static String getEisUnitType(Unit unit) {
-		String type = unit.getType().getName().replace(" ", "");
-		type = type.substring(0, 1).toLowerCase() + type.substring(1);
-		if ("terranSiegeTankTankMode".equals(type) || "terranSiegeTankSiegeMode".equals(type)) {
-			return "terranSiegeTank";
-		} else {
-			return type;
-		}
+	public static String getEisUnitType(UnitType type) {
+		String result = getName(type).replace(" ", "");
+		return result.substring(0, 1).toLowerCase() + result.substring(1);
 	}
 
 	/**
@@ -74,6 +85,9 @@ public class BwapiUtility {
 	 * @return the unit.
 	 */
 	public static UnitType getUnitType(String type) {
+		if (type.equals("Terran Siege Tank")) {
+			type += " Tank Mode";
+		}
 		if (unitTypeMap.isEmpty()) {
 			for (UnitType ut : UnitTypes.getAllUnitTypes()) {
 				unitTypeMap.put(ut.getName(), ut);
@@ -110,6 +124,9 @@ public class BwapiUtility {
 			for (UpgradeType tt : UpgradeTypes.getAllUpgradeTypes()) {
 				upgradeTypeMap.put(tt.getName(), tt);
 			}
+		}
+		if (type.length() > 2 && Character.isDigit(type.charAt(type.length() - 1))) {
+			type = type.substring(0, type.length() - 3);
 		}
 		return upgradeTypeMap.get(type);
 	}

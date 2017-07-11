@@ -1,0 +1,7 @@
+use "../Shared" as knowledge.
+
+module ProtossNexusInit {
+	% Let the mapAgent know we're here, initialize beliefs, and subscribe to the 'buildings' channel.
+	if percept(self(Id,Type))
+		then (mapAgent).send(self(Id,Type)) + insert(queued(0), resources(0,0,0,0)) + subscribe(buildings).
+}

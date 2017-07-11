@@ -1,11 +1,11 @@
 package eisbw.debugger.draw;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import eis.eis2java.exception.TranslationException;
 import eisbw.BwapiUtility;
 import eisbw.Game;
 import jnibwapi.JNIBWAPI;
@@ -17,18 +17,17 @@ import jnibwapi.types.UnitType.UnitTypes;
 import jnibwapi.util.BWColor;
 
 /**
- * @author Danny & Harm - The class which handles the drawing of the buildings
- *         of the dev. tool.
+ * @author Harm & Danny.
  *
  */
 public class DrawUnitInfo extends IDraw {
 	private final static int barHeight = 18;
 	private final static BWColor barColor = BWColor.Blue;
-	private final Set<Unit> alive = new HashSet<>();
+	private final List<Unit> alive = new LinkedList<>();
 	private final Map<Integer, Integer> dead = new HashMap<>();
 
 	/**
-	 * The DrawBuildingDetails constructor.
+	 * Draw unit information (health, movement, counts).
 	 *
 	 * @param game
 	 *            The current game.
@@ -38,7 +37,7 @@ public class DrawUnitInfo extends IDraw {
 	}
 
 	@Override
-	protected void drawOnMap(JNIBWAPI api) throws TranslationException {
+	protected void doDraw(JNIBWAPI api) {
 		drawTimerInfo(api);
 		drawHealth(api);
 		drawTargets(api);
@@ -163,7 +162,7 @@ public class DrawUnitInfo extends IDraw {
 		api.drawText(new Position(x + 180, y + 20), "X", true);
 
 		Map<Integer, Integer> count = new HashMap<>();
-		Set<Unit> previous = new HashSet<>(this.alive);
+		List<Unit> previous = new ArrayList<>(this.alive);
 		this.alive.clear();
 		for (final Unit unit : api.getMyUnits()) {
 			if (!BwapiUtility.isValid(unit)) {

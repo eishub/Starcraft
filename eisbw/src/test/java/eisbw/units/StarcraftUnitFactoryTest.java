@@ -3,31 +3,26 @@ package eisbw.units;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
-
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import jnibwapi.Unit;
+import jnibwapi.types.UnitType;
+
 public class StarcraftUnitFactoryTest {
+	private StarcraftUnitFactory factory;
 
-  private StarcraftUnitFactory factory;
-  
-  @Mock
-  private Unit unit;
-  @Mock
-  private UnitType unitType;
-  
-  @Test
-  public void test() {
-    MockitoAnnotations.initMocks(this);
-    factory = new StarcraftUnitFactory(null);
-    when(unit.getType()).thenReturn(unitType);
-    assertEquals(1,factory.create(unit).perceivers.size());
-    when(unitType.isBuilding()).thenReturn(true);
-    when(unitType.isWorker()).thenReturn(true);
-    assertEquals(3,factory.create(unit).perceivers.size());
-  }
+	@Mock
+	private Unit unit;
+	@Mock
+	private UnitType unitType;
 
+	@Test
+	public void test() {
+		MockitoAnnotations.initMocks(this);
+		this.factory = new StarcraftUnitFactory(null);
+		when(this.unit.getType()).thenReturn(this.unitType);
+		assertEquals(1, this.factory.create(this.unit).perceivers.size());
+	}
 }

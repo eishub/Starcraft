@@ -31,9 +31,8 @@ public class Gather extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		UnitType unitType = unit.getType();
-		return unitType.isWorker();
+	public boolean canExecute(UnitType type, Action action) {
+		return type.isWorker();
 	}
 
 	@Override
@@ -46,6 +45,6 @@ public class Gather extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "gather(targetID)";
+		return "gather(TargetID)";
 	}
 }

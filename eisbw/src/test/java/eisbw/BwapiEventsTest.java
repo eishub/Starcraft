@@ -1,41 +1,41 @@
 package eisbw;
 
-import jnibwapi.Position;
-
 import org.junit.Before;
 import org.junit.Test;
 
+import jnibwapi.Position;
+
 public class BwapiEventsTest {
 
-  BwapiEvents events;
+	BwapiEvents events;
 
-  @Before
-  public void start() {
-    events = new BwapiEvents();
-  }
+	@Before
+	public void start() {
+		this.events = new BwapiEvents();
+	}
 
-  @Test
-  public void eventTests() {
-    events.matchStart();
-    events.connected();
-    events.nukeDetect();
-    events.keyPressed(0);
-    events.matchFrame();
-    events.nukeDetect(new Position(0, 0));
-    events.playerDropped(0);
-    events.playerLeft(0);
-    events.receiveText("0");
-    events.saveGame("0");
-    events.sendText("0");
-    events.unitComplete(0);
-    events.unitCreate(0);
-    events.unitDestroy(0);
-    events.unitDiscover(0);
-    events.unitEvade(0);
-    events.unitHide(0);
-    events.unitMorph(0);
-    events.unitRenegade(0);
-    events.unitShow(0);
-    events.matchEnd(true);
-  }
+	@Test
+	public void eventTests() {
+		this.events.matchStart();
+		this.events.connected();
+		this.events.nukeDetect();
+		this.events.keyPressed(0);
+		this.events.matchFrame();
+		this.events.nukeDetect(new Position(0, 0));
+		this.events.playerDropped(0);
+		this.events.playerLeft(0);
+		this.events.receiveText("0");
+		this.events.saveGame("0");
+		this.events.sendText("0");
+		this.events.unitComplete(0);
+		this.events.unitCreate(0);
+		this.events.unitDestroy(0);
+		this.events.unitDiscover(0);
+		this.events.unitEvade(0);
+		this.events.unitHide(0);
+		this.events.unitMorph(0);
+		this.events.unitRenegade(0);
+		this.events.unitShow(0);
+		this.events.matchEnd(true);
+	}
 }

@@ -27,9 +27,12 @@ public class StatusPercept extends Percept {
 	 *            The current x-coordinate of the unit.
 	 * @param ypos
 	 *            The current y-coordinate of the unit.
+	 * @param ypos
+	 *            The current region of the unit.
 	 */
-	public StatusPercept(int chealth, int cshields, int cenergy, List<Parameter> conditions, int xpos, int ypos) {
+	public StatusPercept(int chealth, int cshields, int cenergy, List<Parameter> conditions, int xpos, int ypos,
+			int region) {
 		super(Percepts.STATUS, new Numeral(chealth), new Numeral(cshields), new Numeral(cenergy),
-				new ParameterList(conditions), new Numeral(xpos), new Numeral(ypos));
+				new ParameterList(conditions), new Numeral(xpos), new Numeral(ypos), new Numeral(region));
 	}
 }

@@ -4,7 +4,7 @@ import eis.iilang.Identifier;
 import eis.iilang.Percept;
 
 /**
- * @author Danny & Harm - The HasResearched percept.
+ * @author Danny & Harm - The Researching percept.
  *
  */
 public class ResearchingPercept extends Percept {
@@ -12,7 +12,7 @@ public class ResearchingPercept extends Percept {
 
 	/**
 	 * @param name
-	 *            The name of the tech type.
+	 *            The name of the tech or upgrade type.
 	 */
 	public ResearchingPercept(String name) {
 		super(Percepts.RESEARCHING, new Identifier(name));

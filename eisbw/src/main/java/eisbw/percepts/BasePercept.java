@@ -12,17 +12,16 @@ public class BasePercept extends Percept {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * @param isStart
+	 *            Indicates whether the base location is a starting location or not.
 	 * @param xpos
 	 *            The x coordinate of the base location.
 	 * @param ypos
 	 *            The y coordinate of the base location.
-	 * @param isStart
-	 *            Indicates whether the base location is a starting location or
-	 *            not.
-	 * @param resourceGroup
-	 *            The resourceGroup matching with the base location.
+	 * @param region
+	 *            The region of the base location.
 	 */
-	public BasePercept(int xpos, int ypos, boolean isStart, int resourceGroup) {
-		super(Percepts.BASE, new Numeral(xpos), new Numeral(ypos), new TruthValue(isStart), new Numeral(resourceGroup));
+	public BasePercept(boolean isStart, int xpos, int ypos, int region) {
+		super(Percepts.BASE, new TruthValue(isStart), new Numeral(xpos), new Numeral(ypos), new Numeral(region));
 	}
 }

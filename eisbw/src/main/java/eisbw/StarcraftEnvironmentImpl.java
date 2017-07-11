@@ -69,13 +69,14 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 						this.config.getSpeed());
 				if (!"OFF".equals(this.config.getAutoMenu()) && !WindowsTools.isProcessRunning("Chaoslauncher.exe")) {
 					WindowsTools.startChaoslauncher(this.config.getOwnRace(), this.config.getMap(),
-							this.config.getScDir(), this.config.getAutoMenu(), this.config.getEnemyRace());
+							this.config.getScDir(), this.config.getAutoMenu(), this.config.getGameType(),
+							this.config.getEnemyRace());
 				}
 			}
 			this.mapAgent = this.config.getMapAgent();
 			setState(EnvironmentState.RUNNING);
 		} catch (Exception ex) {
-			Logger.getLogger(StarcraftEnvironmentImpl.class.getName()).log(Level.SEVERE, null, ex);
+			this.logger.log(Level.SEVERE, null, ex);
 		}
 	}
 
@@ -90,7 +91,7 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 
 	@Override
 	protected boolean isSupportedByEnvironment(Action action) {
-		return this.listener.getAction(action) != null;
+		return this.listener.isSupportedByEnvironment(action);
 	}
 
 	@Override
@@ -119,8 +120,7 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 	 */
 	public void addToEnvironment(String unitName, String eisUnitType) {
 		try {
-			if (!this.entities.contains(unitName)) {
-				this.entities.add(unitName);
+			if (this.entities.add(unitName)) {
 				addEntity(unitName, eisUnitType);
 			}
 		} catch (EntityException exception) {
@@ -135,16 +135,14 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 	 *            - the name of the unit
 	 */
 	public void deleteFromEnvironment(String unitName) {
-		if (!this.entities.contains(unitName)) {
-			return;
-		}
 		try {
-			Set<String> agents = getAssociatedAgents(unitName);
-			deleteEntity(unitName);
-			for (String agent : agents) {
-				unregisterAgent(agent);
+			if (this.entities.remove(unitName)) {
+				Set<String> agents = getAssociatedAgents(unitName);
+				deleteEntity(unitName);
+				for (String agent : agents) {
+					unregisterAgent(agent);
+				}
 			}
-			this.entities.remove(unitName);
 		} catch (EntityException exception) {
 			this.logger.log(Level.WARNING, "Could not delete " + unitName + " from the environment", exception);
 		} catch (RelationException exception) {

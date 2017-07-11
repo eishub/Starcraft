@@ -15,15 +15,15 @@ public class MineralFieldPercept extends Percept {
 	 *            The id of the mineralfield.
 	 * @param resources
 	 *            The amount of resources left.
-	 * @param resourceGroup
-	 *            The resource group.
 	 * @param xpos
 	 *            The x-coordinate of the position.
 	 * @param ypos
-	 *            The y-coordiante of the position.
+	 *            The y-coordinate of the position.
+	 * @param region
+	 *            The region.
 	 */
-	public MineralFieldPercept(int id, int resources, int resourceGroup, int xpos, int ypos) {
-		super(Percepts.MINERALFIELD, new Numeral(id), new Numeral(resources), new Numeral(resourceGroup),
-				new Numeral(xpos), new Numeral(ypos));
+	public MineralFieldPercept(int id, int resources, int xpos, int ypos, int region) {
+		super(Percepts.MINERALFIELD, new Numeral(id), new Numeral(resources), new Numeral(xpos), new Numeral(ypos),
+				new Numeral(region));
 	}
 }

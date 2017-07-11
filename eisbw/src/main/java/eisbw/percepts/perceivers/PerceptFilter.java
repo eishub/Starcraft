@@ -32,6 +32,11 @@ public class PerceptFilter {
 	}
 
 	@Override
+	public String toString() {
+		return "PerceptFilter[name=" + this.name + ",type=" + this.type + "]";
+	}
+
+	@Override
 	public boolean equals(Object other) {
 		if (other == null) {
 			return false;

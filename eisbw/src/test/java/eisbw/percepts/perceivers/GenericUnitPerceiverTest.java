@@ -3,6 +3,17 @@ package eisbw.percepts.perceivers;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import eis.iilang.Percept;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Player;
@@ -13,77 +24,73 @@ import jnibwapi.types.RaceType;
 import jnibwapi.types.RaceType.RaceTypes;
 import jnibwapi.types.UnitType;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 public class GenericUnitPerceiverTest {
+	private GenericUnitPerceiver perciever;
 
-  private GenericUnitPerceiver perciever;
-  @Mock
-  private Unit unit;
-  @Mock
-  private UnitType unitType;
-  @Mock
-  private Player self;
-  @Mock
-  private JNIBWAPI api;
-  @Mock
-  private RaceType race;
+	@Mock
+	private Unit unit;
+	@Mock
+	private UnitType unitType;
+	@Mock
+	private Player self;
+	@Mock
+	private JNIBWAPI api;
+	@Mock
+	private RaceType race;
 
-  private Set<Player> toReturn;
+	private Set<Player> toReturn;
 
-  /**
-   * Initialize mocks.
-   */
-  @Before
-  public void start() {
-    MockitoAnnotations.initMocks(this);
-    toReturn = new HashSet<>();
-    toReturn.add(self);
-    when(api.getEnemies()).thenReturn(toReturn);
+	/**
+	 * Initialize mocks.
+	 */
+	@Before
+	public void start() {
+		MockitoAnnotations.initMocks(this);
 
-    when(self.getRace()).thenReturn(RaceTypes.None);
+		this.toReturn = new HashSet<>(1);
+		this.toReturn.add(this.self);
+		when(this.api.getEnemies()).thenReturn(this.toReturn);
 
-    when(api.getSelf()).thenReturn(self);
-    when(self.getMinerals()).thenReturn(50);
-    when(self.getGas()).thenReturn(90);
-    when(self.getSupplyUsed()).thenReturn(10);
-    when(self.getSupplyTotal()).thenReturn(20);
+		when(this.self.getRace()).thenReturn(RaceTypes.None);
 
-    when(unit.getID()).thenReturn(1);
-    when(unit.getType()).thenReturn(unitType);
-    when(unitType.getName()).thenReturn("type");
+		when(this.api.getSelf()).thenReturn(this.self);
+		when(this.self.getMinerals()).thenReturn(50);
+		when(this.self.getGas()).thenReturn(90);
+		when(this.self.getSupplyUsed()).thenReturn(10);
+		when(this.self.getSupplyTotal()).thenReturn(20);
 
-    when(unit.getHitPoints()).thenReturn(25);
-    when(unit.getShields()).thenReturn(30);
-    when(unit.getPosition()).thenReturn(new Position(2, 1, PosType.BUILD));
+		when(this.unit.getID()).thenReturn(1);
+		when(this.unit.getType()).thenReturn(this.unitType);
+		when(this.unitType.getName()).thenReturn("type");
 
-    when(unit.getEnergy()).thenReturn(100);
-    when(unitType.getMaxEnergy()).thenReturn(110);
-    perciever = new GenericUnitPerceiver(api, unit);
-  }
+		when(this.unit.getHitPoints()).thenReturn(25);
+		when(this.unit.getShields()).thenReturn(30);
+		when(this.unit.getPosition()).thenReturn(new Position(2, 1, PosType.BUILD));
 
-  @Test
-  public void size_test() {
-    Map<PerceptFilter, Set<Percept>> ret = new HashMap<>();
-    when(race.getName()).thenReturn("race");
-    when(self.getRace()).thenReturn(race);
-    assertEquals(4, perciever.perceive(ret).size());
-    toReturn = new HashSet<>();
-    when(api.getEnemies()).thenReturn(toReturn);
-    ret = new HashMap<>();
-    assertEquals(4, perciever.perceive(ret).size());
-    when(unitType.getMaxEnergy()).thenReturn(0);
-    when(unit.isDefenseMatrixed()).thenReturn(true);
-    ret = new HashMap<>();
-    assertEquals(5, perciever.perceive(ret).size());
-  }
+		when(this.unit.getEnergy()).thenReturn(100);
+		when(this.unitType.getMaxEnergy()).thenReturn(110);
+		this.perciever = new GenericUnitPerceiver(this.api, this.unit);
+	}
+
+	@Test
+	public void size_test() {
+		Map<PerceptFilter, List<Percept>> ret = new HashMap<>();
+		when(this.race.getName()).thenReturn("race");
+		when(this.self.getRace()).thenReturn(this.race);
+		this.perciever.perceive(ret);
+		assertEquals(3, ret.size());
+
+		ret.clear();
+		this.toReturn = new HashSet<>();
+		when(this.api.getEnemies()).thenReturn(this.toReturn);
+		this.perciever.perceive(ret);
+		assertEquals(3, ret.size());
+
+		ret.clear();
+		when(this.unitType.getMaxEnergy()).thenReturn(0);
+		when(this.unit.isDefenseMatrixed()).thenReturn(true);
+		this.perciever.perceive(ret);
+		assertEquals(4, ret.size());
+	}
 
 }

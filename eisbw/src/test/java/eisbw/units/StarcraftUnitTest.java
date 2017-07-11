@@ -2,49 +2,38 @@ package eisbw.units;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.when;
 
-import eis.iilang.Percept;
-import eisbw.percepts.perceivers.IPerceiver;
-import eisbw.percepts.perceivers.PerceptFilter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import eisbw.percepts.perceivers.IPerceiver;
 
 public class StarcraftUnitTest {
+	private StarcraftUnit unit;
 
-  private StarcraftUnit unit;
-  @Mock
-  private IPerceiver perceiver;
-  private java.util.Map<PerceptFilter, Set<Percept>> percepts;
+	@Mock
+	private IPerceiver perceiver;
 
-  /**
-   * Initialize variables and mocks.
-   */
-  @SuppressWarnings("unchecked")
-  @Before
-  public void start() {
-    MockitoAnnotations.initMocks(this);
-    percepts = new HashMap<>();
-    percepts.put(null, null);
-    when(perceiver.perceive(any(java.util.Map.class))).thenReturn(percepts);
-    List<IPerceiver> list = new LinkedList<>();
-    list.add(perceiver);
-    unit = new StarcraftUnit(list, false);
-  }
+	/**
+	 * Initialize variables and mocks.
+	 */
+	@Before
+	public void start() {
+		MockitoAnnotations.initMocks(this);
 
-  @Test
-  public void test() {
-    assertEquals(0, unit.perceive().size());
-    assertFalse(unit.isWorker());
-  }
+		List<IPerceiver> list = new ArrayList<>(1);
+		list.add(this.perceiver);
+		this.unit = new StarcraftUnit(list, false);
+	}
 
+	@Test
+	public void test() {
+		assertEquals(0, this.unit.perceive().size());
+		assertFalse(this.unit.isWorker());
+	}
 }

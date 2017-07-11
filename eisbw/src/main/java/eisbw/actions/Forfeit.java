@@ -6,6 +6,7 @@ import eis.iilang.Action;
 import eis.iilang.Parameter;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
+import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Forfeits the match (mapAgent only).
@@ -29,7 +30,7 @@ public class Forfeit extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
+	public boolean canExecute(UnitType type, Action action) {
 		return true;
 	}
 

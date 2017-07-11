@@ -28,9 +28,8 @@ public class AttackMove extends StarcraftMovableAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		UnitType unitType = unit.getType();
-		return unitType.isCanMove() && unitType.isAttackCapable();
+	public boolean canExecute(UnitType type, Action action) {
+		return super.canExecute(type, action) && type.isAttackCapable();
 	}
 
 	@Override
@@ -44,6 +43,6 @@ public class AttackMove extends StarcraftMovableAction {
 
 	@Override
 	public String toString() {
-		return "attack(x,y)";
+		return "attack(X,Y)";
 	}
 }

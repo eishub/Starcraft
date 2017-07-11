@@ -40,8 +40,8 @@ public class Build extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		return unit.getType().isWorker();
+	public boolean canExecute(UnitType type, Action action) {
+		return type.isWorker();
 	}
 
 	@Override
@@ -56,6 +56,6 @@ public class Build extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "build(Type, X, Y)";
+		return "build(Type,X,Y)";
 	}
 }

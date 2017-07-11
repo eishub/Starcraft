@@ -1,0 +1,8 @@
+use "../Shared" as knowledge.
+use TerranCommandCenterActions.
+
+module TerranCommandCenter {
+	% Continously keep trying to produce SCVs
+	if bel(queued(0)) 
+		then train('Terran SCV') + sleep(100).
+}

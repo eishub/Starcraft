@@ -16,9 +16,11 @@ public class ConstructionSitePercept extends Percept {
 	 *            The x coordinate of the construction site.
 	 * @param ypos
 	 *            The y coordinate of the construction site.
+	 * @param region
+	 *            The region of the construction site.
 	 */
-	public ConstructionSitePercept(int xpos, int ypos) {
-		super(Percepts.CONSTRUCTIONSITE, new Numeral(xpos), new Numeral(ypos));
+	public ConstructionSitePercept(int xpos, int ypos, int region) {
+		super(Percepts.CONSTRUCTIONSITE, new Numeral(xpos), new Numeral(ypos), new Numeral(region));
 	}
 
 	/**
@@ -26,11 +28,13 @@ public class ConstructionSitePercept extends Percept {
 	 *            The x coordinate of the construction site.
 	 * @param ypos
 	 *            The y coordinate of the construction site.
+	 * @param region
+	 *            The region of the construction site.
 	 * @param isInRange
-	 *            Indicates whether the construction site is in range of a
-	 *            pylon.
+	 *            Indicates whether the construction site is in range of a pylon.
 	 */
-	public ConstructionSitePercept(int xpos, int ypos, boolean isInRange) {
-		super(Percepts.CONSTRUCTIONSITE, new Numeral(xpos), new Numeral(ypos), new TruthValue(isInRange));
+	public ConstructionSitePercept(int xpos, int ypos, int region, boolean isInRange) {
+		super(Percepts.CONSTRUCTIONSITE, new Numeral(xpos), new Numeral(ypos), new Numeral(region),
+				new TruthValue(isInRange));
 	}
 }

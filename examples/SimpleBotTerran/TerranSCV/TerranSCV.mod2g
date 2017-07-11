@@ -1,0 +1,9 @@
+use "../Shared" as knowledge.
+use TerranSCVActions.
+order=linearrandom.
+
+module TerranSCV {
+	% If we're not doing anything, go gather a random mineral field
+	if bel(conditions(Conditions), member('idle',Conditions), mineralField(Id,_,_)) 
+		then gather(Id).
+}

@@ -2,8 +2,8 @@ package eisbw;
 
 import java.io.File;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,6 +14,7 @@ import eis.iilang.EnvironmentState;
 import eisbw.actions.ActionProvider;
 import eisbw.actions.StarcraftAction;
 import eisbw.debugger.DebugWindow;
+import eisbw.debugger.Draw;
 import eisbw.debugger.draw.DrawMapInfo;
 import eisbw.debugger.draw.DrawUnitInfo;
 import eisbw.debugger.draw.IDraw;
@@ -32,16 +33,13 @@ public class BwapiListener extends BwapiEvents {
 	protected JNIBWAPI bwapi; // overridden in test
 	protected final Game game;
 	protected final ActionProvider actionProvider;
-	protected final Map<Unit, Action> pendingActions;
+	protected final Queue<BwapiAction> pendingActions;
 	protected final StarcraftUnitFactory factory;
 	protected final boolean debug;
-	protected final IDraw drawMapInfo;
-	protected final IDraw drawUnitInfo;
 	protected final boolean invulnerable;
 	protected final int speed;
-	protected int count = 0;
-	protected int nuke = -1;
 	protected DebugWindow debugwindow;
+	protected int nuke = -1;
 
 	/**
 	 * Event listener for BWAPI.
@@ -60,20 +58,23 @@ public class BwapiListener extends BwapiEvents {
 		this.bwapi = new JNIBWAPI(this, bwta);
 		this.game = game;
 		this.actionProvider = new ActionProvider();
-		this.actionProvider.loadActions(this.bwapi);
-		this.pendingActions = new ConcurrentHashMap<>();
+		this.actionProvider.loadActions(this.bwapi, this.game);
+		this.pendingActions = new ConcurrentLinkedQueue<>();
 		this.factory = new StarcraftUnitFactory(this.bwapi);
 		this.debug = debug;
-		this.drawMapInfo = new DrawMapInfo(game);
-		if (drawMapInfo) {
-			this.drawMapInfo.toggle();
-		}
-		this.drawUnitInfo = new DrawUnitInfo(game);
-		if (drawUnitInfo) {
-			this.drawUnitInfo.toggle();
-		}
 		this.invulnerable = invulnerable;
 		this.speed = speed;
+
+		IDraw mapInfo = new DrawMapInfo(game);
+		game.addDraw(Draw.MAP.name(), mapInfo);
+		if (drawMapInfo) {
+			mapInfo.toggle();
+		}
+		IDraw unitInfo = new DrawUnitInfo(game);
+		game.addDraw(Draw.UNITS.name(), unitInfo);
+		if (drawUnitInfo) {
+			unitInfo.toggle();
+		}
 
 		new Thread() {
 			@Override
@@ -88,6 +89,7 @@ public class BwapiListener extends BwapiEvents {
 	@Override
 	public void matchStart() {
 		// SET INIT SPEED (DEFAULT IS 50 FPS, WHICH IS 20 SPEED)
+		this.bwapi.setCommandOptimizationLevel(2);
 		if (this.speed > 0) {
 			this.bwapi.setGameSpeed(1000 / this.speed);
 		} else if (this.speed == 0) {
@@ -101,78 +103,79 @@ public class BwapiListener extends BwapiEvents {
 
 		// START THE DEBUG TOOLS
 		if (this.debug) {
-			this.debugwindow = new DebugWindow(this.game);
 			this.bwapi.enableUserInput();
+			this.debugwindow = new DebugWindow(this.game);
 		}
 
-		// DO INITIAL UPDATES
+		// UPDATE MAP INFO
 		this.game.updateMap(this.bwapi);
-		this.game.updateConstructionSites(this.bwapi);
-		this.game.updateFrameCount(this.count);
 
-		// KnowledgeExport.export();
+		//KnowledgeExport.export();
 	}
 
 	@Override
 	public void matchFrame() {
 		// GENERATE PERCEPTS
-		if ((++this.count % 50) == 0) {
+		int frame = this.bwapi.getFrameCount();
+		if ((frame % 50) == 0) {
+			this.game.updateFrameCount(this.bwapi);
 			this.game.updateConstructionSites(this.bwapi);
-			this.game.updateFrameCount(this.count);
 		}
 		if (this.nuke >= 0 && ++this.nuke == 50) {
-			this.game.updateNukePerceiver(this.bwapi, null);
+			this.game.updateNukePerceiver(null);
 			this.nuke = -1;
 		}
 		do {
 			this.game.update(this.bwapi);
-			if (this.count == 1) {
+			if (frame == 0) {
 				this.game.mapAgent();
 			}
 			try { // always sleep 1ms to better facilitate running at speed 0
 				Thread.sleep(1);
-			} catch (InterruptedException ignore) {
+			} catch (InterruptedException ie) {
+				break;
 			} // wait until all the initial workers get an action request
-		} while (this.count == 1 && isRunning() && this.pendingActions.size() < 4);
+		} while (frame == 0 && isRunning() && this.pendingActions.size() < 4);
 
 		// PERFORM ACTIONS
-		Iterator<Unit> units = this.pendingActions.keySet().iterator();
-		while (units.hasNext()) {
-			Unit unit = units.next();
-			Action act = this.pendingActions.remove(unit);
-			StarcraftAction action = getAction(act);
+		Iterator<BwapiAction> actions = this.pendingActions.iterator();
+		while (actions.hasNext()) {
+			BwapiAction act = actions.next();
+			StarcraftAction action = this.actionProvider.getAction(act.getAction());
 			if (action != null) {
-				action.execute(unit, act);
+				action.execute(act.getUnit(), act.getAction());
 			}
+			actions.remove();
 		}
 		if (this.debugwindow != null) {
 			this.debugwindow.debug(this.bwapi);
 		}
-		this.drawMapInfo.draw(this.bwapi);
-		this.drawUnitInfo.draw(this.bwapi);
+		for (IDraw draw : this.game.getDraws()) {
+			draw.draw(this.bwapi);
+		}
 	}
 
 	@Override
 	public void unitComplete(int id) {
 		Unit unit = this.bwapi.getUnit(id);
-		if (this.bwapi.getMyUnits().contains(unit) && !this.game.getUnits().getUnitNames().containsKey(id)) {
+		if (this.bwapi.getMyUnits().contains(unit) && this.game.getUnits().getUnitName(id) == null) {
 			this.game.getUnits().addUnit(unit, this.factory);
 		}
 	}
 
 	@Override
 	public void unitDestroy(int id) {
-		String unitName = this.game.getUnits().getUnitNames().get(id);
+		String unitName = this.game.getUnits().getUnitName(id);
 		if (unitName != null) {
-			Unit deleted = this.game.getUnits().deleteUnit(unitName, id);
-			this.pendingActions.remove(deleted);
+			this.game.getUnits().deleteUnit(unitName);
+			this.game.removeDraw(Integer.toString(id));
 		}
 	}
 
 	@Override
 	public void unitMorph(int id) {
 		Unit unit = this.bwapi.getUnit(id);
-		if (unit.getType().getRaceID() != RaceTypes.Terran.getID()) {
+		if (unit.getType().getRaceID() != RaceTypes.Terran.getID()) { // siege tank hack
 			unitDestroy(id);
 			unitComplete(id);
 		}
@@ -185,13 +188,13 @@ public class BwapiListener extends BwapiEvents {
 
 	@Override
 	public void nukeDetect(Position pos) {
-		this.game.updateNukePerceiver(this.bwapi, pos);
+		this.game.updateNukePerceiver(pos);
 		this.nuke = 0;
 	}
 
 	@Override
 	public void matchEnd(boolean winner) {
-		this.game.updateEndGamePerceiver(this.bwapi, winner);
+		this.game.updateEndGamePerceiver(winner);
 		this.game.update(this.bwapi);
 
 		// have the winner percept perceived for 1 second before all agents
@@ -207,21 +210,6 @@ public class BwapiListener extends BwapiEvents {
 		}
 		this.bwapi.leaveGame();
 		this.game.clean();
-	}
-
-	protected boolean isSupportedByEntity(Action act, String name) {
-		Unit unit = this.game.getUnits().getUnits().get(name);
-		StarcraftAction action = getAction(act);
-		return action != null && action.isValid(act) && action.canExecute(unit, act);
-	}
-
-	/**
-	 * @param action
-	 *            The inserted requested action.
-	 * @return The requested Starcraft Action.
-	 */
-	public StarcraftAction getAction(Action action) {
-		return this.actionProvider.getAction(action.getName() + "/" + action.getParameters().size());
 	}
 
 	/**
@@ -244,14 +232,28 @@ public class BwapiListener extends BwapiEvents {
 	 * @throws ActException
 	 *             - mandatory from EIS
 	 */
-	public void performEntityAction(String name, Action act) throws ActException {
-		Unit unit = this.game.getUnits().getUnits().get(name);
-		if (isSupportedByEntity(act, name)) {
-			this.pendingActions.put(unit, act);
+	public void performEntityAction(String name, Action action) throws ActException {
+		Unit unit = this.game.getUnits().getUnit(name);
+		if (isSupportedByEntity(action, name)) {
+			BwapiAction apiAction = new BwapiAction(unit, action);
+			if (!this.pendingActions.contains(apiAction)) {
+				this.pendingActions.add(apiAction);
+			}
 		} else {
 			this.logger.log(Level.WARNING,
-					"The Entity: " + name + " is not able to perform the action: " + act.getName());
+					"The entity " + name + " is not able to perform the action " + action.getName());
 		}
+	}
+
+	public boolean isSupportedByEnvironment(Action action) {
+		StarcraftAction act = this.actionProvider.getAction(action);
+		return act != null && act.isValid(action);
+	}
+
+	public boolean isSupportedByEntity(Action action, String name) {
+		StarcraftAction act = this.actionProvider.getAction(action);
+		Unit unit = this.game.getUnits().getUnit(name);
+		return isSupportedByEnvironment(action) && act.canExecute((unit == null) ? null : unit.getType(), action);
 	}
 
 	private boolean isRunning() {

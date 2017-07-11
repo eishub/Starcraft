@@ -3,7 +3,6 @@ package eisbw.units;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import eis.iilang.Percept;
 import eisbw.percepts.perceivers.IPerceiver;
@@ -36,8 +35,8 @@ public class StarcraftUnit {
 	 *
 	 * @return - a list of percepts.
 	 */
-	public Map<PerceptFilter, Set<Percept>> perceive() {
-		Map<PerceptFilter, Set<Percept>> toReturn = new HashMap<>();
+	public Map<PerceptFilter, List<Percept>> perceive() {
+		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
 		for (IPerceiver perceiver : this.perceivers) {
 			perceiver.perceive(toReturn);
 		}

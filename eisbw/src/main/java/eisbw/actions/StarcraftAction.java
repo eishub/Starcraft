@@ -25,38 +25,38 @@ public abstract class StarcraftAction {
 		this.api = api;
 	}
 
-	protected UpgradeType getUpgradeType(String type) {
-		return BwapiUtility.getUpgradeType(type);
+	// Mocked in tests
+	protected UnitType getUnitType(String name) {
+		return BwapiUtility.getUnitType(name);
 	}
 
-	protected TechType getTechType(String type) {
-		return BwapiUtility.getTechType(type);
+	// Mocked in tests
+	protected TechType getTechType(String name) {
+		return BwapiUtility.getTechType(name);
 	}
 
-	protected UnitType getUnitType(String type) {
-		if ("Terran Siege Tank".equals(type)) {
-			type = "Terran Siege Tank Tank Mode";
-		}
-		return BwapiUtility.getUnitType(type);
+	// Mocked in tests
+	protected UpgradeType getUpgradeType(String name) {
+		return BwapiUtility.getUpgradeType(name);
 	}
 
 	/**
 	 * @param action
 	 *            The evaluated action.
-	 * @return A boolean which indicates whether the parameters of the action
-	 *         are valid.
+	 * @return A boolean which indicates whether the parameters of the action are
+	 *         valid.
 	 */
 	public abstract boolean isValid(Action action);
 
 	/**
-	 * @param unit
-	 *            The unit performing the action.
+	 * @param type
+	 *            The type of the unit performing the action.
 	 * @param action
 	 *            The evaluated action.
-	 * @return A boolean which indicated wheter the specified unit can execute
-	 *         the action.
+	 * @return A boolean which indicated wheter the specified unit can execute the
+	 *         action.
 	 */
-	public abstract boolean canExecute(Unit unit, Action action);
+	public abstract boolean canExecute(UnitType type, Action action);
 
 	/**
 	 * @param unit
@@ -68,4 +68,20 @@ public abstract class StarcraftAction {
 
 	@Override
 	public abstract String toString();
+
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		} else if (obj == null || !(obj instanceof StarcraftAction)) {
+			return false;
+		} else {
+			return toString().equals(obj.toString());
+		}
+	}
 }

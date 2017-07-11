@@ -8,12 +8,13 @@ import eis.iilang.Parameter;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
 import jnibwapi.types.TechType;
+import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Use a researched TechType.
  *
  */
-public class Use extends StarcraftTechAction {
+public class Use extends StarcraftAction {
 	/**
 	 * The Use constructor.
 	 *
@@ -22,6 +23,20 @@ public class Use extends StarcraftTechAction {
 	 */
 	public Use(JNIBWAPI api) {
 		super(api);
+	}
+
+	@Override
+	public boolean isValid(Action action) {
+		List<Parameter> parameters = action.getParameters();
+		return parameters.size() == 1 && parameters.get(0) instanceof Identifier
+				&& getTechType(((Identifier) parameters.get(0)).getValue()) != null;
+	}
+
+	@Override
+	public boolean canExecute(UnitType type, Action action) {
+		List<Parameter> parameters = action.getParameters();
+		TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
+		return !techType.isTargetsPosition() && !techType.isTargetsUnits();
 	}
 
 	@Override

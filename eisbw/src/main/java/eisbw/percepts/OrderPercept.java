@@ -14,12 +14,17 @@ public class OrderPercept extends Percept {
 	/**
 	 * @param primary
 	 *            The name of the primary order.
-	 * @param target
+	 * @param targetUnit
 	 *            The id of the primary order target (-1 if none)
+	 * @param targetX
+	 *            The X coordinate of the primary order target (-1 if none)
+	 * @param targetY
+	 *            The Y coordinate of the primary order target (-1 if none)
 	 * @param secondary
 	 *            The name of the secondary order.
 	 */
-	public OrderPercept(String primary, int target, String secondary) {
-		super(Percepts.ORDER, new Identifier(primary), new Numeral(target), new Identifier(secondary));
+	public OrderPercept(String primary, int targetUnit, int targetX, int targetY, String secondary) {
+		super(Percepts.ORDER, new Identifier(primary), new Numeral(targetUnit), new Numeral(targetX),
+				new Numeral(targetY), new Identifier(secondary));
 	}
 }

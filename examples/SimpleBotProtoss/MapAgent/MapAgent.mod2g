@@ -1,0 +1,6 @@
+use "../Shared" as knowledge.
+
+module MapAgent {
+	% This is just to have something here :)
+	if percept(winner) then print("Winner!").
+}
