@@ -20,4 +20,4 @@ The project contains the following folders:
 * **examples:** A basic example agent for each race.
 * **libs:** Files required for building the interface and running the various examples.
 
-Usesul for tournament submissions: [StarCraft GOAL AI Wrapper](https://github.com/Venorcis/StarcraftGOALAIwrapper "StarCraft GOAL AI Wrapper")
+Useful for tournament submissions: [StarCraft GOAL AI Wrapper](https://github.com/Venorcis/StarcraftGOALAIwrapper "StarCraft GOAL AI Wrapper")
