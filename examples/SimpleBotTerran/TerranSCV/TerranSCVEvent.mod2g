@@ -1,0 +1,13 @@
+use "../Shared" as knowledge.
+
+module TerranSCVEvent {
+	% PROCESS RECEIVED INFORMATION
+	forall (_).sent:(not(mineralField(Id,Amount,Region)))
+		do delete(mineralField(Id,Amount,Region)).
+	forall (_).sent:(mineralField(Id,Amount,Region))
+		do insert(mineralField(Id,Amount,Region)).
+		
+	% UPDATE CONDITIONS (ON-CHANGE)
+	if percept(status(_,_,_,Conditions,_,_,_)), bel(conditions(OldConditions)) 
+		then delete(conditions(OldConditions)) + insert(conditions(Conditions)).
+}

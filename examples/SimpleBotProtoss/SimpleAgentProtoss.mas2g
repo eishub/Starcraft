@@ -1,0 +1,37 @@
+use "..\..\connector.jar" as environment with
+	map="sscai\(2)Destination.scx",
+	%map="sscai\(4)CircuitBreaker.scx",
+	own_race="Protoss",
+	starcraft_location="C:\Starcraft",
+	auto_menu="Single_Player",
+	enemy_race="random",
+	debug="true", % launch the development tool
+	draw_mapinfo="false",
+	draw_unitinfo="false",
+	invulnerable="true", % individual assignment only
+	map_agent="true",
+	game_speed=50. % default tournament speed
+	
+define mapAgent as agent {
+	use MapAgent.MapAgentInit as init.
+	use MapAgent.MapAgentEvent as event.
+	use MapAgent.MapAgent as main.
+}
+
+define protossNexus as agent {
+	use ProtossNexus.ProtossNexusInit as init.
+	use ProtossNexus.ProtossNexusEvent as event.
+	use ProtossNexus.ProtossNexus as main.
+}
+
+define protossProbe as agent {
+	use ProtossProbe.ProtossProbeInit as init.
+	use ProtossProbe.ProtossProbeEvent as event.
+	use ProtossProbe.ProtossProbe as main.
+} 
+
+launchpolicy{
+	when type = mapAgent launch mapAgent.
+	when type = protossNexus launch protossNexus.
+	when type = protossProbe launch protossProbe.
+}

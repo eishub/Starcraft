@@ -1,0 +1,8 @@
+use "../Shared" as knowledge.
+use ProtossNexusActions.
+
+module ProtossNexus {
+	% Continously keep trying to produce probes
+	if bel(queued(0)) 
+		then train('Protoss Probe') + sleep(100).
+}
