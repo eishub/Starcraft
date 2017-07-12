@@ -65,9 +65,16 @@ public class ConditionHandler {
 	 * @return The conditions of a protoss unit.
 	 */
 	private void setProtossConditions(List<Parameter> conditions) {
-		// for reavers
+		if (!this.unit.isPowered()) {
+			conditions.add(new Identifier("unpowered"));
+		}
+		// for Reavers
 		if (this.unit.getScarabCount() > 0) {
 			conditions.add(new Identifier("hasScarabs"));
+		}
+		// for (friendly) hallucinations from High Templars
+		if (this.unit.isHallucination()) {
+			conditions.add(new Identifier("hallucination"));
 		}
 	}
 
@@ -104,7 +111,7 @@ public class ConditionHandler {
 		if (this.unit.isIrradiated()) {
 			conditions.add(new Identifier("irradiated"));
 		}
-		// caused by medic heal or scv repair
+		// caused by Medic heal or SCV repair
 		if (this.unit.isBeingHealed()) {
 			conditions.add(new Identifier("beingHealed"));
 		}

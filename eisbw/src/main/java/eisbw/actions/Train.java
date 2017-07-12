@@ -31,8 +31,8 @@ public class Train extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		return true; // edge cases such as reavers or nuclear silos
+	public boolean canExecute(UnitType type, Action action) {
+		return type.canProduce() || type == UnitType.Terran_Nuclear_Silo;
 	}
 
 	@Override

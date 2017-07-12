@@ -3,6 +3,7 @@ package eisbw.actions;
 import java.util.List;
 
 import bwapi.Unit;
+import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
@@ -29,8 +30,8 @@ public class Gather extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		return unit.getType().isWorker();
+	public boolean canExecute(UnitType type, Action action) {
+		return type.isWorker();
 	}
 
 	@Override

@@ -144,7 +144,7 @@ public class Game {
 			while ((unit = this.units.getUninitializedUnits().poll()) != null) {
 				String unitName = BwapiUtility.getName(unit);
 				if (unit.isCompleted() && isInitialized(unitName)) {
-					this.env.addToEnvironment(unitName, BwapiUtility.getEisUnitType(unit));
+					this.env.addToEnvironment(unitName, BwapiUtility.getEisUnitType(unit.getType()));
 				} else {
 					toAdd.add(unit);
 				}
@@ -227,10 +227,10 @@ public class Game {
 	 * @param count
 	 *            The current frame count (per 50, matching c.site updates)
 	 */
-	public void updateFrameCount(int count) {
+	public void updateFrameCount(bwapi.Game api) {
 		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(1);
 		List<Percept> framepercept = new ArrayList<>(1);
-		framepercept.add(new FramePercept(count));
+		framepercept.add(new FramePercept(api.getFrameCount()));
 		toReturn.put(new PerceptFilter(Percepts.FRAME, Filter.Type.ON_CHANGE), framepercept);
 		this.framePercepts = toReturn;
 	}

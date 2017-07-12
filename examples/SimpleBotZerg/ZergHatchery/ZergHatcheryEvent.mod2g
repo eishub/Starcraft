@@ -1,0 +1,11 @@
+use "../Shared" as knowledge.
+
+module ZergHatcheryEvent {
+	% PROCESS RECEIVED INFORMATION
+	if (_).sent:(resources(M,G,S,Smax)), bel(resources(OldM,OldG,OldS,OldSmax)) 
+		then delete(resources(OldM,OldG,OldS,OldSmax)) + insert(resources(M,G,S,Smax)).
+		
+	% UPDATE QUEUESIZE (ON-CHANGE)
+	if percept(queueSize(N)), bel(queued(OldN))
+		then delete(queued(OldN)) + insert(queued(N)).
+}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import bwapi.TechType;
 import bwapi.Unit;
+import bwapi.UnitType;
 import bwapi.UpgradeType;
 import eis.iilang.Action;
 import eis.iilang.Identifier;
@@ -38,8 +39,8 @@ public class Research extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		return unit.getType().isBuilding();
+	public boolean canExecute(UnitType type, Action action) {
+		return type.isBuilding();
 	}
 
 	@Override

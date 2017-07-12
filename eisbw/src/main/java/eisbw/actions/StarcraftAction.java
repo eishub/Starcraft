@@ -48,14 +48,14 @@ public abstract class StarcraftAction {
 	public abstract boolean isValid(Action action);
 
 	/**
-	 * @param unit
-	 *            The unit performing the action.
+	 * @param type
+	 *            The type of the unit performing the action.
 	 * @param action
 	 *            The evaluated action.
 	 * @return A boolean which indicated wheter the specified unit can execute the
 	 *         action.
 	 */
-	public abstract boolean canExecute(Unit unit, Action action);
+	public abstract boolean canExecute(UnitType type, Action action);
 
 	/**
 	 * @param unit

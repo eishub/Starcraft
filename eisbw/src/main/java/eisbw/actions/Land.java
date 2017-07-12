@@ -4,6 +4,7 @@ import java.util.List;
 
 import bwapi.TilePosition;
 import bwapi.Unit;
+import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
@@ -24,8 +25,8 @@ public class Land extends StarcraftMovableAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		return unit.isLifted();
+	public boolean canExecute(UnitType type, Action action) {
+		return type.isFlyingBuilding();
 	}
 
 	@Override

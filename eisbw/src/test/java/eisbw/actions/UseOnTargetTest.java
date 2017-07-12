@@ -81,7 +81,7 @@ public class UseOnTargetTest {
 		when(spyAction.getTechType(this.techType)).thenReturn(this.tech);
 
 		this.params.add(new Numeral(2));
-		assertFalse(spyAction.canExecute(this.unit, this.act));
+		assertFalse(spyAction.canExecute(this.unitType, this.act));
 	}
 
 	// @Test FIXME (native call)

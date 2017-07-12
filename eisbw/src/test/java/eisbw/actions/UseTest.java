@@ -82,25 +82,25 @@ public class UseTest {
 		when(this.tech.targetsPosition()).thenReturn(false);
 		when(this.tech.targetsUnit()).thenReturn(false);
 
-		assertEquals(spyAction.canExecute(this.unit, this.act), true);
+		assertEquals(spyAction.canExecute(this.unitType, this.act), true);
 
 		when(this.tech.targetsPosition()).thenReturn(true);
 		when(this.tech.targetsUnit()).thenReturn(false);
 
-		assertEquals(spyAction.canExecute(this.unit, this.act), false);
+		assertEquals(spyAction.canExecute(this.unitType, this.act), false);
 
 		when(this.tech.targetsPosition()).thenReturn(true);
 		when(this.tech.targetsUnit()).thenReturn(true);
 
-		assertEquals(spyAction.canExecute(this.unit, this.act), false);
+		assertEquals(spyAction.canExecute(this.unitType, this.act), false);
 
 		when(this.tech.targetsPosition()).thenReturn(false);
 		when(this.tech.targetsUnit()).thenReturn(true);
 
-		assertEquals(spyAction.canExecute(this.unit, this.act), false);
+		assertEquals(spyAction.canExecute(this.unitType, this.act), false);
 
 		when(this.unit.isLoaded()).thenReturn(true);
-		assertEquals(spyAction.canExecute(this.unit, this.act), false);
+		assertEquals(spyAction.canExecute(this.unitType, this.act), false);
 	}
 
 	// @Test FIXME (native call)

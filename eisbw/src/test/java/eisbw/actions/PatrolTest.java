@@ -64,10 +64,10 @@ public class PatrolTest {
 
 	@Test
 	public void canExecute_test() {
-		when(this.unit.isBeingConstructed()).thenReturn(true);
-		assertFalse(this.action.canExecute(this.unit, this.act));
-		when(this.unit.isBeingConstructed()).thenReturn(false);
-		assertTrue(this.action.canExecute(this.unit, this.act));
+		when(this.unitType.canMove()).thenReturn(false);
+		assertFalse(this.action.canExecute(this.unitType, this.act));
+		when(this.unitType.canMove()).thenReturn(true);
+		assertTrue(this.action.canExecute(this.unitType, this.act));
 	}
 
 	@Test

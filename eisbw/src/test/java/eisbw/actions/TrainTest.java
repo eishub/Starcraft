@@ -72,7 +72,8 @@ public class TrainTest {
 
 	@Test
 	public void canExecute_test() {
-		assertTrue(this.action.canExecute(this.unit, this.act));
+		when(this.unitType.canProduce()).thenReturn(true);
+		assertTrue(this.action.canExecute(this.unitType, this.act));
 	}
 
 	// @Test FIXME (native call)

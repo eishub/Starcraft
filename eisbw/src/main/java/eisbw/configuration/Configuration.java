@@ -24,7 +24,7 @@ public class Configuration {
 	protected BooleanString drawMapInfo = new BooleanString("false");
 	protected BooleanString drawUnitInfo = new BooleanString("false");
 	protected BooleanString invulnerable = new BooleanString("false");
-	protected BooleanString mapAgent = new BooleanString("false");
+	protected BooleanString mapAgent = new BooleanString("true");
 
 	/**
 	 * The Configuration constructor.

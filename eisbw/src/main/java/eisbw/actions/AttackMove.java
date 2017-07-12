@@ -4,6 +4,7 @@ import java.util.List;
 
 import bwapi.TilePosition;
 import bwapi.Unit;
+import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
@@ -26,8 +27,8 @@ public class AttackMove extends StarcraftMovableAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		return unit.getType().canMove() && unit.getType().canAttack();
+	public boolean canExecute(UnitType type, Action action) {
+		return super.canExecute(type, action) && type.canAttack();
 	}
 
 	@Override

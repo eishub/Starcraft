@@ -1,0 +1,22 @@
+use "../Shared" as knowledge.
+use MapAgent as knowledge.
+
+module MapAgentEvent {
+	% PROCESS RECEIVED MESSAGES (AND PROVIDE INITIAL INFORMATION)
+	forall (Name).sent(self(Id,'Terran Command Center')), bel(resources(M,G,CS,TS))
+		do insert(agent(Name,Id)) + (Name).send:(resources(M,G,CS,TS)).
+	forall (Name).sent(self(Id,'Terran SCV')), bel(mineralField(MId,MAmount,MRegion))
+		do insert(agent(Name,Id)) + (Name).send:(mineralField(MId,MAmount,MRegion)).
+	
+	% UPDATE (AND RELAY) PERCEPT INFORMATION
+	if percept(resources(M,G,CS,TS)), bel(resources(OldM,OldG,OldCS,OldTS)) 
+		then delete(resources(OldM,OldG,OldCS,OldTS)) + insert(resources(M,G,CS,TS)) + (buildings).send:(resources(M,G,CS,TS)).
+	forall bel(mineralField(Id,Amount,Region)), not(percept(mineralField(Id,Amount,_,_,Region)))
+		do delete(mineralField(Id,Amount,Region)) + (workers).send:(not(mineralField(Id,Amount,Region))).
+	forall percept(mineralField(Id,Amount,_,_,Region)), not(bel(mineralField(Id,Amount,Region)))
+		do insert(mineralField(Id,Amount,Region)) + (workers).send:(mineralField(Id,Amount,Region)).
+	forall bel(friendly(Id,Type)), not(percept(friendly(Id,Type)))
+		do delete(friendly(Id,Type)).
+	forall percept(friendly(Id,Type)), not(bel(friendly(Id,Type)))
+		do insert(friendly(Id,Type)).
+}

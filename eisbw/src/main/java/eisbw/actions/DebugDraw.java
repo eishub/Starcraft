@@ -3,6 +3,7 @@ package eisbw.actions;
 import java.util.List;
 
 import bwapi.Unit;
+import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Parameter;
 import eisbw.Game;
@@ -34,7 +35,7 @@ public class DebugDraw extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
+	public boolean canExecute(UnitType type, Action action) {
 		return true;
 	}
 

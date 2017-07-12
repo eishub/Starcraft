@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bwapi.Unit;
-import eisbw.percepts.perceivers.BuildingPerceiver;
 import eisbw.percepts.perceivers.GenericUnitPerceiver;
 import eisbw.percepts.perceivers.IPerceiver;
 
@@ -33,11 +32,8 @@ public class StarcraftUnitFactory {
 	 * @return - a StarCraft unit with perceivers.
 	 */
 	public StarcraftUnit create(Unit unit) {
-		List<IPerceiver> perceptGenerators = new ArrayList<>(2);
+		List<IPerceiver> perceptGenerators = new ArrayList<>(1);
 		perceptGenerators.add(new GenericUnitPerceiver(this.api, unit));
-		if (unit.getType().isBuilding()) {
-			perceptGenerators.add(new BuildingPerceiver(this.api, unit));
-		}
 		return new StarcraftUnit(perceptGenerators, unit.getType().isWorker());
 	}
 }

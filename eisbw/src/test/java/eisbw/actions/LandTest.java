@@ -64,10 +64,10 @@ public class LandTest {
 
 	@Test
 	public void canExecute_test() {
-		when(this.unit.isLifted()).thenReturn(false);
-		assertFalse(this.action.canExecute(this.unit, this.act));
-		when(this.unit.isLifted()).thenReturn(true);
-		assertTrue(this.action.canExecute(this.unit, this.act));
+		when(this.unitType.isFlyingBuilding()).thenReturn(false);
+		assertFalse(this.action.canExecute(this.unitType, this.act));
+		when(this.unitType.isFlyingBuilding()).thenReturn(true);
+		assertTrue(this.action.canExecute(this.unitType, this.act));
 	}
 
 	@Test

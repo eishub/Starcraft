@@ -1,6 +1,5 @@
 package eisbw;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -25,7 +24,6 @@ import bwapi.UnitType;
 import eis.exceptions.ActException;
 import eis.iilang.Action;
 import eis.iilang.Identifier;
-import eis.iilang.Numeral;
 import eisbw.debugger.DebugWindow;
 import eisbw.units.StarcraftUnitFactory;
 import eisbw.units.Units;
@@ -62,6 +60,7 @@ public class BwapiListenerTest {
 		when(this.unit.getID()).thenReturn(0);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unitType.toString()).thenReturn("Terran Siege Tank Tank Mode");
+		when(this.unitType.canMove()).thenReturn(true);
 		when(this.units.getUnitName(0)).thenReturn("unit");
 		when(this.units.getUnit("unit")).thenReturn(this.unit);
 		when(this.game.getUnits()).thenReturn(this.units);
@@ -75,19 +74,6 @@ public class BwapiListenerTest {
 		when(this.mirror.getModule()).thenReturn(this.module);
 		this.listener.api = this.bwapi;
 		this.listener.actionProvider.loadActions(this.bwapi, this.game);
-	}
-
-	@Test
-	public void isSupportedByEntity_test() {
-		assertTrue(this.listener.isSupportedByEntity(new Action("stop"), "unit"));
-		eis.iilang.Parameter[] list = new eis.iilang.Parameter[1];
-		list[0] = new Identifier("fail");
-		assertFalse(this.listener.isSupportedByEntity(new Action("stop", list), "unit"));
-		assertFalse(this.listener.isSupportedByEntity(new Action("setRallyPoint", list), "unit"));
-		list[0] = new Numeral(1);
-		assertFalse(this.listener.isSupportedByEntity(new Action("setRallyPoint", list), "unit"));
-		when(this.unitType.isBuilding()).thenReturn(true);
-		assertTrue(this.listener.isSupportedByEntity(new Action("setRallyPoint", list), "unit"));
 	}
 
 	@Test
@@ -142,16 +128,15 @@ public class BwapiListenerTest {
 
 	@Test
 	public void matchFrame_test() throws ActException {
-		this.listener.pendingActions.add(new BwapiAction(this.unit, new Action("stub1")));
-		this.listener.pendingActions.add(new BwapiAction(this.unit, new Action("stub2")));
-		this.listener.pendingActions.add(new BwapiAction(this.unit, new Action("stub3")));
-		this.listener.pendingActions.add(new BwapiAction(this.unit, new Action("stub4")));
+		this.listener.pendingActions.add(new BwapiAction(this.unit, new Action("stub")));
+		this.listener.pendingActions.add(new BwapiAction(this.unit, new Action("stub")));
+		this.listener.pendingActions.add(new BwapiAction(this.unit, new Action("stub")));
+		this.listener.pendingActions.add(new BwapiAction(this.unit, new Action("stub")));
 		this.listener.onFrame();
-		verify(this.game, times(0)).updateConstructionSites(this.bwapi);
-		this.listener.count = 49;
-		this.listener.onFrame();
-		assertTrue(this.listener.count == 50);
 		verify(this.game, times(1)).updateConstructionSites(this.bwapi);
+		when(this.bwapi.getFrameCount()).thenReturn(50);
+		this.listener.onFrame();
+		verify(this.game, times(2)).updateConstructionSites(this.bwapi);
 		this.listener.performEntityAction("unit", new Action("stop"));
 		eis.iilang.Parameter[] list = new eis.iilang.Parameter[1];
 		list[0] = new Identifier("fail");

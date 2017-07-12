@@ -5,14 +5,20 @@ import java.util.List;
 import java.util.Map;
 
 import bwapi.Order;
+import bwapi.Position;
+import bwapi.TechType;
 import bwapi.TilePosition;
 import bwapi.Unit;
+import bwapi.UnitType;
+import bwapi.UpgradeType;
 import eis.eis2java.translation.Filter;
 import eis.iilang.Percept;
 import eisbw.BwapiUtility;
 import eisbw.percepts.DefensiveMatrixPercept;
 import eisbw.percepts.OrderPercept;
 import eisbw.percepts.Percepts;
+import eisbw.percepts.QueueSizePercept;
+import eisbw.percepts.ResearchingPercept;
 import eisbw.percepts.SelfPercept;
 import eisbw.percepts.StatusPercept;
 import eisbw.percepts.UnitLoadedPercept;
@@ -43,6 +49,12 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 		if (this.unit.getType().spaceProvided() > 0) {
 			List<Unit> loadedUnits = this.unit.getLoadedUnits();
 			unitLoadedPercept(toReturn, loadedUnits);
+		}
+		if (this.unit.getType().canProduce() || this.unit.getType() == UnitType.Terran_Nuclear_Silo) {
+			queueSizePercept(toReturn);
+		}
+		if (this.unit.getType().isBuilding()) {
+			researchingPercept(toReturn);
 		}
 	}
 
@@ -106,10 +118,41 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	private void orderPercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> orderPercept = new ArrayList<>(1);
 		Order primary = (this.unit.getOrder() == null) ? Order.None : this.unit.getOrder();
-		Unit target = (this.unit.getTarget() == null) ? this.unit.getOrderTarget() : this.unit.getTarget();
+		Unit targetUnit = (this.unit.getTarget() == null) ? this.unit.getOrderTarget() : this.unit.getTarget();
+		Position targetPos = (this.unit.getTargetPosition() == null) ? this.unit.getOrderTargetPosition()
+				: this.unit.getTargetPosition();
 		Order secondary = (this.unit.getSecondaryOrder() == null) ? Order.None : this.unit.getSecondaryOrder();
-		orderPercept.add(
-				new OrderPercept(primary.toString(), (target == null) ? -1 : target.getID(), secondary.toString()));
+		orderPercept.add(new OrderPercept(primary.toString(), (targetUnit == null) ? -1 : targetUnit.getID(),
+				(targetPos == null) ? -1 : targetPos.toTilePosition().getX(),
+				(targetPos == null) ? -1 : targetPos.toTilePosition().getY(), secondary.toString()));
 		toReturn.put(new PerceptFilter(Percepts.ORDER, Filter.Type.ON_CHANGE), orderPercept);
+	}
+
+	private void researchingPercept(Map<PerceptFilter, List<Percept>> toReturn) {
+		List<Percept> researchPercepts = new ArrayList<>(2);
+		if (this.unit.getTech() != null && this.unit.getTech() != TechType.None
+				&& this.unit.getTech() != TechType.Unknown) {
+			researchPercepts.add(new ResearchingPercept(this.unit.getTech().toString()));
+		}
+		if (this.unit.getUpgrade() != null && this.unit.getUpgrade() != UpgradeType.None
+				&& this.unit.getUpgrade() != UpgradeType.Unknown) {
+			researchPercepts.add(new ResearchingPercept(this.unit.getUpgrade().toString()));
+		}
+		if (!researchPercepts.isEmpty()) {
+			toReturn.put(new PerceptFilter(Percepts.RESEARCHING, Filter.Type.ALWAYS), researchPercepts);
+		}
+	}
+
+	private void queueSizePercept(Map<PerceptFilter, List<Percept>> toReturn) {
+		List<Percept> queueSizePercept = new ArrayList<>(1);
+		if (this.unit.getType() == UnitType.Zerg_Hatchery || this.unit.getType() == UnitType.Zerg_Lair
+				|| this.unit.getType() == UnitType.Zerg_Hive) {
+			queueSizePercept.add(new QueueSizePercept(this.unit.getLarva().size()));
+		} else if (this.unit.getType() == UnitType.Terran_Nuclear_Silo) {
+			queueSizePercept.add(new QueueSizePercept(this.unit.hasNuke() ? 1 : 0));
+		} else {
+			queueSizePercept.add(new QueueSizePercept(this.unit.getTrainingQueue().size()));
+		}
+		toReturn.put(new PerceptFilter(Percepts.QUEUESIZE, Filter.Type.ON_CHANGE), queueSizePercept);
 	}
 }

@@ -2,8 +2,8 @@ package eisbw.actions;
 
 import java.util.List;
 
-import bwapi.Race;
 import bwapi.Unit;
+import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Parameter;
 
@@ -30,8 +30,8 @@ public class Lift extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		return unit.getType().isBuilding() && unit.getType().getRace() == Race.Terran;
+	public boolean canExecute(UnitType type, Action action) {
+		return type.isFlyingBuilding();
 	}
 
 	@Override

@@ -24,7 +24,5 @@ public class StarcraftUnitFactoryTest {
 		this.factory = new StarcraftUnitFactory(null);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		assertEquals(1, this.factory.create(this.unit).perceivers.size());
-		when(this.unitType.isBuilding()).thenReturn(true);
-		assertEquals(2, this.factory.create(this.unit).perceivers.size());
 	}
 }

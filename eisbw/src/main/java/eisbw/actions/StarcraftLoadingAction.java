@@ -2,7 +2,7 @@ package eisbw.actions;
 
 import java.util.List;
 
-import bwapi.Unit;
+import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
@@ -29,7 +29,7 @@ public abstract class StarcraftLoadingAction extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		return unit.getType().spaceProvided() > 0;
+	public boolean canExecute(UnitType type, Action action) {
+		return type.spaceProvided() > 0;
 	}
 }

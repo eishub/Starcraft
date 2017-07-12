@@ -21,9 +21,8 @@ public class Repair extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(Unit unit, Action action) {
-		UnitType unitType = unit.getType();
-		return unitType.getRace() == Race.Terran && unit.getType().isWorker();
+	public boolean canExecute(UnitType type, Action action) {
+		return type.isWorker() && type.getRace() == Race.Terran;
 	}
 
 	@Override
@@ -32,8 +31,8 @@ public class Repair extends StarcraftAction {
 		int targetId = ((Numeral) parameters.get(0)).getValue().intValue();
 		Unit target = this.api.getUnit(targetId);
 
-		if (target == null || target.isCompleted()) {
-			unit.repair(target);
+		if (target != null && target.isCompleted()) {
+			unit.repair(target, false);
 		} else {
 			unit.rightClick(target);
 		}

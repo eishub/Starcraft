@@ -40,9 +40,8 @@ public class BwapiListener extends BwapiEvents {
 	protected final boolean debug;
 	protected final boolean invulnerable;
 	protected final int speed;
-	protected int count = 0;
-	protected int nuke = -1;
 	protected DebugWindow debugwindow;
+	protected int nuke = -1;
 
 	/**
 	 * Event listener for BWAPI.
@@ -89,6 +88,7 @@ public class BwapiListener extends BwapiEvents {
 	public void onStart() {
 		// API INITIALISATION
 		this.api = this.mirror.getGame();
+		this.api.setCommandOptimizationLevel(2);
 		this.factory = new StarcraftUnitFactory(this.api);
 		this.actionProvider.loadActions(this.api, this.game);
 		BWTA.readMap();
@@ -112,10 +112,8 @@ public class BwapiListener extends BwapiEvents {
 			this.debugwindow = new DebugWindow(this.game);
 		}
 
-		// DO INITIAL UPDATES
+		// UPDATE MAP INFO
 		this.game.updateMap(this.api);
-		this.game.updateConstructionSites(this.api);
-		this.game.updateFrameCount(this.count);
 
 		// KnowledgeExport.export();
 	}
@@ -123,9 +121,10 @@ public class BwapiListener extends BwapiEvents {
 	@Override
 	public void onFrame() {
 		// GENERATE PERCEPTS
-		if ((++this.count % 50) == 0) {
+		int frame = this.api.getFrameCount();
+		if ((frame % 50) == 0) {
+			this.game.updateFrameCount(this.api);
 			this.game.updateConstructionSites(this.api);
-			this.game.updateFrameCount(this.count);
 		}
 		if (this.nuke >= 0 && ++this.nuke == 50) {
 			this.game.updateNukePerceiver(null);
@@ -133,7 +132,7 @@ public class BwapiListener extends BwapiEvents {
 		}
 		do {
 			this.game.update(this.api);
-			if (this.count == 1) {
+			if (frame == 0) {
 				this.game.mapAgent();
 			}
 			try { // always sleep 1ms to better facilitate running at speed 0
@@ -141,7 +140,7 @@ public class BwapiListener extends BwapiEvents {
 			} catch (InterruptedException ie) {
 				break;
 			} // wait until all the initial workers get an action request
-		} while (this.count == 1 && isRunning() && this.pendingActions.size() < 4);
+		} while (frame == 0 && isRunning() && this.pendingActions.size() < 4);
 
 		// PERFORM ACTIONS
 		Iterator<BwapiAction> actions = this.pendingActions.iterator();
@@ -179,7 +178,7 @@ public class BwapiListener extends BwapiEvents {
 
 	@Override
 	public void onUnitMorph(Unit unit) {
-		if (unit.getType().getRace() != Race.Terran) {
+		if (unit.getType().getRace() != Race.Terran) { // siege tank hack
 			onUnitDestroy(unit);
 			onUnitComplete(unit);
 		}
@@ -257,7 +256,7 @@ public class BwapiListener extends BwapiEvents {
 	public boolean isSupportedByEntity(Action action, String name) {
 		StarcraftAction act = this.actionProvider.getAction(action);
 		Unit unit = this.game.getUnits().getUnit(name);
-		return isSupportedByEnvironment(action) && act.canExecute(unit, action);
+		return isSupportedByEnvironment(action) && act.canExecute((unit == null) ? null : unit.getType(), action);
 	}
 
 	private boolean isRunning() {
