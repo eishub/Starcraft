@@ -6,8 +6,10 @@ import java.lang.reflect.Modifier;
 import bwapi.Color;
 import bwapi.Player;
 import bwapi.Position;
+import bwapi.TechType;
 import bwapi.Unit;
 import bwapi.UnitType;
+import bwapi.UpgradeType;
 import eisbw.BwapiUtility;
 import eisbw.Game;
 
@@ -51,19 +53,24 @@ public class DrawUnitInfo extends IDraw {
 			int total = 0;
 			int done = 0;
 			String txt = "";
-			if (unit.getRemainingResearchTime() > 0) {
-				total = unit.getTech().researchTime();
-				done = total - unit.getRemainingResearchTime();
-				txt = unit.getTech().toString();
+			int remaining = unit.getRemainingResearchTime();
+			if (remaining > 0) {
+				TechType tech = unit.getTech();
+				total = tech.researchTime();
+				done = total - remaining;
+				txt = BwapiUtility.getName(tech);
 			}
+			remaining = unit.getRemainingUpgradeTime();
 			if (unit.getRemainingUpgradeTime() > 0) {
-				total = unit.getUpgrade().upgradeTime();
+				UpgradeType upgrade = unit.getUpgrade();
+				total = upgrade.upgradeTime();
 				done = total - unit.getRemainingUpgradeTime();
-				txt = unit.getUpgrade().toString();
+				txt = BwapiUtility.getName(upgrade);
 			}
 			if (total > 0) {
+				Position pos = unit.getPosition();
 				int width = unit.getType().tileWidth() * 32;
-				Position start = new Position(unit.getPosition().getX() - width / 2, unit.getPosition().getY() - 30);
+				Position start = new Position(pos.getX() - width / 2, pos.getY() - 30);
 				api.drawBoxMap(start, new Position(start.getX() + width, start.getY() + barHeight), barColor, false);
 				int progress = (int) ((double) done / (double) total * width);
 				api.drawBoxMap(start, new Position(start.getX() + progress, start.getY() + barHeight), barColor, true);
@@ -81,15 +88,17 @@ public class DrawUnitInfo extends IDraw {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
 			}
+			UnitType type = unit.getType();
 			int health = unit.getHitPoints();
-			int max = unit.getType().maxHitPoints();
+			int max = type.maxHitPoints();
 			if (health > 0 && max > 0) {
-				int x = unit.getPosition().getX();
-				int y = unit.getPosition().getY();
-				int l = unit.getType().dimensionLeft();
-				int t = unit.getType().dimensionUp();
-				int r = unit.getType().dimensionRight();
-				int b = unit.getType().dimensionDown();
+				Position pos = unit.getPosition();
+				int x = pos.getX();
+				int y = pos.getY();
+				int l = type.dimensionLeft();
+				int t = type.dimensionUp();
+				int r = type.dimensionRight();
+				int b = type.dimensionDown();
 				int width = ((r + l) * health) / max;
 				if (health * 3 < max) {
 					api.drawBoxMap(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), Color.Red, true);
@@ -100,12 +109,12 @@ public class DrawUnitInfo extends IDraw {
 					api.drawBoxMap(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), Color.Green,
 							true);
 				}
-				boolean self = unit.getPlayer() != null && unit.getPlayer().equals(api.self());
+				boolean self = unit.getPlayer() != null && unit.getPlayer() == api.self();
 				api.drawBoxMap(new Position(x - l, y - t - 5), new Position(x + r, y - t),
 						self ? Color.White : Color.Red, false);
 				api.drawBoxMap(new Position(x - l, y - t), new Position(x + r, y + b), self ? Color.White : Color.Red,
 						false);
-				api.drawTextMap(new Position(x - l, y - t), BwapiUtility.getName(unit.getType()));
+				api.drawTextMap(new Position(x - l, y - t), BwapiUtility.getName(type));
 			}
 		}
 	}
@@ -119,14 +128,15 @@ public class DrawUnitInfo extends IDraw {
 				continue;
 			}
 			boolean self = unit.getPlayer() != null && unit.getPlayer().equals(api.self());
+			Position pos = unit.getPosition();
 			Unit target = (unit.getTarget() == null) ? unit.getOrderTarget() : unit.getTarget();
 			if (target != null) {
-				api.drawLineMap(unit.getPosition(), target.getPosition(), self ? Color.Yellow : Color.Purple);
+				api.drawLineMap(pos, target.getPosition(), self ? Color.Yellow : Color.Purple);
 			}
-			Position position = (unit.getTargetPosition() == null) ? unit.getOrderTargetPosition()
+			Position targetpos = (unit.getTargetPosition() == null) ? unit.getOrderTargetPosition()
 					: unit.getTargetPosition();
-			if (position != null) {
-				api.drawLineMap(unit.getPosition(), position, self ? Color.Yellow : Color.Purple);
+			if (targetpos != null) {
+				api.drawLineMap(pos, targetpos, self ? Color.Yellow : Color.Purple);
 			}
 		}
 	}

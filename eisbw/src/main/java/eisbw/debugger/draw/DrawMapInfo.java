@@ -3,6 +3,8 @@ package eisbw.debugger.draw;
 import java.util.List;
 
 import bwapi.Color;
+import bwapi.Pair;
+import bwapi.Position;
 import bwapi.Race;
 import bwapi.TilePosition;
 import bwta.BWTA;
@@ -47,29 +49,30 @@ public class DrawMapInfo extends IDraw {
 			// for (int j = 0; j < p.size(); ++j) {
 			// api.drawLineMap(p.get(j), p.get((j + 1) % p.size()), Color.Green);
 			// }
+			TilePosition center = region.getCenter().toTilePosition();
 			api.drawTextMap(region.getCenter(),
-					"Region " + BwapiUtility.getRegion(region.getCenter().toTilePosition(), api) + " ("
-							+ region.getCenter().toTilePosition().getX() + ","
-							+ region.getCenter().toTilePosition().getY() + ")");
+					"Region " + BwapiUtility.getRegion(center, api) + " (" + center.getX() + "," + center.getY() + ")");
 		}
 	}
 
 	private void drawBases(bwapi.Game api) {
 		for (BaseLocation base : BWTA.getBaseLocations()) {
-			api.drawCircleMap(base.getPosition(), 75, Color.Purple, false);
-			api.drawTextMap(base.getPosition(), base.getTilePosition().getX() + ", " + base.getTilePosition().getY());
+			Position pos = base.getPosition();
+			api.drawCircleMap(pos, 75, Color.Purple, false);
+			api.drawTextMap(pos, pos.toTilePosition().getX() + ", " + pos.toTilePosition().getY());
 			if (base.isStartLocation()) {
-				api.drawTextMap(base.getPosition(), "Starting Location");
+				api.drawTextMap(pos, "Starting Location");
 			}
 		}
 	}
 
 	private void drawChokepoints(bwapi.Game api) {
 		for (Chokepoint cp : BWTA.getChokepoints()) {
-			api.drawLineMap(cp.getSides().first.getPoint(), cp.getSides().second.getPoint(), Color.Yellow);
-			api.drawCircleMap(cp.getCenter(), (int) cp.getWidth(), Color.Red, false);
-			api.drawTextMap(cp.getCenter(),
-					"(" + cp.getCenter().toTilePosition().getX() + "," + cp.getCenter().toTilePosition().getY() + ")");
+			Position center = cp.getCenter();
+			Pair<Position, Position> sides = cp.getSides();
+			api.drawLineMap(sides.first.getPoint(), sides.second.getPoint(), Color.Yellow);
+			api.drawCircleMap(center, (int) cp.getWidth(), Color.Red, false);
+			api.drawTextMap(center, "(" + center.toTilePosition().getX() + "," + center.toTilePosition().getY() + ")");
 		}
 	}
 

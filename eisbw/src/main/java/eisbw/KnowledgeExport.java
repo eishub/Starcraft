@@ -83,14 +83,14 @@ public class KnowledgeExport {
 	}
 
 	private static String getUnitType(UnitType type) {
-		return String.format("unit('%s',%s).\n", BwapiUtility.getName(type), getName(type.getRace()));
+		return String.format("unit('%s',%s).\n", BwapiUtility.getName(type), BwapiUtility.getName(type.getRace()));
 	}
 
 	private static String getUnitCosts(UnitType type) {
 		String requirements = "[";
 		boolean hadFirst = false;
 		if (type.requiredTech() != TechType.Unknown && type.requiredTech() != TechType.None) {
-			requirements += "'" + getName(type.requiredTech()) + "'";
+			requirements += "'" + BwapiUtility.getName(type.requiredTech()) + "'";
 			hadFirst = true;
 		}
 		for (UnitType required : type.requiredUnits().keySet()) {
@@ -191,15 +191,15 @@ public class KnowledgeExport {
 	}
 
 	private static String getTechType(TechType type) {
-		return String.format("upgrade('%s',%s).\n", getName(type), getName(type.getRace()));
+		return String.format("upgrade('%s',%s).\n", BwapiUtility.getName(type), BwapiUtility.getName(type.getRace()));
 	}
 
 	private static String getTechCosts(TechType type) {
 		UnitType researches = type.whatResearches();
 		String required = (researches == UnitType.Unknown || researches == UnitType.None) ? ""
 				: ("'" + BwapiUtility.getName(researches) + "'");
-		return String.format("costs('%s',%d,%d,%d,%d,%s).\n", getName(type), type.mineralPrice(), type.gasPrice(),
-				type.energyCost(), type.researchTime(), "[" + required + "]");
+		return String.format("costs('%s',%d,%d,%d,%d,%s).\n", BwapiUtility.getName(type), type.mineralPrice(),
+				type.gasPrice(), type.energyCost(), type.researchTime(), "[" + required + "]");
 	}
 
 	private static String getTechCombat(TechType type) {
@@ -207,7 +207,7 @@ public class KnowledgeExport {
 		if (weapon == WeaponType.Unknown || weapon == WeaponType.None) {
 			return "";
 		} else {
-			return String.format("combat('%s',%d,%d,%d,%d,%d).\n", getName(type),
+			return String.format("combat('%s',%d,%d,%d,%d,%d).\n", BwapiUtility.getName(type),
 					weapon.targetsGround() ? (weapon.damageAmount() * weapon.damageFactor()) : 0,
 					weapon.targetsAir() ? (weapon.damageAmount() * weapon.damageFactor()) : 0, weapon.damageCooldown(),
 					weapon.maxRange() / TilePosition.SIZE_IN_PIXELS,
@@ -219,11 +219,13 @@ public class KnowledgeExport {
 		if (type.maxRepeats() > 1) {
 			String returned = "";
 			for (int i = 1; i <= type.maxRepeats(); ++i) {
-				returned += String.format("upgrade('%s',%s).\n", getName(type) + " " + i, getName(type.getRace()));
+				returned += String.format("upgrade('%s',%s).\n", BwapiUtility.getName(type) + " " + i,
+						BwapiUtility.getName(type.getRace()));
 			}
 			return returned;
 		} else {
-			return String.format("upgrade('%s',%s).\n", getName(type), getName(type.getRace()));
+			return String.format("upgrade('%s',%s).\n", BwapiUtility.getName(type),
+					BwapiUtility.getName(type.getRace()));
 		}
 	}
 
@@ -234,23 +236,11 @@ public class KnowledgeExport {
 		String returned = "";
 		for (int i = 1; i <= type.maxRepeats(); ++i) {
 			String toAdd = (type.maxRepeats() == 1) ? "" : (" " + i);
-			returned += String.format("costs('%s',%d,%d,%d,%d,%s).\n", getName(type) + toAdd,
+			returned += String.format("costs('%s',%d,%d,%d,%d,%s).\n", BwapiUtility.getName(type) + toAdd,
 					type.mineralPrice() + (type.mineralPriceFactor() * i),
 					type.gasPrice() + (type.gasPriceFactor() * i), 0,
 					type.upgradeTime() + (type.upgradeTimeFactor() * i), "[" + required + "]");
 		}
 		return returned;
-	}
-
-	private static String getName(Race race) {
-		return race.toString().toLowerCase();
-	}
-
-	private static String getName(TechType type) {
-		return type.toString().replace("_", " ");
-	}
-
-	private static String getName(UpgradeType type) {
-		return type.toString().replace("_", " ");
 	}
 }

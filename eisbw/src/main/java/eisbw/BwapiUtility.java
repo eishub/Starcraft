@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import bwapi.Race;
 import bwapi.TechType;
 import bwapi.TilePosition;
 import bwapi.Unit;
@@ -45,6 +46,10 @@ public class BwapiUtility {
 		return name.substring(0, 1).toLowerCase() + name.substring(1);
 	}
 
+	public static String getName(Race race) {
+		return race.toString().toLowerCase();
+	}
+
 	public static String getName(UnitType unittype) {
 		String type = unittype.toString().replace("_", " ");
 		if (type.startsWith("Terran Siege Tank")) {
@@ -52,6 +57,14 @@ public class BwapiUtility {
 		} else {
 			return type;
 		}
+	}
+
+	public static String getName(TechType type) {
+		return type.toString().replace("_", " ");
+	}
+
+	public static String getName(UpgradeType type) {
+		return type.toString().replace("_", " ");
 	}
 
 	public static int getRegion(TilePosition position, bwapi.Game api) {
@@ -94,7 +107,7 @@ public class BwapiUtility {
 				if (Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers())) {
 					try {
 						UnitType ut = (UnitType) field.get(null);
-						unitTypeMap.put(ut.toString().replace("_", " "), ut);
+						unitTypeMap.put(getName(ut), ut);
 					} catch (IllegalArgumentException | IllegalAccessException e) {
 						e.printStackTrace(); // TODO Auto-generated
 					}
@@ -117,7 +130,7 @@ public class BwapiUtility {
 				if (Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers())) {
 					try {
 						TechType tt = (TechType) field.get(null);
-						techTypeMap.put(tt.toString().replace("_", " "), tt);
+						techTypeMap.put(getName(tt), tt);
 					} catch (IllegalArgumentException | IllegalAccessException e) {
 						e.printStackTrace(); // TODO Auto-generated
 					}
@@ -140,7 +153,7 @@ public class BwapiUtility {
 				if (Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers())) {
 					try {
 						UpgradeType ut = (UpgradeType) field.get(null);
-						upgradeTypeMap.put(ut.toString().replace("_", " "), ut);
+						upgradeTypeMap.put(getName(ut), ut);
 					} catch (IllegalArgumentException | IllegalAccessException e) {
 						e.printStackTrace(); // TODO Auto-generated
 					}
