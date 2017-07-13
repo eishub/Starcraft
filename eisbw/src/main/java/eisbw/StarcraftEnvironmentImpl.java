@@ -70,7 +70,7 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 				if (!"OFF".equals(this.config.getAutoMenu()) && !WindowsTools.isProcessRunning("Chaoslauncher.exe")) {
 					WindowsTools.startChaoslauncher(this.config.getOwnRace(), this.config.getMap(),
 							this.config.getScDir(), this.config.getAutoMenu(), this.config.getGameType(),
-							this.config.getEnemyRace());
+							this.config.getEnemyRace(), this.config.getSeed());
 				}
 			}
 			this.mapAgent = this.config.getMapAgent();
