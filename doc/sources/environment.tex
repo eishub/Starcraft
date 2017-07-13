@@ -33,6 +33,7 @@ The StarCraft environment offers multiple configurable items through the init pa
         draw_unitinfo="false",
         invulnernable="false",
         map_agent="true",
+        seed=0.
 \end{verbatim}
 
 \subsection{Own Race}
@@ -88,10 +89,11 @@ If enabled, the environment will generate an entity of name and type \textit{`ma
 
 Thus, when the map agent is enabled, all other entities will only receive their local information: \textit{self/2, status/7, order/5, defensiveMatrix/1, queueSize/1, researching/1, unitLoaded/1}, whilst they can of course still take the same actions. The map agent entity can be enabled or disabled with \textit{map\_agent=<Boolean>}.
 
-\newpage
+\subsection{Seed}
+If non-zero, this sets the random seed used by StarCraft to the indicated value (which should be a positive integer). This ensures that randomness such as starting locations, weapon cooldowns, and the initialization of a built-in enemy AI will be consistent over several matches (on the same map with the same seed).
 
 \section{Entity Types}
-When defining a launch rule it is important that a correct entity type is used (see \ref{unittype}). This value has to be the same type of the StarCraft unit without spaces and where the first letter is uncapitalised. So when you for example want to connect an agent to a \texttt{Terran SCV}, this can be done by using the entity type \textit{terranSCV}. Note that each unit type starts with the race of the unit, followed by the exact name of the unit type, and please be aware that the environment will wait in the first game frame until \textit{at least four actions} have been requested, e.g., until all initial workers have called \textit{gather/1}. This will allow all initial agents (including the \textit{`mapAgent'}) to fully start-up (and possible execute a few cycles already) before the game starts.
+When defining a launch rule it is important that a correct entity type is used (see \ref{unittype}). This value has to be the same type of the StarCraft unit without spaces and where the first letter is uncapitalised. So when you for example want to connect an agent to a \textit{Terran SCV}, this can be done by using the entity type \textit{terranSCV}. Note that each unit type starts with the race of the unit, followed by the exact name of the unit type, and please be aware that the environment will wait in the first game frame until \textit{at least four actions} have been requested, e.g., until all initial workers have called \textit{gather/1}. This will allow all initial agents (including the \textit{`mapAgent'}) to fully start-up (and possible execute a few cycles already) before the game starts.
 
 \begin{verbatim}
     define myAgent as agent {

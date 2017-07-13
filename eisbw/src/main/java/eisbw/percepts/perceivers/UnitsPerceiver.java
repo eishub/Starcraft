@@ -6,7 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import bwapi.Bullet;
+import bwapi.BulletType;
 import bwapi.Player;
+import bwapi.Position;
 import bwapi.TilePosition;
 import bwapi.Unit;
 import bwapi.UnitType;
@@ -15,6 +18,7 @@ import eis.eis2java.translation.Filter;
 //import eis.iilang.Parameter;
 import eis.iilang.Percept;
 import eisbw.BwapiUtility;
+import eisbw.percepts.AttackPercept;
 import eisbw.percepts.AttackingPercept;
 import eisbw.percepts.EnemyPercept;
 import eisbw.percepts.FriendlyPercept;
@@ -42,6 +46,7 @@ public class UnitsPerceiver extends Perceiver {
 	public void perceive(Map<PerceptFilter, List<Percept>> toReturn) {
 		resourcesPercepts(toReturn);
 		unitsPercepts(toReturn);
+		attackPercepts(toReturn);
 	}
 
 	private void resourcesPercepts(Map<PerceptFilter, List<Percept>> toReturn) {
@@ -154,6 +159,26 @@ public class UnitsPerceiver extends Perceiver {
 					}
 				}
 			}
+		}
+	}
+
+	private void attackPercepts(Map<PerceptFilter, List<Percept>> toReturn) {
+		List<Percept> attackpercepts = new LinkedList<>();
+		for (Bullet bullet : this.api.getBullets()) {
+			if (bullet.exists() && bullet.isVisible()) {
+				BulletType type = bullet.getType();
+				Unit source = bullet.getSource();
+				Unit targetUnit = bullet.getTarget();
+				Position targetPos = bullet.getTargetPosition();
+				boolean travelling = !targetPos.equals(bullet.getPosition());
+				attackpercepts.add(new AttackPercept(BwapiUtility.getName(type), source.getID(),
+						(targetUnit == null) ? -1 : targetUnit.getID(),
+						(targetPos == null) ? -1 : targetPos.toTilePosition().getX(),
+						(targetPos == null) ? -1 : targetPos.toTilePosition().getY(), travelling));
+			}
+		}
+		if (!attackpercepts.isEmpty()) {
+			toReturn.put(new PerceptFilter(Percepts.ATTACK, Filter.Type.ALWAYS), attackpercepts);
 		}
 	}
 }

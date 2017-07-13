@@ -29,6 +29,7 @@ public class Percepts {
 	public static final String NUKE = "nuke";
 	public static final String REGION = "region";
 	public static final String ORDER = "order";
+	public static final String ATTACK = "attack";
 
 	private Percepts() {
 		// Private constructor because this is a static class

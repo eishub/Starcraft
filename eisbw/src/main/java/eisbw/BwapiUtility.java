@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import bwapi.BulletType;
 import bwapi.Player;
 import bwapi.Race;
 import bwapi.TechType;
@@ -137,6 +138,10 @@ public class BwapiUtility {
 	}
 
 	public static String getName(UpgradeType type) {
+		return type.toString().replace("_", " ");
+	}
+
+	public static String getName(BulletType type) {
 		return type.toString().replace("_", " ");
 	}
 

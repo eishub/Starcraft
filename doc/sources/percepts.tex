@@ -179,6 +179,41 @@ These percepts represent information that changes during a match, but is still g
             \cline{2-3}
 \end{tabularx}
 
+\subsection{attack/6}
+\begin{tabularx}{\textwidth}{lX}
+ Description & Indicates an enemy attack that is in progress. In comparison to \textit{attacking/2}, this reports visible and current attacks, possibly on a location (instead of a unit). This includes for example Psionic Storms and Subterranean Spines. \\
+ Type & Send always \\
+ Syntax & \verb|attack(<Type>,<SourceUnit>,<TargetUnit>,| \\ & \quad \verb|<TargetX>,<TargetY>,<Travelling>)| \\
+ Example & \verb|attack(`Plague Cloud', 4, -1, 12, 6, false)|   \\
+ \end{tabularx}
+ \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
+ \cline{2-3}
+ Parameters & \textbf{\verb|<Primary>|} & The type of attack. \\
+            & \textbf{Type} & \verb|String| \\
+            &\textbf{Range} &  See \url{https://bwapi.github.io/namespace_b_w_a_p_i_1_1_bullet_types.html} \\
+            \cline{2-3}
+            & \textbf{\verb|<SourceUnit>|} & The ID of the enemy unit that is the source of the attack. \\
+            & \textbf{Type} & \verb|Integer| \\
+            &\textbf{Range} &  [0--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<TargetUnit>|} & The ID of the unit the attack is targeted at if any; -1 otherwise. \\
+            & \textbf{Type} & \verb|Integer| \\
+            &\textbf{Range} &  [-1--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<TargetX>|} & The X coordinate of the position the attack is targeted at if any; -1 otherwise. \\
+            & \textbf{Type} & \verb|Integer| \\
+            &\textbf{Range} &  [-1--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<TargetY>|} & The Y coordinate of the position the attack is targeted at if any; -1 otherwise. \\
+            & \textbf{Type} & \verb|Integer| \\
+            &\textbf{Range} &  [-1--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<Travelling>|} & Indicates if the attack is still travelling to its target.\\
+            & \textbf{Type} & \verb|Boolean| \\
+            &\textbf{Range} &  [true,false] \\
+            \cline{2-3}
+\end{tabularx}
+
 \subsection{constructionSite/3-4}
 \begin{tabularx}{\textwidth}{lX}
  Description & All visible and non-obstructed locations at which buildings can potentially be constructed. Such construction sites are squares containing 4 tiles, as the minimum size of any building is 2 by 2 tiles. This information is updated every 50 game frames. Note that resource centers require a minimum distance to mineral patches and geysers (which the locations as indicated by \textit{base/4} conform to for example). \\
@@ -458,6 +493,37 @@ These percepts represent information that changes during a match, but is still g
 These percepts are generated for all individual units in the game (thus excluding the mapAgent if it is enabled). Although the \textit{self/2} percept represents static information that does not change during the match, the \textit{status/7} and the \textit{order/3} percepts are updated frequently.
 %%%----------------------------------------------------------
 
+\subsection{order/5}
+\begin{tabularx}{\textwidth}{lX}
+ Description & Indicates what the unit is ordered to do. A unit always has an order (e.g. even `Nothing' is an order). \\
+ Type & Send on change \\
+ Syntax & \verb|order(<Primary>,<TargetUnit>,<TargetX>,<TargetY>,<Secondary>)| \\
+ Example & \verb|order(`AttackMove', -1, 34, 8, `None')|   \\
+ \end{tabularx}
+ \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
+ \cline{2-3}
+ Parameters & \textbf{\verb|<Primary>|} & The primary order of the unit. Some actions are converted into race or unit specific orders. \\
+            & \textbf{Type} & \verb|String| \\
+            &\textbf{Range} &  See \url{https://bwapi.github.io/namespace_b_w_a_p_i_1_1_orders.html} \\
+            \cline{2-3}
+            & \textbf{\verb|<TargetUnit>|} & The ID of the unit the order is targeted at if any; -1 otherwise. \\
+            & \textbf{Type} & \verb|Integer| \\
+            &\textbf{Range} &  [-1--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<TargetX>|} & The X coordinate of the position the order is targeted at if any; -1 otherwise. \\
+            & \textbf{Type} & \verb|Integer| \\
+            &\textbf{Range} &  [-1--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<TargetY>|} & The Y coordinate of the position the order is targeted at if any; -1 otherwise. \\
+            & \textbf{Type} & \verb|Integer| \\
+            &\textbf{Range} &  [-1--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<Secondary>|} & The secondary order of the unit. This is usually `None', but is used when for example a Protoss Carrier is both moving and producing units.\\
+            & \textbf{Type} & \verb|String| \\
+            &\textbf{Range} &  See \url{https://bwapi.github.io/namespace_b_w_a_p_i_1_1_orders.html} \\
+            \cline{2-3}
+\end{tabularx}
+
 \subsection{self/2}
 \begin{tabularx}{\textwidth}{lX}
  Description & Indicates the ID and type of the unit itself. \\
@@ -514,37 +580,6 @@ These percepts are generated for all individual units in the game (thus excludin
             & \textbf{\verb|<Region>|} & The region the unit is in. Can be 0 if the unit is on a chokepoint (and thus `in-between' regions).\\
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0--$\infty$] \\
-            \cline{2-3}
-\end{tabularx}
-
-\subsection{order/5}
-\begin{tabularx}{\textwidth}{lX}
- Description & Indicates what the unit is ordered to do. A unit always has an order (e.g. even `Nothing' is an order). \\
- Type & Send on change \\
- Syntax & \verb|order(<Primary>,<TargetUnit>,<TargetX>,<TargetY>,<Secondary>)| \\
- Example & \verb|order(`AttackMove', -1, 34, 8, `None')|   \\
- \end{tabularx}
- \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
- \cline{2-3}
- Parameters & \textbf{\verb|<Primary>|} & The primary order of the unit. Some actions are converted into race or unit specific orders. \\
-            & \textbf{Type} & \verb|String| \\
-            &\textbf{Range} &  See \url{https://bwapi.github.io/namespace_b_w_a_p_i_1_1_orders.html} \\
-            \cline{2-3}
-            & \textbf{\verb|<TargetUnit>|} & The ID of the unit the order is targeted at if any; -1 otherwise. \\
-            & \textbf{Type} & \verb|Integer| \\
-            &\textbf{Range} &  [-1--$\infty$] \\
-            \cline{2-3}
-            & \textbf{\verb|<TargetX>|} & The X coordinate of the position the order is targeted at if any; -1 otherwise. \\
-            & \textbf{Type} & \verb|Integer| \\
-            &\textbf{Range} &  [-1--$\infty$] \\
-            \cline{2-3}
-            & \textbf{\verb|<TargetY>|} & The Y coordinate of the position the order is targeted at if any; -1 otherwise. \\
-            & \textbf{Type} & \verb|Integer| \\
-            &\textbf{Range} &  [-1--$\infty$] \\
-            \cline{2-3}
-            & \textbf{\verb|<Secondary>|} & The secondary order of the unit. This is usually `None', but is used when for example a Protoss Carrier is both moving and producing units.\\
-            & \textbf{Type} & \verb|String| \\
-            &\textbf{Range} &  See \url{https://bwapi.github.io/namespace_b_w_a_p_i_1_1_orders.html} \\
             \cline{2-3}
 \end{tabularx}
 
