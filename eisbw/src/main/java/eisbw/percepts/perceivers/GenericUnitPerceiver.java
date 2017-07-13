@@ -46,14 +46,15 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 		defensiveMatrixPercept(toReturn);
 		orderPercept(toReturn);
 
-		if (this.unit.getType().spaceProvided() > 0) {
+		UnitType type = this.unit.getType();
+		if (type.spaceProvided() > 0) {
 			List<Unit> loadedUnits = this.unit.getLoadedUnits();
 			unitLoadedPercept(toReturn, loadedUnits);
 		}
-		if (this.unit.getType().canProduce() || this.unit.getType() == UnitType.Terran_Nuclear_Silo) {
+		if (type.canProduce() || type == UnitType.Terran_Nuclear_Silo) {
 			queueSizePercept(toReturn);
 		}
-		if (this.unit.getType().isBuilding()) {
+		if (type.isBuilding()) {
 			researchingPercept(toReturn);
 		}
 	}
@@ -130,13 +131,13 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 
 	private void researchingPercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> researchPercepts = new ArrayList<>(2);
-		if (this.unit.getTech() != null && this.unit.getTech() != TechType.None
-				&& this.unit.getTech() != TechType.Unknown) {
-			researchPercepts.add(new ResearchingPercept(this.unit.getTech().toString()));
+		TechType tech = this.unit.getTech();
+		if (tech != null && tech != TechType.None && tech != TechType.Unknown) {
+			researchPercepts.add(new ResearchingPercept(BwapiUtility.getName(tech)));
 		}
-		if (this.unit.getUpgrade() != null && this.unit.getUpgrade() != UpgradeType.None
-				&& this.unit.getUpgrade() != UpgradeType.Unknown) {
-			researchPercepts.add(new ResearchingPercept(this.unit.getUpgrade().toString()));
+		UpgradeType upgrade = this.unit.getUpgrade();
+		if (upgrade != null && upgrade != UpgradeType.None && upgrade != UpgradeType.Unknown) {
+			researchPercepts.add(new ResearchingPercept(BwapiUtility.getName(upgrade)));
 		}
 		if (!researchPercepts.isEmpty()) {
 			toReturn.put(new PerceptFilter(Percepts.RESEARCHING, Filter.Type.ALWAYS), researchPercepts);
@@ -145,10 +146,10 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 
 	private void queueSizePercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> queueSizePercept = new ArrayList<>(1);
-		if (this.unit.getType() == UnitType.Zerg_Hatchery || this.unit.getType() == UnitType.Zerg_Lair
-				|| this.unit.getType() == UnitType.Zerg_Hive) {
+		UnitType type = this.unit.getType();
+		if (type == UnitType.Zerg_Hatchery || type == UnitType.Zerg_Lair || type == UnitType.Zerg_Hive) {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getLarva().size()));
-		} else if (this.unit.getType() == UnitType.Terran_Nuclear_Silo) {
+		} else if (type == UnitType.Terran_Nuclear_Silo) {
 			queueSizePercept.add(new QueueSizePercept(this.unit.hasNuke() ? 1 : 0));
 		} else {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getTrainingQueue().size()));

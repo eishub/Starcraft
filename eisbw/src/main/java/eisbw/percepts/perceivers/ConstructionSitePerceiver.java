@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import bwapi.Player;
 import bwapi.Race;
 import bwapi.TilePosition;
 import bwapi.Unit;
@@ -72,8 +73,9 @@ public class ConstructionSitePerceiver extends Perceiver {
 
 	@Override
 	public void perceive(Map<PerceptFilter, List<Percept>> toReturn) {
+		Player self = this.api.self();
 		Unit worker = null;
-		for (Unit unit : this.api.self().getUnits()) {
+		for (Unit unit : self.getUnits()) {
 			if (unit.getType().isWorker()) {
 				worker = unit;
 				break;
@@ -83,15 +85,16 @@ public class ConstructionSitePerceiver extends Perceiver {
 		int mapHeight = (worker == null) ? 0 : this.api.mapHeight();
 
 		List<Percept> percepts = new LinkedList<>();
+		Race race = self.getRace();
 		for (int x = 0; x < mapWidth; x += steps) {
 			for (int y = 0; y < mapHeight; y += steps) {
 				TilePosition pos = new TilePosition(x, y);
 				if (this.api.isBuildable(pos)) {
-					if (this.api.self().getRace() == Race.Terran) {
+					if (race == Race.Terran) {
 						perceiveTerran(pos, worker, percepts);
-					} else if (this.api.self().getRace() == Race.Protoss) {
+					} else if (race == Race.Protoss) {
 						perceiveProtosss(pos, worker, percepts);
-					} else if (this.api.self().getRace() == Race.Zerg) {
+					} else if (race == Race.Zerg) {
 						perceiveZerg(pos, worker, percepts);
 					}
 				}

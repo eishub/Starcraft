@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import bwapi.Pair;
+import bwapi.Position;
 import bwapi.TilePosition;
 import bwta.BWTA;
 import bwta.BaseLocation;
@@ -43,14 +45,15 @@ public class MapPerceiver extends Perceiver {
 		toReturn.put(new PerceptFilter(Percepts.MAP, Filter.Type.ONCE), mapPercept);
 
 		List<Percept> enemyRacePercept = new ArrayList<>(1);
-		enemyRacePercept.add(new EnemyRacePercept(this.api.enemy().getRace().toString().toLowerCase()));
+		enemyRacePercept.add(new EnemyRacePercept(BwapiUtility.getName(this.api.enemy().getRace())));
 		toReturn.put(new PerceptFilter(Percepts.ENEMYRACE, Filter.Type.ONCE), enemyRacePercept);
 
 		List<BaseLocation> baseLocations = BWTA.getBaseLocations();
 		List<Percept> basePercepts = new ArrayList<>(baseLocations.size());
 		for (BaseLocation location : baseLocations) {
-			Percept basePercept = new BasePercept(location.isStartLocation(), location.getTilePosition().getX(),
-					location.getTilePosition().getY(), BwapiUtility.getRegion(location.getTilePosition(), this.api));
+			TilePosition pos = location.getTilePosition();
+			Percept basePercept = new BasePercept(location.isStartLocation(), pos.getX(), pos.getY(),
+					BwapiUtility.getRegion(pos, this.api));
 			basePercepts.add(basePercept);
 		}
 		toReturn.put(new PerceptFilter(Percepts.BASE, Filter.Type.ONCE), basePercepts);
@@ -58,10 +61,12 @@ public class MapPerceiver extends Perceiver {
 		List<Chokepoint> chokePoints = BWTA.getChokepoints();
 		List<Percept> chokepointPercepts = new ArrayList<>(chokePoints.size());
 		for (Chokepoint cp : chokePoints) {
-			TilePosition firstSide = cp.getSides().first.toTilePosition();
-			TilePosition secondSide = cp.getSides().second.toTilePosition();
-			int firstRegion = BwapiUtility.getRegion(cp.getRegions().first.getCenter().toTilePosition(), this.api);
-			int secondRegion = BwapiUtility.getRegion(cp.getRegions().second.getCenter().toTilePosition(), this.api);
+			Pair<Position, Position> sides = cp.getSides();
+			TilePosition firstSide = sides.first.toTilePosition();
+			TilePosition secondSide = sides.second.toTilePosition();
+			Pair<Region, Region> regions = cp.getRegions();
+			int firstRegion = BwapiUtility.getRegion(regions.first.getCenter().toTilePosition(), this.api);
+			int secondRegion = BwapiUtility.getRegion(regions.second.getCenter().toTilePosition(), this.api);
 			Percept chokeRegionPercept = new ChokepointRegionPercept(firstSide.getX(), firstSide.getY(),
 					secondSide.getX(), secondSide.getY(), firstRegion, secondRegion);
 			chokepointPercepts.add(chokeRegionPercept);

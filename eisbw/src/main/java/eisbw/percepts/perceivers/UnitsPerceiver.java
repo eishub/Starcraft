@@ -55,19 +55,20 @@ public class UnitsPerceiver extends Perceiver {
 		List<Percept> minerals = new LinkedList<>();
 		List<Percept> geysers = new LinkedList<>();
 		for (Unit u : this.api.getNeutralUnits()) {
-			if (u.getType().isMineralField() && BwapiUtility.isValid(u)) {
+			UnitType type = u.getType();
+			if (type.isMineralField() && BwapiUtility.isValid(u)) {
 				TilePosition pos = u.getTilePosition();
 				MineralFieldPercept mineralfield = new MineralFieldPercept(u.getID(), u.getResources(), pos.getX(),
 						pos.getY(), BwapiUtility.getRegion(pos, this.api));
 				minerals.add(mineralfield);
-			} else if (u.getType() == UnitType.Resource_Vespene_Geyser && BwapiUtility.isValid(u)) {
+			} else if (type == UnitType.Resource_Vespene_Geyser && BwapiUtility.isValid(u)) {
 				TilePosition pos = u.getTilePosition();
 				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), u.getResources(), pos.getX(),
 						pos.getY(), BwapiUtility.getRegion(pos, this.api));
 				geysers.add(geyser);
 			}
 		}
-		for (Unit u : this.api.self().getUnits()) {
+		for (Unit u : self.getUnits()) {
 			if (u.getType().isRefinery() && BwapiUtility.isValid(u)) {
 				TilePosition pos = u.getTilePosition();
 				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), u.getResources(), pos.getX(),
@@ -128,9 +129,10 @@ public class UnitsPerceiver extends Perceiver {
 			if (!BwapiUtility.isValid(u)) {
 				continue;
 			}
+			UnitType t = u.getType();
 			if (newunitpercepts != null) {
-				String unittype = (u.getType() == UnitType.Zerg_Egg) ? BwapiUtility.getName(u.getBuildType())
-						: BwapiUtility.getName(u.getType());
+				String unittype = (t == UnitType.Zerg_Egg) ? BwapiUtility.getName(u.getBuildType())
+						: BwapiUtility.getName(t);
 				unitpercepts.add(new FriendlyPercept(u.getID(), unittype));
 				if (!u.isCompleted()) {
 					TilePosition pos = u.getTilePosition();
@@ -139,9 +141,9 @@ public class UnitsPerceiver extends Perceiver {
 				}
 			} else {
 				TilePosition pos = u.getTilePosition();
-				unitpercepts.add(new EnemyPercept(u.getID(), BwapiUtility.getName(u.getType()), u.getHitPoints(),
-						u.getShields(), u.getEnergy(), new ConditionHandler(this.api, u).getConditions(), pos.getX(),
-						pos.getY(), BwapiUtility.getRegion(pos, this.api)));
+				unitpercepts.add(new EnemyPercept(u.getID(), BwapiUtility.getName(t), u.getHitPoints(), u.getShields(),
+						u.getEnergy(), new ConditionHandler(this.api, u).getConditions(), pos.getX(), pos.getY(),
+						BwapiUtility.getRegion(pos, this.api)));
 				if (u.getType().canAttack()) {
 					Unit target = (u.getTarget() == null) ? u.getOrderTarget() : u.getTarget();
 					if (target != null && !units.contains(target)) {
