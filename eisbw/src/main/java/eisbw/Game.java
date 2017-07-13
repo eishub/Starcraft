@@ -86,6 +86,7 @@ public class Game {
 	 *            - the game bridge
 	 */
 	public void update(bwapi.Game bwapi) {
+		BwapiUtility.clearValidCache();
 		processUninitializedUnits();
 		Map<String, Map<PerceptFilter, List<Percept>>> unitPerceptHolder = new HashMap<>();
 		Map<PerceptFilter, List<Percept>> globalPercepts = getGlobalPercepts(bwapi);

@@ -16,6 +16,7 @@ import org.mockito.MockitoAnnotations;
 
 import bwapi.Unit;
 import bwapi.UnitType;
+import eisbw.BwapiUtility;
 import eisbw.StarcraftEnvironmentImpl;
 import eisbw.percepts.perceivers.IPerceiver;
 
@@ -37,6 +38,7 @@ public class UnitsTest {
 	@Before
 	public void start() {
 		MockitoAnnotations.initMocks(this);
+		BwapiUtility.clearValidCache();
 
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unit.exists()).thenReturn(true);

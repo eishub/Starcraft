@@ -25,13 +25,23 @@ public class BwapiUtility {
 	private static final Map<String, TechType> techTypeMap = new HashMap<>();
 	private static final Map<String, UpgradeType> upgradeTypeMap = new HashMap<>();
 	private static final Map<Entry<Integer, Integer>, Integer> regionCache = new HashMap<>();
+	private static final Map<Integer, Boolean> validCache = new HashMap<>();
 
 	private BwapiUtility() {
 		// Private constructor for static class.
 	}
 
 	public static boolean isValid(Unit unit) {
-		return unit != null && unit.exists() && unit.isVisible() && !(unit.isBeingConstructed() && unit.isLoaded());
+		Boolean valid = validCache.get(unit.getID());
+		if (valid == null) {
+			valid = unit.exists() && unit.isVisible() && !(unit.isBeingConstructed() && unit.isLoaded());
+			validCache.put(unit.getID(), valid);
+		}
+		return valid.booleanValue();
+	}
+
+	public static void clearValidCache() {
+		validCache.clear();
 	}
 
 	/**
