@@ -233,8 +233,8 @@ public class BwapiListener extends BwapiEvents {
 	 *             - mandatory from EIS
 	 */
 	public void performEntityAction(String name, Action action) throws ActException {
-		Unit unit = this.game.getUnits().getUnit(name);
-		if (unit != null && isSupportedByEntity(action, name)) {
+		Unit unit = this.game.getUnits().getUnit(name); // can be null for the mapagent
+		if (isSupportedByEntity(action, name)) {
 			BwapiAction apiAction = new BwapiAction(unit, action);
 			if (!this.pendingActions.contains(apiAction)) {
 				this.pendingActions.add(apiAction);
