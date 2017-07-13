@@ -78,9 +78,6 @@ public class BwapiListenerTest {
 		when(this.bwapi.getMyUnits()).thenReturn(new LinkedList<Unit>());
 		this.listener.unitComplete(0);
 		verify(this.units, times(1)).addUnit(eq(this.unit), any(StarcraftUnitFactory.class));
-		when(this.units.getUnitName(0)).thenReturn(null);
-		this.listener.unitComplete(0);
-		verify(this.units, times(1)).addUnit(eq(this.unit), any(StarcraftUnitFactory.class));
 	}
 
 	@Test
