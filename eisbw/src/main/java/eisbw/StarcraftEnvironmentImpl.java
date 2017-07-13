@@ -80,6 +80,18 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 		}
 	}
 
+	@Override
+	public void pause() throws ManagementException {
+		super.pause();
+		this.listener.pause();
+	}
+
+	@Override
+	public void start() throws ManagementException {
+		super.start();
+		this.listener.resume();
+	}
+
 	public boolean mapAgent() {
 		return this.mapAgent;
 	}
