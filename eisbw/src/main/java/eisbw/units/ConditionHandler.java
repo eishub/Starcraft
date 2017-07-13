@@ -5,6 +5,7 @@ import java.util.List;
 
 import bwapi.Race;
 import bwapi.Unit;
+import bwapi.UnitType;
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
 import eisbw.BwapiUtility;
@@ -47,8 +48,9 @@ public class ConditionHandler {
 		if (this.unit.isLifted()) {
 			conditions.add(new Identifier("lifted"));
 		}
-		if (this.unit.getAddon() != null) {
-			conditions.add(new Identifier(BwapiUtility.getName(this.unit.getAddon().getType())));
+		Unit addon = this.unit.getAddon();
+		if (addon != null) {
+			conditions.add(new Identifier(BwapiUtility.getName(addon.getType())));
 		}
 		if (this.unit.hasNuke()) {
 			conditions.add(new Identifier("nukeReady"));
@@ -229,7 +231,7 @@ public class ConditionHandler {
 		if (this.unit.isCloaked()) {
 			conditions.add(new Identifier("cloaked"));
 		}
-		if (this.unit.getPlayer() != null && !this.unit.getPlayer().equals(this.api.self()) && this.unit.isDetected()) {
+		if (this.unit.getPlayer() != this.api.self() && this.unit.isDetected()) {
 			conditions.add(new Identifier("detected"));
 		}
 		if (this.unit.isAttacking()) { // includes medic heal
@@ -274,18 +276,20 @@ public class ConditionHandler {
 		List<Parameter> conditions = new LinkedList<>();
 		setGenericConditions(conditions);
 
-		if (this.unit.getType().getRace() == Race.Terran) {
+		UnitType type = this.unit.getType();
+		Race race = type.getRace();
+		if (race == Race.Terran) {
 			setTerranConditions(conditions);
-		} else if (this.unit.getType().getRace() == Race.Protoss) {
+		} else if (race == Race.Protoss) {
 			setProtossConditions(conditions);
-		} else if (this.unit.getType().getRace() == Race.Zerg) {
+		} else if (race == Race.Zerg) {
 			setZergConditions(conditions);
 		}
 
-		if (this.unit.getType().isWorker()) {
+		if (type.isWorker()) {
 			setWorkerConditions(conditions);
 		}
-		if (this.unit.getType().canMove()) {
+		if (type.canMove()) {
 			setMovingConditions(conditions);
 			setAbilityConditions(conditions);
 		}
