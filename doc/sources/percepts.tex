@@ -162,18 +162,18 @@ These percepts represent information that changes during a match, but is still g
 
 \subsection{attacking/2}
 \begin{tabularx}{\textwidth}{lX}
- Description & All enemy units that are attacking / going to attack and the corresponding units they have targeted (which can be friendly when e.g. healing or repairing). \\
+ Description & All enemy units that are attacking / going to attack and the corresponding friendly units they have targeted. \\
  Type & Send always \\
  Syntax & \verb|attacking(<Id>,<TargetId>)| \\
  Example & \verb|attacking(123, 177)| \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
  \cline{2-3}
- Parameters & \textbf{\verb|<Id>|} & The ID of the enemy unit that is attacking. \\
+ Parameters & \textbf{\verb|<Id>|} & The ID of the enemy unit that is attacking / going to attack. \\
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [1--$\infty$] \\
             \cline{2-3}
-            & \textbf{\verb|<TargetId>|} & The ID of the unit which is being targeted. This unit is mostly friendly, but can also be an enemy for e.g. heals or repairs. \\
+            & \textbf{\verb|<TargetId>|} & The ID of the friendly unit that is being targeted. \\
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [1--$\infty$] \\
             \cline{2-3}
