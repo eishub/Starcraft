@@ -18,12 +18,11 @@ public class RaceStringTranslator implements Parameter2Java<RaceString> {
 			throw new TranslationException("Invalid parameter " + param + ", must be a string");
 		}
 		String id = ((Identifier) param).getValue().toLowerCase();
-
 		if (Races.getRaceList().contains(id)) {
 			return new RaceString(id);
+		} else {
+			throw new TranslationException("Parameter " + id + " should be a race.");
 		}
-
-		throw new TranslationException("Parameter " + id + " should be a race.");
 	}
 
 	@Override

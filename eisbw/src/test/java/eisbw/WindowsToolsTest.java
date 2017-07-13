@@ -7,6 +7,6 @@ import org.junit.Test;
 public class WindowsToolsTest {
 	@Test
 	public void test() {
-		assertNotNull(WindowsTools.getIniFile("race", "map", "OFF", "MELEE", "random"));
+		assertNotNull(WindowsTools.getIniFile("race", "map", "OFF", "MELEE", "random", 0));
 	}
 }

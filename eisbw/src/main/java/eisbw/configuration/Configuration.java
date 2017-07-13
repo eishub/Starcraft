@@ -25,6 +25,7 @@ public class Configuration {
 	protected BooleanString drawUnitInfo = new BooleanString("false");
 	protected BooleanString invulnerable = new BooleanString("false");
 	protected BooleanString mapAgent = new BooleanString("true");
+	protected int seed = 0;
 
 	/**
 	 * The Configuration constructor.
@@ -79,6 +80,9 @@ public class Configuration {
 			case MAPAGENT:
 				this.mapAgent = translator.translate2Java(entry.getValue(), BooleanString.class);
 				break;
+			case SEED:
+				this.seed = translator.translate2Java(entry.getValue(), Integer.class);
+				break;
 			default:
 				// Unreachable clause.
 				break;
@@ -132,5 +136,9 @@ public class Configuration {
 
 	public boolean getMapAgent() {
 		return this.mapAgent.getValue();
+	}
+
+	public int getSeed() {
+		return this.seed;
 	}
 }
