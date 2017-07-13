@@ -50,7 +50,8 @@ public class ConditionHandler {
 		}
 		Unit addon = this.unit.getAddon();
 		if (addon != null) {
-			conditions.add(new Identifier(BwapiUtility.getName(addon.getType())));
+			UnitType addonType = BwapiUtility.getType(addon);
+			conditions.add(new Identifier(BwapiUtility.getName(addonType)));
 		}
 		if (this.unit.hasNuke()) {
 			conditions.add(new Identifier("nukeReady"));
@@ -221,17 +222,18 @@ public class ConditionHandler {
 		if (this.unit.isIdle()) {
 			conditions.add(new Identifier("idle"));
 		}
-		if (this.unit.getType().isFlyer()) { // useful shortcut
+		if (BwapiUtility.getType(this.unit).isFlyer()) { // useful shortcut
 			conditions.add(new Identifier("flying"));
 		}
-		if (!this.unit.isCompleted()) { // isBeingConstructed can be false for
-										// terran buildings not being worked on
+		if (!BwapiUtility.isComplete(this.unit)) {
+			// isBeingConstructed can be false for
+			// terran buildings not being worked on
 			conditions.add(new Identifier("beingConstructed"));
 		}
 		if (this.unit.isCloaked()) {
 			conditions.add(new Identifier("cloaked"));
 		}
-		if (this.unit.getPlayer() != this.api.self() && this.unit.isDetected()) {
+		if (BwapiUtility.getPlayer(this.unit) != BwapiUtility.getSelf(this.api) && this.unit.isDetected()) {
 			conditions.add(new Identifier("detected"));
 		}
 		if (this.unit.isAttacking()) { // includes medic heal
@@ -276,7 +278,7 @@ public class ConditionHandler {
 		List<Parameter> conditions = new LinkedList<>();
 		setGenericConditions(conditions);
 
-		UnitType type = this.unit.getType();
+		UnitType type = BwapiUtility.getType(this.unit);
 		Race race = type.getRace();
 		if (race == Race.Terran) {
 			setTerranConditions(conditions);

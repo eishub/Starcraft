@@ -8,6 +8,7 @@ import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
+import eisbw.BwapiUtility;
 
 public class Repair extends StarcraftAction {
 	public Repair(bwapi.Game api) {
@@ -31,8 +32,8 @@ public class Repair extends StarcraftAction {
 		int targetId = ((Numeral) parameters.get(0)).getValue().intValue();
 		Unit target = this.api.getUnit(targetId);
 
-		if (target != null && target.isCompleted()) {
-			unit.repair(target, false);
+		if (target != null && BwapiUtility.isComplete(target)) {
+			unit.repair(target);
 		} else {
 			unit.rightClick(target);
 		}

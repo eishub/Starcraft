@@ -46,7 +46,7 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 		defensiveMatrixPercept(toReturn);
 		orderPercept(toReturn);
 
-		UnitType type = this.unit.getType();
+		UnitType type = BwapiUtility.getType(this.unit);
 		if (type.spaceProvided() > 0) {
 			List<Unit> loadedUnits = this.unit.getLoadedUnits();
 			unitLoadedPercept(toReturn, loadedUnits);
@@ -78,7 +78,8 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	 */
 	private void selfPercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> selfPercept = new ArrayList<>(1);
-		selfPercept.add(new SelfPercept(this.unit.getID(), BwapiUtility.getName(this.unit.getType())));
+		UnitType type = BwapiUtility.getType(this.unit);
+		selfPercept.add(new SelfPercept(this.unit.getID(), BwapiUtility.getName(type)));
 		toReturn.put(new PerceptFilter(Percepts.SELF, Filter.Type.ONCE), selfPercept);
 	}
 
@@ -146,7 +147,7 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 
 	private void queueSizePercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> queueSizePercept = new ArrayList<>(1);
-		UnitType type = this.unit.getType();
+		UnitType type = BwapiUtility.getType(this.unit);
 		if (type == UnitType.Zerg_Hatchery || type == UnitType.Zerg_Lair || type == UnitType.Zerg_Hive) {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getLarva().size()));
 		} else if (type == UnitType.Terran_Nuclear_Silo) {

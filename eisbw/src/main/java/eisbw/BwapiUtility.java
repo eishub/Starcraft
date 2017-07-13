@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import bwapi.Player;
 import bwapi.Race;
 import bwapi.TechType;
 import bwapi.TilePosition;
@@ -26,22 +27,83 @@ public class BwapiUtility {
 	private static final Map<String, UpgradeType> upgradeTypeMap = new HashMap<>();
 	private static final Map<Entry<Integer, Integer>, Integer> regionCache = new HashMap<>();
 	private static final Map<Integer, Boolean> validCache = new HashMap<>();
+	private static final Map<Integer, UnitType> typeCache = new HashMap<>();
+	private static final Map<Integer, Player> playerCache = new HashMap<>();
+	private static final Map<Integer, Boolean> completeCache = new HashMap<>();
+	private static Player self;
+	private static Player enemy;
 
 	private BwapiUtility() {
 		// Private constructor for static class.
 	}
 
 	public static boolean isValid(Unit unit) {
-		Boolean valid = validCache.get(unit.getID());
+		int id = unit.getID();
+		Boolean valid = validCache.get(id);
 		if (valid == null) {
 			valid = unit.exists() && unit.isVisible() && !(unit.isBeingConstructed() && unit.isLoaded());
-			validCache.put(unit.getID(), valid);
+			validCache.put(id, valid);
 		}
 		return valid.booleanValue();
 	}
 
 	public static void clearValidCache() {
 		validCache.clear();
+	}
+
+	public static UnitType getType(Unit unit) {
+		int id = unit.getID();
+		UnitType type = typeCache.get(id);
+		if (type == null) {
+			type = unit.getType();
+			typeCache.put(id, type);
+		}
+		return type;
+	}
+
+	public static Player getPlayer(Unit unit) {
+		int id = unit.getID();
+		Player player = playerCache.get(id);
+		if (player == null) {
+			player = unit.getPlayer();
+			playerCache.put(id, player);
+		}
+		return player;
+	}
+
+	public static boolean isComplete(Unit unit) {
+		int id = unit.getID();
+		Boolean complete = completeCache.get(id);
+		if (complete == null || complete.booleanValue() == false) {
+			complete = unit.isCompleted();
+			completeCache.put(id, complete);
+		}
+		return complete.booleanValue();
+	}
+
+	public static void clearCache(Unit unit) {
+		typeCache.remove(unit.getID());
+		playerCache.remove(unit.getID());
+		completeCache.remove(unit.getID());
+	}
+
+	public static Player getSelf(bwapi.Game api) {
+		if (self == null) {
+			self = api.self();
+		}
+		return self;
+	}
+
+	public static Player getEnemy(bwapi.Game api) {
+		if (enemy == null) {
+			enemy = api.enemy();
+		}
+		return enemy;
+	}
+
+	public static void clearPlayerCache() {
+		self = null;
+		enemy = null;
 	}
 
 	/**
@@ -52,7 +114,8 @@ public class BwapiUtility {
 	 * @return the name of the unit.
 	 */
 	public static String getName(Unit unit) {
-		String name = (getName(unit.getType()) + unit.getID()).replace(" ", "");
+		UnitType type = getType(unit);
+		String name = (getName(type) + unit.getID()).replace(" ", "");
 		return name.substring(0, 1).toLowerCase() + name.substring(1);
 	}
 

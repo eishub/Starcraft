@@ -12,6 +12,7 @@ import bwapi.Player;
 import bwapi.Race;
 import bwapi.Unit;
 import bwapi.UnitType;
+import eisbw.BwapiUtility;
 
 public class ConditionHandlerTest {
 	private ConditionHandler handler;
@@ -31,6 +32,7 @@ public class ConditionHandlerTest {
 	@Before
 	public void start() {
 		MockitoAnnotations.initMocks(this);
+		BwapiUtility.clearPlayerCache();
 
 		when(this.self.getRace()).thenReturn(Race.None);
 
@@ -39,6 +41,7 @@ public class ConditionHandlerTest {
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unitType.toString()).thenReturn("name");
 		when(this.unit.getID()).thenReturn(0);
+		BwapiUtility.clearCache(this.unit);
 
 		this.handler = new ConditionHandler(this.api, this.unit);
 	}

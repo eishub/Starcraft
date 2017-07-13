@@ -2,7 +2,6 @@ package eisbw.actions;
 
 import java.util.List;
 
-import bwapi.Race;
 import bwapi.TechType;
 import bwapi.Unit;
 import bwapi.UnitType;
@@ -44,7 +43,7 @@ public class Cancel extends StarcraftAction {
 			unit.cancelResearch();
 		} else if (unit.getUpgrade() != null && unit.getUpgrade() != UpgradeType.None) {
 			unit.cancelUpgrade();
-		} else if (unit.getType().getRace() == Race.Terran) {
+		} else if (unit.getType().canBuildAddon()) {
 			unit.cancelAddon();
 		}
 	}

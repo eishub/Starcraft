@@ -40,7 +40,7 @@ public class CancelUnit extends StarcraftAction {
 		Numeral id = (Numeral) parameters.get(0);
 		unit = this.api.getUnit(id.getValue().intValue());
 
-		if (unit.isMorphing()) {
+		if (unit != null && unit.isMorphing()) {
 			unit.cancelMorph();
 		} else {
 			unit.cancelConstruction();

@@ -17,6 +17,7 @@ import bwapi.TilePosition;
 import bwapi.Unit;
 import bwapi.UnitType;
 import eis.iilang.Percept;
+import eisbw.BwapiUtility;
 
 public class GenericUnitPerceiverTest {
 	private GenericUnitPerceiver perciever;
@@ -38,6 +39,7 @@ public class GenericUnitPerceiverTest {
 	@Before
 	public void start() {
 		MockitoAnnotations.initMocks(this);
+		BwapiUtility.clearPlayerCache();
 
 		when(this.api.enemy()).thenReturn(this.self);
 

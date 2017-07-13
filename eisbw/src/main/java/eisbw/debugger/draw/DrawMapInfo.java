@@ -78,12 +78,13 @@ public class DrawMapInfo extends IDraw {
 
 	private void drawConstructionSites(bwapi.Game api) {
 		List<Percept> percepts = this.game.getConstructionSites();
+		Race race = BwapiUtility.getSelf(api).getRace();
 		int size = ConstructionSitePerceiver.steps;
 		for (Percept percept : percepts) {
 			List<Parameter> params = percept.getParameters();
 			int xpos = ((Numeral) params.get(0)).getValue().intValue();
 			int ypos = ((Numeral) params.get(1)).getValue().intValue();
-			if (api.self().getRace() == Race.Terran) {
+			if (race == Race.Terran) {
 				api.drawBoxMap(new TilePosition(xpos, ypos).toPosition(),
 						new TilePosition(xpos + size, ypos + size).toPosition(), Color.Blue, false);
 			} else {

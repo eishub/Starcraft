@@ -51,6 +51,7 @@ public class GameTest {
 	@Before
 	public void start() {
 		MockitoAnnotations.initMocks(this);
+		BwapiUtility.clearPlayerCache();
 
 		this.percepts = new HashMap<>(1);
 		List<Percept> perc = new ArrayList<>(1);
@@ -59,6 +60,7 @@ public class GameTest {
 
 		when(this.type.isWorker()).thenReturn(true);
 		when(this.unit.getID()).thenReturn(0);
+		BwapiUtility.clearCache(this.unit);
 		when(this.unit.getType()).thenReturn(this.type);
 		when(this.units.getUnitName(0)).thenReturn("unit");
 		when(this.units.getUnit("unit")).thenReturn(this.unit);

@@ -73,10 +73,10 @@ public class ConstructionSitePerceiver extends Perceiver {
 
 	@Override
 	public void perceive(Map<PerceptFilter, List<Percept>> toReturn) {
-		Player self = this.api.self();
+		Player self = BwapiUtility.getSelf(this.api);
 		Unit worker = null;
 		for (Unit unit : self.getUnits()) {
-			if (unit.getType().isWorker()) {
+			if (BwapiUtility.getType(unit).isWorker()) {
 				worker = unit;
 				break;
 			}

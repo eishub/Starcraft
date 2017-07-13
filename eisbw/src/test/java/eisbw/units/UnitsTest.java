@@ -45,6 +45,7 @@ public class UnitsTest {
 		when(this.unit.isVisible()).thenReturn(true);
 		when(this.unitType.toString()).thenReturn("name");
 		when(this.unit.getID()).thenReturn(0);
+		BwapiUtility.clearCache(this.unit);
 
 		when(this.factory.create(any(Unit.class))).thenReturn(new StarcraftUnit(new LinkedList<IPerceiver>(), false));
 

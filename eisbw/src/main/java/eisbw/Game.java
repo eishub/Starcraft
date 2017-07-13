@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import bwapi.TilePosition;
 import bwapi.Unit;
+import bwapi.UnitType;
 import eis.eis2java.translation.Filter;
 import eis.exceptions.ManagementException;
 import eis.iilang.Percept;
@@ -90,7 +91,7 @@ public class Game {
 		processUninitializedUnits();
 		Map<String, Map<PerceptFilter, List<Percept>>> unitPerceptHolder = new HashMap<>();
 		Map<PerceptFilter, List<Percept>> globalPercepts = getGlobalPercepts(bwapi);
-		for (Unit unit : bwapi.self().getUnits()) {
+		for (Unit unit : BwapiUtility.getSelf(bwapi).getUnits()) {
 			StarcraftUnit scUnit = this.units.getStarcraftUnit(unit);
 			if (scUnit == null) {
 				continue;
@@ -143,9 +144,10 @@ public class Game {
 			List<Unit> toAdd = new LinkedList<>();
 			Unit unit;
 			while ((unit = this.units.getUninitializedUnits().poll()) != null) {
-				String unitName = BwapiUtility.getName(unit);
-				if (unit.isCompleted() && isInitialized(unitName)) {
-					this.env.addToEnvironment(unitName, BwapiUtility.getEisUnitType(unit.getType()));
+				String name = BwapiUtility.getName(unit);
+				if (BwapiUtility.isComplete(unit) && isInitialized(name)) {
+					UnitType type = BwapiUtility.getType(unit);
+					this.env.addToEnvironment(name, BwapiUtility.getEisUnitType(type));
 				} else {
 					toAdd.add(unit);
 				}
