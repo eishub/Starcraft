@@ -110,7 +110,7 @@ public class BwapiListener extends BwapiEvents {
 		// UPDATE MAP INFO
 		this.game.updateMap(this.bwapi);
 
-		//KnowledgeExport.export();
+		// KnowledgeExport.export();
 	}
 
 	@Override
@@ -158,7 +158,7 @@ public class BwapiListener extends BwapiEvents {
 	@Override
 	public void unitComplete(int id) {
 		Unit unit = this.bwapi.getUnit(id);
-		if (this.bwapi.getMyUnits().contains(unit) && this.game.getUnits().getUnitName(id) == null) {
+		if (unit != null && this.game.getUnits().getUnitName(id) == null) {
 			this.game.getUnits().addUnit(unit, this.factory);
 		}
 	}
@@ -175,7 +175,7 @@ public class BwapiListener extends BwapiEvents {
 	@Override
 	public void unitMorph(int id) {
 		Unit unit = this.bwapi.getUnit(id);
-		if (unit.getType().getRaceID() != RaceTypes.Terran.getID()) { // siege tank hack
+		if (unit != null && unit.getType().getRaceID() != RaceTypes.Terran.getID()) { // siege tank hack
 			unitDestroy(id);
 			unitComplete(id);
 		}
@@ -234,7 +234,7 @@ public class BwapiListener extends BwapiEvents {
 	 */
 	public void performEntityAction(String name, Action action) throws ActException {
 		Unit unit = this.game.getUnits().getUnit(name);
-		if (isSupportedByEntity(action, name)) {
+		if (unit != null && isSupportedByEntity(action, name)) {
 			BwapiAction apiAction = new BwapiAction(unit, action);
 			if (!this.pendingActions.contains(apiAction)) {
 				this.pendingActions.add(apiAction);
