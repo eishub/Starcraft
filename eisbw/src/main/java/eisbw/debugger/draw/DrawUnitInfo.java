@@ -1,12 +1,10 @@
 package eisbw.debugger.draw;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 import bwapi.Color;
+import bwapi.Player;
 import bwapi.Position;
 import bwapi.Unit;
 import bwapi.UnitType;
@@ -20,8 +18,6 @@ import eisbw.Game;
 public class DrawUnitInfo extends IDraw {
 	private final static int barHeight = 18;
 	private final static Color barColor = Color.Blue;
-	private final List<Unit> alive = new LinkedList<>();
-	private final Map<UnitType, Integer> dead = new HashMap<>();
 
 	/**
 	 * Draw unit information (health, movement, counts).
@@ -109,7 +105,7 @@ public class DrawUnitInfo extends IDraw {
 						self ? Color.White : Color.Red, false);
 				api.drawBoxMap(new Position(x - l, y - t), new Position(x + r, y + b), self ? Color.White : Color.Red,
 						false);
-				api.drawTextMap(new Position(x - l, y - t), unit.getType().toString());
+				api.drawTextMap(new Position(x - l, y - t), BwapiUtility.getName(unit.getType()));
 			}
 		}
 	}
@@ -127,7 +123,8 @@ public class DrawUnitInfo extends IDraw {
 			if (target != null) {
 				api.drawLineMap(unit.getPosition(), target.getPosition(), self ? Color.Yellow : Color.Purple);
 			}
-			Position position = unit.getTargetPosition();
+			Position position = (unit.getTargetPosition() == null) ? unit.getOrderTargetPosition()
+					: unit.getTargetPosition();
 			if (position != null) {
 				api.drawLineMap(unit.getPosition(), position, self ? Color.Yellow : Color.Purple);
 			}
@@ -151,48 +148,29 @@ public class DrawUnitInfo extends IDraw {
 	 * many have died (ported from native code of the tournament manager)
 	 */
 	private void drawUnitInformation(bwapi.Game api, int x, int y) {
-		api.drawTextScreen(new Position(x, y + 20), api.self().getName() + "'s Units");
+		Player self = api.self();
+		api.drawTextScreen(new Position(x, y + 20), self.getName() + "'s Units");
 		api.drawTextScreen(new Position(x + 160, y + 20), "#");
 		api.drawTextScreen(new Position(x + 180, y + 20), "X");
 
-		Map<UnitType, Integer> count = new HashMap<>();
-		List<Unit> previous = new ArrayList<>(this.alive);
-		this.alive.clear();
-		for (final Unit unit : api.self().getUnits()) {
-			if (!BwapiUtility.isValid(unit)) {
-				continue;
-			}
-			this.alive.add(unit);
-			UnitType type = unit.getType();
-			if (type == UnitType.Terran_Siege_Tank_Siege_Mode) {
-				type = UnitType.Terran_Siege_Tank_Tank_Mode;
-			}
-			if (count.containsKey(type)) {
-				count.put(type, count.get(type).intValue() + 1);
-			} else {
-				count.put(type, 1);
-			}
-		}
-		previous.removeAll(this.alive);
-		for (final Unit unit : previous) {
-			UnitType type = unit.getType();
-			if (type == UnitType.Terran_Siege_Tank_Siege_Mode) {
-				type = UnitType.Terran_Siege_Tank_Tank_Mode;
-			}
-			if (this.dead.containsKey(type)) {
-				this.dead.put(type, this.dead.get(type).intValue() + 1);
-			} else {
-				this.dead.put(type, 1);
-			}
-		}
-
 		int yspace = 0;
-		for (final UnitType t : count.keySet()) {
-			int livecount = count.get(t).intValue();
-			int deadcount = this.dead.containsKey(t) ? this.dead.get(t).intValue() : 0;
-			api.drawTextScreen(new Position(x, y + 40 + ((yspace) * 10)), BwapiUtility.getName(t));
-			api.drawTextScreen(new Position(x + 160, y + 40 + ((yspace) * 10)), Integer.toString(livecount));
-			api.drawTextScreen(new Position(x + 180, y + 40 + ((yspace++) * 10)), Integer.toString(deadcount));
+		for (Field field : UnitType.class.getDeclaredFields()) {
+			if (Modifier.isPublic(field.getModifiers()) && Modifier.isStatic(field.getModifiers())) {
+				try {
+					UnitType type = (UnitType) field.get(null);
+					int livecount = self.allUnitCount(type);
+					int deadcount = self.deadUnitCount(type);
+					if (livecount > 0 || deadcount > 0) {
+						api.drawTextScreen(new Position(x, y + 40 + ((yspace) * 10)), BwapiUtility.getName(type));
+						api.drawTextScreen(new Position(x + 160, y + 40 + ((yspace) * 10)),
+								Integer.toString(livecount));
+						api.drawTextScreen(new Position(x + 180, y + 40 + ((yspace++) * 10)),
+								Integer.toString(deadcount));
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
