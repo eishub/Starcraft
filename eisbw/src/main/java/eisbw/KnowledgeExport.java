@@ -275,9 +275,9 @@ public class KnowledgeExport {
 		WeaponType generic = (ground == null || ground.getID() == WeaponTypes.Unknown.getID()
 				|| ground.getID() == WeaponTypes.None.getID()) ? air : ground;
 		return String.format("combat('%s',%d,%d,%d,%d,%d).\n", BwapiUtility.getName(type),
-				ground.getDamageAmount() * ground.getDamageFactor(), air.getDamageAmount() * air.getDamageFactor(),
-				generic.getDamageCooldown(), generic.getMaxRange() / PosType.BUILD.scale,
-				generic.getMedianSplashRadius() / PosType.BUILD.scale);
+				type.getMaxGroundHits() * ground.getDamageAmount() * ground.getDamageFactor(),
+				type.getMaxAirHits() * air.getDamageAmount() * air.getDamageFactor(), generic.getDamageCooldown(),
+				generic.getMaxRange() / PosType.BUILD.scale, generic.getMedianSplashRadius() / PosType.BUILD.scale);
 	}
 
 	private static String getTechType(TechType type) {
