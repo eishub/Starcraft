@@ -34,7 +34,7 @@ public class CustomDrawUnit extends IDraw {
 	@Override
 	protected void doDraw(JNIBWAPI api) {
 		if (this.unit == null) {
-			api.drawText(new Position(10, 20, PosType.PIXEL), this.text, true);
+			api.drawText(new Position(10, 30, PosType.PIXEL), this.text, true);
 		} else {
 			Position aboveUnit = new Position(this.unit.getPosition().getPX(), this.unit.getPosition().getPY() - 30);
 			api.drawText(aboveUnit, this.text, false);

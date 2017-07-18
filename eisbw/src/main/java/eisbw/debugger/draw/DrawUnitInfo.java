@@ -70,7 +70,7 @@ public class DrawUnitInfo extends IDraw {
 			}
 			if (total > 0) {
 				int width = unit.getType().getTileWidth() * 32;
-				Position start = new Position(unit.getPosition().getPX() - width / 2, unit.getPosition().getPY() - 30);
+				Position start = new Position(unit.getPosition().getPX() - width / 2, unit.getPosition().getPY() - 20);
 				api.drawBox(start, new Position(start.getPX() + width, start.getPY() + barHeight), barColor, false,
 						false);
 				int progress = (int) ((double) done / (double) total * width);
@@ -90,15 +90,24 @@ public class DrawUnitInfo extends IDraw {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
 			}
+			UnitType type = unit.getType();
 			int health = unit.getHitPoints();
-			int max = unit.getType().getMaxHitPoints();
+			int max = type.getMaxHitPoints();
+			if (type.isMineralField()) {
+				health = unit.getResources();
+				max = 1500;
+			}
+			if (type.isRefinery() || type.getID() == UnitTypes.Resource_Vespene_Geyser.getID()) {
+				health = unit.getResources();
+				max = 5000;
+			}
 			if (health > 0 && max > 0) {
 				int x = unit.getPosition().getPX();
 				int y = unit.getPosition().getPY();
-				int l = unit.getType().getDimensionLeft();
-				int t = unit.getType().getDimensionUp();
-				int r = unit.getType().getDimensionRight();
-				int b = unit.getType().getDimensionDown();
+				int l = type.getDimensionLeft();
+				int t = type.getDimensionUp();
+				int r = type.getDimensionRight();
+				int b = type.getDimensionDown();
 				int width = ((r + l) * health) / max;
 				if (health * 3 < max) {
 					api.drawBox(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), BWColor.Red, true,
@@ -206,6 +215,6 @@ public class DrawUnitInfo extends IDraw {
 	}
 
 	private void drawAgentCount(JNIBWAPI api) {
-		api.drawText(new Position(10, 10, PosType.PIXEL), "Agentcount: " + this.game.getAgentCount(), true);
+		api.drawText(new Position(10, 15, PosType.PIXEL), "Agentcount: " + this.game.getAgentCount(), true);
 	}
 }
