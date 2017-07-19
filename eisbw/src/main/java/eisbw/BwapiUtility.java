@@ -126,7 +126,7 @@ public class BwapiUtility {
 			}
 		}
 		if (type.length() > 2 && Character.isDigit(type.charAt(type.length() - 1))) {
-			type = type.substring(0, type.length() - 3);
+			type = type.substring(0, type.length() - 2);
 		}
 		return upgradeTypeMap.get(type);
 	}
