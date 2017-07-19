@@ -73,9 +73,11 @@ public class DrawUnitInfo extends IDraw {
 				bar = true;
 			}
 			if (unit.getRemainingBuildTimer() > 0) {
-				total = unit.getType().getBuildTime();
+				UnitType type = unit.getType();
+				total = type.getBuildTime();
 				done = total - unit.getRemainingBuildTimer();
-				txt = unit.getType().getName();
+				txt = (type.getID() == UnitTypes.Zerg_Egg.getID()) ? unit.getBuildType().getName()
+						: BwapiUtility.getName(type);
 			}
 			if (total > 0) {
 				if (bar) {
@@ -204,6 +206,9 @@ public class DrawUnitInfo extends IDraw {
 		}
 		previous.removeAll(this.alive);
 		for (final Unit unit : previous) {
+			if (unit.isMorphing()) {
+				continue;
+			}
 			int type = unit.getType().getID();
 			if (type == UnitTypes.Terran_Siege_Tank_Siege_Mode.getID()) {
 				type = UnitTypes.Terran_Siege_Tank_Tank_Mode.getID();
