@@ -43,7 +43,7 @@ public class ConstructionSitePerceiver extends Perceiver {
 		for (int x = 0; x < mapWidth; x += steps) {
 			for (int y = 0; y < mapHeight; y += steps) {
 				Position pos = new Position(x, y, Position.PosType.BUILD);
-				if (map.isBuildable(pos)) {
+				if (map.isBuildable(pos) && this.api.isVisible(pos)) {
 					if (this.api.getSelf().getRace().getID() == RaceTypes.Terran.getID()) {
 						perceiveTerran(pos, percepts);
 					} else if (this.api.getSelf().getRace().getID() == RaceTypes.Protoss.getID()) {
@@ -64,7 +64,7 @@ public class ConstructionSitePerceiver extends Perceiver {
 	 *            The list of perceived constructionsites
 	 */
 	private void perceiveTerran(Position pos, List<Percept> percepts) {
-		if (this.api.canBuildHere(pos, UnitType.UnitTypes.Terran_Missile_Turret, true)) {
+		if (this.api.canBuildHere(pos, UnitType.UnitTypes.Terran_Missile_Turret, false)) {
 			percepts.add(new ConstructionSitePercept(pos.getBX(), pos.getBY(), getRegion(pos)));
 		}
 	}
@@ -76,8 +76,8 @@ public class ConstructionSitePerceiver extends Perceiver {
 	 *            The list of perceived constructionsites
 	 */
 	private void perceiveProtosss(Position pos, List<Percept> percepts) {
-		boolean nearPylon = this.api.canBuildHere(pos, UnitType.UnitTypes.Protoss_Photon_Cannon, true);
-		if (nearPylon || this.api.canBuildHere(pos, UnitType.UnitTypes.Protoss_Pylon, true)) {
+		boolean nearPylon = this.api.canBuildHere(pos, UnitType.UnitTypes.Protoss_Photon_Cannon, false);
+		if (nearPylon || this.api.canBuildHere(pos, UnitType.UnitTypes.Protoss_Pylon, false)) {
 			percepts.add(new ConstructionSitePercept(pos.getBX(), pos.getBY(), getRegion(pos), nearPylon));
 		}
 	}
@@ -89,8 +89,8 @@ public class ConstructionSitePerceiver extends Perceiver {
 	 *            The list of perceived constructionsites
 	 */
 	private void perceiveZerg(Position pos, List<Percept> percepts) {
-		boolean onCreep = this.api.canBuildHere(pos, UnitTypes.Zerg_Creep_Colony, true);
-		if (onCreep || this.api.canBuildHere(pos, UnitTypes.Terran_Missile_Turret, true)) {
+		boolean onCreep = this.api.canBuildHere(pos, UnitTypes.Zerg_Creep_Colony, false);
+		if (onCreep || this.api.canBuildHere(pos, UnitTypes.Terran_Missile_Turret, false)) {
 			percepts.add(new ConstructionSitePercept(pos.getBX(), pos.getBY(), getRegion(pos), onCreep));
 		}
 	}
