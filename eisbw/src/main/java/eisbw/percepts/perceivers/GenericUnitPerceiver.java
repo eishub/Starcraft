@@ -52,7 +52,8 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 			unitLoadedPercept(toReturn, loadedUnits);
 		}
 		if (this.unit.getType().isProduceCapable()
-				|| this.unit.getType().getID() == UnitTypes.Terran_Nuclear_Silo.getID()) {
+				|| this.unit.getType().getID() == UnitTypes.Terran_Nuclear_Silo.getID()
+				|| this.unit.getType().getID() == UnitTypes.Terran_Vulture.getID()) {
 			queueSizePercept(toReturn);
 		}
 		if (this.unit.getType().isBuilding()) {
@@ -152,6 +153,13 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getLarvaCount()));
 		} else if (this.unit.getType().getID() == UnitTypes.Terran_Nuclear_Silo.getID()) {
 			queueSizePercept.add(new QueueSizePercept(this.unit.isNukeReady() ? 1 : 0));
+		} else if (this.unit.getType().getID() == UnitTypes.Terran_Vulture.getID()) {
+			queueSizePercept.add(new QueueSizePercept(this.unit.getSpiderMineCount()));
+		} else if (this.unit.getType().getID() == UnitTypes.Protoss_Carrier.getID()) {
+			queueSizePercept
+					.add(new QueueSizePercept(this.unit.getTrainingQueueSize() + this.unit.getInterceptorCount()));
+		} else if (this.unit.getType().getID() == UnitTypes.Protoss_Reaver.getID()) {
+			queueSizePercept.add(new QueueSizePercept(this.unit.getTrainingQueueSize() + this.unit.getScarabCount()));
 		} else {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getTrainingQueueSize()));
 		}

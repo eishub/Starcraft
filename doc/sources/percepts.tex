@@ -572,9 +572,12 @@ These percepts are generated only for specific units in the game. All of these (
 
 \subsection{queueSize/1}
 \begin{tabularx}{\textwidth}{lX}
- Description & The number of units that are in the queue of any production unit (e.g. including Protoss Reavers and Carriers).\\
- & Zerg Hatchery/Lair/Hive: The number of of available larva.\\
- & Terran Nuclear Silo: 1 if a nuke is ready (after a corresponding \textit{train/1} action); 0 otherwise.\\
+ Description & The number of units that are in the queue of any production unit, thus including e.g. Protoss Carriers.\\
+ & (Zerg Hatchery/Lair/Hive) the number of of available larva.\\
+ & (Terran Nuclear Silo) 1 if a nuke is ready (after a corresponding \textit{train/1} action); 0 otherwise.\\
+ & (Terran Vulture) the number of spider mines left (which are automatically granted upon production of the vulture).\\
+ & (Protoss Carrier) the number of interceptors (ready and in production).\\
+ & (Protoss Reaver) the number of scarabs (ready and in production).\\
  Type & Send on change \\
  Syntax & \verb|queueSize(<Size>)| \\
  Example & \verb|queueSize(2)| \\

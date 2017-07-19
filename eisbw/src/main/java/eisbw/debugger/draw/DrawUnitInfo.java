@@ -188,7 +188,7 @@ public class DrawUnitInfo extends IDraw {
 		List<Unit> previous = new ArrayList<>(this.alive);
 		this.alive.clear();
 		for (final Unit unit : api.getMyUnits()) {
-			if (!BwapiUtility.isValid(unit)) {
+			if (!BwapiUtility.isValid(unit) || !unit.isCompleted()) {
 				continue;
 			}
 			this.alive.add(unit);
