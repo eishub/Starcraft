@@ -656,114 +656,114 @@ combat('Nuclear Strike',600,600,1,0,6).
 upgrade('Terran Infantry Armor 1',terran).
 upgrade('Terran Infantry Armor 2',terran).
 upgrade('Terran Infantry Armor 3',terran).
-costs('Terran Infantry Armor 1',175,175,0,4480,['Terran Engineering Bay']).
-costs('Terran Infantry Armor 2',250,250,0,4960,['Terran Engineering Bay']).
-costs('Terran Infantry Armor 3',325,325,0,5440,['Terran Engineering Bay']).
+costs('Terran Infantry Armor 1',100,100,0,4000,['Terran Engineering Bay']).
+costs('Terran Infantry Armor 2',175,175,0,4480,['Terran Engineering Bay']).
+costs('Terran Infantry Armor 3',250,250,0,4960,['Terran Engineering Bay']).
 
 upgrade('Terran Vehicle Plating 1',terran).
 upgrade('Terran Vehicle Plating 2',terran).
 upgrade('Terran Vehicle Plating 3',terran).
-costs('Terran Vehicle Plating 1',175,175,0,4480,['Terran Armory']).
-costs('Terran Vehicle Plating 2',250,250,0,4960,['Terran Armory']).
-costs('Terran Vehicle Plating 3',325,325,0,5440,['Terran Armory']).
+costs('Terran Vehicle Plating 1',100,100,0,4000,['Terran Armory']).
+costs('Terran Vehicle Plating 2',175,175,0,4480,['Terran Armory']).
+costs('Terran Vehicle Plating 3',250,250,0,4960,['Terran Armory']).
 
 upgrade('Terran Ship Plating 1',terran).
 upgrade('Terran Ship Plating 2',terran).
 upgrade('Terran Ship Plating 3',terran).
-costs('Terran Ship Plating 1',225,225,0,4480,['Terran Armory']).
-costs('Terran Ship Plating 2',300,300,0,4960,['Terran Armory']).
-costs('Terran Ship Plating 3',375,375,0,5440,['Terran Armory']).
+costs('Terran Ship Plating 1',150,150,0,4000,['Terran Armory']).
+costs('Terran Ship Plating 2',225,225,0,4480,['Terran Armory']).
+costs('Terran Ship Plating 3',300,300,0,4960,['Terran Armory']).
 
 upgrade('Zerg Carapace 1',zerg).
 upgrade('Zerg Carapace 2',zerg).
 upgrade('Zerg Carapace 3',zerg).
-costs('Zerg Carapace 1',225,225,0,4480,['Zerg Evolution Chamber']).
-costs('Zerg Carapace 2',300,300,0,4960,['Zerg Evolution Chamber']).
-costs('Zerg Carapace 3',375,375,0,5440,['Zerg Evolution Chamber']).
+costs('Zerg Carapace 1',150,150,0,4000,['Zerg Evolution Chamber']).
+costs('Zerg Carapace 2',225,225,0,4480,['Zerg Evolution Chamber']).
+costs('Zerg Carapace 3',300,300,0,4960,['Zerg Evolution Chamber']).
 
 upgrade('Zerg Flyer Carapace 1',zerg).
 upgrade('Zerg Flyer Carapace 2',zerg).
 upgrade('Zerg Flyer Carapace 3',zerg).
-costs('Zerg Flyer Carapace 1',225,225,0,4480,['Zerg Spire']).
-costs('Zerg Flyer Carapace 2',300,300,0,4960,['Zerg Spire']).
-costs('Zerg Flyer Carapace 3',375,375,0,5440,['Zerg Spire']).
+costs('Zerg Flyer Carapace 1',150,150,0,4000,['Zerg Spire']).
+costs('Zerg Flyer Carapace 2',225,225,0,4480,['Zerg Spire']).
+costs('Zerg Flyer Carapace 3',300,300,0,4960,['Zerg Spire']).
 
 upgrade('Protoss Ground Armor 1',protoss).
 upgrade('Protoss Ground Armor 2',protoss).
 upgrade('Protoss Ground Armor 3',protoss).
-costs('Protoss Ground Armor 1',175,175,0,4480,['Protoss Forge']).
-costs('Protoss Ground Armor 2',250,250,0,4960,['Protoss Forge']).
-costs('Protoss Ground Armor 3',325,325,0,5440,['Protoss Forge']).
+costs('Protoss Ground Armor 1',100,100,0,4000,['Protoss Forge']).
+costs('Protoss Ground Armor 2',175,175,0,4480,['Protoss Forge']).
+costs('Protoss Ground Armor 3',250,250,0,4960,['Protoss Forge']).
 
 upgrade('Protoss Air Armor 1',protoss).
 upgrade('Protoss Air Armor 2',protoss).
 upgrade('Protoss Air Armor 3',protoss).
-costs('Protoss Air Armor 1',225,225,0,4480,['Protoss Cybernetics Core']).
-costs('Protoss Air Armor 2',300,300,0,4960,['Protoss Cybernetics Core']).
-costs('Protoss Air Armor 3',375,375,0,5440,['Protoss Cybernetics Core']).
+costs('Protoss Air Armor 1',150,150,0,4000,['Protoss Cybernetics Core']).
+costs('Protoss Air Armor 2',225,225,0,4480,['Protoss Cybernetics Core']).
+costs('Protoss Air Armor 3',300,300,0,4960,['Protoss Cybernetics Core']).
 
 upgrade('Terran Infantry Weapons 1',terran).
 upgrade('Terran Infantry Weapons 2',terran).
 upgrade('Terran Infantry Weapons 3',terran).
-costs('Terran Infantry Weapons 1',175,175,0,4480,['Terran Engineering Bay']).
-costs('Terran Infantry Weapons 2',250,250,0,4960,['Terran Engineering Bay']).
-costs('Terran Infantry Weapons 3',325,325,0,5440,['Terran Engineering Bay']).
+costs('Terran Infantry Weapons 1',100,100,0,4000,['Terran Engineering Bay']).
+costs('Terran Infantry Weapons 2',175,175,0,4480,['Terran Engineering Bay']).
+costs('Terran Infantry Weapons 3',250,250,0,4960,['Terran Engineering Bay']).
 
 upgrade('Terran Vehicle Weapons 1',terran).
 upgrade('Terran Vehicle Weapons 2',terran).
 upgrade('Terran Vehicle Weapons 3',terran).
-costs('Terran Vehicle Weapons 1',175,175,0,4480,['Terran Armory']).
-costs('Terran Vehicle Weapons 2',250,250,0,4960,['Terran Armory']).
-costs('Terran Vehicle Weapons 3',325,325,0,5440,['Terran Armory']).
+costs('Terran Vehicle Weapons 1',100,100,0,4000,['Terran Armory']).
+costs('Terran Vehicle Weapons 2',175,175,0,4480,['Terran Armory']).
+costs('Terran Vehicle Weapons 3',250,250,0,4960,['Terran Armory']).
 
 upgrade('Terran Ship Weapons 1',terran).
 upgrade('Terran Ship Weapons 2',terran).
 upgrade('Terran Ship Weapons 3',terran).
-costs('Terran Ship Weapons 1',150,150,0,4480,['Terran Armory']).
-costs('Terran Ship Weapons 2',200,200,0,4960,['Terran Armory']).
-costs('Terran Ship Weapons 3',250,250,0,5440,['Terran Armory']).
+costs('Terran Ship Weapons 1',100,100,0,4000,['Terran Armory']).
+costs('Terran Ship Weapons 2',150,150,0,4480,['Terran Armory']).
+costs('Terran Ship Weapons 3',200,200,0,4960,['Terran Armory']).
 
 upgrade('Zerg Melee Attacks 1',zerg).
 upgrade('Zerg Melee Attacks 2',zerg).
 upgrade('Zerg Melee Attacks 3',zerg).
-costs('Zerg Melee Attacks 1',150,150,0,4480,['Zerg Evolution Chamber']).
-costs('Zerg Melee Attacks 2',200,200,0,4960,['Zerg Evolution Chamber']).
-costs('Zerg Melee Attacks 3',250,250,0,5440,['Zerg Evolution Chamber']).
+costs('Zerg Melee Attacks 1',100,100,0,4000,['Zerg Evolution Chamber']).
+costs('Zerg Melee Attacks 2',150,150,0,4480,['Zerg Evolution Chamber']).
+costs('Zerg Melee Attacks 3',200,200,0,4960,['Zerg Evolution Chamber']).
 
 upgrade('Zerg Missile Attacks 1',zerg).
 upgrade('Zerg Missile Attacks 2',zerg).
 upgrade('Zerg Missile Attacks 3',zerg).
-costs('Zerg Missile Attacks 1',150,150,0,4480,['Zerg Evolution Chamber']).
-costs('Zerg Missile Attacks 2',200,200,0,4960,['Zerg Evolution Chamber']).
-costs('Zerg Missile Attacks 3',250,250,0,5440,['Zerg Evolution Chamber']).
+costs('Zerg Missile Attacks 1',100,100,0,4000,['Zerg Evolution Chamber']).
+costs('Zerg Missile Attacks 2',150,150,0,4480,['Zerg Evolution Chamber']).
+costs('Zerg Missile Attacks 3',200,200,0,4960,['Zerg Evolution Chamber']).
 
 upgrade('Zerg Flyer Attacks 1',zerg).
 upgrade('Zerg Flyer Attacks 2',zerg).
 upgrade('Zerg Flyer Attacks 3',zerg).
-costs('Zerg Flyer Attacks 1',175,175,0,4480,['Zerg Spire']).
-costs('Zerg Flyer Attacks 2',250,250,0,4960,['Zerg Spire']).
-costs('Zerg Flyer Attacks 3',325,325,0,5440,['Zerg Spire']).
+costs('Zerg Flyer Attacks 1',100,100,0,4000,['Zerg Spire']).
+costs('Zerg Flyer Attacks 2',175,175,0,4480,['Zerg Spire']).
+costs('Zerg Flyer Attacks 3',250,250,0,4960,['Zerg Spire']).
 
 upgrade('Protoss Ground Weapons 1',protoss).
 upgrade('Protoss Ground Weapons 2',protoss).
 upgrade('Protoss Ground Weapons 3',protoss).
-costs('Protoss Ground Weapons 1',150,150,0,4480,['Protoss Forge']).
-costs('Protoss Ground Weapons 2',200,200,0,4960,['Protoss Forge']).
-costs('Protoss Ground Weapons 3',250,250,0,5440,['Protoss Forge']).
+costs('Protoss Ground Weapons 1',100,100,0,4000,['Protoss Forge']).
+costs('Protoss Ground Weapons 2',150,150,0,4480,['Protoss Forge']).
+costs('Protoss Ground Weapons 3',200,200,0,4960,['Protoss Forge']).
 
 upgrade('Protoss Air Weapons 1',protoss).
 upgrade('Protoss Air Weapons 2',protoss).
 upgrade('Protoss Air Weapons 3',protoss).
-costs('Protoss Air Weapons 1',175,175,0,4480,['Protoss Cybernetics Core']).
-costs('Protoss Air Weapons 2',250,250,0,4960,['Protoss Cybernetics Core']).
-costs('Protoss Air Weapons 3',325,325,0,5440,['Protoss Cybernetics Core']).
+costs('Protoss Air Weapons 1',100,100,0,4000,['Protoss Cybernetics Core']).
+costs('Protoss Air Weapons 2',175,175,0,4480,['Protoss Cybernetics Core']).
+costs('Protoss Air Weapons 3',250,250,0,4960,['Protoss Cybernetics Core']).
 
 upgrade('Protoss Plasma Shields 1',protoss).
 upgrade('Protoss Plasma Shields 2',protoss).
 upgrade('Protoss Plasma Shields 3',protoss).
-costs('Protoss Plasma Shields 1',300,300,0,4480,['Protoss Forge']).
-costs('Protoss Plasma Shields 2',400,400,0,4960,['Protoss Forge']).
-costs('Protoss Plasma Shields 3',500,500,0,5440,['Protoss Forge']).
+costs('Protoss Plasma Shields 1',200,200,0,4000,['Protoss Forge']).
+costs('Protoss Plasma Shields 2',300,300,0,4480,['Protoss Forge']).
+costs('Protoss Plasma Shields 3',400,400,0,4960,['Protoss Forge']).
 
 upgrade('U-238 Shells',terran).
 costs('U-238 Shells',150,150,0,1500,['Terran Academy']).
@@ -866,4 +866,3 @@ costs('Anabolic Synthesis',200,200,0,2000,['Zerg Ultralisk Cavern']).
 
 upgrade('Charon Boosters',terran).
 costs('Charon Boosters',100,100,0,2000,['Terran Machine Shop']).
-
