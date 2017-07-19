@@ -51,6 +51,7 @@ public class DrawUnitInfo extends IDraw {
 	 * covered by the health drawing
 	 */
 	private void drawTimerInfo(JNIBWAPI api) {
+		int y = 45;
 		for (final Unit unit : api.getMyUnits()) {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
@@ -58,25 +59,38 @@ public class DrawUnitInfo extends IDraw {
 			int total = 0;
 			int done = 0;
 			String txt = "";
+			boolean bar = false;
 			if (unit.getRemainingResearchTime() > 0) {
 				total = unit.getTech().getResearchTime();
 				done = total - unit.getRemainingResearchTime();
 				txt = unit.getTech().getName();
+				bar = true;
 			}
 			if (unit.getRemainingUpgradeTime() > 0) {
 				total = unit.getUpgrade().getUpgradeTimeBase();
 				done = total - unit.getRemainingUpgradeTime();
 				txt = unit.getUpgrade().getName();
+				bar = true;
+			}
+			if (unit.getRemainingBuildTimer() > 0) {
+				total = unit.getType().getBuildTime();
+				done = total - unit.getRemainingBuildTimer();
+				txt = unit.getType().getName();
 			}
 			if (total > 0) {
-				int width = unit.getType().getTileWidth() * 32;
-				Position start = new Position(unit.getPosition().getPX() - width / 2, unit.getPosition().getPY() - 20);
-				api.drawBox(start, new Position(start.getPX() + width, start.getPY() + barHeight), barColor, false,
-						false);
-				int progress = (int) ((double) done / (double) total * width);
-				api.drawBox(start, new Position(start.getPX() + progress, start.getPY() + barHeight), barColor, true,
-						false);
-				api.drawText(new Position(start.getPX() + 5, start.getPY() + 2), txt, false);
+				if (bar) {
+					int width = unit.getType().getTileWidth() * 32;
+					Position start = new Position(unit.getPosition().getPX() - width / 2,
+							unit.getPosition().getPY() - 20);
+					api.drawBox(start, new Position(start.getPX() + width, start.getPY() + barHeight), barColor, false,
+							false);
+					int progress = (int) ((double) done / (double) total * width);
+					api.drawBox(start, new Position(start.getPX() + progress, start.getPY() + barHeight), barColor,
+							true, false);
+					api.drawText(new Position(start.getPX() + 5, start.getPY() + 2), txt, false);
+				}
+				api.drawText(new Position(10, y, PosType.PIXEL), (total - done) + " " + txt, true);
+				y += 10;
 			}
 		}
 	}
