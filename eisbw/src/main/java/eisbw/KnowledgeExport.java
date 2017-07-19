@@ -324,8 +324,8 @@ public class KnowledgeExport {
 		String required = (type.getWhatUpgradesTypeID() > 202) ? ""
 				: ("'" + BwapiUtility.getName(UnitTypes.getUnitType(type.getWhatUpgradesTypeID())) + "'");
 		String returned = "";
-		for (int i = 1; i <= type.getMaxRepeats(); ++i) {
-			String toAdd = (type.getMaxRepeats() == 1) ? "" : (" " + i);
+		for (int i = 0; i < type.getMaxRepeats(); ++i) {
+			String toAdd = (type.getMaxRepeats() == 1) ? "" : (" " + (i + 1));
 			returned += String.format("costs('%s',%d,%d,%d,%d,%s).\n", name + toAdd,
 					type.getMineralPriceBase() + (type.getMineralPriceFactor() * i),
 					type.getGasPriceBase() + (type.getGasPriceFactor() * i), 0,
