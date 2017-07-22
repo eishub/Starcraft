@@ -44,7 +44,7 @@ public class DrawUnitInfo extends IDraw {
 		drawHealth(api);
 		drawTargets(api);
 		drawIDs(api);
-		drawUnitInformation(api, 440, 6);
+		drawUnitInformation(api, 440, 5);
 	}
 
 	/**
