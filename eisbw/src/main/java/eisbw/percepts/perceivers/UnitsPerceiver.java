@@ -22,7 +22,9 @@ import eisbw.percepts.VespeneGeyserPercept;
 import eisbw.units.ConditionHandler;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Player;
+import jnibwapi.Position;
 import jnibwapi.Unit;
+import jnibwapi.types.UnitType;
 import jnibwapi.types.UnitType.UnitTypes;
 
 /**
@@ -55,20 +57,25 @@ public class UnitsPerceiver extends Perceiver {
 		List<Percept> minerals = new LinkedList<>();
 		List<Percept> geysers = new LinkedList<>();
 		for (Unit u : this.api.getNeutralUnits()) {
-			if (u.getType().isMineralField() && BwapiUtility.isValid(u)) {
-				MineralFieldPercept mineralfield = new MineralFieldPercept(u.getID(), u.getResources(),
-						u.getPosition().getBX(), u.getPosition().getBY(), getRegion(u));
+			UnitType type = BwapiUtility.getType(u);
+			if (type.isMineralField() && BwapiUtility.isValid(u)) {
+				Position pos = u.getPosition();
+				MineralFieldPercept mineralfield = new MineralFieldPercept(u.getID(), u.getResources(), pos.getBX(),
+						pos.getBY(), getRegion(u));
 				minerals.add(mineralfield);
-			} else if (u.getType().getID() == UnitTypes.Resource_Vespene_Geyser.getID() && BwapiUtility.isValid(u)) {
-				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), u.getResources(),
-						u.getPosition().getBX(), u.getPosition().getBY(), getRegion(u));
+			} else if (type == UnitTypes.Resource_Vespene_Geyser && BwapiUtility.isValid(u)) {
+				Position pos = u.getPosition();
+				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), u.getResources(), pos.getBX(),
+						pos.getBY(), getRegion(u));
 				geysers.add(geyser);
 			}
 		}
 		for (Unit u : this.api.getMyUnits()) {
-			if (u.getType().isRefinery() && BwapiUtility.isValid(u)) {
-				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), u.getResources(),
-						u.getPosition().getBX(), u.getPosition().getBY(), getRegion(u));
+			UnitType type = BwapiUtility.getType(u);
+			if (type.isRefinery() && BwapiUtility.isValid(u)) {
+				Position pos = u.getPosition();
+				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), u.getResources(), pos.getBX(),
+						pos.getBY(), getRegion(u));
 				geysers.add(geyser);
 
 			}
@@ -133,19 +140,22 @@ public class UnitsPerceiver extends Perceiver {
 			if (!BwapiUtility.isValid(u)) {
 				continue;
 			}
+			UnitType type = BwapiUtility.getType(u);
 			if (newunitpercepts != null) {
-				String unittype = (u.getType().getID() == UnitTypes.Zerg_Egg.getID()) ? u.getBuildType().getName()
-						: BwapiUtility.getName(u.getType());
+				String unittype = (type == UnitTypes.Zerg_Egg) ? u.getBuildType().getName()
+						: BwapiUtility.getName(type);
 				unitpercepts.add(new FriendlyPercept(u.getID(), unittype));
 				if (!u.isCompleted()) {
+					Position pos = u.getPosition();
 					newunitpercepts.add(new UnderConstructionPercept(u.getID(), u.getHitPoints() + u.getShields(),
-							u.getPosition().getBX(), u.getPosition().getBY(), getRegion(u)));
+							pos.getBX(), pos.getBY(), getRegion(u)));
 				}
 			} else {
-				unitpercepts.add(new EnemyPercept(u.getID(), BwapiUtility.getName(u.getType()), u.getHitPoints(),
-						u.getShields(), u.getEnergy(), new ConditionHandler(this.api, u).getConditions(),
-						u.getPosition().getBX(), u.getPosition().getBY(), getRegion(u)));
-				if (u.getType().isAttackCapable()) {
+				Position pos = u.getPosition();
+				unitpercepts.add(new EnemyPercept(u.getID(), BwapiUtility.getName(type), u.getHitPoints(),
+						u.getShields(), u.getEnergy(), new ConditionHandler(this.api, u).getConditions(), pos.getBX(),
+						pos.getBY(), getRegion(u)));
+				if (type.isAttackCapable()) {
 					Unit target = (u.getTarget() == null) ? u.getOrderTarget() : u.getTarget();
 					if (target != null && !units.contains(target)) {
 						attackingpercepts.add(new AttackingPercept(u.getID(), target.getID()));

@@ -167,15 +167,17 @@ public class BwapiListener extends BwapiEvents {
 	public void unitDestroy(int id) {
 		String unitName = this.game.getUnits().getUnitName(id);
 		if (unitName != null) {
-			this.game.getUnits().deleteUnit(unitName);
+			Unit unit = this.game.getUnits().deleteUnit(unitName);
 			this.game.removeDraw(Integer.toString(id));
+			BwapiUtility.clearCache(unit);
 		}
 	}
 
 	@Override
 	public void unitMorph(int id) {
 		Unit unit = this.bwapi.getUnit(id);
-		if (unit != null && unit.getType().getRaceID() != RaceTypes.Terran.getID()) { // siege tank hack
+		boolean isTerran = (BwapiUtility.getType(unit).getRaceID() == RaceTypes.Terran.getID());
+		if (unit != null && !isTerran) { // siege tank hack
 			unitDestroy(id);
 			unitComplete(id);
 		}
@@ -253,7 +255,8 @@ public class BwapiListener extends BwapiEvents {
 	public boolean isSupportedByEntity(Action action, String name) {
 		StarcraftAction act = this.actionProvider.getAction(action);
 		Unit unit = this.game.getUnits().getUnit(name);
-		return isSupportedByEnvironment(action) && act.canExecute((unit == null) ? null : unit.getType(), action);
+		return isSupportedByEnvironment(action)
+				&& act.canExecute((unit == null) ? null : BwapiUtility.getType(unit), action);
 	}
 
 	private boolean isRunning() {

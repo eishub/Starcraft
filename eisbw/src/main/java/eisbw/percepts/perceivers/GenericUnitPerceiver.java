@@ -22,6 +22,7 @@ import jnibwapi.Unit;
 import jnibwapi.types.OrderType;
 import jnibwapi.types.OrderType.OrderTypes;
 import jnibwapi.types.TechType.TechTypes;
+import jnibwapi.types.UnitType;
 import jnibwapi.types.UnitType.UnitTypes;
 import jnibwapi.types.UpgradeType.UpgradeTypes;
 
@@ -47,16 +48,15 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 		defensiveMatrixPercept(toReturn);
 		orderPercept(toReturn);
 
-		if (this.unit.getType().getSpaceProvided() > 0) {
+		UnitType type = BwapiUtility.getType(this.unit);
+		if (type.getSpaceProvided() > 0) {
 			List<Unit> loadedUnits = this.unit.getLoadedUnits();
 			unitLoadedPercept(toReturn, loadedUnits);
 		}
-		if (this.unit.getType().isProduceCapable()
-				|| this.unit.getType().getID() == UnitTypes.Terran_Nuclear_Silo.getID()
-				|| this.unit.getType().getID() == UnitTypes.Terran_Vulture.getID()) {
+		if (type.isProduceCapable() || type == UnitTypes.Terran_Nuclear_Silo || type == UnitTypes.Terran_Vulture) {
 			queueSizePercept(toReturn);
 		}
-		if (this.unit.getType().isBuilding()) {
+		if (type.isBuilding()) {
 			researchingPercept(toReturn);
 		}
 	}
@@ -80,7 +80,8 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	 */
 	private void selfPercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> selfPercept = new ArrayList<>(1);
-		selfPercept.add(new SelfPercept(this.unit.getID(), BwapiUtility.getName(this.unit.getType())));
+		UnitType type = BwapiUtility.getType(this.unit);
+		selfPercept.add(new SelfPercept(this.unit.getID(), BwapiUtility.getName(type)));
 		toReturn.put(new PerceptFilter(Percepts.SELF, Filter.Type.ONCE), selfPercept);
 	}
 
@@ -132,12 +133,12 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 
 	private void researchingPercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> researchPercepts = new ArrayList<>(2);
-		if (this.unit.getTech() != null && this.unit.getTech().getID() != TechTypes.None.getID()
-				&& this.unit.getTech().getID() != TechTypes.Unknown.getID()) {
+		if (this.unit.getTech() != null && this.unit.getTech() != TechTypes.None
+				&& this.unit.getTech() != TechTypes.Unknown) {
 			researchPercepts.add(new ResearchingPercept(this.unit.getTech().getName()));
 		}
-		if (this.unit.getUpgrade() != null && this.unit.getUpgrade().getID() != UpgradeTypes.None.getID()
-				&& this.unit.getUpgrade().getID() != UpgradeTypes.Unknown.getID()) {
+		if (this.unit.getUpgrade() != null && this.unit.getUpgrade() != UpgradeTypes.None
+				&& this.unit.getUpgrade() != UpgradeTypes.Unknown) {
 			researchPercepts.add(new ResearchingPercept(this.unit.getUpgrade().getName()));
 		}
 		if (!researchPercepts.isEmpty()) {
@@ -147,18 +148,17 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 
 	private void queueSizePercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> queueSizePercept = new ArrayList<>(1);
-		if (this.unit.getType().getID() == UnitTypes.Zerg_Hatchery.getID()
-				|| this.unit.getType().getID() == UnitTypes.Zerg_Lair.getID()
-				|| this.unit.getType().getID() == UnitTypes.Zerg_Hive.getID()) {
+		UnitType type = BwapiUtility.getType(this.unit);
+		if (type == UnitTypes.Zerg_Hatchery || type == UnitTypes.Zerg_Lair || type == UnitTypes.Zerg_Hive) {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getLarvaCount()));
-		} else if (this.unit.getType().getID() == UnitTypes.Terran_Nuclear_Silo.getID()) {
+		} else if (type == UnitTypes.Terran_Nuclear_Silo) {
 			queueSizePercept.add(new QueueSizePercept(this.unit.isNukeReady() ? 1 : 0));
-		} else if (this.unit.getType().getID() == UnitTypes.Terran_Vulture.getID()) {
+		} else if (type == UnitTypes.Terran_Vulture) {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getSpiderMineCount()));
-		} else if (this.unit.getType().getID() == UnitTypes.Protoss_Carrier.getID()) {
+		} else if (type == UnitTypes.Protoss_Carrier) {
 			queueSizePercept
 					.add(new QueueSizePercept(this.unit.getTrainingQueueSize() + this.unit.getInterceptorCount()));
-		} else if (this.unit.getType().getID() == UnitTypes.Protoss_Reaver.getID()) {
+		} else if (type == UnitTypes.Protoss_Reaver) {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getTrainingQueueSize() + this.unit.getScarabCount()));
 		} else {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getTrainingQueueSize()));

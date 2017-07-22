@@ -5,9 +5,11 @@ import java.util.List;
 
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
+import eisbw.BwapiUtility;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
 import jnibwapi.types.RaceType.RaceTypes;
+import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - The condition perceiver.
@@ -48,7 +50,8 @@ public class ConditionHandler {
 			conditions.add(new Identifier("lifted"));
 		}
 		if (this.unit.getAddon() != null) {
-			conditions.add(new Identifier(this.unit.getAddon().getType().getName()));
+			UnitType addon = BwapiUtility.getType(this.unit.getAddon());
+			conditions.add(new Identifier(addon.getName()));
 		}
 		if (this.unit.isNukeReady()) {
 			conditions.add(new Identifier("nukeReady"));
@@ -219,7 +222,7 @@ public class ConditionHandler {
 		if (this.unit.isIdle()) {
 			conditions.add(new Identifier("idle"));
 		}
-		if (this.unit.getType().isFlyer()) { // useful shortcut
+		if (BwapiUtility.getType(this.unit).isFlyer()) { // useful shortcut
 			conditions.add(new Identifier("flying"));
 		}
 		if (!this.unit.isCompleted()) { // isBeingConstructed can be false for
@@ -229,8 +232,7 @@ public class ConditionHandler {
 		if (this.unit.isCloaked()) {
 			conditions.add(new Identifier("cloaked"));
 		}
-		if (this.unit.getPlayer() != null && this.api.getSelf() != null
-				&& this.unit.getPlayer().getID() != this.api.getSelf().getID() && this.unit.isDetected()) {
+		if (BwapiUtility.getPlayer(this.unit) != this.api.getSelf() && this.unit.isDetected()) {
 			conditions.add(new Identifier("detected"));
 		}
 		if (this.unit.isAttacking()) { // includes medic heal
@@ -275,18 +277,19 @@ public class ConditionHandler {
 		List<Parameter> conditions = new LinkedList<>();
 		setGenericConditions(conditions);
 
-		if (this.unit.getType().getRaceID() == RaceTypes.Terran.getID()) {
+		UnitType type = BwapiUtility.getType(this.unit);
+		if (type.getRaceID() == RaceTypes.Terran.getID()) {
 			setTerranConditions(conditions);
-		} else if (this.unit.getType().getRaceID() == RaceTypes.Protoss.getID()) {
+		} else if (type.getRaceID() == RaceTypes.Protoss.getID()) {
 			setProtossConditions(conditions);
-		} else if (this.unit.getType().getRaceID() == RaceTypes.Zerg.getID()) {
+		} else if (type.getRaceID() == RaceTypes.Zerg.getID()) {
 			setZergConditions(conditions);
 		}
 
-		if (this.unit.getType().isWorker()) {
+		if (type.isWorker()) {
 			setWorkerConditions(conditions);
 		}
-		if (this.unit.getType().isCanMove()) {
+		if (type.isCanMove()) {
 			setMovingConditions(conditions);
 			setAbilityConditions(conditions);
 		}

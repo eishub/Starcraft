@@ -145,7 +145,7 @@ public class Game {
 			while ((unit = this.units.getUninitializedUnits().poll()) != null) {
 				String unitName = BwapiUtility.getName(unit);
 				if (unit.isCompleted() && isInitialized(unitName)) {
-					this.env.addToEnvironment(unitName, BwapiUtility.getEisUnitType(unit.getType()));
+					this.env.addToEnvironment(unitName, BwapiUtility.getEisUnitType(unit));
 				} else {
 					toAdd.add(unit);
 				}

@@ -3,6 +3,7 @@ package eisbw.units;
 import java.util.ArrayList;
 import java.util.List;
 
+import eisbw.BwapiUtility;
 import eisbw.percepts.perceivers.GenericUnitPerceiver;
 import eisbw.percepts.perceivers.IPerceiver;
 import jnibwapi.JNIBWAPI;
@@ -35,6 +36,6 @@ public class StarcraftUnitFactory {
 	public StarcraftUnit create(Unit unit) {
 		List<IPerceiver> perceptGenerators = new ArrayList<>(1);
 		perceptGenerators.add(new GenericUnitPerceiver(this.api, unit));
-		return new StarcraftUnit(perceptGenerators, unit.getType().isWorker());
+		return new StarcraftUnit(perceptGenerators, BwapiUtility.getType(unit).isWorker());
 	}
 }

@@ -34,7 +34,7 @@ public class Train extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(UnitType type, Action action) {
-		return type.isProduceCapable() || type.getID() == UnitTypes.Terran_Nuclear_Silo.getID();
+		return type.isProduceCapable() || type == UnitTypes.Terran_Nuclear_Silo;
 	}
 
 	@Override

@@ -55,7 +55,8 @@ public class DrawMapInfo extends IDraw {
 	private void drawBases(JNIBWAPI api) {
 		for (BaseLocation base : api.getMap().getBaseLocations()) {
 			api.drawCircle(base.getCenter(), 75, BWColor.Purple, false, false);
-			api.drawText(base.getPosition(), base.getPosition().getBX() + ", " + base.getPosition().getBY(), false);
+			Position pos = base.getPosition();
+			api.drawText(pos, pos.getBX() + ", " + pos.getBY(), false);
 			if (base.isStartLocation()) {
 				api.drawText(base.getCenter(), "Starting Location", false);
 			}
@@ -73,11 +74,12 @@ public class DrawMapInfo extends IDraw {
 	private void drawConstructionSites(JNIBWAPI api) {
 		List<Percept> percepts = this.game.getConstructionSites();
 		int size = ConstructionSitePerceiver.steps;
+		boolean isTerran = (api.getSelf().getRace() == RaceTypes.Terran);
 		for (Percept percept : percepts) {
 			List<Parameter> params = percept.getParameters();
 			int xpos = ((Numeral) params.get(0)).getValue().intValue();
 			int ypos = ((Numeral) params.get(1)).getValue().intValue();
-			if (api.getSelf().getRace().getID() == RaceTypes.Terran.getID()) {
+			if (isTerran) {
 				api.drawBox(new Position(xpos, ypos, PosType.BUILD),
 						new Position(xpos + size, ypos + size, PosType.BUILD), BWColor.Blue, false, false);
 			} else {

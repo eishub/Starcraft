@@ -36,7 +36,7 @@ public class CustomDrawUnit extends IDraw {
 		if (this.unit == null) {
 			api.drawText(new Position(10, 30, PosType.PIXEL), this.text, true);
 		} else {
-			Position aboveUnit = new Position(this.unit.getPosition().getPX(), this.unit.getPosition().getPY() - 30);
+			Position aboveUnit = new Position(this.unit.getX(), this.unit.getY() - 30);
 			api.drawText(aboveUnit, this.text, false);
 		}
 	}

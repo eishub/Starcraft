@@ -53,16 +53,20 @@ public class BwapiListenerTest {
 	@Before
 	public void start() {
 		MockitoAnnotations.initMocks(this);
+
 		when(this.game.getUnits()).thenReturn(this.units);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unitType.getName()).thenReturn("Terran Siege Tank Tank Mode");
 		when(this.unitType.isCanMove()).thenReturn(true);
+		BwapiUtility.clearCache(this.unit);
+
 		when(this.units.getUnitName(0)).thenReturn("unit");
 		when(this.units.getUnit("unit")).thenReturn(this.unit);
 		this.list = new LinkedList<>();
 		this.list.add(this.unit);
 		when(this.bwapi.getMyUnits()).thenReturn(this.list);
 		when(this.bwapi.getUnit(0)).thenReturn(this.unit);
+
 		this.listener = new BwapiListener(this.game, "", false, false, false, false, 200);
 		this.listener.bwapi = this.bwapi;
 	}

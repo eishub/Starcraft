@@ -12,8 +12,10 @@ import jnibwapi.JNIBWAPI;
 import jnibwapi.Position;
 import jnibwapi.Position.PosType;
 import jnibwapi.Unit;
+import jnibwapi.types.TechType;
 import jnibwapi.types.UnitType;
 import jnibwapi.types.UnitType.UnitTypes;
+import jnibwapi.types.UpgradeType;
 import jnibwapi.util.BWColor;
 
 /**
@@ -43,7 +45,6 @@ public class DrawUnitInfo extends IDraw {
 		drawTargets(api);
 		drawIDs(api);
 		drawUnitInformation(api, 440, 6);
-		drawAgentCount(api);
 	}
 
 	/**
@@ -61,29 +62,29 @@ public class DrawUnitInfo extends IDraw {
 			String txt = "";
 			boolean bar = false;
 			if (unit.getRemainingResearchTime() > 0) {
-				total = unit.getTech().getResearchTime();
+				TechType type = unit.getTech();
+				total = type.getResearchTime();
 				done = total - unit.getRemainingResearchTime();
-				txt = unit.getTech().getName();
+				txt = type.getName();
 				bar = true;
 			}
 			if (unit.getRemainingUpgradeTime() > 0) {
-				total = unit.getUpgrade().getUpgradeTimeBase();
+				UpgradeType type = unit.getUpgrade();
+				total = type.getUpgradeTimeBase();
 				done = total - unit.getRemainingUpgradeTime();
-				txt = unit.getUpgrade().getName();
+				txt = type.getName();
 				bar = true;
 			}
 			if (unit.getRemainingBuildTimer() > 0) {
-				UnitType type = unit.getType();
+				UnitType type = BwapiUtility.getType(unit);
 				total = type.getBuildTime();
 				done = total - unit.getRemainingBuildTimer();
-				txt = (type.getID() == UnitTypes.Zerg_Egg.getID()) ? unit.getBuildType().getName()
-						: BwapiUtility.getName(type);
+				txt = (type == UnitTypes.Zerg_Egg) ? unit.getBuildType().getName() : BwapiUtility.getName(type);
 			}
 			if (total > 0) {
 				if (bar) {
-					int width = unit.getType().getTileWidth() * 32;
-					Position start = new Position(unit.getPosition().getPX() - width / 2,
-							unit.getPosition().getPY() - 20);
+					int width = BwapiUtility.getType(unit).getTileWidth() * 32;
+					Position start = new Position(unit.getX() - width / 2, unit.getY() - 20);
 					api.drawBox(start, new Position(start.getPX() + width, start.getPY() + barHeight), barColor, false,
 							false);
 					int progress = (int) ((double) done / (double) total * width);
@@ -106,20 +107,20 @@ public class DrawUnitInfo extends IDraw {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
 			}
-			UnitType type = unit.getType();
+			UnitType type = BwapiUtility.getType(unit);
 			int health = unit.getHitPoints();
 			int max = type.getMaxHitPoints();
 			if (type.isMineralField()) {
 				health = unit.getResources();
 				max = 1500;
 			}
-			if (type.isRefinery() || type.getID() == UnitTypes.Resource_Vespene_Geyser.getID()) {
+			if (type.isRefinery() || type == UnitTypes.Resource_Vespene_Geyser) {
 				health = unit.getResources();
 				max = 5000;
 			}
 			if (health > 0 && max > 0) {
-				int x = unit.getPosition().getPX();
-				int y = unit.getPosition().getPY();
+				int x = unit.getX();
+				int y = unit.getY();
 				int l = type.getDimensionLeft();
 				int t = type.getDimensionUp();
 				int r = type.getDimensionRight();
@@ -135,12 +136,12 @@ public class DrawUnitInfo extends IDraw {
 					api.drawBox(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), BWColor.Green, true,
 							false);
 				}
-				boolean self = (unit.getPlayer().getID() == api.getSelf().getID());
+				boolean self = BwapiUtility.getPlayer(unit) == api.getSelf();
 				api.drawBox(new Position(x - l, y - t - 5), new Position(x + r, y - t),
 						self ? BWColor.White : BWColor.Red, false, false);
 				api.drawBox(new Position(x - l, y - t), new Position(x + r, y + b), self ? BWColor.White : BWColor.Red,
 						false, false);
-				api.drawText(new Position(x - l, y - t), unit.getType().getName(), false);
+				api.drawText(new Position(x - l, y - t), type.getName(), false);
 			}
 		}
 	}
@@ -153,7 +154,7 @@ public class DrawUnitInfo extends IDraw {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
 			}
-			boolean self = (unit.getPlayer().getID() == api.getSelf().getID());
+			boolean self = BwapiUtility.getPlayer(unit) == api.getSelf();
 			Unit target = (unit.getTarget() == null) ? unit.getOrderTarget() : unit.getTarget();
 			if (target != null) {
 				api.drawLine(unit.getPosition(), target.getPosition(), self ? BWColor.Yellow : BWColor.Purple, false);
@@ -194,14 +195,15 @@ public class DrawUnitInfo extends IDraw {
 				continue;
 			}
 			this.alive.add(unit);
-			int type = unit.getType().getID();
-			if (type == UnitTypes.Terran_Siege_Tank_Siege_Mode.getID()) {
-				type = UnitTypes.Terran_Siege_Tank_Tank_Mode.getID();
+			UnitType type = BwapiUtility.getType(unit);
+			if (type == UnitTypes.Terran_Siege_Tank_Siege_Mode) {
+				type = UnitTypes.Terran_Siege_Tank_Tank_Mode;
 			}
-			if (count.containsKey(type)) {
-				count.put(type, count.get(type).intValue() + 1);
+			int t = type.getID();
+			if (count.containsKey(t)) {
+				count.put(t, count.get(t).intValue() + 1);
 			} else {
-				count.put(type, 1);
+				count.put(t, 1);
 			}
 		}
 		previous.removeAll(this.alive);
@@ -209,14 +211,15 @@ public class DrawUnitInfo extends IDraw {
 			if (unit.isMorphing()) {
 				continue;
 			}
-			int type = unit.getType().getID();
-			if (type == UnitTypes.Terran_Siege_Tank_Siege_Mode.getID()) {
-				type = UnitTypes.Terran_Siege_Tank_Tank_Mode.getID();
+			UnitType type = BwapiUtility.getType(unit);
+			if (type == UnitTypes.Terran_Siege_Tank_Siege_Mode) {
+				type = UnitTypes.Terran_Siege_Tank_Tank_Mode;
 			}
-			if (this.dead.containsKey(type)) {
-				this.dead.put(type, this.dead.get(type).intValue() + 1);
+			int t = type.getID();
+			if (this.dead.containsKey(t)) {
+				this.dead.put(t, this.dead.get(t).intValue() + 1);
 			} else {
-				this.dead.put(type, 1);
+				this.dead.put(t, 1);
 			}
 		}
 
@@ -231,9 +234,5 @@ public class DrawUnitInfo extends IDraw {
 				api.drawText(new Position(x + 180, y + 40 + ((yspace++) * 10)), Integer.toString(deadcount), true);
 			}
 		}
-	}
-
-	private void drawAgentCount(JNIBWAPI api) {
-		api.drawText(new Position(10, 15, PosType.PIXEL), "Agentcount: " + this.game.getAgentCount(), true);
 	}
 }

@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import eis.iilang.Percept;
+import eisbw.BwapiUtility;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Player;
 import jnibwapi.Position;
@@ -62,13 +63,13 @@ public class GenericUnitPerceiverTest {
 		when(this.unit.getID()).thenReturn(1);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unitType.getName()).thenReturn("type");
-
 		when(this.unit.getHitPoints()).thenReturn(25);
 		when(this.unit.getShields()).thenReturn(30);
 		when(this.unit.getPosition()).thenReturn(new Position(2, 1, PosType.BUILD));
-
 		when(this.unit.getEnergy()).thenReturn(100);
 		when(this.unitType.getMaxEnergy()).thenReturn(110);
+		BwapiUtility.clearCache(this.unit);
+
 		this.perciever = new GenericUnitPerceiver(this.api, this.unit);
 	}
 

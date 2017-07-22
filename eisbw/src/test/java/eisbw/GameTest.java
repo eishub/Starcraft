@@ -65,6 +65,7 @@ public class GameTest {
 		when(this.units.getUnit("unit")).thenReturn(this.unit);
 		when(this.units.getStarcraftUnit(this.unit)).thenReturn(this.scUnit);
 		when(this.scUnit.perceive()).thenReturn(this.percepts);
+		BwapiUtility.clearCache(this.unit);
 
 		when(this.env.getAgents()).thenReturn(new LinkedList<String>());
 

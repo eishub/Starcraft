@@ -272,8 +272,8 @@ public class KnowledgeExport {
 	private static String getUnitCombat(UnitType type) {
 		WeaponType ground = type.getGroundWeapon();
 		WeaponType air = WeaponTypes.getWeaponType(type.getAirWeaponID());
-		WeaponType generic = (ground == null || ground.getID() == WeaponTypes.Unknown.getID()
-				|| ground.getID() == WeaponTypes.None.getID()) ? air : ground;
+		WeaponType generic = (ground == null || ground == WeaponTypes.Unknown || ground == WeaponTypes.None) ? air
+				: ground;
 		return String.format("combat('%s',%d,%d,%d,%d,%d).\n", BwapiUtility.getName(type),
 				type.getMaxGroundHits() * ground.getDamageAmount() * ground.getDamageFactor(),
 				type.getMaxAirHits() * air.getDamageAmount() * air.getDamageFactor(), generic.getDamageCooldown(),
@@ -294,7 +294,7 @@ public class KnowledgeExport {
 
 	private static String getTechCombat(TechType type) {
 		WeaponType weapon = WeaponTypes.getWeaponType(type.getGetWeaponID());
-		if (weapon.getID() == WeaponTypes.Unknown.getID() || weapon.getID() == WeaponTypes.None.getID()) {
+		if (weapon == WeaponTypes.Unknown || weapon == WeaponTypes.None) {
 			return "";
 		} else {
 			return String.format("combat('%s',%d,%d,%d,%d,%d).\n", type.getName(),

@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import eisbw.BwapiUtility;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Player;
 import jnibwapi.Unit;
@@ -41,6 +42,7 @@ public class ConditionHandlerTest {
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unitType.getName()).thenReturn("name");
 		when(this.unit.getID()).thenReturn(0);
+		BwapiUtility.clearCache(this.unit);
 
 		this.handler = new ConditionHandler(this.api, this.unit);
 	}

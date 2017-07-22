@@ -17,6 +17,7 @@ import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
+import eisbw.BwapiUtility;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Player;
 import jnibwapi.Unit;
@@ -55,6 +56,7 @@ public class MorphTest {
 		when(this.act.getParameters()).thenReturn(this.params);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.bwapi.getSelf()).thenReturn(this.player);
+		BwapiUtility.clearCache(this.unit);
 	}
 
 	@Test

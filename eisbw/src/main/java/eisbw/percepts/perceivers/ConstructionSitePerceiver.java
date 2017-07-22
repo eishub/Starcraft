@@ -11,6 +11,7 @@ import eisbw.percepts.ConstructionSitePercept;
 import eisbw.percepts.Percepts;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Position;
+import jnibwapi.types.RaceType;
 import jnibwapi.types.RaceType.RaceTypes;
 import jnibwapi.types.UnitType;
 import jnibwapi.types.UnitType.UnitTypes;
@@ -39,16 +40,16 @@ public class ConstructionSitePerceiver extends Perceiver {
 		jnibwapi.Map map = this.api.getMap();
 		int mapWidth = map.getSize().getBX();
 		int mapHeight = map.getSize().getBY();
-
+		RaceType race = (this.api.getSelf() == null) ? RaceTypes.Unknown : this.api.getSelf().getRace();
 		for (int x = 0; x < mapWidth; x += steps) {
 			for (int y = 0; y < mapHeight; y += steps) {
 				Position pos = new Position(x, y, Position.PosType.BUILD);
 				if (map.isBuildable(pos) && this.api.isVisible(pos)) {
-					if (this.api.getSelf().getRace().getID() == RaceTypes.Terran.getID()) {
+					if (race == RaceTypes.Terran) {
 						perceiveTerran(pos, percepts);
-					} else if (this.api.getSelf().getRace().getID() == RaceTypes.Protoss.getID()) {
+					} else if (race == RaceTypes.Protoss) {
 						perceiveProtosss(pos, percepts);
-					} else if (this.api.getSelf().getRace().getID() == RaceTypes.Zerg.getID()) {
+					} else if (race == RaceTypes.Zerg) {
 						perceiveZerg(pos, percepts);
 					}
 				}

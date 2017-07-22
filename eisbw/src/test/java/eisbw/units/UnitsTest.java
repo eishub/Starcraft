@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import eisbw.BwapiUtility;
 import eisbw.StarcraftEnvironmentImpl;
 import eisbw.percepts.perceivers.IPerceiver;
 import jnibwapi.Unit;
@@ -44,6 +45,7 @@ public class UnitsTest {
 		when(this.unit.isVisible()).thenReturn(true);
 		when(this.unitType.getName()).thenReturn("name");
 		when(this.unit.getID()).thenReturn(0);
+		BwapiUtility.clearCache(this.unit);
 
 		when(this.factory.create(any(Unit.class))).thenReturn(new StarcraftUnit(new LinkedList<IPerceiver>(), false));
 

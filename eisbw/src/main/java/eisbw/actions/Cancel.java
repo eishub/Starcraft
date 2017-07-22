@@ -4,6 +4,7 @@ import java.util.List;
 
 import eis.iilang.Action;
 import eis.iilang.Parameter;
+import eisbw.BwapiUtility;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
 import jnibwapi.types.RaceType.RaceTypes;
@@ -35,18 +36,18 @@ public class Cancel extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(UnitType type, Action action) {
-		return type.isBuilding() || type.isProduceCapable() || type.getID() == UnitTypes.Terran_Nuclear_Silo.getID();
+		return type.isBuilding() || type.isProduceCapable() || type == UnitTypes.Terran_Nuclear_Silo;
 	}
 
 	@Override
 	public void execute(Unit unit, Action action) {
 		if (unit.isTraining()) {
 			unit.cancelTrain();
-		} else if (unit.getTech() != null && unit.getTech().getID() != TechTypes.None.getID()) {
+		} else if (unit.getTech() != null && unit.getTech() != TechTypes.None) {
 			unit.cancelResearch();
-		} else if (unit.getUpgrade() != null && unit.getUpgrade().getID() != UpgradeTypes.None.getID()) {
+		} else if (unit.getUpgrade() != null && unit.getUpgrade() != UpgradeTypes.None) {
 			unit.cancelUpgrade();
-		} else if (unit.getType().getRaceID() == RaceTypes.Terran.getID()) {
+		} else if (BwapiUtility.getType(unit).getRaceID() == RaceTypes.Terran.getID()) {
 			unit.cancelAddon();
 		}
 	}

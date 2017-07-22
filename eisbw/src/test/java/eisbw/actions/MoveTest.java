@@ -16,6 +16,7 @@ import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
+import eisbw.BwapiUtility;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Position;
 import jnibwapi.Unit;
@@ -49,6 +50,7 @@ public class MoveTest {
 		when(this.unit.isBeingConstructed()).thenReturn(false);
 		when(this.act.getParameters()).thenReturn(this.params);
 		when(this.unit.getType()).thenReturn(this.unitType);
+		BwapiUtility.clearCache(this.unit);
 	}
 
 	@Test

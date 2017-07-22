@@ -1,10 +1,12 @@
 package eisbw;
 
-import java.util.AbstractMap.SimpleEntry;
+import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
+
+import jnibwapi.Player;
 import jnibwapi.Position;
 import jnibwapi.Region;
 import jnibwapi.Unit;
@@ -23,7 +25,9 @@ public class BwapiUtility {
 	private static final Map<String, UnitType> unitTypeMap = new HashMap<>();
 	private static final Map<String, TechType> techTypeMap = new HashMap<>();
 	private static final Map<String, UpgradeType> upgradeTypeMap = new HashMap<>();
-	private static final Map<Entry<Integer, Integer>, Integer> regionCache = new HashMap<>();
+	private static final Map<Integer, UnitType> typeCache = new HashMap<>();
+	private static final Map<Integer, Player> playerCache = new HashMap<>();
+	private static final Map<Point, Integer> regionCache = new HashMap<>();
 
 	private BwapiUtility() {
 		// Private constructor for static class.
@@ -41,39 +45,63 @@ public class BwapiUtility {
 	 * @return the name of the unit.
 	 */
 	public static String getName(Unit unit) {
-		String name = (getName(unit.getType()) + unit.getID()).replace(" ", "");
+		String name = StringUtils.deleteWhitespace(getName(getType(unit)) + unit.getID());
 		return name.substring(0, 1).toLowerCase() + name.substring(1);
 	}
 
 	public static String getName(UnitType unittype) {
-		String type = unittype.getName();
-		if (type.startsWith("Terran Siege Tank")) {
+		if (unittype == UnitTypes.Terran_Siege_Tank_Tank_Mode || unittype == UnitTypes.Terran_Siege_Tank_Siege_Mode) {
 			return "Terran Siege Tank";
 		} else {
-			return type;
+			return unittype.getName();
 		}
 	}
 
+	public static UnitType getType(Unit unit) {
+		int id = unit.getID();
+		UnitType type = typeCache.get(id);
+		if (type == null) {
+			type = unit.getType();
+			typeCache.put(id, type);
+		}
+		return type;
+	}
+
+	public static Player getPlayer(Unit unit) {
+		int id = unit.getID();
+		Player player = playerCache.get(id);
+		if (player == null) {
+			player = unit.getPlayer();
+			playerCache.put(id, player);
+		}
+		return player;
+	}
+
 	public static int getRegion(Position position, jnibwapi.Map map) {
-		Entry<Integer, Integer> pos = new SimpleEntry<>(position.getBX(), position.getBY());
-		Integer regionId = regionCache.get(pos);
+		Point point = new Point(position.getBX(), position.getBY());
+		Integer regionId = regionCache.get(point);
 		if (regionId == null) {
 			Region region = (map == null) ? null : map.getRegion(position);
 			regionId = (region == null) ? 0 : region.getID();
-			regionCache.put(pos, regionId);
+			regionCache.put(point, regionId);
 		}
 		return regionId.intValue();
+	}
+
+	public static void clearCache(Unit unit) {
+		typeCache.remove(unit.getID());
+		playerCache.remove(unit.getID());
 	}
 
 	/**
 	 * Get the EIS unittype.
 	 *
-	 * @param unittype
-	 *            the unittype
+	 * @param unit
+	 *            the unit
 	 * @return the type of a unit.
 	 */
-	public static String getEisUnitType(UnitType type) {
-		String result = getName(type).replace(" ", "");
+	public static String getEisUnitType(Unit unit) {
+		String result = StringUtils.deleteWhitespace(getName(getType(unit)));
 		return result.substring(0, 1).toLowerCase() + result.substring(1);
 	}
 
