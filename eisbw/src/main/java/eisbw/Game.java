@@ -54,8 +54,8 @@ public class Game {
 		this.env = environment;
 		this.units = new Units(environment);
 		this.draws = new ConcurrentHashMap<>();
-		this.percepts = new HashMap<>();
-		this.previous = new HashMap<>();
+		this.percepts = new ConcurrentHashMap<>();
+		this.previous = new ConcurrentHashMap<>();
 	}
 
 	public void mapAgent() {
@@ -158,8 +158,8 @@ public class Game {
 		LinkedList<Percept> percepts = new LinkedList<>();
 		Map<String, List<Percept>> previousPercepts = this.previous.get(unitName);
 		if (previousPercepts == null) {
-			this.previous.put(unitName, new HashMap<String, List<Percept>>());
-			previousPercepts = this.previous.get(unitName);
+			previousPercepts = new HashMap<>();
+			this.previous.put(unitName, previousPercepts);
 		}
 		Iterator<Entry<PerceptFilter, List<Percept>>> entries = map.entrySet().iterator();
 		while (entries.hasNext()) {
@@ -192,20 +192,27 @@ public class Game {
 		return percepts;
 	}
 
+	/**
+	 * Get the global percepts (resources, mineralfield, vespenegeyser, friendly,
+	 * enemy, attacking, underconstruction)
+	 *
+	 * @param api
+	 *            - the API.
+	 */
 	private Map<PerceptFilter, List<Percept>> getGlobalPercepts(JNIBWAPI bwapi) {
-		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
+		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(7);
 		new UnitsPerceiver(bwapi).perceive(toReturn);
 		return toReturn;
 	}
 
 	/**
-	 * Update the map.
+	 * Update the map percepts (map, enemy, base, choke, region)
 	 *
 	 * @param api
 	 *            - the API.
 	 */
 	public void updateMap(JNIBWAPI api) {
-		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
+		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(5);
 		new MapPerceiver(api).perceive(toReturn);
 		this.mapPercepts = toReturn;
 	}
