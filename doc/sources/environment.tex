@@ -84,7 +84,7 @@ The invulnerable parameter can be used to automatically make your units invulner
 
 \subsection{Map Agent}
 \label{map agent}
-If enabled, the environment will generate an entity of name and type \textit{`mapAgent'}. This entity is not connected to a unit in the game, but will be the only entity to receive all global information: \textit{base/2, chokepoint/6, enemyrace/1, map/2, region/5, attacking/2, constructionSite/3-4, enemy/9, friendly/2, gameframe/1, mineralField/4, nuke/2, resources/4, underConstruction/5, vepseneGeyser/5, winner/1}, and can even take a few actions: \textit{cancel/1, debugdraw/1, forfeit/0}. 
+If enabled, the environment will generate an entity of name and type \textit{`mapAgent'}. This entity is not connected to a unit in the game, but will be the only entity to receive all global information: \textit{base/2, chokepoint/6, enemyrace/1, map/2, region/5, attacking/2, constructionSite/3-4, enemy/9, friendly/2, gameframe/1, mineralField/5, nuke/2, resources/4, underConstruction/5, vepseneGeyser/5, winner/1}, and can even take a few actions: \textit{cancel/1, debugdraw/1, forfeit/0}. 
 
 Thus, when the map agent is enabled, all other entities will only receive their local information: \textit{self/2, status/7, order/5, defensiveMatrix/1, queueSize/1, researching/1, unitLoaded/1}, whilst they can of course still take the same actions. The map agent entity can be enabled or disabled with \textit{map\_agent=<Boolean>}.
 
