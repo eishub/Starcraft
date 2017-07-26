@@ -50,10 +50,8 @@ public class UnitsPerceiver extends Perceiver {
 		Player self = this.api.getSelf();
 		if (self != null) { // for tests
 			List<Percept> resourcePercept = new ArrayList<>(1);
-			double minerals = 5 * Math.floor(self.getMinerals() / 5.0);
-			double gas = 5 * Math.floor(self.getGas() / 5.0);
-			resourcePercept
-					.add(new ResourcesPercept((int) minerals, (int) gas, self.getSupplyUsed(), self.getSupplyTotal()));
+			resourcePercept.add(new ResourcesPercept(self.getMinerals(), self.getGas(), self.getSupplyUsed(),
+					self.getSupplyTotal()));
 			toReturn.put(new PerceptFilter(Percepts.RESOURCES, Filter.Type.ON_CHANGE), resourcePercept);
 		}
 		List<Percept> minerals = new LinkedList<>();
