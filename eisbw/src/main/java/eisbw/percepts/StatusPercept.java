@@ -35,6 +35,7 @@ public class StatusPercept extends Percept {
 	public StatusPercept(int chealth, int cshields, int cenergy, List<Parameter> conditions, int orientation, int xpos,
 			int ypos, int region) {
 		super(Percepts.STATUS, new Numeral(chealth), new Numeral(cshields), new Numeral(cenergy),
-				new ParameterList(conditions), new Numeral(xpos), new Numeral(ypos), new Numeral(region));
+				new ParameterList(conditions), new Numeral(orientation), new Numeral(xpos), new Numeral(ypos),
+				new Numeral(region));
 	}
 }
