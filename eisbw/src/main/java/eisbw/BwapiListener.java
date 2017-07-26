@@ -118,7 +118,6 @@ public class BwapiListener extends BwapiEvents {
 		// GENERATE PERCEPTS
 		int frame = this.bwapi.getFrameCount();
 		if ((frame % 50) == 0) {
-			this.game.updateFrameCount(this.bwapi);
 			this.game.updateConstructionSites(this.bwapi);
 		}
 		if (this.nuke >= 0 && ++this.nuke == 50) {

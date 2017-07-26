@@ -14,7 +14,6 @@ import eis.eis2java.translation.Filter;
 import eis.exceptions.ManagementException;
 import eis.iilang.Percept;
 import eisbw.debugger.draw.IDraw;
-import eisbw.percepts.FramePercept;
 import eisbw.percepts.NukePercept;
 import eisbw.percepts.Percepts;
 import eisbw.percepts.WinnerPercept;
@@ -39,7 +38,6 @@ public class Game {
 	protected volatile Map<String, Map<PerceptFilter, List<Percept>>> percepts;
 	protected volatile Map<PerceptFilter, List<Percept>> mapPercepts;
 	protected volatile Map<PerceptFilter, List<Percept>> constructionPercepts;
-	protected volatile Map<PerceptFilter, List<Percept>> framePercepts;
 	protected volatile Map<PerceptFilter, List<Percept>> nukePercepts;
 	protected volatile Map<PerceptFilter, List<Percept>> endGamePercepts;
 	private final Map<String, Map<String, List<Percept>>> previous;
@@ -101,17 +99,14 @@ public class Game {
 				if (scUnit.isWorker() && this.constructionPercepts != null) {
 					thisUnitPercepts.putAll(this.constructionPercepts);
 				}
+				if (this.mapPercepts != null) {
+					thisUnitPercepts.putAll(this.mapPercepts);
+				}
 				if (this.nukePercepts != null) {
 					thisUnitPercepts.putAll(this.nukePercepts);
 				}
 				if (this.endGamePercepts != null) {
 					thisUnitPercepts.putAll(this.endGamePercepts);
-				}
-				if (this.mapPercepts != null) {
-					thisUnitPercepts.putAll(this.mapPercepts);
-				}
-				if (this.framePercepts != null) {
-					thisUnitPercepts.putAll(this.framePercepts);
 				}
 			}
 			unitPerceptHolder.put(this.units.getUnitName(unit.getID()), thisUnitPercepts);
@@ -121,17 +116,14 @@ public class Game {
 			if (this.constructionPercepts != null) {
 				thisUnitPercepts.putAll(this.constructionPercepts);
 			}
+			if (this.mapPercepts != null) {
+				thisUnitPercepts.putAll(this.mapPercepts);
+			}
 			if (this.nukePercepts != null) {
 				thisUnitPercepts.putAll(this.nukePercepts);
 			}
 			if (this.endGamePercepts != null) {
 				thisUnitPercepts.putAll(this.endGamePercepts);
-			}
-			if (this.mapPercepts != null) {
-				thisUnitPercepts.putAll(this.mapPercepts);
-			}
-			if (this.framePercepts != null) {
-				thisUnitPercepts.putAll(this.framePercepts);
 			}
 			unitPerceptHolder.put("mapAgent", thisUnitPercepts);
 		}
@@ -230,20 +222,6 @@ public class Game {
 	}
 
 	/**
-	 * updates the frame count.
-	 *
-	 * @param count
-	 *            The current frame count (per 50, matching c.site updates)
-	 */
-	public void updateFrameCount(JNIBWAPI bwapi) {
-		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(1);
-		List<Percept> framepercept = new ArrayList<>(1);
-		framepercept.add(new FramePercept(bwapi.getFrameCount()));
-		toReturn.put(new PerceptFilter(Percepts.FRAME, Filter.Type.ON_CHANGE), framepercept);
-		this.framePercepts = toReturn;
-	}
-
-	/**
 	 * Updates the endGame percept.
 	 *
 	 * @param bwapi
@@ -332,7 +310,6 @@ public class Game {
 		this.constructionPercepts = null;
 		this.endGamePercepts = null;
 		this.nukePercepts = null;
-		this.framePercepts = null;
 		this.mapPercepts = null;
 		this.previous.clear();
 		try {

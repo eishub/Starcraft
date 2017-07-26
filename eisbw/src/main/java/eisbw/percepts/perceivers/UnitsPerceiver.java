@@ -13,6 +13,7 @@ import eis.iilang.Percept;
 import eisbw.BwapiUtility;
 import eisbw.percepts.AttackingPercept;
 import eisbw.percepts.EnemyPercept;
+import eisbw.percepts.FramePercept;
 import eisbw.percepts.FriendlyPercept;
 import eisbw.percepts.MineralFieldPercept;
 import eisbw.percepts.Percepts;
@@ -42,8 +43,15 @@ public class UnitsPerceiver extends Perceiver {
 
 	@Override
 	public void perceive(Map<PerceptFilter, List<Percept>> toReturn) {
+		framePercept(toReturn);
 		resourcesPercepts(toReturn);
 		unitsPercepts(toReturn);
+	}
+
+	private void framePercept(Map<PerceptFilter, List<Percept>> toReturn) {
+		List<Percept> framepercept = new ArrayList<>(1);
+		framepercept.add(new FramePercept(this.api.getFrameCount()));
+		toReturn.put(new PerceptFilter(Percepts.FRAME, Filter.Type.ON_CHANGE), framepercept);
 	}
 
 	private void resourcesPercepts(Map<PerceptFilter, List<Percept>> toReturn) {
