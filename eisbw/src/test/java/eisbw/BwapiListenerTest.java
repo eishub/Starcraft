@@ -91,7 +91,6 @@ public class BwapiListenerTest {
 		when(this.units.getUnitName(0)).thenReturn(null);
 		this.listener.unitMorph(0);
 		when(this.units.getUnitName(0)).thenReturn("unit");
-		when(this.units.deleteUnit("unit")).thenReturn(this.unit);
 		this.listener.unitMorph(0);
 		// verify(units, times(1)).getUnits();
 		verify(this.units, times(1)).addUnit(eq(this.unit), any(StarcraftUnitFactory.class));
@@ -102,13 +101,8 @@ public class BwapiListenerTest {
 
 	@Test
 	public void unitDestroy_test() {
-		when(this.units.getUnitName(0)).thenReturn(null);
 		this.listener.unitDestroy(0);
-		verify(this.units, times(0)).deleteUnit(any(String.class));
-		when(this.units.getUnitName(0)).thenReturn("unit");
-		when(this.units.deleteUnit("unit")).thenReturn(this.unit);
-		this.listener.unitDestroy(0);
-		verify(this.units, times(1)).deleteUnit(any(String.class));
+		verify(this.units, times(1)).deleteUnit(any(Unit.class));
 	}
 
 	@Test
