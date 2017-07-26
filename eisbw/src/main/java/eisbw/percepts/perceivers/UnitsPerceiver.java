@@ -62,13 +62,13 @@ public class UnitsPerceiver extends Perceiver {
 			UnitType type = BwapiUtility.getType(u);
 			if (type.isMineralField() && BwapiUtility.isValid(u)) {
 				Position pos = u.getPosition();
-				double amount = 100 * Math.round(u.getResources() / 100.0);
+				double amount = 100 * Math.ceil(u.getResources() / 100.0);
 				MineralFieldPercept mineralfield = new MineralFieldPercept(u.getID(), (int) amount, pos.getBX(),
 						pos.getBY(), getRegion(u));
 				minerals.add(mineralfield);
 			} else if (type == UnitTypes.Resource_Vespene_Geyser && BwapiUtility.isValid(u)) {
 				Position pos = u.getPosition();
-				double amount = 100 * Math.round(u.getResources() / 100.0);
+				double amount = 100 * Math.ceil(u.getResources() / 100.0);
 				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), (int) amount, pos.getBX(),
 						pos.getBY(), getRegion(u));
 				geysers.add(geyser);
@@ -78,7 +78,7 @@ public class UnitsPerceiver extends Perceiver {
 			UnitType type = BwapiUtility.getType(u);
 			if (type.isRefinery() && BwapiUtility.isValid(u)) {
 				Position pos = u.getPosition();
-				double amount = 100 * Math.round(u.getResources() / 100.0);
+				double amount = 100 * Math.ceil(u.getResources() / 100.0);
 				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), (int) amount, pos.getBX(),
 						pos.getBY(), getRegion(u));
 				geysers.add(geyser);
