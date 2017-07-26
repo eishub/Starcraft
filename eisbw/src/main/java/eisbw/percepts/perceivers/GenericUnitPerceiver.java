@@ -70,7 +70,8 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 		Position pos = this.unit.getPosition();
 		int region = BwapiUtility.getRegion(pos, this.api.getMap());
 		statusPercept.add(new StatusPercept(this.unit.getHitPoints(), this.unit.getShields(), this.unit.getEnergy(),
-				new ConditionHandler(this.api, this.unit).getConditions(), pos.getBX(), pos.getBY(), region));
+				new ConditionHandler(this.api, this.unit).getConditions(), (int) Math.toDegrees(this.unit.getAngle()),
+				pos.getBX(), pos.getBY(), region));
 		toReturn.put(new PerceptFilter(Percepts.STATUS, Filter.Type.ON_CHANGE), statusPercept);
 	}
 
