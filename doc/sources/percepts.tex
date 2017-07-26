@@ -10,21 +10,29 @@ Another guideline used in this environment is that \textit{no data is sent throu
 
 %%%----------------------------------------------------------
 \section{Global Static Percepts}
-These percepts represent global information (i.e., not specific to a certain unit) that will not change during a match. When the map agent is enabled, it will be the only entity to receive these percepts when started. Otherwise, all entities will receive these percepts when started. Note that all coordinates (X,Y) reflect tile positions; one such tile is actually 16 by 16 pixels. Moreover, Zerg units that morph (or Protoss units that mege) into a different type of unit will keep the same ID (of one of the units).
+These percepts represent global information (i.e., not specific to a certain unit) that will not change during a match. When the map agent is enabled, it will be the only entity to receive these percepts when started. Otherwise, all entities will receive these percepts when started. Note that all coordinates (X,Y) reflect tile positions; one such tile is actually 16 by 16 pixels. Moreover, units will keep the same ID (of one of the units) after a morph or merge.
 %%%----------------------------------------------------------
 
-\subsection{base/4}
+\subsection{base/6}
 \begin{tabularx}{\textwidth}{lX}
- Description & Information about all base locations on the map. These are possible construction sites for resource centers (or spawning sites for the initial center). \\
+ Description & Information about all base locations on the map. These are possible construction sites for resource centers (or spawning sites for the initial centers). \\
  Type & Send once \\
- Syntax & \verb|base(<IsPossibleStart>,<X>,<Y>,<Region>)| \\
- Example & \verb|base(true, 28, 32, 8)| \\
+ Syntax & \verb|base(<IsPossibleStart>,<Minerals>,<Gas>,<X>,<Y>,<Region>)| \\
+ Example & \verb|base(true, 13500, 5000, 28, 32, 8)| \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
  \cline{2-3}
  Parameters & \textbf{\verb|<IsPossibleStart>|} & Indicates whether the location is a potential starting location or not (i.e., there are 2 on a 2-player map and 4 on a 4-player map). \\
             & \textbf{Type} & \verb|Boolean| \\
             & \textbf{Range} & [true,false] \\
+            \cline{2-3}
+ 			& \textbf{\verb|<Minerals>|} & The total amount of minerals available at/near the base location (at the start).\\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
+            \cline{2-3}
+ 			& \textbf{\verb|<Gas>|} & The total amount of vespense gas available at/near the base location (at the start).\\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--$\infty$] \\
             \cline{2-3}
  			& \textbf{\verb|<X>|} & The x-coordinate of the base location.\\
             & \textbf{Type} & \verb|Integer| \\
@@ -34,7 +42,7 @@ These percepts represent global information (i.e., not specific to a certain uni
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0--$\infty$] \\
             \cline{2-3}
-            & \textbf{\verb|<Region>|} & The region the base is located in. Can for example be used to find matching mineral patches and geysers. \\
+            & \textbf{\verb|<Region>|} & The region the base is located in. Can for example be used to find matching resources. \\
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [1--$\infty$] \\
             \cline{2-3}
@@ -214,12 +222,12 @@ These percepts represent information that changes during a match, but is still g
 \end{tabularx}
 
 
-\subsection{enemy/9}
+\subsection{enemy/10}
 \begin{tabularx}{\textwidth}{lX}
  Description & Information about all visible (living) enemy units. Note that this also includes unfinished units (like buildings under construction) or cloaked units that cannot be attacked until they are detected (see \textit{<Conditions>}). \\
  Type & Send always \\
- Syntax & \verb|enemy(<Id>,<Type>,<Health>,<Shield>,<Energy>,| \\ & \quad \verb|<Conditions>,<X>,<Y>,<Region>)| \\
- Example & \verb|enemy(12, `Zerg Overlord', 200, 100, 0, [flying], 120, 96, 3)| \\
+ Syntax & \verb|enemy(<Id>,<Type>,<Health>,<Shield>,<Energy>,| \\ & \quad \verb|<Conditions>,<Orientation>,<X>,<Y>,<Region>)| \\
+ Example & \verb|enemy(12, `Zerg Overlord', 200, 100, 0, [flying], 0, 120, 96, 3)| \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
  \cline{2-3}
@@ -233,19 +241,23 @@ These percepts represent information that changes during a match, but is still g
             \cline{2-3}
             & \textbf{\verb|<Health>|} & The current amount of health of the unit.\\
             & \textbf{Type} & \verb|Integer| \\
-            & \textbf{Range} & [1--\verb|<maxHealth>|] where \verb|<maxHealth>| is the maximum health of the given unit type.\\
+            & \textbf{Range} & [1--\verb|<maxHealth>|] \\
             \cline{2-3}
             & \textbf{\verb|<Shield>|} & The current amount of shields of the unit. \\
             & \textbf{Type} & \verb|Integer| \\
-            & \textbf{Range} & [0--\verb|<maxShield>|] where \verb|<maxShield>| is the maximum shield of the given unit type. \\
+            & \textbf{Range} & [0--\verb|<maxShield>|] \\
             \cline{2-3}
             & \textbf{\verb|<Energy>|} & The current amount of energy of the unit. \\
             & \textbf{Type} & \verb|Integer| \\
-            & \textbf{Range} & [0--\verb|<maxEnergy>|] where \verb|<maxEnergy>| is the maximum shield of the given unit type. \\
+            & \textbf{Range} & [0--\verb|<maxEnergy>|] \\
             \cline{2-3}
             & \textbf{\verb|<Conditions>|} & A list representing the current conditions of the unit. Each unit can have multiple or no conditions depending on the unit and situation. Note that not all conditions are available for enemies.\\
             & \textbf{Type} & \verb|List of Strings| \\
             & \textbf{Range} & See \ref{conditions} \\
+            \cline{2-3}
+            & \textbf{\verb|<Orientation>|} & The orientation of the unit (in degrees).\\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--360] \\
             \cline{2-3}
             & \textbf{\verb|<X>|} & The x-coordinate of the unit.\\
             & \textbf{Type} & \verb|Integer| \\
@@ -283,14 +295,14 @@ These percepts represent information that changes during a match, but is still g
 
 \subsection{gameframe/1}
 \begin{tabularx}{\textwidth}{lX}
- Description & The current game frame, sent per 50 frames (which is also the interval at which construction sites are updated). For more information see \ref{game speed}. \\
+ Description & The current game frame. For more information see \ref{game speed}. \\
  Type & Send on change \\
  Syntax & \verb|gameframe(<Number>)| \\
  Example & \verb|gameframe(150)|   \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
  \cline{2-3}
-  Parameters & \textbf{\verb|<Number>|} & The game frame count in increments of 50. \\
+  Parameters & \textbf{\verb|<Number>|} & The game frame count. \\
              & \textbf{Type} & \verb|Integer| \\
              & \textbf{Range} & [0--$\infty$] \\
             \cline{2-3}
@@ -309,7 +321,7 @@ These percepts represent information that changes during a match, but is still g
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [1--$\infty$] \\
             \cline{2-3}
-            & \textbf{\verb|<Resources>|} & The amount of minerals left in the field. Can be 0 for mineral fields that obstruct e.g. chokepoints.\\
+            & \textbf{\verb|<Resources>|} & The amount of minerals left in the field, rounded to the nearest (upper) multiple of 100. Can be 0 for mineral fields that obstruct e.g. chokepoints (mined out fields disappear).\\
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0--5000] \\
             \cline{2-3}
@@ -364,7 +376,7 @@ These percepts represent information that changes during a match, but is still g
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0--$\infty$] \\
             \cline{2-3}
-            & \textbf{\verb|<UsedSupply>|} & The amount of supply that is in use. \\
+            & \textbf{\verb|<UsedSupply>|} & The amount of supply that is in use \\
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0--400] \\
             \cline{2-3}
@@ -418,7 +430,7 @@ These percepts represent information that changes during a match, but is still g
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [1--$\infty$] \\
             \cline{2-3}
-            & \textbf{\verb|<Resources>|} & The amount of gas left in the vespene geyser.\\
+            & \textbf{\verb|<Resources>|} & The amount of gas left in the vespene geyser, rounded to the nearest (upper) multiple of 100. Can be 0, after which mining workers will obtain way less gas per trip.\\
             & \textbf{Type} & \verb|Integer| \\
             & \textbf{Range} & [0--$\infty$] \\
             \cline{2-3}
@@ -477,13 +489,13 @@ These percepts are generated for all individual units in the game (thus excludin
             \cline{2-3}
 \end{tabularx}
 
-\subsection{status/7}
+\subsection{status/8}
 \begin{tabularx}{\textwidth}{lX}
  Description & The current amount of health, shield and energy of the unit. The \verb|status| percept also shows the conditions of the unit and its current position. \\
  Type & Send on change \\
  Syntax & \verb|status(<Health>,<Shield>,<Energy>,<Conditions>,| \\
- & \quad \verb|<X>,<Y>,<Region>)| \\
- Example & \verb|status(250, 0, 0, [moving, carrying], 24, 36, 1)|   \\
+ & \quad \verb|<Orientation>,<X>,<Y>,<Region>)| \\
+ Example & \verb|status(250, 0, 0, [moving, carrying], 180, 24, 36, 1)|   \\
  \end{tabularx}\\
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
  \cline{2-3}
@@ -502,6 +514,10 @@ These percepts are generated for all individual units in the game (thus excludin
             & \textbf{\verb|<Conditions>|} & A list representing the current conditions of the unit. Each unit can have multiple or no conditions depending on the unit and situation.\\
             & \textbf{Type} & \verb|List of Strings| \\
             & \textbf{Range} & See \ref{conditions} \\
+            \cline{2-3}
+            & \textbf{\verb|<Orientation>|} & The orientation of the unit (in degrees).\\
+            & \textbf{Type} & \verb|Integer| \\
+            & \textbf{Range} & [0--360] \\
             \cline{2-3}
             & \textbf{\verb|<X>|} & The x-coordinate of the unit. \\
             & \textbf{Type} & \verb|Integer| \\

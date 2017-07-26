@@ -31,6 +31,18 @@ The following actions can be executed by any unit.
  Note & For the \textit{`mapAgent'}, the text will be drawn on a fixed position on the left top of the game window.
 \end{tabularx}
 
+\subsection{debugdraw/2}
+\begin{tabularx}{\textwidth}{lX}
+ Description & Draw text above any unit in the game window. \\
+ Syntax & \verb|debugdraw(<TargetId>,<Text>)| \\
+ Example & \verb|debugdraw("Power Overwhelming")| \\
+ Parameters & \verb|<TargetId>|: The ID of the (possibly enemy or even neutral) unit above which the text should be drawn. \\
+ 			& \verb|<Text>|: The text(string) that should be drawn. \\
+ Pre & - \\
+ Post & The given text will be drawn above the unit (i.e., it will stay with the unit) in the game window, as long as it is visible (or becomes visible again). If the given text is empty, the drawing will be cancelled. \\
+ Note & It makes most sense for the \textit{`mapAgent'} to execute this.
+\end{tabularx}
+
 \subsection{forfeit/0}
 \begin{tabularx}{\textwidth}{lX}
  Description & Forfeit the game. \\
@@ -49,8 +61,6 @@ The following actions can be executed by any unit.
  Pre & The unit is capable of morphing into the given unit type. \\
  Post & The unit's corresponding agent terminates and a new agent is created for the new unit when it is completed (with the same ID).
 \end{tabularx}
-
-\newpage
 
 %%%----------------------------------------------------------
 \section{Buildings}
@@ -142,6 +152,8 @@ The actions in this section can only be executed by buildings (or by some specia
  Pre & There are units currently loaded into the unit. \\
  Post & All loaded units are unloaded from the unit.
 \end{tabularx}
+
+\newpage
 
 %%%----------------------------------------------------------
 \section{Moving Units}
