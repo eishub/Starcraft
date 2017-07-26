@@ -14,6 +14,10 @@ public class BasePercept extends Percept {
 	/**
 	 * @param isStart
 	 *            Indicates whether the base location is a starting location or not.
+	 * @param minerals
+	 *            The amount of minerals available near the base (at the start).
+	 * @param gas
+	 *            The amount of gas available near the base (at the start).
 	 * @param xpos
 	 *            The x coordinate of the base location.
 	 * @param ypos
@@ -21,7 +25,8 @@ public class BasePercept extends Percept {
 	 * @param region
 	 *            The region of the base location.
 	 */
-	public BasePercept(boolean isStart, int xpos, int ypos, int region) {
-		super(Percepts.BASE, new TruthValue(isStart), new Numeral(xpos), new Numeral(ypos), new Numeral(region));
+	public BasePercept(boolean isStart, int minerals, int gas, int xpos, int ypos, int region) {
+		super(Percepts.BASE, new TruthValue(isStart), new Numeral(minerals), new Numeral(gas), new Numeral(xpos),
+				new Numeral(ypos), new Numeral(region));
 	}
 }

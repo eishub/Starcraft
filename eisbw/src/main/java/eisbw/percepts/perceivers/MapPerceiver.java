@@ -53,8 +53,8 @@ public class MapPerceiver extends Perceiver {
 		List<Percept> basePercepts = new ArrayList<>(map.getBaseLocations().size());
 		for (BaseLocation location : map.getBaseLocations()) {
 			Position pos = location.getPosition();
-			Percept basePercept = new BasePercept(location.isStartLocation(), pos.getBX(), pos.getBY(),
-					location.getRegion().getID());
+			Percept basePercept = new BasePercept(location.isStartLocation(), location.getMinerals(), location.getGas(),
+					pos.getBX(), pos.getBY(), location.getRegion().getID());
 			basePercepts.add(basePercept);
 		}
 		toReturn.put(new PerceptFilter(Percepts.BASE, Filter.Type.ONCE), basePercepts);
