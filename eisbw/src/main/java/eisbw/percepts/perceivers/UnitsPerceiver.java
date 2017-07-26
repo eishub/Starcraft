@@ -50,8 +50,10 @@ public class UnitsPerceiver extends Perceiver {
 		Player self = this.api.getSelf();
 		if (self != null) { // for tests
 			List<Percept> resourcePercept = new ArrayList<>(1);
-			resourcePercept.add(new ResourcesPercept(self.getMinerals(), self.getGas(), self.getSupplyUsed(),
-					self.getSupplyTotal()));
+			double minerals = 5 * Math.floor(self.getMinerals() / 5.0);
+			double gas = 5 * Math.floor(self.getGas() / 5.0);
+			resourcePercept
+					.add(new ResourcesPercept((int) minerals, (int) gas, self.getSupplyUsed(), self.getSupplyTotal()));
 			toReturn.put(new PerceptFilter(Percepts.RESOURCES, Filter.Type.ON_CHANGE), resourcePercept);
 		}
 		List<Percept> minerals = new LinkedList<>();
@@ -60,12 +62,14 @@ public class UnitsPerceiver extends Perceiver {
 			UnitType type = BwapiUtility.getType(u);
 			if (type.isMineralField() && BwapiUtility.isValid(u)) {
 				Position pos = u.getPosition();
-				MineralFieldPercept mineralfield = new MineralFieldPercept(u.getID(), u.getResources(), pos.getBX(),
+				double amount = 100 * Math.round(u.getResources() / 100.0);
+				MineralFieldPercept mineralfield = new MineralFieldPercept(u.getID(), (int) amount, pos.getBX(),
 						pos.getBY(), getRegion(u));
 				minerals.add(mineralfield);
 			} else if (type == UnitTypes.Resource_Vespene_Geyser && BwapiUtility.isValid(u)) {
 				Position pos = u.getPosition();
-				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), u.getResources(), pos.getBX(),
+				double amount = 100 * Math.round(u.getResources() / 100.0);
+				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), (int) amount, pos.getBX(),
 						pos.getBY(), getRegion(u));
 				geysers.add(geyser);
 			}
@@ -74,7 +78,8 @@ public class UnitsPerceiver extends Perceiver {
 			UnitType type = BwapiUtility.getType(u);
 			if (type.isRefinery() && BwapiUtility.isValid(u)) {
 				Position pos = u.getPosition();
-				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), u.getResources(), pos.getBX(),
+				double amount = 100 * Math.round(u.getResources() / 100.0);
+				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), (int) amount, pos.getBX(),
 						pos.getBY(), getRegion(u));
 				geysers.add(geyser);
 
