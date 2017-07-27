@@ -54,13 +54,13 @@ public class GenericUnitPerceiverTest {
 		when(this.unit.getID()).thenReturn(1);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unitType.toString()).thenReturn("type");
-
 		when(this.unit.getHitPoints()).thenReturn(25);
 		when(this.unit.getShields()).thenReturn(30);
 		when(this.unit.getTilePosition()).thenReturn(new TilePosition(2, 1));
-
 		when(this.unit.getEnergy()).thenReturn(100);
 		when(this.unitType.maxEnergy()).thenReturn(110);
+		BwapiUtility.clearCache(this.unit);
+
 		this.perciever = new GenericUnitPerceiver(this.api, this.unit);
 	}
 

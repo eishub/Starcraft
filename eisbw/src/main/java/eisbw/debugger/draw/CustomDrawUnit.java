@@ -2,6 +2,7 @@ package eisbw.debugger.draw;
 
 import bwapi.Position;
 import bwapi.Unit;
+import eisbw.BwapiUtility;
 import eisbw.Game;
 
 /**
@@ -31,11 +32,11 @@ public class CustomDrawUnit extends IDraw {
 
 	@Override
 	protected void doDraw(bwapi.Game api) {
-		if (this.unit == null) {
-			api.drawTextScreen(10, 20, this.text);
-		} else {
+		if (BwapiUtility.isValid(this.unit)) {
 			Position pos = this.unit.getPosition();
 			api.drawTextMap(pos.getX(), pos.getY() - 30, this.text);
+		} else if (this.unit == null) { // mapagent
+			api.drawTextScreen(10, 20, this.text);
 		}
 	}
 }

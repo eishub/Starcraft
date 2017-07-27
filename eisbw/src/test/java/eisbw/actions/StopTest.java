@@ -17,6 +17,7 @@ import bwapi.UnitType;
 import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
+import eisbw.BwapiUtility;
 
 public class StopTest {
 	private Stop action;
@@ -44,6 +45,7 @@ public class StopTest {
 
 		when(this.act.getParameters()).thenReturn(this.params);
 		when(this.unit.getType()).thenReturn(this.unitType);
+		BwapiUtility.clearCache(this.unit);
 	}
 
 	@Test

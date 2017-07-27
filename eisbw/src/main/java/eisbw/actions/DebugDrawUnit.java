@@ -5,6 +5,7 @@ import java.util.List;
 import bwapi.Unit;
 import bwapi.UnitType;
 import eis.iilang.Action;
+import eis.iilang.Numeral;
 import eis.iilang.Parameter;
 import eisbw.BwapiUtility;
 import eisbw.Game;
@@ -15,7 +16,7 @@ import eisbw.debugger.draw.IDraw;
  * @author Danny & Harm - Enable or disable drawing text above a certain unit.
  *
  */
-public class DebugDraw extends StarcraftAction {
+public class DebugDrawUnit extends StarcraftAction {
 	private final Game game;
 
 	/**
@@ -24,7 +25,7 @@ public class DebugDraw extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public DebugDraw(bwapi.Game api, Game game) {
+	public DebugDrawUnit(bwapi.Game api, Game game) {
 		super(api);
 		this.game = game;
 	}
@@ -32,7 +33,7 @@ public class DebugDraw extends StarcraftAction {
 	@Override
 	public boolean isValid(Action action) {
 		List<Parameter> parameters = action.getParameters();
-		return parameters.size() == 1;
+		return (parameters.size() == 2 && parameters.get(0) instanceof Numeral);
 	}
 
 	@Override
@@ -44,8 +45,10 @@ public class DebugDraw extends StarcraftAction {
 	@Override
 	public void execute(Unit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
-		String text = parameters.get(0).toProlog();
+		Numeral id = (Numeral) parameters.get(0);
+		unit = this.api.getUnit(id.getValue().intValue());
 		String name = (unit == null) ? "0" : BwapiUtility.getName(unit);
+		String text = parameters.get(1).toProlog();
 
 		IDraw draw = new CustomDrawUnit(this.game, unit, text);
 		this.game.addDraw(name, draw);
@@ -56,6 +59,6 @@ public class DebugDraw extends StarcraftAction {
 
 	@Override
 	public String toString() {
-		return "debugdraw(Text)";
+		return "debugdraw(TargetId,Text)";
 	}
 }

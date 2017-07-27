@@ -18,6 +18,7 @@ import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
+import eisbw.BwapiUtility;
 
 public class AttackTest {
 	private Attack action;
@@ -45,6 +46,7 @@ public class AttackTest {
 
 		when(this.act.getParameters()).thenReturn(this.params);
 		when(this.unit.getType()).thenReturn(this.unitType);
+		BwapiUtility.clearCache(this.unit);
 	}
 
 	@Test

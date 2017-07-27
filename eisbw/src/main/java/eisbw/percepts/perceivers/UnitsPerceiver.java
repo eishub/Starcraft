@@ -2,7 +2,6 @@ package eisbw.percepts.perceivers;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-//import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,13 +13,12 @@ import bwapi.TilePosition;
 import bwapi.Unit;
 import bwapi.UnitType;
 import eis.eis2java.translation.Filter;
-//import eis.iilang.Identifier;
-//import eis.iilang.Parameter;
 import eis.iilang.Percept;
 import eisbw.BwapiUtility;
 import eisbw.percepts.AttackPercept;
 import eisbw.percepts.AttackingPercept;
 import eisbw.percepts.EnemyPercept;
+import eisbw.percepts.FramePercept;
 import eisbw.percepts.FriendlyPercept;
 import eisbw.percepts.MineralFieldPercept;
 import eisbw.percepts.Percepts;
@@ -44,9 +42,16 @@ public class UnitsPerceiver extends Perceiver {
 
 	@Override
 	public void perceive(Map<PerceptFilter, List<Percept>> toReturn) {
+		framePercept(toReturn);
 		resourcesPercepts(toReturn);
 		unitsPercepts(toReturn);
 		attackPercepts(toReturn);
+	}
+
+	private void framePercept(Map<PerceptFilter, List<Percept>> toReturn) {
+		List<Percept> framepercept = new ArrayList<>(1);
+		framepercept.add(new FramePercept(this.api.getFrameCount()));
+		toReturn.put(new PerceptFilter(Percepts.FRAME, Filter.Type.ON_CHANGE), framepercept);
 	}
 
 	private void resourcesPercepts(Map<PerceptFilter, List<Percept>> toReturn) {
@@ -63,13 +68,15 @@ public class UnitsPerceiver extends Perceiver {
 			UnitType type = BwapiUtility.getType(u);
 			if (type.isMineralField() && BwapiUtility.isValid(u)) {
 				TilePosition pos = u.getTilePosition();
-				MineralFieldPercept mineralfield = new MineralFieldPercept(u.getID(), u.getResources(), pos.getX(),
+				double amount = 100 * Math.ceil(u.getResources() / 100.0);
+				MineralFieldPercept mineralfield = new MineralFieldPercept(u.getID(), (int) amount, pos.getX(),
 						pos.getY(), BwapiUtility.getRegion(pos, this.api));
 				minerals.add(mineralfield);
 			} else if (type == UnitType.Resource_Vespene_Geyser && BwapiUtility.isValid(u)) {
 				TilePosition pos = u.getTilePosition();
-				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), u.getResources(), pos.getX(),
-						pos.getY(), BwapiUtility.getRegion(pos, this.api));
+				double amount = 100 * Math.ceil(u.getResources() / 100.0);
+				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), (int) amount, pos.getX(), pos.getY(),
+						BwapiUtility.getRegion(pos, this.api));
 				geysers.add(geyser);
 			}
 		}
@@ -77,8 +84,9 @@ public class UnitsPerceiver extends Perceiver {
 			UnitType type = BwapiUtility.getType(u);
 			if (type.isRefinery() && BwapiUtility.isValid(u)) {
 				TilePosition pos = u.getTilePosition();
-				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), u.getResources(), pos.getX(),
-						pos.getY(), BwapiUtility.getRegion(pos, this.api));
+				double amount = 100 * Math.ceil(u.getResources() / 100.0);
+				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), (int) amount, pos.getX(), pos.getY(),
+						BwapiUtility.getRegion(pos, this.api));
 				geysers.add(geyser);
 
 			}
@@ -149,9 +157,10 @@ public class UnitsPerceiver extends Perceiver {
 				}
 			} else {
 				TilePosition pos = u.getTilePosition();
-				unitpercepts.add(new EnemyPercept(id, BwapiUtility.getName(t), u.getHitPoints(), u.getShields(),
-						u.getEnergy(), new ConditionHandler(this.api, u).getConditions(), pos.getX(), pos.getY(),
-						BwapiUtility.getRegion(pos, this.api)));
+				unitpercepts.add(
+						new EnemyPercept(id, BwapiUtility.getName(t), u.getHitPoints(), u.getShields(), u.getEnergy(),
+								new ConditionHandler(this.api, u).getConditions(), (int) Math.toDegrees(u.getAngle()),
+								pos.getX(), pos.getY(), BwapiUtility.getRegion(pos, this.api)));
 				if (t.canAttack()) {
 					Unit target = (u.getTarget() == null) ? u.getOrderTarget() : u.getTarget();
 					if (target != null && !units.contains(target)) {

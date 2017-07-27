@@ -51,7 +51,7 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 			List<Unit> loadedUnits = this.unit.getLoadedUnits();
 			unitLoadedPercept(toReturn, loadedUnits);
 		}
-		if (type.canProduce() || type == UnitType.Terran_Nuclear_Silo) {
+		if (type.canProduce() || type == UnitType.Terran_Nuclear_Silo || type == UnitType.Terran_Vulture) {
 			queueSizePercept(toReturn);
 		}
 		if (type.isBuilding()) {
@@ -67,8 +67,8 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 		List<Percept> statusPercept = new ArrayList<>(1);
 		TilePosition pos = this.unit.getTilePosition();
 		statusPercept.add(new StatusPercept(this.unit.getHitPoints(), this.unit.getShields(), this.unit.getEnergy(),
-				new ConditionHandler(this.api, this.unit).getConditions(), pos.getX(), pos.getY(),
-				BwapiUtility.getRegion(pos, this.api)));
+				new ConditionHandler(this.api, this.unit).getConditions(), (int) Math.toDegrees(this.unit.getAngle()),
+				pos.getX(), pos.getY(), BwapiUtility.getRegion(pos, this.api)));
 		toReturn.put(new PerceptFilter(Percepts.STATUS, Filter.Type.ON_CHANGE), statusPercept);
 	}
 
@@ -152,6 +152,14 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getLarva().size()));
 		} else if (type == UnitType.Terran_Nuclear_Silo) {
 			queueSizePercept.add(new QueueSizePercept(this.unit.hasNuke() ? 1 : 0));
+		} else if (type == UnitType.Terran_Vulture) {
+			queueSizePercept.add(new QueueSizePercept(this.unit.getSpiderMineCount()));
+		} else if (type == UnitType.Protoss_Carrier) {
+			queueSizePercept
+					.add(new QueueSizePercept(this.unit.getTrainingQueue().size() + this.unit.getInterceptorCount()));
+		} else if (type == UnitType.Protoss_Reaver) {
+			queueSizePercept
+					.add(new QueueSizePercept(this.unit.getTrainingQueue().size() + this.unit.getScarabCount()));
 		} else {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getTrainingQueue().size()));
 		}

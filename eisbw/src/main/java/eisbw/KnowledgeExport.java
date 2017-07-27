@@ -185,8 +185,9 @@ public class KnowledgeExport {
 		WeaponType generic = (ground == null || ground == WeaponType.Unknown || ground == WeaponType.None) ? air
 				: ground;
 		return String.format("combat('%s',%d,%d,%d,%d,%d).\n", BwapiUtility.getName(type),
-				ground.damageAmount() * ground.damageFactor(), air.damageAmount() * air.damageFactor(),
-				generic.damageCooldown(), generic.maxRange() / TilePosition.SIZE_IN_PIXELS,
+				type.maxGroundHits() * ground.damageAmount() * ground.damageFactor(),
+				type.maxAirHits() * air.damageAmount() * air.damageFactor(), generic.damageCooldown(),
+				generic.maxRange() / TilePosition.SIZE_IN_PIXELS,
 				generic.medianSplashRadius() / TilePosition.SIZE_IN_PIXELS);
 	}
 
@@ -234,8 +235,8 @@ public class KnowledgeExport {
 		String required = (upgrades == UnitType.Unknown || upgrades == UnitType.None) ? ""
 				: ("'" + BwapiUtility.getName(upgrades) + "'");
 		String returned = "";
-		for (int i = 1; i <= type.maxRepeats(); ++i) {
-			String toAdd = (type.maxRepeats() == 1) ? "" : (" " + i);
+		for (int i = 0; i < type.maxRepeats(); ++i) {
+			String toAdd = (type.maxRepeats() == 1) ? "" : (" " + (i + 1));
 			returned += String.format("costs('%s',%d,%d,%d,%d,%s).\n", BwapiUtility.getName(type) + toAdd,
 					type.mineralPrice() + (type.mineralPriceFactor() * i),
 					type.gasPrice() + (type.gasPriceFactor() * i), 0,

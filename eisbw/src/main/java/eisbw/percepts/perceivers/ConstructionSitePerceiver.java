@@ -89,7 +89,7 @@ public class ConstructionSitePerceiver extends Perceiver {
 		for (int x = 0; x < mapWidth; x += steps) {
 			for (int y = 0; y < mapHeight; y += steps) {
 				TilePosition pos = new TilePosition(x, y);
-				if (this.api.isBuildable(pos)) {
+				if (this.api.isBuildable(pos) && this.api.isVisible(pos)) {
 					if (race == Race.Terran) {
 						perceiveTerran(pos, worker, percepts);
 					} else if (race == Race.Protoss) {

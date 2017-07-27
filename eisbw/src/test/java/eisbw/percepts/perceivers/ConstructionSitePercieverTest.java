@@ -21,6 +21,7 @@ import bwapi.TilePosition;
 import bwapi.Unit;
 import bwapi.UnitType;
 import eis.iilang.Percept;
+import eisbw.BwapiUtility;
 
 public class ConstructionSitePercieverTest {
 	private ConstructionSitePerceiver perciever;
@@ -49,6 +50,7 @@ public class ConstructionSitePercieverTest {
 		when(this.unit.exists()).thenReturn(true);
 		when(this.unit.getTilePosition()).thenReturn(this.mapsize);
 		when(this.unitType.toString()).thenReturn("Resource Mineral Field");
+		BwapiUtility.clearCache(this.unit);
 
 		when(this.bwapi.canBuildHere(any(TilePosition.class), any(UnitType.class), any(Unit.class), any(Boolean.class)))
 				.thenReturn(true);

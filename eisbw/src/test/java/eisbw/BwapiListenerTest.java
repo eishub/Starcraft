@@ -57,13 +57,12 @@ public class BwapiListenerTest {
 	@Before
 	public void start() {
 		MockitoAnnotations.initMocks(this);
-		BwapiUtility.clearPlayerCache();
-
 		when(this.unit.getID()).thenReturn(0);
-		BwapiUtility.clearCache(this.unit);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unitType.toString()).thenReturn("Terran Siege Tank Tank Mode");
 		when(this.unitType.canMove()).thenReturn(true);
+		BwapiUtility.clearCache(this.unit);
+
 		when(this.units.getUnitName(0)).thenReturn("unit");
 		when(this.units.getUnit("unit")).thenReturn(this.unit);
 		when(this.game.getUnits()).thenReturn(this.units);
@@ -72,6 +71,7 @@ public class BwapiListenerTest {
 		when(this.self.getUnits()).thenReturn(this.list);
 		when(this.bwapi.self()).thenReturn(this.self);
 		when(this.bwapi.getUnit(0)).thenReturn(this.unit);
+
 		this.listener = new BwapiListener(this.game, "", false, false, false, false, 200);
 		this.listener.mirror = this.mirror;
 		when(this.mirror.getModule()).thenReturn(this.module);
@@ -91,20 +91,15 @@ public class BwapiListenerTest {
 		when(this.bwapi.self()).thenReturn(this.self);
 		when(this.self.getRace()).thenReturn(Race.Zerg);
 		when(this.units.getUnitName(0)).thenReturn("unit");
-		when(this.units.deleteUnit("unit")).thenReturn(this.unit);
 		this.listener.onUnitMorph(this.unit);
 		verify(this.units, times(1)).addUnit(eq(this.unit), any(StarcraftUnitFactory.class));
 	}
 
 	@Test
 	public void unitDestroy_test() {
-		when(this.units.getUnitName(0)).thenReturn(null);
-		this.listener.onUnitDestroy(this.unit);
-		verify(this.units, times(0)).deleteUnit(any(String.class));
 		when(this.units.getUnitName(0)).thenReturn("unit");
-		when(this.units.deleteUnit("unit")).thenReturn(this.unit);
 		this.listener.onUnitDestroy(this.unit);
-		verify(this.units, times(1)).deleteUnit(any(String.class));
+		verify(this.units, times(1)).deleteUnit(any(Unit.class));
 	}
 
 	// @Test (FIXME: native)

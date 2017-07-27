@@ -62,5 +62,6 @@ public class ActionProvider {
 		this.actions.put("repair/1", new Repair(api));
 		this.actions.put("forfeit/0", new Forfeit(api));
 		this.actions.put("debugdraw/1", new DebugDraw(api, game));
+		this.actions.put("debugdraw/2", new DebugDrawUnit(api, game));
 	}
 }

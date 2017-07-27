@@ -9,6 +9,7 @@ import org.mockito.MockitoAnnotations;
 
 import bwapi.Unit;
 import bwapi.UnitType;
+import eisbw.BwapiUtility;
 
 public class StarcraftUnitFactoryTest {
 	private StarcraftUnitFactory factory;
@@ -23,6 +24,7 @@ public class StarcraftUnitFactoryTest {
 		MockitoAnnotations.initMocks(this);
 		this.factory = new StarcraftUnitFactory(null);
 		when(this.unit.getType()).thenReturn(this.unitType);
+		BwapiUtility.clearCache(this.unit);
 		assertEquals(1, this.factory.create(this.unit).perceivers.size());
 	}
 }

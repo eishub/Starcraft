@@ -56,19 +56,17 @@ public class Units {
 	/**
 	 * Removes a unit from game data.
 	 *
-	 * @param unitName
-	 *            The unit name.
-	 * @param id
-	 *            The id of the unit.
+	 * @param unit
+	 *            The unit to delete.
 	 */
-	public Unit deleteUnit(String unitName) {
-		Unit unit = this.unitMap.remove(unitName);
+	public void deleteUnit(Unit unit) {
+		String unitName = BwapiUtility.getName(unit);
+		this.unitMap.remove(unitName);
 		this.unitNames.remove(unit.getID());
 		this.starcraftUnits.remove(unit);
 		this.uninitializedUnits.remove(unit);
 
 		this.environment.deleteFromEnvironment(unitName);
-		return unit;
 	}
 
 	public String getUnitName(int id) {
@@ -91,7 +89,7 @@ public class Units {
 	 * Clean units, let garbage collector remove the remains.
 	 */
 	public void clean() {
-		for (String unit : this.unitNames.values()) {
+		for (Unit unit : this.unitMap.values()) {
 			deleteUnit(unit);
 		}
 	}

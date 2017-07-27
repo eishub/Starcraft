@@ -123,7 +123,6 @@ public class BwapiListener extends BwapiEvents {
 		// GENERATE PERCEPTS
 		int frame = this.api.getFrameCount();
 		if ((frame % 50) == 0) {
-			this.game.updateFrameCount(this.api);
 			this.game.updateConstructionSites(this.api);
 		}
 		if (this.nuke >= 0 && ++this.nuke == 50) {
@@ -167,11 +166,8 @@ public class BwapiListener extends BwapiEvents {
 
 	@Override
 	public void onUnitDestroy(Unit unit) {
-		String unitName = this.game.getUnits().getUnitName(unit.getID());
-		if (unitName != null) {
-			this.game.getUnits().deleteUnit(unitName);
-			this.game.removeDraw(Integer.toString(unit.getID()));
-		}
+		this.game.getUnits().deleteUnit(unit);
+		this.game.removeDraw(BwapiUtility.getName(unit));
 		BwapiUtility.clearCache(unit);
 	}
 

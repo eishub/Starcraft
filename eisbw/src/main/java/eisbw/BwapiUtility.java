@@ -1,11 +1,12 @@
 package eisbw;
 
+import java.awt.Point;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
+
+import org.apache.commons.lang3.StringUtils;
 
 import bwapi.BulletType;
 import bwapi.Player;
@@ -26,7 +27,7 @@ public class BwapiUtility {
 	private static final Map<String, UnitType> unitTypeMap = new HashMap<>();
 	private static final Map<String, TechType> techTypeMap = new HashMap<>();
 	private static final Map<String, UpgradeType> upgradeTypeMap = new HashMap<>();
-	private static final Map<Entry<Integer, Integer>, Integer> regionCache = new HashMap<>();
+	private static final Map<Point, Integer> regionCache = new HashMap<>();
 	private static final Map<Integer, Boolean> validCache = new HashMap<>();
 	private static final Map<Integer, UnitType> typeCache = new HashMap<>();
 	private static final Map<Integer, Player> playerCache = new HashMap<>();
@@ -115,8 +116,7 @@ public class BwapiUtility {
 	 * @return the name of the unit.
 	 */
 	public static String getName(Unit unit) {
-		UnitType type = getType(unit);
-		String name = (getName(type) + unit.getID()).replace(" ", "");
+		String name = StringUtils.deleteWhitespace(getName(getType(unit)) + unit.getID());
 		return name.substring(0, 1).toLowerCase() + name.substring(1);
 	}
 
@@ -125,11 +125,10 @@ public class BwapiUtility {
 	}
 
 	public static String getName(UnitType unittype) {
-		String type = unittype.toString().replace("_", " ");
-		if (type.startsWith("Terran Siege Tank")) {
+		if (unittype == UnitType.Terran_Siege_Tank_Tank_Mode || unittype == UnitType.Terran_Siege_Tank_Siege_Mode) {
 			return "Terran Siege Tank";
 		} else {
-			return type;
+			return unittype.toString().replace("_", " ");
 		}
 	}
 
@@ -146,7 +145,7 @@ public class BwapiUtility {
 	}
 
 	public static int getRegion(TilePosition position, bwapi.Game api) {
-		Entry<Integer, Integer> pos = new SimpleEntry<>(position.getX(), position.getY());
+		Point pos = new Point(position.getX(), position.getY());
 		Integer regionId = regionCache.get(pos);
 		if (regionId == null) {
 			Region region = BWTA.getRegion(position);
@@ -160,12 +159,12 @@ public class BwapiUtility {
 	/**
 	 * Get the EIS unittype.
 	 *
-	 * @param unittype
-	 *            the unittype
+	 * @param unit
+	 *            the unit
 	 * @return the type of a unit.
 	 */
-	public static String getEisUnitType(UnitType type) {
-		String result = getName(type).replace(" ", "");
+	public static String getEisUnitType(Unit unit) {
+		String result = StringUtils.deleteWhitespace(getName(getType(unit)));
 		return result.substring(0, 1).toLowerCase() + result.substring(1);
 	}
 
@@ -239,7 +238,7 @@ public class BwapiUtility {
 			}
 		}
 		if (type.length() > 2 && Character.isDigit(type.charAt(type.length() - 1))) {
-			type = type.substring(0, type.length() - 3);
+			type = type.substring(0, type.length() - 2);
 		}
 		return upgradeTypeMap.get(type);
 	}

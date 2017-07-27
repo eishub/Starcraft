@@ -52,8 +52,8 @@ public class MapPerceiver extends Perceiver {
 		List<Percept> basePercepts = new ArrayList<>(baseLocations.size());
 		for (BaseLocation location : baseLocations) {
 			TilePosition pos = location.getTilePosition();
-			Percept basePercept = new BasePercept(location.isStartLocation(), pos.getX(), pos.getY(),
-					BwapiUtility.getRegion(pos, this.api));
+			Percept basePercept = new BasePercept(location.isStartLocation(), location.minerals(), location.gas(),
+					pos.getX(), pos.getY(), BwapiUtility.getRegion(pos, this.api));
 			basePercepts.add(basePercept);
 		}
 		toReturn.put(new PerceptFilter(Percepts.BASE, Filter.Type.ONCE), basePercepts);
