@@ -8,6 +8,6 @@ module ZergDroneEvent {
 		do insert(mineralField(Id,Amount,Region)).
 		
 	% UPDATE CONDITIONS (ON-CHANGE)
-	if percept(status(_,_,_,Conditions,_,_,_)), bel(conditions(OldConditions)) 
+	if percept(status(_,_,_,Conditions,_,_,_,_)), bel(conditions(OldConditions)) 
 		then delete(conditions(OldConditions)) + insert(conditions(Conditions)).
 }
