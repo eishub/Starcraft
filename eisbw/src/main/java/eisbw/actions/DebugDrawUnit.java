@@ -3,7 +3,6 @@ package eisbw.actions;
 import java.util.List;
 
 import eis.iilang.Action;
-import eis.iilang.Identifier;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
 import eisbw.BwapiUtility;
@@ -35,7 +34,7 @@ public class DebugDrawUnit extends StarcraftAction {
 	@Override
 	public boolean isValid(Action action) {
 		List<Parameter> parameters = action.getParameters();
-		return (parameters.size() == 2 && parameters.get(0) instanceof Identifier);
+		return (parameters.size() == 2 && parameters.get(0) instanceof Numeral);
 	}
 
 	@Override
