@@ -48,13 +48,14 @@ public class DebugDrawUnit extends StarcraftAction {
 		List<Parameter> parameters = action.getParameters();
 		Numeral id = (Numeral) parameters.get(0);
 		unit = this.api.getUnit(id.getValue().intValue());
-		String name = (unit == null) ? "0" : BwapiUtility.getName(unit);
-		String text = parameters.get(1).toProlog();
-
-		IDraw draw = new CustomDrawUnit(this.game, unit, text);
-		this.game.addDraw(name, draw);
-		if (!text.isEmpty()) {
-			this.game.toggleDraw(name);
+		if (unit != null) {
+			String name = BwapiUtility.getName(unit);
+			String text = parameters.get(1).toProlog();
+			IDraw draw = new CustomDrawUnit(this.game, unit, text);
+			this.game.addDraw(name, draw);
+			if (!text.isEmpty()) {
+				this.game.toggleDraw(name);
+			}
 		}
 	}
 
