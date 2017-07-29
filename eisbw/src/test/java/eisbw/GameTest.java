@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -58,6 +59,7 @@ public class GameTest {
 		perc.add(new ConstructionSitePercept(1, 2, 3));
 		this.percepts.put(new PerceptFilter(Percepts.CONSTRUCTIONSITE, Filter.Type.ALWAYS), perc);
 
+		when(this.type.getName()).thenReturn("worker");
 		when(this.type.isWorker()).thenReturn(true);
 		when(this.unit.getID()).thenReturn(0);
 		when(this.unit.getType()).thenReturn(this.type);
@@ -69,7 +71,7 @@ public class GameTest {
 
 		when(this.env.getAgents()).thenReturn(new LinkedList<String>());
 
-		this.game = new Game(this.env);
+		this.game = new Game(this.env, 0, new HashMap<String, Set<String>>(0));
 		this.game.units = this.units;
 
 		List<Unit> units = new ArrayList<>(1);
@@ -82,7 +84,7 @@ public class GameTest {
 		this.game.update(this.bwapi);
 		assertTrue(this.game.getUnits() == this.units);
 		assertTrue(this.game.getPercepts("null").isEmpty());
-		assertEquals(2, this.game.getPercepts("unit").size());
+		assertEquals(1, this.game.getPercepts("unit").size());
 	}
 
 	@Test

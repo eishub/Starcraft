@@ -35,21 +35,14 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 
 	protected BwapiListener listener;
 	private Configuration config;
-	private final Game game;
-	private final Set<String> entities;
-	private volatile boolean mapAgent = false;
+	private Game game;
+	private final Set<String> entities = new HashSet<>();
 
 	/**
 	 * Constructor of the environment.
 	 */
 	public StarcraftEnvironmentImpl() {
 		super();
-		installTranslators();
-		this.entities = new HashSet<>();
-		this.game = new Game(this);
-	}
-
-	private void installTranslators() {
 		Translator translatorfactory = Translator.getInstance();
 		translatorfactory.registerParameter2JavaTranslator(new ParamEnumTranslator());
 		translatorfactory.registerParameter2JavaTranslator(new BooleanStringTranslator());
@@ -63,6 +56,7 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 		Thread.currentThread().setPriority(3);
 		try {
 			this.config = new Configuration(parameters);
+			this.game = new Game(this, this.config.getManagers(), this.config.getPercepts());
 			if (!"test".equals(this.config.getOwnRace())) {
 				this.listener = new BwapiListener(this.game, this.config.getScDir(), this.config.getDebug(),
 						this.config.getDrawMapInfo(), this.config.getDrawUnitInfo(), this.config.getInvulnerable(),
@@ -73,15 +67,10 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 							this.config.getEnemyRace(), this.config.getSeed());
 				}
 			}
-			this.mapAgent = this.config.getMapAgent();
 			setState(EnvironmentState.RUNNING);
 		} catch (Exception ex) {
 			this.logger.log(Level.SEVERE, null, ex);
 		}
-	}
-
-	public boolean mapAgent() {
-		return this.mapAgent;
 	}
 
 	@Override
