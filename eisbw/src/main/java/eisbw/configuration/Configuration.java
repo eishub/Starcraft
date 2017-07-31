@@ -1,12 +1,16 @@
 package eisbw.configuration;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import eis.eis2java.exception.TranslationException;
 import eis.eis2java.translation.Translator;
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
+import eis.iilang.ParameterList;
 
 /**
  * @author Danny & Harm - This class handles all the possible configurations.
@@ -24,8 +28,9 @@ public class Configuration {
 	protected BooleanString drawMapInfo = new BooleanString("false");
 	protected BooleanString drawUnitInfo = new BooleanString("false");
 	protected BooleanString invulnerable = new BooleanString("false");
-	protected BooleanString mapAgent = new BooleanString("true");
+	protected int managers = 0;
 	protected int seed = 0;
+	protected ParameterList percepts = new ParameterList();
 
 	/**
 	 * The Configuration constructor.
@@ -77,12 +82,14 @@ public class Configuration {
 			case INVULNERABLE:
 				this.invulnerable = translator.translate2Java(entry.getValue(), BooleanString.class);
 				break;
-			case MAPAGENT:
-				this.mapAgent = translator.translate2Java(entry.getValue(), BooleanString.class);
+			case MANAGERS:
+				this.managers = translator.translate2Java(entry.getValue(), Integer.class);
 				break;
 			case SEED:
 				this.seed = translator.translate2Java(entry.getValue(), Integer.class);
 				break;
+			case PERCEPTS:
+				this.percepts = (ParameterList) entry.getValue();
 			default:
 				// Unreachable clause.
 				break;
@@ -134,11 +141,30 @@ public class Configuration {
 		return this.invulnerable.getValue();
 	}
 
-	public boolean getMapAgent() {
-		return this.mapAgent.getValue();
+	public int getManagers() {
+		return this.managers;
 	}
 
 	public int getSeed() {
 		return this.seed;
+	}
+
+	public Map<String, Set<String>> getPercepts() {
+		Map<String, Set<String>> returned = new HashMap<>();
+		for (Parameter rawentries : this.percepts) {
+			ParameterList entries = (ParameterList) rawentries;
+			Set<String> percepts = new HashSet<>(entries.size() - 1);
+			String type = null;
+			for (Parameter rawentry : entries) {
+				String entry = ((Identifier) rawentry).getValue();
+				if (type == null) {
+					type = entry;
+				} else {
+					percepts.add(entry);
+				}
+			}
+			returned.put(type, percepts);
+		}
+		return returned;
 	}
 }

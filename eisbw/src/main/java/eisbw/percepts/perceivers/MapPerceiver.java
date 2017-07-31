@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import bwapi.Pair;
+import bwapi.Player;
 import bwapi.Position;
 import bwapi.TilePosition;
 import bwta.BWTA;
@@ -20,6 +21,7 @@ import eisbw.percepts.BasePercept;
 import eisbw.percepts.ChokepointRegionPercept;
 import eisbw.percepts.EnemyRacePercept;
 import eisbw.percepts.MapPercept;
+import eisbw.percepts.OwnRacePercept;
 import eisbw.percepts.Percepts;
 import eisbw.percepts.RegionPercept;
 
@@ -44,9 +46,18 @@ public class MapPerceiver extends Perceiver {
 		mapPercept.add(new MapPercept(this.api.mapWidth(), this.api.mapHeight()));
 		toReturn.put(new PerceptFilter(Percepts.MAP, Filter.Type.ONCE), mapPercept);
 
-		List<Percept> enemyRacePercept = new ArrayList<>(1);
-		enemyRacePercept.add(new EnemyRacePercept(BwapiUtility.getName(this.api.enemy().getRace())));
-		toReturn.put(new PerceptFilter(Percepts.ENEMYRACE, Filter.Type.ONCE), enemyRacePercept);
+		Player self = BwapiUtility.getSelf(this.api);
+		if (self != null) {
+			List<Percept> ownRacePercept = new ArrayList<>(1);
+			ownRacePercept.add(new OwnRacePercept(BwapiUtility.getName(self.getRace())));
+			toReturn.put(new PerceptFilter(Percepts.OWNRACE, Filter.Type.ONCE), ownRacePercept);
+		}
+		Player enemy = BwapiUtility.getEnemy(this.api);
+		if (enemy != null) {
+			List<Percept> enemyRacePercept = new ArrayList<>(1);
+			enemyRacePercept.add(new EnemyRacePercept(BwapiUtility.getName(enemy.getRace())));
+			toReturn.put(new PerceptFilter(Percepts.ENEMYRACE, Filter.Type.ONCE), enemyRacePercept);
+		}
 
 		List<BaseLocation> baseLocations = BWTA.getBaseLocations();
 		List<Percept> basePercepts = new ArrayList<>(baseLocations.size());

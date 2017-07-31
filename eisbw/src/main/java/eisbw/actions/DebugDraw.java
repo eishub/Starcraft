@@ -45,7 +45,7 @@ public class DebugDraw extends StarcraftAction {
 	public void execute(Unit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		String text = parameters.get(0).toProlog();
-		String name = (unit == null) ? "0" : BwapiUtility.getName(unit);
+		String name = (unit == null) ? "" : BwapiUtility.getName(unit);
 
 		IDraw draw = new CustomDrawUnit(this.game, unit, text);
 		this.game.addDraw(name, draw);

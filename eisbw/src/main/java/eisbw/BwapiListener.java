@@ -132,7 +132,7 @@ public class BwapiListener extends BwapiEvents {
 		do {
 			this.game.update(this.api);
 			if (frame == 0) {
-				this.game.mapAgent();
+				this.game.startManagers();
 			}
 			try { // always sleep 1ms to better facilitate running at speed 0
 				Thread.sleep(1);
