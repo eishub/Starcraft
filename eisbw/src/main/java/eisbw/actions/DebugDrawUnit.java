@@ -48,7 +48,7 @@ public class DebugDrawUnit extends StarcraftAction {
 		List<Parameter> parameters = action.getParameters();
 		Numeral id = (Numeral) parameters.get(0);
 		unit = this.api.getUnit(id.getValue().intValue());
-		if (unit != null) {
+		if (BwapiUtility.isValid(unit)) {
 			String name = BwapiUtility.getName(unit);
 			String text = parameters.get(1).toProlog();
 			IDraw draw = new CustomDrawUnit(this.game, unit, text);
