@@ -59,6 +59,9 @@ public class GameTest {
 		this.percepts.put(new PerceptFilter(Percepts.CONSTRUCTIONSITE, Filter.Type.ALWAYS), perc);
 
 		when(this.type.isWorker()).thenReturn(true);
+		when(this.unit.isExists()).thenReturn(true);
+		when(this.unit.isVisible()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
 		when(this.unit.getID()).thenReturn(0);
 		when(this.unit.getType()).thenReturn(this.type);
 		when(this.units.getUnitName(0)).thenReturn("unit");
