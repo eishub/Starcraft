@@ -51,6 +51,8 @@ public class GenericUnitPerceiverTest {
 		when(this.self.supplyUsed()).thenReturn(10);
 		when(this.self.supplyTotal()).thenReturn(20);
 
+		when(this.unit.exists()).thenReturn(true);
+		when(this.unit.isVisible()).thenReturn(true);
 		when(this.unit.getID()).thenReturn(1);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unitType.toString()).thenReturn("type");

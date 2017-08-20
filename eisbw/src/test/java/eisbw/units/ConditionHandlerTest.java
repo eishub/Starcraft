@@ -32,12 +32,13 @@ public class ConditionHandlerTest {
 	@Before
 	public void start() {
 		MockitoAnnotations.initMocks(this);
+		BwapiUtility.clearValidCache();
 		BwapiUtility.clearPlayerCache();
 
 		when(this.self.getRace()).thenReturn(Race.None);
 
-		when(this.api.self()).thenReturn(this.self);
-		when(this.unitType.getRace()).thenReturn(Race.Terran);
+		when(this.unit.exists()).thenReturn(true);
+		when(this.unit.isVisible()).thenReturn(true);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unitType.toString()).thenReturn("name");
 		when(this.unit.getID()).thenReturn(0);
@@ -100,8 +101,8 @@ public class ConditionHandlerTest {
 	@Test
 	public void stimmed_test() {
 		when(this.unitType.canMove()).thenReturn(true);
+		when(this.unitType.getRace()).thenReturn(Race.Terran);
 		when(this.unit.isCompleted()).thenReturn(true);
-		when(this.self.getRace()).thenReturn(Race.Terran);
 		when(this.unit.isStimmed()).thenReturn(true);
 		assertEquals("stimmed", this.handler.getConditions().get(0).toProlog());
 	}
@@ -110,8 +111,8 @@ public class ConditionHandlerTest {
 	@Test
 	public void sieged_test() {
 		when(this.unitType.canMove()).thenReturn(true);
+		when(this.unitType.getRace()).thenReturn(Race.Terran);
 		when(this.unit.isCompleted()).thenReturn(true);
-		when(this.self.getRace()).thenReturn(Race.Terran);
 		when(this.unit.isSieged()).thenReturn(true);
 		assertEquals("sieged", this.handler.getConditions().get(0).toProlog());
 	}
@@ -251,9 +252,10 @@ public class ConditionHandlerTest {
 
 	@Test
 	public void conditions_building_test() {
-		when(this.unit.isCompleted()).thenReturn(true);
 		when(this.unitType.isBuilding()).thenReturn(true);
+		when(this.unitType.getRace()).thenReturn(Race.Terran);
 
+		when(this.unit.isCompleted()).thenReturn(true);
 		when(this.unit.isLifted()).thenReturn(true);
 		when(this.unit.getAddon()).thenReturn(this.unit);
 

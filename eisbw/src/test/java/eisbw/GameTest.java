@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import bwapi.Player;
+import bwapi.TilePosition;
 import bwapi.Unit;
 import bwapi.UnitType;
 import eis.eis2java.translation.Filter;
@@ -38,6 +39,8 @@ public class GameTest {
 	@Mock
 	private Player self;
 	@Mock
+	private Player enemy;
+	@Mock
 	private StarcraftUnit scUnit;
 	@Mock
 	private Units units;
@@ -45,6 +48,8 @@ public class GameTest {
 	private Unit unit;
 	@Mock
 	private UnitType type;
+	@Mock
+	private TilePosition pos;
 
 	/**
 	 * Init mocks.
@@ -61,8 +66,11 @@ public class GameTest {
 
 		when(this.type.toString()).thenReturn("worker");
 		when(this.type.isWorker()).thenReturn(true);
+		when(this.unit.exists()).thenReturn(true);
+		when(this.unit.isVisible()).thenReturn(true);
+		when(this.unit.isCompleted()).thenReturn(true);
+		when(this.unit.getTilePosition()).thenReturn(this.pos);
 		when(this.unit.getID()).thenReturn(0);
-		BwapiUtility.clearCache(this.unit);
 		when(this.unit.getType()).thenReturn(this.type);
 		when(this.units.getUnitName(0)).thenReturn("unit");
 		when(this.units.getUnit("unit")).thenReturn(this.unit);
@@ -79,7 +87,7 @@ public class GameTest {
 		units.add(this.unit);
 		when(this.self.getUnits()).thenReturn(units);
 		when(this.bwapi.self()).thenReturn(this.self);
-		when(this.bwapi.enemy()).thenReturn(this.self);
+		when(this.bwapi.enemy()).thenReturn(this.enemy);
 	}
 
 	@Test

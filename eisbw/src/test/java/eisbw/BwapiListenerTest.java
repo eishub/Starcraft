@@ -57,7 +57,11 @@ public class BwapiListenerTest {
 	@Before
 	public void start() {
 		MockitoAnnotations.initMocks(this);
+
 		when(this.unit.getID()).thenReturn(0);
+		when(this.game.getUnits()).thenReturn(this.units);
+		when(this.unit.exists()).thenReturn(true);
+		when(this.unit.isVisible()).thenReturn(true);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unitType.toString()).thenReturn("Terran Siege Tank Tank Mode");
 		when(this.unitType.canMove()).thenReturn(true);

@@ -88,7 +88,9 @@ public class BwapiListener extends BwapiEvents {
 	public void onStart() {
 		// API INITIALISATION
 		this.api = this.mirror.getGame();
-		this.api.setCommandOptimizationLevel(2);
+		// level 2 seems bugged for buildings, at least in BWAPI 3.7.5
+		// FIXME: check if this is also true in the latest BWAPI
+		this.api.setCommandOptimizationLevel(1);
 		this.factory = new StarcraftUnitFactory(this.api);
 		this.actionProvider.loadActions(this.api, this.game);
 		BWTA.readMap();

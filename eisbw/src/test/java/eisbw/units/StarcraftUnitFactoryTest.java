@@ -23,6 +23,8 @@ public class StarcraftUnitFactoryTest {
 	public void test() {
 		MockitoAnnotations.initMocks(this);
 		this.factory = new StarcraftUnitFactory(null);
+		when(this.unit.exists()).thenReturn(true);
+		when(this.unit.isVisible()).thenReturn(true);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		BwapiUtility.clearCache(this.unit);
 		assertEquals(1, this.factory.create(this.unit).perceivers.size());
