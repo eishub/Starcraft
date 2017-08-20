@@ -89,7 +89,7 @@ public class BwapiListener extends BwapiEvents {
 	@Override
 	public void matchStart() {
 		// SET INIT SPEED (DEFAULT IS 50 FPS, WHICH IS 20 SPEED)
-		this.bwapi.setCommandOptimizationLevel(2);
+		this.bwapi.setCommandOptimizationLevel(1); // 2 seems bugged for buildings
 		if (this.speed > 0) {
 			this.bwapi.setGameSpeed(1000 / this.speed);
 		} else if (this.speed == 0) {

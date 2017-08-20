@@ -60,7 +60,7 @@ public class BwapiUtility {
 	public static UnitType getType(Unit unit) {
 		int id = unit.getID();
 		UnitType type = typeCache.get(id);
-		if (type == null) {
+		if (type == null && isValid(unit)) {
 			type = unit.getType();
 			typeCache.put(id, type);
 		}
@@ -70,7 +70,7 @@ public class BwapiUtility {
 	public static Player getPlayer(Unit unit) {
 		int id = unit.getID();
 		Player player = playerCache.get(id);
-		if (player == null) {
+		if (player == null && isValid(unit)) {
 			player = unit.getPlayer();
 			playerCache.put(id, player);
 		}
