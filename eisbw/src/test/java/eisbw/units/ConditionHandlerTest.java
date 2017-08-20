@@ -39,6 +39,8 @@ public class ConditionHandlerTest {
 
 		when(this.api.getSelf()).thenReturn(this.self);
 		when(this.unitType.getRaceID()).thenReturn(RaceTypes.Terran.getID());
+		when(this.unit.isExists()).thenReturn(true);
+		when(this.unit.isVisible()).thenReturn(true);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unitType.getName()).thenReturn("name");
 		when(this.unit.getID()).thenReturn(0);
