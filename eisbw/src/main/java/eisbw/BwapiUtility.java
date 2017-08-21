@@ -121,11 +121,14 @@ public class BwapiUtility {
 	}
 
 	public static String getName(Race race) {
-		return race.toString().toLowerCase();
+		return (race == null) ? "" : race.toString().toLowerCase();
 	}
 
 	public static String getName(UnitType unittype) {
-		if (unittype == UnitType.Terran_Siege_Tank_Tank_Mode || unittype == UnitType.Terran_Siege_Tank_Siege_Mode) {
+		if (unittype == null) {
+			return "";
+		} else if (unittype == UnitType.Terran_Siege_Tank_Tank_Mode
+				|| unittype == UnitType.Terran_Siege_Tank_Siege_Mode) {
 			return "Terran Siege Tank";
 		} else {
 			return unittype.toString().replace("_", " ");

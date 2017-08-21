@@ -47,7 +47,8 @@ public class DrawUnitInfo extends IDraw {
 	private void drawTimerInfo(bwapi.Game api) {
 		int y = 45;
 		for (final Unit unit : BwapiUtility.getSelf(api).getUnits()) {
-			if (!BwapiUtility.isValid(unit)) {
+			UnitType type = BwapiUtility.getType(unit);
+			if (type == null) {
 				continue;
 			}
 			int total = 0;
@@ -72,7 +73,6 @@ public class DrawUnitInfo extends IDraw {
 			}
 			remaining = unit.getRemainingBuildTime();
 			if (remaining > 0) {
-				UnitType type = BwapiUtility.getType(unit);
 				total = type.buildTime();
 				done = total - remaining;
 				txt = (type == UnitType.Zerg_Egg) ? BwapiUtility.getName(unit.getBuildType())
@@ -81,7 +81,7 @@ public class DrawUnitInfo extends IDraw {
 			if (total > 0) {
 				if (bar) {
 					Position pos = unit.getPosition();
-					int width = BwapiUtility.getType(unit).tileWidth() * 32;
+					int width = type.tileWidth() * 32;
 					Position start = new Position(pos.getX() - width / 2, pos.getY() - 30);
 					api.drawBoxMap(start, new Position(start.getX() + width, start.getY() + barHeight), barColor,
 							false);
@@ -103,10 +103,10 @@ public class DrawUnitInfo extends IDraw {
 	private void drawHealth(bwapi.Game api) {
 		Player self = BwapiUtility.getSelf(api);
 		for (final Unit unit : api.getAllUnits()) {
-			if (!BwapiUtility.isValid(unit)) {
+			UnitType type = BwapiUtility.getType(unit);
+			if (type == null) {
 				continue;
 			}
-			UnitType type = BwapiUtility.getType(unit);
 			int health = unit.getHitPoints();
 			int max = type.maxHitPoints();
 			if (type.isMineralField()) {
@@ -135,7 +135,7 @@ public class DrawUnitInfo extends IDraw {
 					api.drawBoxMap(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), Color.Green,
 							true);
 				}
-				boolean isSelf = BwapiUtility.getPlayer(unit) == self;
+				boolean isSelf = (BwapiUtility.getPlayer(unit) == self);
 				api.drawBoxMap(new Position(x - l, y - t - 5), new Position(x + r, y - t),
 						isSelf ? Color.White : Color.Red, false);
 				api.drawBoxMap(new Position(x - l, y - t), new Position(x + r, y + b), isSelf ? Color.White : Color.Red,
@@ -154,7 +154,7 @@ public class DrawUnitInfo extends IDraw {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
 			}
-			boolean isSelf = BwapiUtility.getPlayer(unit) == self;
+			boolean isSelf = (BwapiUtility.getPlayer(unit) == self);
 			Position pos = unit.getPosition();
 			Unit target = (unit.getTarget() == null) ? unit.getOrderTarget() : unit.getTarget();
 			if (target != null) {

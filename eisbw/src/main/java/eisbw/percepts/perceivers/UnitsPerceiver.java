@@ -66,13 +66,13 @@ public class UnitsPerceiver extends Perceiver {
 		List<Percept> geysers = new LinkedList<>();
 		for (Unit u : this.api.getNeutralUnits()) {
 			UnitType type = BwapiUtility.getType(u);
-			if (type.isMineralField() && BwapiUtility.isValid(u)) {
+			if (type != null && type.isMineralField()) {
 				TilePosition pos = u.getTilePosition();
 				double amount = 100 * Math.ceil(u.getResources() / 100.0);
 				MineralFieldPercept mineralfield = new MineralFieldPercept(u.getID(), (int) amount, pos.getX(),
 						pos.getY(), BwapiUtility.getRegion(pos, this.api));
 				minerals.add(mineralfield);
-			} else if (type == UnitType.Resource_Vespene_Geyser && BwapiUtility.isValid(u)) {
+			} else if (type == UnitType.Resource_Vespene_Geyser) {
 				TilePosition pos = u.getTilePosition();
 				double amount = 100 * Math.ceil(u.getResources() / 100.0);
 				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), (int) amount, pos.getX(), pos.getY(),
@@ -82,7 +82,7 @@ public class UnitsPerceiver extends Perceiver {
 		}
 		for (Unit u : self.getUnits()) {
 			UnitType type = BwapiUtility.getType(u);
-			if (type.isRefinery() && BwapiUtility.isValid(u)) {
+			if (type != null && type.isRefinery()) {
 				TilePosition pos = u.getTilePosition();
 				double amount = 100 * Math.ceil(u.getResources() / 100.0);
 				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getID(), (int) amount, pos.getX(), pos.getY(),
@@ -141,11 +141,11 @@ public class UnitsPerceiver extends Perceiver {
 	private void setUnitPercepts(List<Unit> units, List<Percept> newunitpercepts, List<Percept> unitpercepts,
 			List<Percept> attackingpercepts) {
 		for (Unit u : units) {
-			if (!BwapiUtility.isValid(u)) {
+			UnitType t = BwapiUtility.getType(u);
+			if (t == null) {
 				continue;
 			}
 			int id = u.getID();
-			UnitType t = BwapiUtility.getType(u);
 			if (newunitpercepts != null) {
 				String unittype = (t == UnitType.Zerg_Egg) ? BwapiUtility.getName(u.getBuildType())
 						: BwapiUtility.getName(t);

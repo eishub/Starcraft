@@ -12,6 +12,7 @@ import bwapi.Mirror;
 import bwapi.Position;
 import bwapi.Race;
 import bwapi.Unit;
+import bwapi.UnitType;
 import bwta.BWTA;
 import eis.exceptions.ActException;
 import eis.iilang.Action;
@@ -175,7 +176,8 @@ public class BwapiListener extends BwapiEvents {
 
 	@Override
 	public void onUnitMorph(Unit unit) {
-		if (BwapiUtility.getType(unit).getRace() != Race.Terran) { // siege tank hack
+		UnitType type = BwapiUtility.getType(unit);
+		if (type != null && type.getRace() != Race.Terran) { // siege tank hack
 			onUnitDestroy(unit);
 			onUnitComplete(unit);
 		}

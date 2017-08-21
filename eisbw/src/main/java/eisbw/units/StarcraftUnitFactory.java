@@ -35,6 +35,6 @@ public class StarcraftUnitFactory {
 	public StarcraftUnit create(Unit unit) {
 		List<IPerceiver> perceptGenerators = new ArrayList<>(1);
 		perceptGenerators.add(new GenericUnitPerceiver(this.api, unit));
-		return new StarcraftUnit(perceptGenerators, BwapiUtility.getType(unit).isWorker());
+		return new StarcraftUnit(perceptGenerators, BwapiUtility.getType(unit));
 	}
 }
