@@ -12,12 +12,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import eisbw.percepts.perceivers.IPerceiver;
+import jnibwapi.types.UnitType;
 
 public class StarcraftUnitTest {
 	private StarcraftUnit unit;
 
 	@Mock
 	private IPerceiver perceiver;
+	@Mock
+	private UnitType type;
 
 	/**
 	 * Initialize variables and mocks.
@@ -28,7 +31,7 @@ public class StarcraftUnitTest {
 
 		List<IPerceiver> list = new ArrayList<>(1);
 		list.add(this.perceiver);
-		this.unit = new StarcraftUnit(list, false);
+		this.unit = new StarcraftUnit(list, this.type);
 	}
 
 	@Test

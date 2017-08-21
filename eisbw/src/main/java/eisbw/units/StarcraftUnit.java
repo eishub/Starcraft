@@ -7,6 +7,7 @@ import java.util.Map;
 import eis.iilang.Percept;
 import eisbw.percepts.perceivers.IPerceiver;
 import eisbw.percepts.perceivers.PerceptFilter;
+import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - The class which gathers all the percepts of a
@@ -25,9 +26,9 @@ public class StarcraftUnit {
 	 * @param worker
 	 *            - true iff the unit is a worker
 	 */
-	public StarcraftUnit(List<IPerceiver> perceivers, boolean worker) {
+	public StarcraftUnit(List<IPerceiver> perceivers, UnitType type) {
 		this.perceivers = perceivers;
-		this.worker = worker;
+		this.worker = (type != null && type.isWorker());
 	}
 
 	/**

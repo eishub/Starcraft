@@ -23,6 +23,7 @@ import jnibwapi.JNIBWAPI;
 import jnibwapi.Position;
 import jnibwapi.Unit;
 import jnibwapi.types.RaceType.RaceTypes;
+import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - The Listener of the BWAPI Events.
@@ -175,7 +176,8 @@ public class BwapiListener extends BwapiEvents {
 	@Override
 	public void unitMorph(int id) {
 		Unit unit = this.bwapi.getUnit(id);
-		boolean isTerran = (BwapiUtility.getType(unit).getRaceID() == RaceTypes.Terran.getID());
+		UnitType type = BwapiUtility.getType(unit);
+		boolean isTerran = (type != null && type.getRaceID() == RaceTypes.Terran.getID());
 		if (unit != null && !isTerran) { // siege tank hack
 			unitDestroy(id);
 			unitComplete(id);

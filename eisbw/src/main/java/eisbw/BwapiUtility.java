@@ -50,7 +50,10 @@ public class BwapiUtility {
 	}
 
 	public static String getName(UnitType unittype) {
-		if (unittype == UnitTypes.Terran_Siege_Tank_Tank_Mode || unittype == UnitTypes.Terran_Siege_Tank_Siege_Mode) {
+		if (unittype == null) {
+			return "";
+		} else if (unittype == UnitTypes.Terran_Siege_Tank_Tank_Mode
+				|| unittype == UnitTypes.Terran_Siege_Tank_Siege_Mode) {
 			return "Terran Siege Tank";
 		} else {
 			return unittype.getName();
