@@ -54,7 +54,8 @@ public class DrawUnitInfo extends IDraw {
 	private void drawTimerInfo(JNIBWAPI api) {
 		int y = 45;
 		for (final Unit unit : api.getMyUnits()) {
-			if (!BwapiUtility.isValid(unit)) {
+			UnitType type = BwapiUtility.getType(unit);
+			if (type == null) {
 				continue;
 			}
 			int total = 0;
@@ -62,28 +63,27 @@ public class DrawUnitInfo extends IDraw {
 			String txt = "";
 			boolean bar = false;
 			if (unit.getRemainingResearchTime() > 0) {
-				TechType type = unit.getTech();
-				total = type.getResearchTime();
+				TechType ttype = unit.getTech();
+				total = ttype.getResearchTime();
 				done = total - unit.getRemainingResearchTime();
-				txt = type.getName();
+				txt = ttype.getName();
 				bar = true;
 			}
 			if (unit.getRemainingUpgradeTime() > 0) {
-				UpgradeType type = unit.getUpgrade();
-				total = type.getUpgradeTimeBase();
+				UpgradeType utype = unit.getUpgrade();
+				total = utype.getUpgradeTimeBase();
 				done = total - unit.getRemainingUpgradeTime();
-				txt = type.getName();
+				txt = utype.getName();
 				bar = true;
 			}
 			if (unit.getRemainingBuildTimer() > 0) {
-				UnitType type = BwapiUtility.getType(unit);
 				total = type.getBuildTime();
 				done = total - unit.getRemainingBuildTimer();
 				txt = (type == UnitTypes.Zerg_Egg) ? unit.getBuildType().getName() : BwapiUtility.getName(type);
 			}
 			if (total > 0) {
 				if (bar) {
-					int width = BwapiUtility.getType(unit).getTileWidth() * 32;
+					int width = type.getTileWidth() * 32;
 					Position start = new Position(unit.getX() - width / 2, unit.getY() - 20);
 					api.drawBox(start, new Position(start.getPX() + width, start.getPY() + barHeight), barColor, false,
 							false);
@@ -104,10 +104,10 @@ public class DrawUnitInfo extends IDraw {
 	 */
 	private void drawHealth(JNIBWAPI api) {
 		for (final Unit unit : api.getAllUnits()) {
-			if (!BwapiUtility.isValid(unit)) {
+			UnitType type = BwapiUtility.getType(unit);
+			if (type == null) {
 				continue;
 			}
-			UnitType type = BwapiUtility.getType(unit);
 			int health = unit.getHitPoints();
 			int max = type.getMaxHitPoints();
 			if (type.isMineralField()) {
@@ -136,7 +136,7 @@ public class DrawUnitInfo extends IDraw {
 					api.drawBox(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), BWColor.Green, true,
 							false);
 				}
-				boolean self = BwapiUtility.getPlayer(unit) == api.getSelf();
+				boolean self = (BwapiUtility.getPlayer(unit) == api.getSelf());
 				api.drawBox(new Position(x - l, y - t - 5), new Position(x + r, y - t),
 						self ? BWColor.White : BWColor.Red, false, false);
 				api.drawBox(new Position(x - l, y - t), new Position(x + r, y + b), self ? BWColor.White : BWColor.Red,
@@ -154,7 +154,7 @@ public class DrawUnitInfo extends IDraw {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
 			}
-			boolean self = BwapiUtility.getPlayer(unit) == api.getSelf();
+			boolean self = (BwapiUtility.getPlayer(unit) == api.getSelf());
 			Unit target = (unit.getTarget() == null) ? unit.getOrderTarget() : unit.getTarget();
 			if (target != null) {
 				api.drawLine(unit.getPosition(), target.getPosition(), self ? BWColor.Yellow : BWColor.Purple, false);
@@ -191,11 +191,11 @@ public class DrawUnitInfo extends IDraw {
 		List<Unit> previous = new ArrayList<>(this.alive);
 		this.alive.clear();
 		for (final Unit unit : api.getMyUnits()) {
-			if (!BwapiUtility.isValid(unit) || !unit.isCompleted()) {
+			UnitType type = BwapiUtility.getType(unit);
+			if (type == null || !unit.isCompleted()) {
 				continue;
 			}
 			this.alive.add(unit);
-			UnitType type = BwapiUtility.getType(unit);
 			if (type == UnitTypes.Terran_Siege_Tank_Siege_Mode) {
 				type = UnitTypes.Terran_Siege_Tank_Tank_Mode;
 			}
@@ -208,10 +208,10 @@ public class DrawUnitInfo extends IDraw {
 		}
 		previous.removeAll(this.alive);
 		for (final Unit unit : previous) {
-			if (unit.isMorphing()) {
+			UnitType type = BwapiUtility.getType(unit);
+			if (type == null || unit.isMorphing()) {
 				continue;
 			}
-			UnitType type = BwapiUtility.getType(unit);
 			if (type == UnitTypes.Terran_Siege_Tank_Siege_Mode) {
 				type = UnitTypes.Terran_Siege_Tank_Tank_Mode;
 			}

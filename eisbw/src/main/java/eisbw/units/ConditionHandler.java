@@ -218,11 +218,11 @@ public class ConditionHandler {
 	 *            The conditions of the unit
 	 * @return The conditions of generic unit.
 	 */
-	private void setGenericConditions(List<Parameter> conditions) {
+	private void setGenericConditions(List<Parameter> conditions, UnitType type) {
 		if (this.unit.isIdle()) {
 			conditions.add(new Identifier("idle"));
 		}
-		if (BwapiUtility.getType(this.unit).isFlyer()) { // useful shortcut
+		if (type.isFlyer()) { // useful shortcut
 			conditions.add(new Identifier("flying"));
 		}
 		if (!this.unit.isCompleted()) { // isBeingConstructed can be false for
@@ -275,9 +275,13 @@ public class ConditionHandler {
 	 */
 	public List<Parameter> getConditions() {
 		List<Parameter> conditions = new LinkedList<>();
-		setGenericConditions(conditions);
-
 		UnitType type = BwapiUtility.getType(this.unit);
+		if (type == null) {
+			return conditions;
+		}
+
+		setGenericConditions(conditions, type);
+
 		if (type.getRaceID() == RaceTypes.Terran.getID()) {
 			setTerranConditions(conditions);
 		} else if (type.getRaceID() == RaceTypes.Protoss.getID()) {
