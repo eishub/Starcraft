@@ -31,7 +31,7 @@ public class KnowledgeExport {
 			case 1: // ghost
 			case 2: // vulture
 			case 3: // goliath
-			case 4: // siege tank
+			case 5: // siege tank
 			case 7: // scv
 			case 8: // wraith
 			case 9: // science vessel
