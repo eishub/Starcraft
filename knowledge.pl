@@ -51,6 +51,12 @@ stats('Terran Goliath',125,0,0,45,['canMove','mechanical']).
 metrics('Terran Goliath',1,1,8,2).
 combat('Terran Goliath',12,20,22,6,0).
 
+unit('Terran Siege Tank',terran).
+costs('Terran Siege Tank',150,100,4,750,['Terran Factory','Terran Machine Shop']).
+stats('Terran Siege Tank',150,0,0,40,['canMove','mechanical']).
+metrics('Terran Siege Tank',1,1,10,4).
+combat('Terran Siege Tank',30,0,37,7,0).
+
 unit('Terran SCV',terran).
 costs('Terran SCV',50,0,2,300,['Terran Command Center']).
 stats('Terran SCV',60,0,0,49,['canMove','mechanical','organic']).
