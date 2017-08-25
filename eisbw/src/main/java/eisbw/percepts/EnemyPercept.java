@@ -40,8 +40,8 @@ public class EnemyPercept extends Percept {
 	 */
 	public EnemyPercept(int id, String type, int health, int shields, int energy, List<Parameter> conditions,
 			int orientation, int x, int y, int region) {
-		super(Percepts.ENEMY, new Numeral(id), new Identifier(type), new Numeral(health), new Numeral(energy),
-				new Numeral(shields), new ParameterList(conditions), new Numeral(orientation), new Numeral(x),
+		super(Percepts.ENEMY, new Numeral(id), new Identifier(type), new Numeral(health), new Numeral(shields),
+				new Numeral(energy), new ParameterList(conditions), new Numeral(orientation), new Numeral(x),
 				new Numeral(y), new Numeral(region));
 	}
 }
