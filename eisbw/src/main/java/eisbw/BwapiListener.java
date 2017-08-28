@@ -52,11 +52,10 @@ public class BwapiListener extends BwapiEvents {
 	 */
 	public BwapiListener(Game game, String scDir, boolean debug, boolean drawMapInfo, boolean drawUnitInfo,
 			boolean invulnerable, int speed) {
-		File bwta = new File(scDir + File.separator + "bwapi-data" + File.separator + "BWTA");
-		if (!bwta.isDirectory()) {
-			bwta = new File("mapData");
-		}
-		this.bwapi = new JNIBWAPI(this, bwta);
+		File dll = (scDir.isEmpty()) ? new File("bwapi-data" + File.separator + "AI") : new File(scDir);
+		File bwta = (scDir.isEmpty()) ? new File(dll + File.separator + "mapData")
+				: new File(scDir + File.separator + "bwapi-data" + File.separator + "BWTA");
+		this.bwapi = new JNIBWAPI(this, dll, bwta);
 		this.game = game;
 		this.actionProvider = new ActionProvider();
 		this.actionProvider.loadActions(this.bwapi, this.game);

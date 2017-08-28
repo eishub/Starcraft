@@ -53,7 +53,6 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 	public void init(Map<String, Parameter> parameters) throws ManagementException {
 		super.init(parameters);
 		setState(EnvironmentState.PAUSED);
-		Thread.currentThread().setPriority(3);
 		try {
 			this.config = new Configuration(parameters);
 			this.game = new Game(this, this.config.getManagers(), this.config.getPercepts());
