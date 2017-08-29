@@ -49,7 +49,7 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 		orderPercept(toReturn);
 
 		UnitType type = BwapiUtility.getType(this.unit);
-		if (type.getSpaceProvided() > 0) {
+		if (type.getSpaceProvided() > 0 && this.unit.isLoaded()) {
 			List<Unit> loadedUnits = this.unit.getLoadedUnits();
 			unitLoadedPercept(toReturn, loadedUnits);
 		}
