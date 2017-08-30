@@ -43,15 +43,14 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 
 	@Override
 	public void perceive(Map<PerceptFilter, List<Percept>> toReturn) {
-		selfPercept(toReturn);
-		statusPercept(toReturn);
-		defensiveMatrixPercept(toReturn);
-		orderPercept(toReturn);
-
 		UnitType type = BwapiUtility.getType(this.unit);
-		if (type.getSpaceProvided() > 0 && this.unit.isLoaded()) {
-			List<Unit> loadedUnits = this.unit.getLoadedUnits();
-			unitLoadedPercept(toReturn, loadedUnits);
+		selfPercept(toReturn);
+
+		if (type != UnitTypes.Zerg_Larva) {
+			statusPercept(toReturn);
+			defensiveMatrixPercept(toReturn);
+			orderPercept(toReturn);
+			unitLoadedPercept(toReturn);
 		}
 		if (type.isProduceCapable() || type == UnitTypes.Terran_Nuclear_Silo || type == UnitTypes.Terran_Vulture) {
 			queueSizePercept(toReturn);
@@ -101,18 +100,19 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	/**
 	 * @param toReturn
 	 *            The percept and reference of which kind of percept it is.
-	 * @param loadedUnits
-	 *            The loaded units
 	 */
-	private void unitLoadedPercept(Map<PerceptFilter, List<Percept>> toReturn, List<Unit> loadedUnits) {
-		List<Percept> unitLoadedPercept = new ArrayList<>(loadedUnits.size());
-		for (Unit u : loadedUnits) {
-			if (BwapiUtility.isValid(u)) {
-				unitLoadedPercept.add(new UnitLoadedPercept(u.getID()));
+	private void unitLoadedPercept(Map<PerceptFilter, List<Percept>> toReturn) {
+		if (this.unit.isLoaded()) {
+			List<Unit> loadedUnits = this.unit.getLoadedUnits();
+			List<Percept> unitLoadedPercept = new ArrayList<>(loadedUnits.size());
+			for (Unit u : loadedUnits) {
+				if (BwapiUtility.isValid(u)) {
+					unitLoadedPercept.add(new UnitLoadedPercept(u.getID()));
+				}
 			}
-		}
-		if (!unitLoadedPercept.isEmpty()) {
-			toReturn.put(new PerceptFilter(Percepts.UNITLOADED, Filter.Type.ALWAYS), unitLoadedPercept);
+			if (!unitLoadedPercept.isEmpty()) {
+				toReturn.put(new PerceptFilter(Percepts.UNITLOADED, Filter.Type.ALWAYS), unitLoadedPercept);
+			}
 		}
 	}
 
