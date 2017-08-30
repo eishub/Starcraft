@@ -43,15 +43,13 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 
 	@Override
 	public void perceive(Map<PerceptFilter, List<Percept>> toReturn) {
-		UnitType type = BwapiUtility.getType(this.unit);
 		selfPercept(toReturn);
+		statusPercept(toReturn);
+		orderPercept(toReturn);
+		defensiveMatrixPercept(toReturn);
+		unitLoadedPercept(toReturn);
 
-		if (type != UnitTypes.Zerg_Larva) {
-			statusPercept(toReturn);
-			defensiveMatrixPercept(toReturn);
-			orderPercept(toReturn);
-			unitLoadedPercept(toReturn);
-		}
+		UnitType type = BwapiUtility.getType(this.unit);
 		if (type.isProduceCapable() || type == UnitTypes.Terran_Nuclear_Silo || type == UnitTypes.Terran_Vulture) {
 			queueSizePercept(toReturn);
 		}

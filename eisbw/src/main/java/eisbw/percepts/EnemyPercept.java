@@ -6,14 +6,13 @@ import eis.iilang.Identifier;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
 import eis.iilang.ParameterList;
-import eis.iilang.Percept;
 
 /**
  * @author Danny & Harm - The Enemy percept which gives information about the
  *         opponent's units.
  *
  */
-public class EnemyPercept extends Percept {
+public class EnemyPercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
 
 	/**

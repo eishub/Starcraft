@@ -1,13 +1,12 @@
 package eisbw.percepts;
 
 import eis.iilang.Numeral;
-import eis.iilang.Percept;
 
 /**
  * @author Danny & Harm - Defensive Matrix percept.
  *
  */
-public class DefensiveMatrixPercept extends Percept {
+public class DefensiveMatrixPercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
 
 	/**

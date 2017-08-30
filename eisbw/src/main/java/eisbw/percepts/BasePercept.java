@@ -1,14 +1,13 @@
 package eisbw.percepts;
 
 import eis.iilang.Numeral;
-import eis.iilang.Percept;
 import eis.iilang.TruthValue;
 
 /**
  * @author Danny & Harm - The Base percept.
  *
  */
-public class BasePercept extends Percept {
+public class BasePercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
 
 	/**

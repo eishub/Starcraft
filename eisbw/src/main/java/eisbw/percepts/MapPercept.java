@@ -1,13 +1,12 @@
 package eisbw.percepts;
 
 import eis.iilang.Numeral;
-import eis.iilang.Percept;
 
 /**
  * @author Danny & Harm - The Map percept.
  *
  */
-public class MapPercept extends Percept {
+public class MapPercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
 
 	/**

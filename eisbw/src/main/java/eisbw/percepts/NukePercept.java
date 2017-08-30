@@ -1,13 +1,12 @@
 package eisbw.percepts;
 
 import eis.iilang.Numeral;
-import eis.iilang.Percept;
 
 /**
  * @author Danny & Harm - The Nuke percept.
  *
  */
-public class NukePercept extends Percept {
+public class NukePercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
 
 	/**

@@ -2,13 +2,12 @@ package eisbw.percepts;
 
 import eis.iilang.Identifier;
 import eis.iilang.Numeral;
-import eis.iilang.Percept;
 
 /**
  * @author Danny & Harm - The Self percept.
  *
  */
-public class SelfPercept extends Percept {
+public class SelfPercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
 
 	/**

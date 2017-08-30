@@ -1,13 +1,12 @@
 package eisbw.percepts;
 
 import eis.iilang.Numeral;
-import eis.iilang.Percept;
 
 /**
  * @author Danny & Harm - The Mineral Field percept.
  *
  */
-public class MineralFieldPercept extends Percept {
+public class MineralFieldPercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
 
 	/**

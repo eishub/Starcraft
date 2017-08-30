@@ -1,13 +1,12 @@
 package eisbw.percepts;
 
 import eis.iilang.Numeral;
-import eis.iilang.Percept;
 
 /**
  * @author Danny & Harm - The Vespene Geyser percept.
  *
  */
-public class VespeneGeyserPercept extends Percept {
+public class VespeneGeyserPercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
 
 	/**

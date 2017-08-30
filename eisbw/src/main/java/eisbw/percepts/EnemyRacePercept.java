@@ -1,13 +1,12 @@
 package eisbw.percepts;
 
 import eis.iilang.Identifier;
-import eis.iilang.Percept;
 
 /**
  * @author Danny & Harm - The Enemy Race percept.
  *
  */
-public class EnemyRacePercept extends Percept {
+public class EnemyRacePercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
 
 	/**

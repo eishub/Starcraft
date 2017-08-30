@@ -1,14 +1,13 @@
 package eisbw.percepts;
 
 import eis.iilang.Numeral;
-import eis.iilang.Percept;
 
 /**
  * @author Danny & Harm - The Unit percept which gives information about the
  *         other units.
  *
  */
-public class UnderConstructionPercept extends Percept {
+public class UnderConstructionPercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
 
 	/**
