@@ -115,6 +115,7 @@ public class BwapiListener extends BwapiEvents {
 
 	@Override
 	public void matchFrame() {
+		long start = System.nanoTime();
 		// GENERATE PERCEPTS
 		int frame = this.bwapi.getFrameCount();
 		if ((frame % 50) == 0) {
@@ -124,17 +125,24 @@ public class BwapiListener extends BwapiEvents {
 			this.game.updateNukePerceiver(null);
 			this.nuke = -1;
 		}
+		long elapsed = System.nanoTime() - start;
+		boolean update = true;
 		do {
-			this.game.update(this.bwapi);
+			if (update) {
+				this.game.update(this.bwapi);
+				update = false;
+			}
 			if (frame == 0) {
 				this.game.startManagers();
+				update = true;
 			}
-			try { // always sleep 1ms to better facilitate running at speed 0
+			try {
 				Thread.sleep(1);
-			} catch (InterruptedException ie) {
+			} catch (InterruptedException e) {
 				break;
-			} // wait until all the initial workers get an action request
-		} while (frame == 0 && isRunning() && this.pendingActions.size() < 4);
+			}
+			elapsed = System.nanoTime() - start;
+		} while (isRunning() && ((frame == 0 && this.pendingActions.size() < 4) || (elapsed < 30000000)));
 
 		// PERFORM ACTIONS
 		Iterator<BwapiAction> actions = this.pendingActions.iterator();
