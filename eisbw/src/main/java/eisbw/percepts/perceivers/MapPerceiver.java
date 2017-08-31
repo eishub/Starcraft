@@ -45,13 +45,9 @@ public class MapPerceiver extends Perceiver {
 		jnibwapi.Map map = this.api.getMap();
 
 		List<Percept> mapPercept = new ArrayList<>(1);
-		mapPercept.add(new MapPercept(map.getSize().getBX(), map.getSize().getBY()));
+		mapPercept.add(new MapPercept(map.getFileName(), map.getSize().getBX(), map.getSize().getBY()));
 		toReturn.put(new PerceptFilter(Percepts.MAP, Filter.Type.ONCE), mapPercept);
 
-		List<Percept> mapNamePercept = new ArrayList<>(1);
-		mapNamePercept.add(new MapNamePercept(map.getFileName()));
-		toReturn.put(new PerceptFilter(Percepts.MAPNAME, Filter.Type.ONCE), mapNamePercept);
-		
 		Player self = this.api.getSelf();
 		if (self != null) {
 			List<Percept> ownRacePercept = new ArrayList<>(1);

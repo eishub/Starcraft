@@ -12,7 +12,6 @@ public class Percepts {
 	public static final String BASE = "base";
 	public static final String CHOKEPOINT = "chokepoint";
 	public static final String MAP = "map";
-	public static final String MAPNAME = "mapName";
 	public static final String VESPENEGEYSER = "vespeneGeyser";
 	public static final String SELF = "self";
 	public static final String QUEUESIZE = "queueSize";
