@@ -13,7 +13,6 @@ import eisbw.percepts.BasePercept;
 import eisbw.percepts.ChokepointRegionPercept;
 import eisbw.percepts.EnemyNamePercept;
 import eisbw.percepts.EnemyRacePercept;
-import eisbw.percepts.MapNamePercept;
 import eisbw.percepts.MapPercept;
 import eisbw.percepts.OwnRacePercept;
 import eisbw.percepts.Percepts;
