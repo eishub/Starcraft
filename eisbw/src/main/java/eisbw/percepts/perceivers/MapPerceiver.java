@@ -11,8 +11,7 @@ import eis.iilang.Parameter;
 import eis.iilang.Percept;
 import eisbw.percepts.BasePercept;
 import eisbw.percepts.ChokepointRegionPercept;
-import eisbw.percepts.EnemyNamePercept;
-import eisbw.percepts.EnemyRacePercept;
+import eisbw.percepts.EnemyPlayerPercept;
 import eisbw.percepts.MapPercept;
 import eisbw.percepts.OwnRacePercept;
 import eisbw.percepts.Percepts;
@@ -56,13 +55,9 @@ public class MapPerceiver extends Perceiver {
 		Set<Player> enemies = this.api.getEnemies();
 		if (!enemies.isEmpty()) {
 			Player enemy = enemies.iterator().next();
-			List<Percept> enemyRacePercept = new ArrayList<>(1);
-			enemyRacePercept.add(new EnemyRacePercept(enemy.getRace().getName().toLowerCase()));
-			toReturn.put(new PerceptFilter(Percepts.ENEMYRACE, Filter.Type.ONCE), enemyRacePercept);
-			
-			List<Percept> enemyNamePercept = new ArrayList<>(1);
-			enemyNamePercept.add(new EnemyNamePercept(enemy.getName()));
-			toReturn.put(new PerceptFilter(Percepts.ENEMYNAME, Filter.Type.ONCE), enemyNamePercept);
+			List<Percept> enemyPlayerPercept = new ArrayList<>(1);
+			enemyPlayerPercept.add(new EnemyPlayerPercept(enemy.getName(), enemy.getRace().getName().toLowerCase()));
+			toReturn.put(new PerceptFilter(Percepts.ENEMYPLAYER, Filter.Type.ONCE), enemyPlayerPercept);
 		} // FIXME: we only support 1 enemy now
 
 		List<BaseLocation> bases = map.getBaseLocations();

@@ -18,8 +18,7 @@ public class Percepts {
 	public static final String ATTACKING = "attacking";
 	public static final String CONSTRUCTIONSITE = "constructionSite";
 	public static final String OWNRACE = "ownRace";
-	public static final String ENEMYRACE = "enemyRace";
-	public static final String ENEMYNAME = "enemyName";
+	public static final String ENEMYPLAYER = "enemyPlayer";
 	public static final String ENEMY = "enemy";
 	public static final String FRIENDLY = "friendly";
 	public static final String UNDERCONSTRUCTION = "underConstruction";
