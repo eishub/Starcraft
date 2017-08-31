@@ -2,6 +2,8 @@ package eisbw.actions;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import eis.iilang.Action;
 import eis.iilang.Parameter;
 import eisbw.BwapiUtility;
@@ -45,7 +47,7 @@ public class DebugDraw extends StarcraftAction {
 	@Override
 	public void execute(Unit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
-		String text = parameters.get(0).toProlog();
+		String text = StringUtils.replace(parameters.get(0).toProlog(), "\\\\", "\\");
 		String name = (unit == null) ? "" : BwapiUtility.getName(unit);
 
 		IDraw draw = new CustomDrawUnit(this.game, unit, text);
