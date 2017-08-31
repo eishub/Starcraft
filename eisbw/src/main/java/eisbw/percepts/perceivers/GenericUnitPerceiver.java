@@ -64,11 +64,12 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	 */
 	private void statusPercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> statusPercept = new ArrayList<>(1);
+		long orientation = 45 * Math.round(Math.toDegrees(this.unit.getAngle()) / 45.0);
 		Position pos = this.unit.getPosition();
 		int region = BwapiUtility.getRegion(pos, this.api.getMap());
 		statusPercept.add(new StatusPercept(this.unit.getHitPoints(), this.unit.getShields(), this.unit.getEnergy(),
-				new ConditionHandler(this.api, this.unit).getConditions(), (int) Math.toDegrees(this.unit.getAngle()),
-				pos.getBX(), pos.getBY(), region));
+				new ConditionHandler(this.api, this.unit).getConditions(), (int) orientation, pos.getBX(), pos.getBY(),
+				region));
 		toReturn.put(new PerceptFilter(Percepts.STATUS, Filter.Type.ON_CHANGE), statusPercept);
 	}
 
