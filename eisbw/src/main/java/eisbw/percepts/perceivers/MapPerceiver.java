@@ -12,6 +12,7 @@ import eis.iilang.Percept;
 import eisbw.percepts.BasePercept;
 import eisbw.percepts.ChokepointRegionPercept;
 import eisbw.percepts.EnemyRacePercept;
+import eisbw.percepts.MapNamePercept;
 import eisbw.percepts.MapPercept;
 import eisbw.percepts.OwnRacePercept;
 import eisbw.percepts.Percepts;
@@ -46,6 +47,10 @@ public class MapPerceiver extends Perceiver {
 		mapPercept.add(new MapPercept(map.getSize().getBX(), map.getSize().getBY()));
 		toReturn.put(new PerceptFilter(Percepts.MAP, Filter.Type.ONCE), mapPercept);
 
+		List<Percept> mapNamePercept = new ArrayList<>(1);
+		mapNamePercept.add(new MapNamePercept(map.getFileName()));
+		toReturn.put(new PerceptFilter(Percepts.MAPNAME, Filter.Type.ONCE), mapNamePercept);
+		
 		Player self = this.api.getSelf();
 		if (self != null) {
 			List<Percept> ownRacePercept = new ArrayList<>(1);
