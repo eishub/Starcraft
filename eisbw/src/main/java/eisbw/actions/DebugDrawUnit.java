@@ -2,7 +2,7 @@ package eisbw.actions;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import eis.iilang.Action;
 import eis.iilang.Numeral;
@@ -19,6 +19,7 @@ import jnibwapi.types.UnitType;
  * @author Danny & Harm - Enable or disable drawing text above a certain unit.
  *
  */
+@SuppressWarnings("deprecation")
 public class DebugDrawUnit extends StarcraftAction {
 	private final Game game;
 
@@ -44,7 +45,6 @@ public class DebugDrawUnit extends StarcraftAction {
 		return true;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void execute(Unit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
@@ -52,7 +52,7 @@ public class DebugDrawUnit extends StarcraftAction {
 		unit = this.api.getUnit(id.getValue().intValue());
 		if (BwapiUtility.isValid(unit)) {
 			String name = BwapiUtility.getName(unit);
-			String text = StringUtils.replace(parameters.get(1).toProlog(), "\\\\", "\\");
+			String text = StringEscapeUtils.unescapeJava(parameters.get(1).toProlog());
 			IDraw draw = new CustomDrawUnit(this.game, unit, text);
 			this.game.addDraw(name, draw);
 			if (!text.isEmpty()) {
