@@ -5,13 +5,12 @@ import java.util.List;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
 import eis.iilang.ParameterList;
-import eis.iilang.Percept;
 
 /**
  * @author Danny & Harm - The Chokepoint/4 percept.
  *
  */
-public class RegionPercept extends Percept {
+public class RegionPercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
 
 	/**

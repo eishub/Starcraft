@@ -52,11 +52,10 @@ public class BwapiListener extends BwapiEvents {
 	 */
 	public BwapiListener(Game game, String scDir, boolean debug, boolean drawMapInfo, boolean drawUnitInfo,
 			boolean invulnerable, int speed) {
-		File bwta = new File(scDir + File.separator + "bwapi-data" + File.separator + "BWTA");
-		if (!bwta.isDirectory()) {
-			bwta = new File("mapData");
-		}
-		this.bwapi = new JNIBWAPI(this, bwta);
+		File dll = (scDir.isEmpty()) ? new File("bwapi-data" + File.separator + "AI") : new File(scDir);
+		File bwta = (scDir.isEmpty()) ? new File(dll + File.separator + "mapData")
+				: new File(scDir + File.separator + "bwapi-data" + File.separator + "BWTA");
+		this.bwapi = new JNIBWAPI(this, dll, bwta);
 		this.game = game;
 		this.actionProvider = new ActionProvider();
 		this.actionProvider.loadActions(this.bwapi, this.game);
@@ -128,14 +127,14 @@ public class BwapiListener extends BwapiEvents {
 		do {
 			this.game.update(this.bwapi);
 			if (frame == 0) {
-				this.game.mapAgent();
+				this.game.startManagers();
 			}
-			try { // always sleep 1ms to better facilitate running at speed 0
-				Thread.sleep(1);
+			try { // always sleep 10ms to better facilitate running at speed 0
+				Thread.sleep(10);
 			} catch (InterruptedException ie) {
 				break;
 			} // wait until all the initial workers get an action request
-		} while (frame == 0 && isRunning() && this.pendingActions.size() < 4);
+		} while (frame == 1 && isRunning() && this.pendingActions.size() < 4);
 
 		// PERFORM ACTIONS
 		Iterator<BwapiAction> actions = this.pendingActions.iterator();

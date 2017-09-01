@@ -1,13 +1,12 @@
 package eisbw.percepts;
 
 import eis.iilang.Identifier;
-import eis.iilang.Percept;
 
 /**
  * @author Danny & Harm - The Researching percept.
  *
  */
-public class ResearchingPercept extends Percept {
+public class ResearchingPercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
 
 	/**

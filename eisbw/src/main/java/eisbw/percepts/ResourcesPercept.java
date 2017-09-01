@@ -1,13 +1,12 @@
 package eisbw.percepts;
 
 import eis.iilang.Numeral;
-import eis.iilang.Percept;
 
 /**
  * @author Danny & Harm - The Resources percept.
  *
  */
-public class ResourcesPercept extends Percept {
+public class ResourcesPercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
 
 	/**

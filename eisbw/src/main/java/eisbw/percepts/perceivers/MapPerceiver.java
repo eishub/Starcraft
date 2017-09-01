@@ -3,6 +3,7 @@ package eisbw.percepts.perceivers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import eis.eis2java.translation.Filter;
 import eis.iilang.Numeral;
@@ -12,11 +13,13 @@ import eisbw.percepts.BasePercept;
 import eisbw.percepts.ChokepointRegionPercept;
 import eisbw.percepts.EnemyRacePercept;
 import eisbw.percepts.MapPercept;
+import eisbw.percepts.OwnRacePercept;
 import eisbw.percepts.Percepts;
 import eisbw.percepts.RegionPercept;
 import jnibwapi.BaseLocation;
 import jnibwapi.ChokePoint;
 import jnibwapi.JNIBWAPI;
+import jnibwapi.Player;
 import jnibwapi.Position;
 import jnibwapi.Region;
 
@@ -43,15 +46,22 @@ public class MapPerceiver extends Perceiver {
 		mapPercept.add(new MapPercept(map.getSize().getBX(), map.getSize().getBY()));
 		toReturn.put(new PerceptFilter(Percepts.MAP, Filter.Type.ONCE), mapPercept);
 
-		if (!this.api.getEnemies().isEmpty()) {
+		Player self = this.api.getSelf();
+		if (self != null) {
+			List<Percept> ownRacePercept = new ArrayList<>(1);
+			ownRacePercept.add(new OwnRacePercept(self.getRace().getName().toLowerCase()));
+			toReturn.put(new PerceptFilter(Percepts.OWNRACE, Filter.Type.ONCE), ownRacePercept);
+		}
+		Set<Player> enemies = this.api.getEnemies();
+		if (!enemies.isEmpty()) {
 			List<Percept> enemyRacePercept = new ArrayList<>(1);
-			enemyRacePercept.add(
-					new EnemyRacePercept(this.api.getEnemies().iterator().next().getRace().getName().toLowerCase()));
+			enemyRacePercept.add(new EnemyRacePercept(enemies.iterator().next().getRace().getName().toLowerCase()));
 			toReturn.put(new PerceptFilter(Percepts.ENEMYRACE, Filter.Type.ONCE), enemyRacePercept);
 		} // FIXME: we only support 1 enemy now
 
-		List<Percept> basePercepts = new ArrayList<>(map.getBaseLocations().size());
-		for (BaseLocation location : map.getBaseLocations()) {
+		List<BaseLocation> bases = map.getBaseLocations();
+		List<Percept> basePercepts = new ArrayList<>(bases.size());
+		for (BaseLocation location : bases) {
 			Position pos = location.getPosition();
 			Percept basePercept = new BasePercept(location.isStartLocation(), location.getMinerals(), location.getGas(),
 					pos.getBX(), pos.getBY(), location.getRegion().getID());
@@ -59,8 +69,9 @@ public class MapPerceiver extends Perceiver {
 		}
 		toReturn.put(new PerceptFilter(Percepts.BASE, Filter.Type.ONCE), basePercepts);
 
-		List<Percept> chokepointPercepts = new ArrayList<>(map.getChokePoints().size());
-		for (ChokePoint cp : map.getChokePoints()) {
+		List<ChokePoint> chokepoints = map.getChokePoints();
+		List<Percept> chokepointPercepts = new ArrayList<>(chokepoints.size());
+		for (ChokePoint cp : chokepoints) {
 			Percept chokeRegionPercept = new ChokepointRegionPercept(cp.getFirstSide().getBX(),
 					cp.getFirstSide().getBY(), cp.getSecondSide().getBX(), cp.getSecondSide().getBY(),
 					cp.getFirstRegion().getID(), cp.getSecondRegion().getID());
@@ -68,12 +79,14 @@ public class MapPerceiver extends Perceiver {
 		}
 		toReturn.put(new PerceptFilter(Percepts.CHOKEPOINT, Filter.Type.ONCE), chokepointPercepts);
 
-		List<Percept> regionPercepts = new ArrayList<>(map.getRegions().size());
-		for (Region r : map.getRegions()) {
+		List<Region> regions = map.getRegions();
+		List<Percept> regionPercepts = new ArrayList<>(regions.size());
+		for (Region r : regions) {
 			Position center = r.getCenter();
 			int height = map.getGroundHeight(center);
-			List<Parameter> connected = new ArrayList<>(r.getConnectedRegions().size());
-			for (Region c : r.getConnectedRegions()) {
+			Set<Region> connectedRegions = r.getConnectedRegions();
+			List<Parameter> connected = new ArrayList<>(connectedRegions.size());
+			for (Region c : connectedRegions) {
 				connected.add(new Numeral(c.getID()));
 			}
 			Percept regionPercept = new RegionPercept(r.getID(), center.getBX(), center.getBY(), height, connected);

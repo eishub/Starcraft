@@ -1,13 +1,12 @@
 package eisbw.percepts;
 
 import eis.iilang.Numeral;
-import eis.iilang.Percept;
 
 /**
  * @author Danny & Harm - The Chokepoint percept.
  *
  */
-public class ChokepointRegionPercept extends Percept {
+public class ChokepointRegionPercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
 
 	/**

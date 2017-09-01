@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
@@ -34,6 +35,8 @@ import jnibwapi.Unit;
 public class Game {
 	protected final StarcraftEnvironmentImpl env;
 	protected Units units; // overriden in test
+	protected final int managers;
+	protected final Map<String, Set<String>> subscriptions;
 	protected final Map<String, IDraw> draws;
 	protected volatile Map<String, Map<PerceptFilter, List<Percept>>> percepts;
 	protected volatile Map<PerceptFilter, List<Percept>> mapPercepts;
@@ -42,23 +45,19 @@ public class Game {
 	protected volatile Map<PerceptFilter, List<Percept>> endGamePercepts;
 	private final Map<String, Map<String, List<Percept>>> previous;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param environment
-	 *            - the environment
-	 */
-	public Game(StarcraftEnvironmentImpl environment) {
+	public Game(StarcraftEnvironmentImpl environment, int managers, Map<String, Set<String>> subscriptions) {
 		this.env = environment;
+		this.managers = managers;
+		this.subscriptions = subscriptions;
 		this.units = new Units(environment);
 		this.draws = new ConcurrentHashMap<>();
 		this.percepts = new ConcurrentHashMap<>();
 		this.previous = new ConcurrentHashMap<>();
 	}
 
-	public void mapAgent() {
-		if (this.env.mapAgent()) {
-			this.env.addToEnvironment("mapAgent", "mapAgent");
+	public void startManagers() {
+		for (int i = 1; i <= this.managers; ++i) {
+			this.env.addToEnvironment("manager" + i, "manager" + i);
 		}
 	}
 
@@ -93,41 +92,60 @@ public class Game {
 			if (scUnit == null) {
 				continue;
 			}
-			Map<PerceptFilter, List<Percept>> thisUnitPercepts = new HashMap<>(scUnit.perceive());
-			if (!this.env.mapAgent()) {
-				thisUnitPercepts.putAll(globalPercepts); // UnitsPerceiver
-				if (scUnit.isWorker() && this.constructionPercepts != null) {
-					thisUnitPercepts.putAll(this.constructionPercepts);
-				}
-				if (this.mapPercepts != null) {
-					thisUnitPercepts.putAll(this.mapPercepts);
-				}
-				if (this.nukePercepts != null) {
-					thisUnitPercepts.putAll(this.nukePercepts);
-				}
-				if (this.endGamePercepts != null) {
-					thisUnitPercepts.putAll(this.endGamePercepts);
-				}
-			}
-			unitPerceptHolder.put(this.units.getUnitName(unit.getID()), thisUnitPercepts);
+			String unittype = BwapiUtility.getEisUnitType(unit);
+			Map<PerceptFilter, List<Percept>> percepts = getUnitPercepts(unittype, globalPercepts);
+			percepts.putAll(scUnit.perceive());
+			unitPerceptHolder.put(this.units.getUnitName(unit.getID()), percepts);
 		}
-		if (this.env.mapAgent()) {
-			Map<PerceptFilter, List<Percept>> thisUnitPercepts = new HashMap<>(globalPercepts);
-			if (this.constructionPercepts != null) {
-				thisUnitPercepts.putAll(this.constructionPercepts);
-			}
-			if (this.mapPercepts != null) {
-				thisUnitPercepts.putAll(this.mapPercepts);
-			}
-			if (this.nukePercepts != null) {
-				thisUnitPercepts.putAll(this.nukePercepts);
-			}
-			if (this.endGamePercepts != null) {
-				thisUnitPercepts.putAll(this.endGamePercepts);
-			}
-			unitPerceptHolder.put("mapAgent", thisUnitPercepts);
+		for (int i = 1; i <= this.managers; ++i) {
+			String managertype = "manager" + i;
+			Map<PerceptFilter, List<Percept>> thisUnitPercepts = getUnitPercepts(managertype, globalPercepts);
+			unitPerceptHolder.put(managertype, thisUnitPercepts);
 		}
 		this.percepts = unitPerceptHolder;
+	}
+
+	private Map<PerceptFilter, List<Percept>> getUnitPercepts(String unit,
+			Map<PerceptFilter, List<Percept>> globalPercepts) {
+		Map<PerceptFilter, List<Percept>> thisUnitPercepts = new HashMap<>();
+		Set<String> subscriptions = this.subscriptions.get(unit);
+		if (subscriptions == null || subscriptions.isEmpty()) {
+			return thisUnitPercepts;
+		}
+		for (PerceptFilter global : globalPercepts.keySet()) {
+			if (subscriptions.contains(global.getName())) {
+				thisUnitPercepts.put(global, globalPercepts.get(global));
+			}
+		}
+		if (this.constructionPercepts != null) {
+			for (PerceptFilter construction : this.constructionPercepts.keySet()) {
+				if (subscriptions.contains(construction.getName())) {
+					thisUnitPercepts.put(construction, this.constructionPercepts.get(construction));
+				}
+			}
+		}
+		if (this.mapPercepts != null) {
+			for (PerceptFilter map : this.mapPercepts.keySet()) {
+				if (subscriptions.contains(map.getName())) {
+					thisUnitPercepts.put(map, this.mapPercepts.get(map));
+				}
+			}
+		}
+		if (this.nukePercepts != null) {
+			for (PerceptFilter nuke : this.nukePercepts.keySet()) {
+				if (subscriptions.contains(nuke.getName())) {
+					thisUnitPercepts.put(nuke, this.nukePercepts.get(nuke));
+				}
+			}
+		}
+		if (this.endGamePercepts != null) {
+			for (PerceptFilter endGame : this.endGamePercepts.keySet()) {
+				if (subscriptions.contains(endGame.getName())) {
+					thisUnitPercepts.put(endGame, this.endGamePercepts.get(endGame));
+				}
+			}
+		}
+		return thisUnitPercepts;
 	}
 
 	private void processUninitializedUnits() {
@@ -303,8 +321,8 @@ public class Game {
 	 */
 	public void clean() {
 		this.units.clean();
-		if (this.env.mapAgent()) {
-			this.env.deleteFromEnvironment("mapAgent");
+		for (int i = 1; i <= this.managers; ++i) {
+			this.env.deleteFromEnvironment("manager" + i);
 		}
 		this.percepts = null;
 		this.constructionPercepts = null;

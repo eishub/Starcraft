@@ -162,10 +162,11 @@ public class UnitsPerceiver extends Perceiver {
 							pos.getBX(), pos.getBY(), getRegion(u)));
 				}
 			} else {
+				long orientation = 45 * Math.round(Math.toDegrees(u.getAngle()) / 45.0);
 				Position pos = u.getPosition();
 				unitpercepts.add(new EnemyPercept(u.getID(), BwapiUtility.getName(type), u.getHitPoints(),
 						u.getShields(), u.getEnergy(), new ConditionHandler(this.api, u).getConditions(),
-						(int) Math.toDegrees(u.getAngle()), pos.getBX(), pos.getBY(), getRegion(u)));
+						(int) orientation, pos.getBX(), pos.getBY(), getRegion(u)));
 				if (type.isAttackCapable()) {
 					Unit target = (u.getTarget() == null) ? u.getOrderTarget() : u.getTarget();
 					if (target != null && !units.contains(target)) {
