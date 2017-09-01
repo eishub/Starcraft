@@ -129,8 +129,8 @@ public class BwapiListener extends BwapiEvents {
 			if (frame == 0) {
 				this.game.startManagers();
 			}
-			try { // always sleep 10ms to better facilitate running at speed 0
-				Thread.sleep(10);
+			try { // always sleep 5ms to better facilitate running at speed 0
+				Thread.sleep(5);
 			} catch (InterruptedException ie) {
 				break;
 			} // wait until all the initial workers get an action request
