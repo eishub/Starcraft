@@ -15,6 +15,7 @@ import eis.eis2java.translation.Filter;
 import eis.exceptions.ManagementException;
 import eis.iilang.Percept;
 import eisbw.debugger.draw.IDraw;
+import eisbw.percepts.EnemyPercept;
 import eisbw.percepts.NukePercept;
 import eisbw.percepts.Percepts;
 import eisbw.percepts.WinnerPercept;
@@ -23,6 +24,7 @@ import eisbw.percepts.perceivers.MapPerceiver;
 import eisbw.percepts.perceivers.PerceptFilter;
 import eisbw.percepts.perceivers.UnitsPerceiver;
 import eisbw.units.StarcraftUnit;
+import eisbw.units.StarcraftUnitFactory;
 import eisbw.units.Units;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Position;
@@ -44,6 +46,7 @@ public class Game {
 	protected volatile Map<PerceptFilter, List<Percept>> nukePercepts;
 	protected volatile Map<PerceptFilter, List<Percept>> endGamePercepts;
 	private final Map<String, Map<String, List<Percept>>> previous;
+	private final Map<Integer, EnemyPercept> enemies;
 
 	public Game(StarcraftEnvironmentImpl environment, int managers, Map<String, Set<String>> subscriptions) {
 		this.env = environment;
@@ -53,6 +56,7 @@ public class Game {
 		this.draws = new ConcurrentHashMap<>();
 		this.percepts = new ConcurrentHashMap<>();
 		this.previous = new ConcurrentHashMap<>();
+		this.enemies = new ConcurrentHashMap<>();
 	}
 
 	public void startManagers() {
@@ -74,8 +78,21 @@ public class Game {
 		return this.env.getAgents().size();
 	}
 
-	public Units getUnits() {
-		return this.units;
+	public void addUnit(Unit unit, StarcraftUnitFactory factory) {
+		this.units.addUnit(unit, factory);
+	}
+
+	public void deleteUnit(Unit unit) {
+		this.units.deleteUnit(unit);
+		this.enemies.remove(unit.getID());
+	}
+
+	public Unit getUnit(String name) {
+		return this.units.getUnit(name);
+	}
+
+	public String getUnitName(int id) {
+		return this.units.getUnitName(id);
 	}
 
 	public List<IDraw> getDraws() {
@@ -215,8 +232,8 @@ public class Game {
 	 *            - the API.
 	 */
 	private Map<PerceptFilter, List<Percept>> getGlobalPercepts(JNIBWAPI bwapi) {
-		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(7);
-		new UnitsPerceiver(bwapi).perceive(toReturn);
+		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
+		new UnitsPerceiver(bwapi, this.enemies).perceive(toReturn);
 		return toReturn;
 	}
 
@@ -227,7 +244,7 @@ public class Game {
 	 *            - the API.
 	 */
 	public void updateMap(JNIBWAPI api) {
-		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(5);
+		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
 		new MapPerceiver(api).perceive(toReturn);
 		this.mapPercepts = toReturn;
 	}

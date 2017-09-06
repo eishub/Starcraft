@@ -157,8 +157,8 @@ public class BwapiListener extends BwapiEvents {
 	@Override
 	public void unitComplete(int id) {
 		Unit unit = this.bwapi.getUnit(id);
-		if (unit != null && this.game.getUnits().getUnitName(id) == null) {
-			this.game.getUnits().addUnit(unit, this.factory);
+		if (unit != null && unit.getPlayer() == this.bwapi.getSelf() && this.game.getUnitName(id) == null) {
+			this.game.addUnit(unit, this.factory);
 		}
 	}
 
@@ -166,7 +166,7 @@ public class BwapiListener extends BwapiEvents {
 	public void unitDestroy(int id) {
 		Unit unit = this.bwapi.getUnit(id);
 		if (unit != null) {
-			this.game.getUnits().deleteUnit(unit);
+			this.game.deleteUnit(unit);
 			this.game.removeDraw(BwapiUtility.getName(unit));
 			BwapiUtility.clearCache(unit);
 		}
@@ -235,7 +235,7 @@ public class BwapiListener extends BwapiEvents {
 	 *             - mandatory from EIS
 	 */
 	public void performEntityAction(String name, Action action) throws ActException {
-		Unit unit = this.game.getUnits().getUnit(name); // can be null for the mapagent
+		Unit unit = this.game.getUnit(name); // can be null for the mapagent
 		if (isSupportedByEntity(action, name)) {
 			BwapiAction apiAction = new BwapiAction(unit, action);
 			if (!this.pendingActions.contains(apiAction)) {
@@ -254,7 +254,7 @@ public class BwapiListener extends BwapiEvents {
 
 	public boolean isSupportedByEntity(Action action, String name) {
 		StarcraftAction act = this.actionProvider.getAction(action);
-		Unit unit = this.game.getUnits().getUnit(name);
+		Unit unit = this.game.getUnit(name);
 		return isSupportedByEnvironment(action)
 				&& act.canExecute((unit == null) ? null : BwapiUtility.getType(unit), action);
 	}

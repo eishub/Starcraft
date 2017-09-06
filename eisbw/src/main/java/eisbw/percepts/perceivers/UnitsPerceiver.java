@@ -33,12 +33,17 @@ import jnibwapi.types.UnitType.UnitTypes;
  *
  */
 public class UnitsPerceiver extends Perceiver {
+	private final int frame;
+	private final Map<Integer, EnemyPercept> enemies;
+
 	/**
 	 * @param api
 	 *            The BWAPI.
 	 */
-	public UnitsPerceiver(JNIBWAPI api) {
+	public UnitsPerceiver(JNIBWAPI api, Map<Integer, EnemyPercept> enemies) {
 		super(api);
+		this.frame = api.getFrameCount();
+		this.enemies = enemies;
 	}
 
 	@Override
@@ -152,7 +157,7 @@ public class UnitsPerceiver extends Perceiver {
 			if (type == null) {
 				continue;
 			}
-			if (newunitpercepts != null) {
+			if (newunitpercepts != null) { // friendly
 				String unittype = (type == UnitTypes.Zerg_Egg) ? u.getBuildType().getName()
 						: BwapiUtility.getName(type);
 				unitpercepts.add(new FriendlyPercept(u.getID(), unittype));
@@ -161,18 +166,24 @@ public class UnitsPerceiver extends Perceiver {
 					newunitpercepts.add(new UnderConstructionPercept(u.getID(), u.getHitPoints() + u.getShields(),
 							pos.getBX(), pos.getBY(), getRegion(u)));
 				}
-			} else {
+			} else { // enemy
 				long orientation = 45 * Math.round(Math.toDegrees(u.getAngle()) / 45.0);
 				Position pos = u.getPosition();
-				unitpercepts.add(new EnemyPercept(u.getID(), BwapiUtility.getName(type), u.getHitPoints(),
-						u.getShields(), u.getEnergy(), new ConditionHandler(this.api, u).getConditions(),
-						(int) orientation, pos.getBX(), pos.getBY(), getRegion(u)));
+				this.enemies.put(u.getID(),
+						new EnemyPercept(u.getID(), BwapiUtility.getName(type), u.getHitPoints(), u.getShields(),
+								u.getEnergy(), new ConditionHandler(this.api, u).getConditions(), (int) orientation,
+								pos.getBX(), pos.getBY(), getRegion(u), this.frame));
 				if (type.isAttackCapable()) {
 					Unit target = (u.getTarget() == null) ? u.getOrderTarget() : u.getTarget();
 					if (target != null && !units.contains(target)) {
 						attackingpercepts.add(new AttackingPercept(u.getID(), target.getID()));
 					}
 				}
+			}
+		}
+		if (newunitpercepts == null) {
+			for (EnemyPercept percept : this.enemies.values()) {
+				unitpercepts.add(percept);
 			}
 		}
 	}

@@ -20,7 +20,6 @@ import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eisbw.debugger.DebugWindow;
 import eisbw.units.StarcraftUnitFactory;
-import eisbw.units.Units;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Player;
 import jnibwapi.Unit;
@@ -34,8 +33,6 @@ public class BwapiListenerTest {
 
 	@Mock
 	private Game game;
-	@Mock
-	private Units units;
 	@Mock
 	private JNIBWAPI bwapi;
 	@Mock
@@ -54,7 +51,6 @@ public class BwapiListenerTest {
 	public void start() {
 		MockitoAnnotations.initMocks(this);
 
-		when(this.game.getUnits()).thenReturn(this.units);
 		when(this.unit.isExists()).thenReturn(true);
 		when(this.unit.isVisible()).thenReturn(true);
 		when(this.unit.getType()).thenReturn(this.unitType);
@@ -62,8 +58,8 @@ public class BwapiListenerTest {
 		when(this.unitType.isCanMove()).thenReturn(true);
 		BwapiUtility.clearCache(this.unit);
 
-		when(this.units.getUnitName(0)).thenReturn("unit");
-		when(this.units.getUnit("unit")).thenReturn(this.unit);
+		when(this.game.getUnitName(0)).thenReturn("unit");
+		when(this.game.getUnit("unit")).thenReturn(this.unit);
 		this.list = new LinkedList<>();
 		this.list.add(this.unit);
 		when(this.bwapi.getMyUnits()).thenReturn(this.list);
@@ -75,36 +71,37 @@ public class BwapiListenerTest {
 
 	@Test
 	public void unitComplete_test() {
-		when(this.units.getUnitName(0)).thenReturn(null);
+		when(this.game.getUnitName(0)).thenReturn(null);
 		this.listener.unitComplete(0);
-		verify(this.units, times(1)).addUnit(eq(this.unit), any(StarcraftUnitFactory.class));
-		when(this.units.getUnitName(0)).thenReturn("unit");
+		verify(this.game, times(1)).addUnit(eq(this.unit), any(StarcraftUnitFactory.class));
+		when(this.game.getUnitName(0)).thenReturn("unit");
 		this.listener.unitComplete(0);
-		verify(this.units, times(1)).addUnit(eq(this.unit), any(StarcraftUnitFactory.class));
+		verify(this.game, times(1)).addUnit(eq(this.unit), any(StarcraftUnitFactory.class));
 		when(this.bwapi.getMyUnits()).thenReturn(new LinkedList<Unit>());
 		this.listener.unitComplete(0);
-		verify(this.units, times(1)).addUnit(eq(this.unit), any(StarcraftUnitFactory.class));
+		verify(this.game, times(1)).addUnit(eq(this.unit), any(StarcraftUnitFactory.class));
 	}
 
 	@Test
 	public void unitMorph_test() {
-		when(this.bwapi.getSelf()).thenReturn(this.self);
 		when(this.self.getRace()).thenReturn(RaceTypes.Zerg);
-		when(this.units.getUnitName(0)).thenReturn(null);
+		when(this.bwapi.getSelf()).thenReturn(this.self);
+		when(this.unit.getPlayer()).thenReturn(this.self);
+		when(this.game.getUnitName(0)).thenReturn(null);
 		this.listener.unitMorph(0);
-		when(this.units.getUnitName(0)).thenReturn("unit");
+		when(this.game.getUnitName(0)).thenReturn("unit");
 		this.listener.unitMorph(0);
 		// verify(units, times(1)).getUnits();
-		verify(this.units, times(1)).addUnit(eq(this.unit), any(StarcraftUnitFactory.class));
+		verify(this.game, times(1)).addUnit(eq(this.unit), any(StarcraftUnitFactory.class));
 		when(this.bwapi.getMyUnits()).thenReturn(new LinkedList<Unit>());
 		this.listener.unitMorph(0);
-		verify(this.units, times(1)).addUnit(eq(this.unit), any(StarcraftUnitFactory.class));
+		verify(this.game, times(1)).addUnit(eq(this.unit), any(StarcraftUnitFactory.class));
 	}
 
 	@Test
 	public void unitDestroy_test() {
 		this.listener.unitDestroy(0);
-		verify(this.units, times(1)).deleteUnit(any(Unit.class));
+		verify(this.game, times(1)).deleteUnit(any(Unit.class));
 	}
 
 	@Test
