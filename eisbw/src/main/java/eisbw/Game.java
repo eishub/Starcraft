@@ -61,13 +61,12 @@ public class Game {
 
 	public void startManagers() {
 		for (int i = 1; i <= this.managers; ++i) {
-			this.env.addToEnvironment("manager" + i, "manager" + i);
+			this.env.addToEnvironment("manager" + i, "manager");
 		}
 	}
 
 	public void startNewManager() {
-		int i = ++this.managers;
-		this.env.addToEnvironment("manager" + i, "manager" + i);
+		this.env.addToEnvironment("manager" + (++this.managers), "manager");
 	}
 
 	public StarcraftEnvironmentImpl getEnvironment() {
@@ -120,9 +119,9 @@ public class Game {
 			unitPerceptHolder.put(this.units.getUnitName(unit.getID()), percepts);
 		}
 		for (int i = 1; i <= this.managers; ++i) {
-			String managertype = "manager" + i;
-			Map<PerceptFilter, List<Percept>> thisUnitPercepts = getUnitPercepts(managertype, globalPercepts);
-			unitPerceptHolder.put(managertype, thisUnitPercepts);
+			String manager = "manager" + i;
+			Map<PerceptFilter, List<Percept>> thisUnitPercepts = getUnitPercepts(manager, globalPercepts);
+			unitPerceptHolder.put(manager, thisUnitPercepts);
 		}
 		this.percepts = unitPerceptHolder;
 	}
