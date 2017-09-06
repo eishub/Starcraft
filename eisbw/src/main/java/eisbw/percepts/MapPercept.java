@@ -1,5 +1,6 @@
 package eisbw.percepts;
 
+import eis.iilang.Identifier;
 import eis.iilang.Numeral;
 
 /**
@@ -12,12 +13,14 @@ public class MapPercept extends StarcraftPercept {
 	/**
 	 * The MapPercept constructor.
 	 *
+	 * @param name
+	 *            The name of the map
 	 * @param width
 	 *            The width of the map
 	 * @param height
 	 *            The height of the map
 	 */
-	public MapPercept(int width, int height) {
-		super(Percepts.MAP, new Numeral(width), new Numeral(height));
+	public MapPercept(String name, int width, int height) {
+		super(Percepts.MAP, new Identifier(name), new Numeral(width), new Numeral(height));
 	}
 }
