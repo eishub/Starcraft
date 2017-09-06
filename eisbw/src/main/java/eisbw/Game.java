@@ -37,7 +37,7 @@ import jnibwapi.Unit;
 public class Game {
 	protected final StarcraftEnvironmentImpl env;
 	protected Units units; // overriden in test
-	protected int managers;
+	protected int managers; // can increase with action
 	protected final Map<String, Set<String>> subscriptions;
 	protected final Map<String, IDraw> draws;
 	protected volatile Map<String, Map<PerceptFilter, List<Percept>>> percepts;
@@ -133,41 +133,25 @@ public class Game {
 		Set<String> subscriptions = this.subscriptions.get(unit);
 		if (subscriptions == null || subscriptions.isEmpty()) {
 			return thisUnitPercepts;
+		} else {
+			filterPercepts(thisUnitPercepts, subscriptions, globalPercepts);
+			filterPercepts(thisUnitPercepts, subscriptions, this.constructionPercepts);
+			filterPercepts(thisUnitPercepts, subscriptions, this.mapPercepts);
+			filterPercepts(thisUnitPercepts, subscriptions, this.nukePercepts);
+			filterPercepts(thisUnitPercepts, subscriptions, this.endGamePercepts);
+			return thisUnitPercepts;
 		}
-		for (PerceptFilter global : globalPercepts.keySet()) {
-			if (subscriptions.contains(global.getName())) {
-				thisUnitPercepts.put(global, globalPercepts.get(global));
-			}
-		}
-		if (this.constructionPercepts != null) {
-			for (PerceptFilter construction : this.constructionPercepts.keySet()) {
-				if (subscriptions.contains(construction.getName())) {
-					thisUnitPercepts.put(construction, this.constructionPercepts.get(construction));
+	}
+
+	private static void filterPercepts(Map<PerceptFilter, List<Percept>> thisUnitPercepts, Set<String> subscriptions,
+			Map<PerceptFilter, List<Percept>> perceptsToAdd) {
+		if (perceptsToAdd != null) {
+			for (PerceptFilter toAdd : perceptsToAdd.keySet()) {
+				if (subscriptions.contains(toAdd.getName())) {
+					thisUnitPercepts.put(toAdd, perceptsToAdd.get(toAdd));
 				}
 			}
 		}
-		if (this.mapPercepts != null) {
-			for (PerceptFilter map : this.mapPercepts.keySet()) {
-				if (subscriptions.contains(map.getName())) {
-					thisUnitPercepts.put(map, this.mapPercepts.get(map));
-				}
-			}
-		}
-		if (this.nukePercepts != null) {
-			for (PerceptFilter nuke : this.nukePercepts.keySet()) {
-				if (subscriptions.contains(nuke.getName())) {
-					thisUnitPercepts.put(nuke, this.nukePercepts.get(nuke));
-				}
-			}
-		}
-		if (this.endGamePercepts != null) {
-			for (PerceptFilter endGame : this.endGamePercepts.keySet()) {
-				if (subscriptions.contains(endGame.getName())) {
-					thisUnitPercepts.put(endGame, this.endGamePercepts.get(endGame));
-				}
-			}
-		}
-		return thisUnitPercepts;
 	}
 
 	private void processUninitializedUnits() {
