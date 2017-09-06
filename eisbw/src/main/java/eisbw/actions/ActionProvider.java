@@ -64,5 +64,6 @@ public class ActionProvider {
 		this.actions.put("forfeit/0", new Forfeit(api));
 		this.actions.put("debugdraw/1", new DebugDraw(api, game));
 		this.actions.put("debugdraw/2", new DebugDrawUnit(api, game));
+		this.actions.put("startNewManager/0", new StartNewManager(api, game));
 	}
 }

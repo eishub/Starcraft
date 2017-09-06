@@ -35,7 +35,7 @@ import jnibwapi.Unit;
 public class Game {
 	protected final StarcraftEnvironmentImpl env;
 	protected Units units; // overriden in test
-	protected final int managers;
+	protected int managers;
 	protected final Map<String, Set<String>> subscriptions;
 	protected final Map<String, IDraw> draws;
 	protected volatile Map<String, Map<PerceptFilter, List<Percept>>> percepts;
@@ -59,6 +59,11 @@ public class Game {
 		for (int i = 1; i <= this.managers; ++i) {
 			this.env.addToEnvironment("manager" + i, "manager" + i);
 		}
+	}
+
+	public void startNewManager() {
+		int i = ++this.managers;
+		this.env.addToEnvironment("manager" + i, "manager" + i);
 	}
 
 	public StarcraftEnvironmentImpl getEnvironment() {
