@@ -113,26 +113,31 @@ public class Game {
 			if (scUnit == null) {
 				continue;
 			}
+			String unitname = this.units.getUnitName(unit.getID());
 			String unittype = BwapiUtility.getEisUnitType(unit);
-			Map<PerceptFilter, List<Percept>> percepts = getUnitPercepts(unittype, globalPercepts);
+			Map<PerceptFilter, List<Percept>> percepts = getUnitPercepts(unitname, unittype, globalPercepts);
 			percepts.putAll(scUnit.perceive());
-			unitPerceptHolder.put(this.units.getUnitName(unit.getID()), percepts);
+			unitPerceptHolder.put(unitname, percepts);
 		}
 		for (int i = 1; i <= this.managers; ++i) {
-			String manager = "manager" + i;
-			Map<PerceptFilter, List<Percept>> thisUnitPercepts = getUnitPercepts(manager, globalPercepts);
-			unitPerceptHolder.put(manager, thisUnitPercepts);
+			String managername = "manager" + i;
+			Map<PerceptFilter, List<Percept>> thisUnitPercepts = getUnitPercepts(managername, "manager",
+					globalPercepts);
+			unitPerceptHolder.put(managername, thisUnitPercepts);
 		}
 		this.percepts = unitPerceptHolder;
 	}
 
-	private Map<PerceptFilter, List<Percept>> getUnitPercepts(String unit,
+	private Map<PerceptFilter, List<Percept>> getUnitPercepts(String unitName, String unitType,
 			Map<PerceptFilter, List<Percept>> globalPercepts) {
-		Map<PerceptFilter, List<Percept>> thisUnitPercepts = new HashMap<>();
-		Set<String> subscriptions = this.subscriptions.get(unit);
+		Set<String> subscriptions = this.subscriptions.get(unitName);
 		if (subscriptions == null || subscriptions.isEmpty()) {
-			return thisUnitPercepts;
+			subscriptions = this.subscriptions.get(unitType); // fallback
+		}
+		if (subscriptions == null || subscriptions.isEmpty()) {
+			return new HashMap<>(0);
 		} else {
+			Map<PerceptFilter, List<Percept>> thisUnitPercepts = new HashMap<>();
 			filterPercepts(thisUnitPercepts, subscriptions, globalPercepts);
 			filterPercepts(thisUnitPercepts, subscriptions, this.constructionPercepts);
 			filterPercepts(thisUnitPercepts, subscriptions, this.mapPercepts);
