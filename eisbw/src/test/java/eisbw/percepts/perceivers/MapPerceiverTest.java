@@ -45,6 +45,7 @@ public class MapPerceiverTest {
 		MockitoAnnotations.initMocks(this);
 
 		when(this.bwapi.getMap()).thenReturn(this.map);
+		when(this.map.getName()).thenReturn("testMap");
 		when(this.map.getSize()).thenReturn(this.mapsize);
 		when(this.mapsize.getBX()).thenReturn(10);
 		when(this.mapsize.getBY()).thenReturn(11);
