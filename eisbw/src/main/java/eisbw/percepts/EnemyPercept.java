@@ -45,6 +45,6 @@ public class EnemyPercept extends StarcraftPercept {
 			int orientation, int x, int y, int region, int lastUpdated) {
 		super(Percepts.ENEMY, new Numeral(id), new Identifier(type), new Numeral(health), new Numeral(shields),
 				new Numeral(energy), new ParameterList(conditions), new Numeral(orientation), new Numeral(x),
-				new Numeral(y), new Numeral(region));
+				new Numeral(y), new Numeral(region), new Numeral(lastUpdated));
 	}
 }

@@ -43,7 +43,8 @@ public class MapPerceiver extends Perceiver {
 		jnibwapi.Map map = this.api.getMap();
 
 		List<Percept> mapPercept = new ArrayList<>(1);
-		mapPercept.add(new MapPercept(map.getName(), map.getSize().getBX(), map.getSize().getBY()));
+		String mapname = map.getName().replaceAll("[^\\x20-\\x7E]", "");
+		mapPercept.add(new MapPercept(mapname, map.getSize().getBX(), map.getSize().getBY()));
 		toReturn.put(new PerceptFilter(Percepts.MAP, Filter.Type.ONCE), mapPercept);
 
 		Player self = this.api.getSelf();
