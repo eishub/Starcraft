@@ -70,7 +70,7 @@ public class GenericUnitPerceiverTest {
 		when(this.unit.getPosition()).thenReturn(new Position(2, 1, PosType.BUILD));
 		when(this.unit.getEnergy()).thenReturn(100);
 		when(this.unitType.getMaxEnergy()).thenReturn(110);
-		BwapiUtility.clearCache(this.unit);
+		BwapiUtility.clearCache(1);
 
 		this.perciever = new GenericUnitPerceiver(this.api, this.unit);
 	}

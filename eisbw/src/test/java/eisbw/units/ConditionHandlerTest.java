@@ -43,8 +43,7 @@ public class ConditionHandlerTest {
 		when(this.unit.isVisible()).thenReturn(true);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unitType.getName()).thenReturn("name");
-		when(this.unit.getID()).thenReturn(0);
-		BwapiUtility.clearCache(this.unit);
+		BwapiUtility.clearCache(0);
 
 		this.handler = new ConditionHandler(this.api, this.unit);
 	}

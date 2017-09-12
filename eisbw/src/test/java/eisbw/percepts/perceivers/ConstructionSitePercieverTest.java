@@ -53,7 +53,7 @@ public class ConstructionSitePercieverTest {
 		when(this.unit.isExists()).thenReturn(true);
 		when(this.unit.getPosition()).thenReturn(this.mapsize);
 		when(this.unitType.getName()).thenReturn("Resource Mineral Field");
-		BwapiUtility.clearCache(this.unit);
+		BwapiUtility.clearCache(0);
 
 		when(this.bwapi.canBuildHere(any(Position.class), any(UnitType.class), any(Boolean.class))).thenReturn(true);
 		when(this.bwapi.getSelf()).thenReturn(this.player);

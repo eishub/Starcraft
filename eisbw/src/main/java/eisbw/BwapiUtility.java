@@ -91,9 +91,9 @@ public class BwapiUtility {
 		return regionId.intValue();
 	}
 
-	public static void clearCache(Unit unit) {
-		typeCache.remove(unit.getID());
-		playerCache.remove(unit.getID());
+	public static void clearCache(int id) {
+		typeCache.remove(id);
+		playerCache.remove(id);
 	}
 
 	/**

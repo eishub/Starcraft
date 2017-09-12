@@ -54,7 +54,7 @@ public class BuildAddonTest {
 
 		when(this.act.getParameters()).thenReturn(this.params);
 		when(this.unit.getType()).thenReturn(this.unitType);
-		BwapiUtility.clearCache(this.unit);
+		BwapiUtility.clearCache(0);
 	}
 
 	@Test

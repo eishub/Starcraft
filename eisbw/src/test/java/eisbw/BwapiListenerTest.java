@@ -56,7 +56,7 @@ public class BwapiListenerTest {
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unitType.getName()).thenReturn("Terran Siege Tank Tank Mode");
 		when(this.unitType.isCanMove()).thenReturn(true);
-		BwapiUtility.clearCache(this.unit);
+		BwapiUtility.clearCache(0);
 
 		when(this.game.getUnitName(0)).thenReturn("unit");
 		when(this.game.getUnit("unit")).thenReturn(this.unit);
@@ -101,7 +101,7 @@ public class BwapiListenerTest {
 	@Test
 	public void unitDestroy_test() {
 		this.listener.unitDestroy(0);
-		verify(this.game, times(1)).deleteUnit(any(Unit.class));
+		verify(this.game, times(1)).deleteUnit(any(Unit.class), 0);
 	}
 
 	@Test

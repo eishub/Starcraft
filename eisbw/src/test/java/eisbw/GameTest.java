@@ -64,13 +64,12 @@ public class GameTest {
 		when(this.unit.isExists()).thenReturn(true);
 		when(this.unit.isVisible()).thenReturn(true);
 		when(this.unit.isCompleted()).thenReturn(true);
-		when(this.unit.getID()).thenReturn(0);
 		when(this.unit.getType()).thenReturn(this.type);
 		when(this.units.getUnitName(0)).thenReturn("unit");
 		when(this.units.getUnit("unit")).thenReturn(this.unit);
 		when(this.units.getStarcraftUnit(this.unit)).thenReturn(this.scUnit);
 		when(this.scUnit.perceive()).thenReturn(this.percepts);
-		BwapiUtility.clearCache(this.unit);
+		BwapiUtility.clearCache(0);
 
 		when(this.env.getAgents()).thenReturn(new LinkedList<String>());
 

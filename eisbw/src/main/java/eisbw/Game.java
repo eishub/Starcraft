@@ -81,9 +81,11 @@ public class Game {
 		this.units.addUnit(unit, factory);
 	}
 
-	public void deleteUnit(Unit unit) {
-		this.units.deleteUnit(unit);
-		this.enemies.remove(unit.getID());
+	public void deleteUnit(Unit unit, int id) {
+		if (unit != null) {
+			this.units.deleteUnit(unit);
+		}
+		this.enemies.remove(id);
 	}
 
 	public Unit getUnit(String name) {

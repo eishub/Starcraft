@@ -56,7 +56,7 @@ public class MorphTest {
 		when(this.act.getParameters()).thenReturn(this.params);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.bwapi.getSelf()).thenReturn(this.player);
-		BwapiUtility.clearCache(this.unit);
+		BwapiUtility.clearCache(0);
 	}
 
 	@Test

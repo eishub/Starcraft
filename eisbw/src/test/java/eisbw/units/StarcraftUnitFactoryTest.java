@@ -26,7 +26,7 @@ public class StarcraftUnitFactoryTest {
 		when(this.unit.isExists()).thenReturn(true);
 		when(this.unit.isVisible()).thenReturn(true);
 		when(this.unit.getType()).thenReturn(this.unitType);
-		BwapiUtility.clearCache(this.unit);
+		BwapiUtility.clearCache(0);
 		assertEquals(1, this.factory.create(this.unit).perceivers.size());
 	}
 }
