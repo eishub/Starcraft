@@ -101,7 +101,7 @@ public class BwapiListenerTest {
 	@Test
 	public void unitDestroy_test() {
 		this.listener.unitDestroy(0);
-		verify(this.game, times(1)).deleteUnit(any(Unit.class), 0);
+		verify(this.game, times(1)).deleteUnit(any(Unit.class), eq(0));
 	}
 
 	@Test
