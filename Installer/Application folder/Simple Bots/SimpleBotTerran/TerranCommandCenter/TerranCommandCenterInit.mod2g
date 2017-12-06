@@ -1,0 +1,7 @@
+use "../Shared" as knowledge.
+use TerranCommandCenter as knowledge.
+
+module TerranCommandCenterInit {
+	% Initialize beliefs for on-change percepts
+	if true	then insert(resources(0,0,0,0), queued(0)).
+}

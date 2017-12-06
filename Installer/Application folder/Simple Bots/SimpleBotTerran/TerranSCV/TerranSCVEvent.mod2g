@@ -1,0 +1,11 @@
+use TerranSCV as knowledge.
+
+module TerranSCVEvent {
+	% UPDATE PERCEPT INFORMATION
+	if percept(status(_,_,_,Conditions,_,_,_,_)), bel(conditions(OldConditions)) 
+		then delete(conditions(OldConditions)) + insert(conditions(Conditions)).
+	forall bel(mineralField(Id,Amount,Region)), not(percept(mineralField(Id,Amount,_,_,Region)))
+		do delete(mineralField(Id,Amount,Region)).
+	forall percept(mineralField(Id,Amount,_,_,Region)), not(bel(mineralField(Id,Amount,Region)))
+		do insert(mineralField(Id,Amount,Region)).
+}

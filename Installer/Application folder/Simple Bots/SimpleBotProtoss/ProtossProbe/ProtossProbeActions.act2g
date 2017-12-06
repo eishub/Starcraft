@@ -1,0 +1,6 @@
+use ProtossProbe as knowledge.
+
+% Only gather from non-empty mineral fields
+define gather(Id) with
+	pre{ mineralField(Id,Amount,_), Amount > 0 }
+	post{ true }

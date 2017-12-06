@@ -1,0 +1,8 @@
+use ZergHatchery as knowledge.
+use ZergHatcheryActions.
+
+module ZergHatchery {
+	% Continously keep trying to produce drones
+	if bel(queued(Eggs), Eggs > 0)
+		then train('Zerg Drone') + sleep(100).
+}

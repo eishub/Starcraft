@@ -1,0 +1,43 @@
+use "..\..\connector.jar" as environment with
+	map="sscai\(2)Destination.scx",
+	%map="sscai\(4)CircuitBreaker.scx",
+	own_race="Terran",
+	starcraft_location="C:\Starcraft",
+	auto_menu="Single_Player",
+	enemy_race="random",
+	debug="true", % launch the development tool
+	draw_mapinfo="false",
+	draw_unitinfo="false",
+	invulnerable="true", % individual assignment only
+	game_speed=50, % default tournament speed
+	managers=1,
+	percepts=
+[
+	['manager1',friendly,resources,winner],
+	['terranCommandCenter',resources],
+	['terranSCV',mineralField]
+].	
+	
+define mapAgent as agent {
+	use MapAgent.MapAgentInit as init.
+	use MapAgent.MapAgentEvent as event.
+	use MapAgent.MapAgent as main.
+}
+
+define terranCommandCenter as agent {
+	use TerranCommandCenter.TerranCommandCenterInit as init.
+	use TerranCommandCenter.TerranCommandCenterEvent as event.
+	use TerranCommandCenter.TerranCommandCenter as main.
+}
+
+define terranSCV as agent {
+	use TerranSCV.TerranSCVInit as init.
+	use TerranSCV.TerranSCVEvent as event.
+	use TerranSCV.TerranSCV as main.
+} 
+
+launchpolicy{
+	when name = manager1 launch mapAgent.
+	when type = terranCommandCenter launch terranCommandCenter.
+	when type = terranSCV launch terranSCV.
+}

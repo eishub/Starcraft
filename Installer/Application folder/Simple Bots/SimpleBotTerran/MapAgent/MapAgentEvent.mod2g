@@ -1,0 +1,12 @@
+use "../Shared" as knowledge.
+use MapAgent as knowledge.
+
+module MapAgentEvent {	
+	% UPDATE PERCEPT INFORMATION (used in test)
+	if percept(resources(M,G,CS,TS)), bel(resources(OldM,OldG,OldCS,OldTS)) 
+		then delete(resources(OldM,OldG,OldCS,OldTS)) + insert(resources(M,G,CS,TS)).
+	forall bel(friendly(Id,Type)), not(percept(friendly(Id,Type)))
+		do delete(friendly(Id,Type)).
+	forall percept(friendly(Id,Type)), not(bel(friendly(Id,Type)))
+		do insert(friendly(Id,Type)).
+}

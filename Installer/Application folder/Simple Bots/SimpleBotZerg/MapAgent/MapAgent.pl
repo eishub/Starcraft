@@ -1,0 +1,1 @@
+:-dynamic friendly/2.
