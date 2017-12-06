@@ -1,4 +1,4 @@
-use "../Shared" as knowledge.
+use ProtossProbe as knowledge.
 use ProtossProbeActions.
 order=linearrandom.
 

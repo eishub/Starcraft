@@ -9,8 +9,14 @@ use "..\..\connector.jar" as environment with
 	draw_mapinfo="false",
 	draw_unitinfo="false",
 	invulnerable="true", % individual assignment only
-	map_agent="true",
-	game_speed=50. % default tournament speed
+	game_speed=50, % default tournament speed
+	managers=1,
+	percepts=
+[
+	['manager1',friendly,resources,winner],
+	['zergHatchery',resources],
+	['zergDrone',mineralField]
+].	
 	
 define mapAgent as agent {
 	use MapAgent.MapAgentInit as init.
@@ -31,7 +37,7 @@ define zergDrone as agent {
 } 
 
 launchpolicy{
-	when type = mapAgent launch mapAgent.
+	when name = manager1 launch mapAgent.
 	when type = zergHatchery launch zergHatchery.
 	when type = zergDrone launch zergDrone.
 }
