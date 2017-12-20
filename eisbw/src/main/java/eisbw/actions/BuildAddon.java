@@ -5,8 +5,10 @@ import java.util.List;
 import org.openbw.bwapi4j.BW;
 import org.openbw.bwapi4j.type.UnitType;
 import org.openbw.bwapi4j.unit.CommandCenter;
+import org.openbw.bwapi4j.unit.Factory;
 import org.openbw.bwapi4j.unit.PlayerUnit;
 import org.openbw.bwapi4j.unit.ScienceFacility;
+import org.openbw.bwapi4j.unit.Starport;
 
 import eis.iilang.Action;
 import eis.iilang.Identifier;
@@ -53,17 +55,17 @@ public class BuildAddon extends StarcraftAction {
 		case Terran_Nuclear_Silo:
 			((CommandCenter) unit).buildNuclearSilo();
 			break;
-		case Terran_Factory:
-			// ((MachineShop) unit).buildFactory(); FIXME: not implemented in lib
+		case Terran_Machine_Shop:
+			((Factory) unit).buildMachineShop();
 			break;
-		case Terran_Starport:
-			// ((ControlTower) unit).buildStarport(); FIXME: not implemented in lib
-			break;
-		case Terran_Physics_Lab:
-			((ScienceFacility) unit).buildPhysicslab();
+		case Terran_Control_Tower:
+			((Starport) unit).buildControlTower();
 			break;
 		case Terran_Covert_Ops:
 			((ScienceFacility) unit).buildCovertOps();
+			break;
+		case Terran_Physics_Lab:
+			((ScienceFacility) unit).buildPhysicslab();
 			break;
 		default:
 			break;

@@ -110,7 +110,7 @@ public class BwapiListener extends BwapiEvents {
 		}
 
 		// UPDATE MAP INFO
-		this.game.updateMap(this.bwapi);
+		this.game.updateMap(this.bwapi, this.bwta);
 
 		// KnowledgeExport.export();
 	}
@@ -120,14 +120,14 @@ public class BwapiListener extends BwapiEvents {
 		// GENERATE PERCEPTS
 		int frame = this.bwapi.getInteractionHandler().getFrameCount();
 		if ((frame % 50) == 0) {
-			this.game.updateConstructionSites(this.bwapi);
+			this.game.updateConstructionSites(this.bwapi, this.bwta);
 		}
 		if (this.nuke >= 0 && ++this.nuke == 50) {
 			this.game.updateNukePerceiver(null);
 			this.nuke = -1;
 		}
 		do {
-			this.game.update(this.bwapi);
+			this.game.update(this.bwapi, this.bwta);
 			if (frame == 0) {
 				this.game.startManagers();
 			}
@@ -202,7 +202,7 @@ public class BwapiListener extends BwapiEvents {
 	@Override
 	public void onEnd(boolean winner) {
 		this.game.updateEndGamePerceiver(winner);
-		this.game.update(this.bwapi);
+		this.game.update(this.bwapi, this.bwta);
 
 		// have the winner percept perceived for 1 second before all agents
 		// are removed

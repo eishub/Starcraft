@@ -7,13 +7,21 @@ import java.util.Map;
 import org.openbw.bwapi4j.BW;
 import org.openbw.bwapi4j.TilePosition;
 import org.openbw.bwapi4j.type.Order;
+import org.openbw.bwapi4j.type.TechType;
 import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.type.UpgradeType;
 import org.openbw.bwapi4j.unit.Bunker;
+import org.openbw.bwapi4j.unit.Carrier;
+import org.openbw.bwapi4j.unit.Hatchery;
 import org.openbw.bwapi4j.unit.MobileUnit;
+import org.openbw.bwapi4j.unit.NuclearSilo;
 import org.openbw.bwapi4j.unit.PlayerUnit;
+import org.openbw.bwapi4j.unit.Reaver;
+import org.openbw.bwapi4j.unit.ResearchingFacility;
 import org.openbw.bwapi4j.unit.SpellCaster;
 import org.openbw.bwapi4j.unit.Transporter;
 import org.openbw.bwapi4j.unit.Unit;
+import org.openbw.bwapi4j.unit.Vulture;
 
 import bwta.BWTA;
 import eis.eis2java.translation.Filter;
@@ -26,8 +34,6 @@ import eisbw.percepts.ResearchingPercept;
 import eisbw.percepts.SelfPercept;
 import eisbw.percepts.StatusPercept;
 import eisbw.units.ConditionHandler;
-import jnibwapi.types.TechType.TechTypes;
-import jnibwapi.types.UpgradeType.UpgradeTypes;
 
 /**
  * @author Danny & Harm - The perceiver which handles all the generic percepts.
@@ -163,13 +169,13 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 
 	private void researchingPercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> researchPercepts = new ArrayList<>(2);
-		if (this.unit.getTech() != null && this.unit.getTech() != TechTypes.None
-				&& this.unit.getTech() != TechTypes.Unknown) {
-			researchPercepts.add(new ResearchingPercept(this.unit.getTech().getName()));
+		if (this.unit instanceof ResearchingFacility && ((ResearchingFacility) this.unit).isResearching()) {
+			researchPercepts.add(new ResearchingPercept(
+					/* this.unit.getTech().toString() FIXME: not supported */ TechType.Unknown.toString()));
 		}
-		if (this.unit.getUpgrade() != null && this.unit.getUpgrade() != UpgradeTypes.None
-				&& this.unit.getUpgrade() != UpgradeTypes.Unknown) {
-			researchPercepts.add(new ResearchingPercept(this.unit.getUpgrade().getName()));
+		if (this.unit instanceof ResearchingFacility && ((ResearchingFacility) this.unit).isUpgrading()) {
+			researchPercepts.add(new ResearchingPercept(
+					/* this.unit.getUpgrade().toString() FIXME: not supported */ UpgradeType.Unknown.toString()));
 		}
 		if (!researchPercepts.isEmpty()) {
 			toReturn.put(new PerceptFilter(Percepts.RESEARCHING, Filter.Type.ALWAYS), researchPercepts);
@@ -178,21 +184,30 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 
 	private void queueSizePercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> queueSizePercept = new ArrayList<>(1);
-		UnitType type = BwapiUtility.getType(this.unit);
-		if (type == UnitType.Zerg_Hatchery || type == UnitType.Zerg_Lair || type == UnitType.Zerg_Hive) {
-			queueSizePercept.add(new QueueSizePercept(this.unit.getLarvaCount()));
-		} else if (type == UnitType.Terran_Nuclear_Silo) {
-			queueSizePercept.add(new QueueSizePercept(this.unit.isNukeReady() ? 1 : 0));
-		} else if (type == UnitType.Terran_Vulture) {
-			queueSizePercept.add(new QueueSizePercept(this.unit.getSpiderMineCount()));
-		} else if (type == UnitType.Protoss_Carrier) {
-			queueSizePercept
-					.add(new QueueSizePercept(this.unit.getTrainingQueueSize() + this.unit.getInterceptorCount()));
-		} else if (type == UnitType.Protoss_Reaver) {
-			queueSizePercept.add(new QueueSizePercept(this.unit.getTrainingQueueSize() + this.unit.getScarabCount()));
-		} else {
-			queueSizePercept.add(new QueueSizePercept(this.unit.getTrainingQueueSize()));
+		if (this.unit instanceof Hatchery) {
+			queueSizePercept.add(new QueueSizePercept(((Hatchery) this.unit).getLarva().size()));
+		} else if (this.unit instanceof Hatchery) {
+			queueSizePercept.add(new QueueSizePercept(((Hatchery) this.unit).getLarva().size()));
+		} else if (this.unit instanceof Hatchery) {
+			queueSizePercept.add(new QueueSizePercept(((Hatchery) this.unit).getLarva().size()));
+		} else if (this.unit instanceof NuclearSilo) {
+			queueSizePercept.add(new QueueSizePercept(((NuclearSilo) this.unit).hasNuke() ? 1 : 0));
+		} else if (this.unit instanceof Vulture) {
+			queueSizePercept.add(new QueueSizePercept(((Vulture) this.unit).getSpiderMineCount()));
+		} else if (this.unit instanceof Carrier) {
+			queueSizePercept.add(new QueueSizePercept(
+					/* ((Carrier) this.unit).getTrainingQueueSize() + FIXME: not supported by lib */
+					((Carrier) this.unit).getInterceptorCount()));
+		} else if (this.unit instanceof Reaver) {
+			queueSizePercept.add(new QueueSizePercept(
+					/* ((Reaver) this.unit).getTrainingQueueSize() + FIXME: not supported by lib */ ((Reaver) this.unit)
+							.getScarabCount()));
 		}
+		// else if (this.unit instanceof TrainingFacility) {
+		// FIXME: interface is not public in lib atm.
+		// queueSizePercept.add(new QueueSizePercept(((TrainingFacility)
+		// this.unit).getTrainingQueueSize()));
+		// }
 		toReturn.put(new PerceptFilter(Percepts.QUEUESIZE, Filter.Type.ON_CHANGE), queueSizePercept);
 	}
 }

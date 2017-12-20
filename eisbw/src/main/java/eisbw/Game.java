@@ -15,6 +15,7 @@ import org.openbw.bwapi4j.BW;
 import org.openbw.bwapi4j.TilePosition;
 import org.openbw.bwapi4j.unit.PlayerUnit;
 
+import bwta.BWTA;
 import eis.eis2java.translation.Filter;
 import eis.exceptions.ManagementException;
 import eis.iilang.Percept;
@@ -107,10 +108,10 @@ public class Game {
 	 * @param bwapi
 	 *            - the game bridge
 	 */
-	public void update(BW bwapi) {
+	public void update(BW bwapi, BWTA bwta) {
 		processUninitializedUnits();
 		Map<String, Map<PerceptFilter, List<Percept>>> unitPerceptHolder = new HashMap<>();
-		Map<PerceptFilter, List<Percept>> globalPercepts = getGlobalPercepts(bwapi);
+		Map<PerceptFilter, List<Percept>> globalPercepts = getGlobalPercepts(bwapi, bwta);
 		for (PlayerUnit unit : bwapi.getUnits(bwapi.getInteractionHandler().self())) {
 			StarcraftUnit scUnit = this.units.getStarcraftUnit(unit);
 			if (scUnit == null) {
@@ -222,9 +223,9 @@ public class Game {
 	 * @param api
 	 *            - the API.
 	 */
-	private Map<PerceptFilter, List<Percept>> getGlobalPercepts(BW bwapi) {
+	private Map<PerceptFilter, List<Percept>> getGlobalPercepts(BW bwapi, BWTA bwta) {
 		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
-		new UnitsPerceiver(bwapi, this.enemies).perceive(toReturn);
+		new UnitsPerceiver(bwapi, bwta, this.enemies).perceive(toReturn);
 		return toReturn;
 	}
 
@@ -234,9 +235,9 @@ public class Game {
 	 * @param api
 	 *            - the API.
 	 */
-	public void updateMap(BW api) {
+	public void updateMap(BW bwapi, BWTA bwta) {
 		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
-		new MapPerceiver(api).perceive(toReturn);
+		new MapPerceiver(bwapi, bwta).perceive(toReturn);
 		this.mapPercepts = toReturn;
 	}
 
@@ -246,9 +247,9 @@ public class Game {
 	 * @param bwapi
 	 *            - the JNIBWAPI
 	 */
-	public void updateConstructionSites(BW bwapi) {
+	public void updateConstructionSites(BW bwapi, BWTA bwta) {
 		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(1);
-		new ConstructionSitePerceiver(bwapi).perceive(toReturn);
+		new ConstructionSitePerceiver(bwapi, bwta).perceive(toReturn);
 		this.constructionPercepts = toReturn;
 	}
 

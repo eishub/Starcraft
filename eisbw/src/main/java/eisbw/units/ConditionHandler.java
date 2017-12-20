@@ -6,8 +6,22 @@ import java.util.List;
 import org.openbw.bwapi4j.BW;
 import org.openbw.bwapi4j.type.Race;
 import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.unit.Burrowable;
+import org.openbw.bwapi4j.unit.CommandCenter;
+import org.openbw.bwapi4j.unit.Drone;
+import org.openbw.bwapi4j.unit.Factory;
+import org.openbw.bwapi4j.unit.Firebat;
+import org.openbw.bwapi4j.unit.Marine;
 import org.openbw.bwapi4j.unit.MobileUnit;
+import org.openbw.bwapi4j.unit.NuclearSilo;
 import org.openbw.bwapi4j.unit.PlayerUnit;
+import org.openbw.bwapi4j.unit.Probe;
+import org.openbw.bwapi4j.unit.Reaver;
+import org.openbw.bwapi4j.unit.SCV;
+import org.openbw.bwapi4j.unit.ScienceFacility;
+import org.openbw.bwapi4j.unit.SiegeTank;
+import org.openbw.bwapi4j.unit.Starport;
+import org.openbw.bwapi4j.unit.Vulture;
 
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
@@ -38,28 +52,44 @@ public class ConditionHandler {
 	 * @return The conditions of a terran unit.
 	 */
 	private void setTerranConditions(List<Parameter> conditions) {
-		if (this.unit.isStimmed()) {
+		if (this.unit instanceof Firebat && ((Firebat) this.unit).isStimmed()) {
 			conditions.add(new Identifier("stimmed"));
 		}
-		if (this.unit.isSieged()) {
+		if (this.unit instanceof Marine && ((Marine) this.unit).isStimmed()) {
+			conditions.add(new Identifier("stimmed"));
+		}
+		if (this.unit instanceof SiegeTank && ((SiegeTank) this.unit).isSieged()) {
 			conditions.add(new Identifier("sieged"));
 		}
-		if (this.unit.isDefenseMatrixed()) {
-			conditions.add(new Identifier("defenseMatrixed"));
-		}
 		// building-specific
-		if (this.unit.isLifted()) {
-			conditions.add(new Identifier("lifted"));
+		// if (this.unit instanceof FlyingBuilding && ((FlyingBuilding)
+		// this.unit).isLifted()) {
+		// FIXME: FlyingBuilding is private in lib atm.
+		// conditions.add(new Identifier("lifted"));
+		// }
+		if (this.unit instanceof CommandCenter && ((CommandCenter) this.unit).getComsatStation() != null) {
+			conditions.add(new Identifier(UnitType.Terran_Comsat_Station.toString()));
 		}
-		if (this.unit.getAddon() != null) {
-			UnitType addon = BwapiUtility.getType(this.unit.getAddon());
-			conditions.add(new Identifier(addon.getName()));
+		if (this.unit instanceof CommandCenter && ((CommandCenter) this.unit).getNuclearSilo() != null) {
+			conditions.add(new Identifier(UnitType.Terran_Nuclear_Silo.toString()));
 		}
-		if (this.unit.isNukeReady()) {
+		if (this.unit instanceof Factory && ((Factory) this.unit).getMachineShop() != null) {
+			conditions.add(new Identifier(UnitType.Terran_Machine_Shop.toString()));
+		}
+		if (this.unit instanceof Starport && ((Starport) this.unit).getControlTower() != null) {
+			conditions.add(new Identifier(UnitType.Terran_Control_Tower.toString()));
+		}
+		if (this.unit instanceof ScienceFacility && ((ScienceFacility) this.unit).getCovertOps() != null) {
+			conditions.add(new Identifier(UnitType.Terran_Covert_Ops.toString()));
+		}
+		if (this.unit instanceof ScienceFacility && ((ScienceFacility) this.unit).getPhysicsLab() != null) {
+			conditions.add(new Identifier(UnitType.Terran_Physics_Lab.toString()));
+		}
+		if (this.unit instanceof NuclearSilo && ((NuclearSilo) this.unit).hasNuke()) {
 			conditions.add(new Identifier("nukeReady"));
 		}
 		// for vultures
-		if (this.unit.getSpiderMineCount() > 0) {
+		if (this.unit instanceof Vulture && ((Vulture) this.unit).getSpiderMineCount() > 0) {
 			conditions.add(new Identifier("hasMines"));
 		}
 	}
@@ -70,15 +100,15 @@ public class ConditionHandler {
 	 * @return The conditions of a protoss unit.
 	 */
 	private void setProtossConditions(List<Parameter> conditions) {
-		if (this.unit.isUnpowered()) {
+		if (!this.unit.isPowered()) {
 			conditions.add(new Identifier("unpowered"));
 		}
 		// for Reavers
-		if (this.unit.getScarabCount() > 0) {
+		if (this.unit instanceof Reaver && ((Reaver) this.unit).getScarabCount() > 0) {
 			conditions.add(new Identifier("hasScarabs"));
 		}
 		// for (friendly) hallucinations from High Templars
-		if (this.unit.isHallucination()) {
+		if (this.unit instanceof MobileUnit && ((MobileUnit) this.unit).isHallucination()) {
 			conditions.add(new Identifier("hallucination"));
 		}
 	}
@@ -89,10 +119,10 @@ public class ConditionHandler {
 	 * @return The conditions of a protoss unit.
 	 */
 	private void setZergConditions(List<Parameter> conditions) {
-		if (this.unit.isMorphing()) {
-			conditions.add(new Identifier("morphing"));
-		}
-		if (this.unit.isBurrowed()) {
+		// if (this.unit.isMorphing()) {
+		// conditions.add(new Identifier("morphing"));
+		// FIXME: not supported in lib atm. }
+		if (this.unit instanceof Burrowable && ((Burrowable) this.unit).isBurrowed()) {
 			conditions.add(new Identifier("burrowed"));
 		}
 	}
@@ -116,6 +146,10 @@ public class ConditionHandler {
 		// caused by a Science Vessel
 		if (unit.isIrradiated()) {
 			conditions.add(new Identifier("irradiated"));
+		}
+		// caused by a Science Vessel
+		if (unit.isDefenseMatrixed()) {
+			conditions.add(new Identifier("defenseMatrixed"));
 		}
 		// caused by Medic heal or SCV repair
 		if (unit.isBeingHealed()) {
@@ -262,17 +296,36 @@ public class ConditionHandler {
 	 * @return The conditions of the worker units.
 	 */
 	private void setWorkerConditions(List<Parameter> conditions) {
-		if (this.unit.isCarryingGas() || this.unit.isCarryingMinerals()) {
-			conditions.add(new Identifier("carrying"));
-		}
-		if (this.unit.isGatheringGas() || this.unit.isGatheringMinerals()) {
-			conditions.add(new Identifier("gathering"));
-		}
-		if (this.unit.isConstructing()) {
-			conditions.add(new Identifier("constructing"));
-		}
-		if (this.unit.isRepairing()) {
-			conditions.add(new Identifier("repairing"));
+		if (this.unit instanceof Drone) {
+			Drone unit = (Drone) this.unit;
+			if (unit.isCarryingGas() || unit.isCarryingMinerals()) {
+				conditions.add(new Identifier("carrying"));
+			}
+			if (unit.isGatheringGas() || unit.isGatheringMinerals()) {
+				conditions.add(new Identifier("gathering"));
+			}
+		} else if (this.unit instanceof Probe) {
+			Probe unit = (Probe) this.unit;
+			if (unit.isCarryingGas() || unit.isCarryingMinerals()) {
+				conditions.add(new Identifier("carrying"));
+			}
+			if (unit.isGatheringGas() || unit.isGatheringMinerals()) {
+				conditions.add(new Identifier("gathering"));
+			}
+		} else if (this.unit instanceof SCV) {
+			SCV unit = (SCV) this.unit;
+			if (unit.isCarryingGas() || unit.isCarryingMinerals()) {
+				conditions.add(new Identifier("carrying"));
+			}
+			if (unit.isGatheringGas() || unit.isGatheringMinerals()) {
+				conditions.add(new Identifier("gathering"));
+			}
+			if (unit.isConstructing()) {
+				conditions.add(new Identifier("constructing"));
+			}
+			if (unit.isRepairing()) {
+				conditions.add(new Identifier("repairing"));
+			}
 		}
 	}
 
