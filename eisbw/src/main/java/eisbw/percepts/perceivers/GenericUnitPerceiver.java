@@ -171,11 +171,11 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 		List<Percept> researchPercepts = new ArrayList<>(2);
 		if (this.unit instanceof ResearchingFacility && ((ResearchingFacility) this.unit).isResearching()) {
 			researchPercepts.add(new ResearchingPercept(
-					/* this.unit.getTech().toString() FIXME: not supported */ TechType.Unknown.toString()));
+					BwapiUtility.getName(/* this.unit.getTech() FIXME: not supported */ TechType.Unknown)));
 		}
 		if (this.unit instanceof ResearchingFacility && ((ResearchingFacility) this.unit).isUpgrading()) {
 			researchPercepts.add(new ResearchingPercept(
-					/* this.unit.getUpgrade().toString() FIXME: not supported */ UpgradeType.Unknown.toString()));
+					BwapiUtility.getName(/* this.unit.getUpgrade() FIXME: not supported */ UpgradeType.Unknown)));
 		}
 		if (!researchPercepts.isEmpty()) {
 			toReturn.put(new PerceptFilter(Percepts.RESEARCHING, Filter.Type.ALWAYS), researchPercepts);

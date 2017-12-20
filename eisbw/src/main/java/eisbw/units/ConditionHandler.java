@@ -68,22 +68,22 @@ public class ConditionHandler {
 		// conditions.add(new Identifier("lifted"));
 		// }
 		if (this.unit instanceof CommandCenter && ((CommandCenter) this.unit).getComsatStation() != null) {
-			conditions.add(new Identifier(UnitType.Terran_Comsat_Station.toString()));
+			conditions.add(new Identifier(BwapiUtility.getName(UnitType.Terran_Comsat_Station)));
 		}
 		if (this.unit instanceof CommandCenter && ((CommandCenter) this.unit).getNuclearSilo() != null) {
-			conditions.add(new Identifier(UnitType.Terran_Nuclear_Silo.toString()));
+			conditions.add(new Identifier(BwapiUtility.getName(UnitType.Terran_Nuclear_Silo)));
 		}
 		if (this.unit instanceof Factory && ((Factory) this.unit).getMachineShop() != null) {
-			conditions.add(new Identifier(UnitType.Terran_Machine_Shop.toString()));
+			conditions.add(new Identifier(BwapiUtility.getName(UnitType.Terran_Machine_Shop)));
 		}
 		if (this.unit instanceof Starport && ((Starport) this.unit).getControlTower() != null) {
-			conditions.add(new Identifier(UnitType.Terran_Control_Tower.toString()));
+			conditions.add(new Identifier(BwapiUtility.getName(UnitType.Terran_Control_Tower)));
 		}
 		if (this.unit instanceof ScienceFacility && ((ScienceFacility) this.unit).getCovertOps() != null) {
-			conditions.add(new Identifier(UnitType.Terran_Covert_Ops.toString()));
+			conditions.add(new Identifier(BwapiUtility.getName(UnitType.Terran_Covert_Ops)));
 		}
 		if (this.unit instanceof ScienceFacility && ((ScienceFacility) this.unit).getPhysicsLab() != null) {
-			conditions.add(new Identifier(UnitType.Terran_Physics_Lab.toString()));
+			conditions.add(new Identifier(BwapiUtility.getName(UnitType.Terran_Physics_Lab)));
 		}
 		if (this.unit instanceof NuclearSilo && ((NuclearSilo) this.unit).hasNuke()) {
 			conditions.add(new Identifier("nukeReady"));

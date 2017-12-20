@@ -75,14 +75,14 @@ public class DrawUnitInfo extends IDraw {
 			// TechType ttype = unit.getTech();
 			// total = ttype.researchTime();
 			// done = total - unit.getRemainingResearchTime();
-			// txt = ttype.toString();
+			// txt = BwapiUtility.getName(ttype);
 			// bar = true;
 			// }
 			// if (unit.getRemainingUpgradeTime() > 0) { FIXME cannot access Researcher
 			// UpgradeType utype = unit.getUpgrade();
 			// total = utype.upgradeTime(0); // ???
 			// done = total - unit.getRemainingUpgradeTime();
-			// txt = utype.toString();
+			// txt = BwapiUtility.getName(utype);
 			// bar = true;
 			// }
 			if (unit.getRemainingBuildTime() > 0) {
@@ -157,7 +157,7 @@ public class DrawUnitInfo extends IDraw {
 						&& BwapiUtility.getPlayer((PlayerUnit) unit) == this.bwapi.getInteractionHandler().self());
 				api.drawBoxMap(x - l, y - t - 5, x + r, y - t, self ? Color.WHITE : Color.RED, false);
 				api.drawBoxMap(x - l, y - t, x + r, y + b, self ? Color.WHITE : Color.RED, false);
-				api.drawTextMap(x - l, y - t, type.toString());
+				api.drawTextMap(x - l, y - t, BwapiUtility.getName(type));
 			}
 		}
 	}

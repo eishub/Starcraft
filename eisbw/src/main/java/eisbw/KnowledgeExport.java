@@ -173,7 +173,7 @@ public class KnowledgeExport {
 		boolean hadFirst = false;
 		TechType tech = type.requiredTech();
 		if (tech.getId() <= 32) {
-			requirements += "'" + tech.toString() + "'";
+			requirements += "'" + BwapiUtility.getName(tech) + "'";
 			hadFirst = true;
 		}
 		for (UnitType unit : type.requiredUnits()) {
@@ -274,14 +274,15 @@ public class KnowledgeExport {
 	}
 
 	private static String getTechType(TechType type) {
-		return String.format("upgrade('%s',%s).\n", type.toString(), type.getRace().toString().toLowerCase());
+		return String.format("upgrade('%s',%s).\n", BwapiUtility.getName(type),
+				type.getRace().toString().toLowerCase());
 	}
 
 	private static String getTechCosts(TechType type) {
 		String required = (type.whatResearches().getId() > 202) ? ""
 				: ("'" + BwapiUtility.getName(type.whatResearches()) + "'");
-		return String.format("costs('%s',%d,%d,%d,%d,%s).\n", type.toString(), type.mineralPrice(), type.gasPrice(),
-				type.energyCost(), type.researchTime(), "[" + required + "]");
+		return String.format("costs('%s',%d,%d,%d,%d,%s).\n", BwapiUtility.getName(type), type.mineralPrice(),
+				type.gasPrice(), type.energyCost(), type.researchTime(), "[" + required + "]");
 	}
 
 	private static String getTechCombat(TechType type) {
@@ -289,7 +290,7 @@ public class KnowledgeExport {
 		if (weapon == WeaponType.Unknown || weapon == WeaponType.None) {
 			return "";
 		} else {
-			return String.format("combat('%s',%d,%d,%d,%d,%d).\n", type.toString(),
+			return String.format("combat('%s',%d,%d,%d,%d,%d).\n", BwapiUtility.getName(type),
 					weapon.targetsGround() ? (weapon.damageAmount() * weapon.damageFactor()) : 0,
 					weapon.targetsAir() ? (weapon.damageAmount() * weapon.damageFactor()) : 0, weapon.damageCooldown(),
 					new Position(weapon.maxRange(), 0).toTilePosition().getX(),
@@ -301,17 +302,18 @@ public class KnowledgeExport {
 		if (type.maxRepeats() > 1) {
 			String returned = "";
 			for (int i = 1; i <= type.maxRepeats(); ++i) {
-				returned += String.format("upgrade('%s',%s).\n", type.toString() + " " + i,
+				returned += String.format("upgrade('%s',%s).\n", BwapiUtility.getName(type) + " " + i,
 						type.getRace().toString().toLowerCase());
 			}
 			return returned;
 		} else {
-			return String.format("upgrade('%s',%s).\n", type.toString(), type.getRace().toString().toLowerCase());
+			return String.format("upgrade('%s',%s).\n", BwapiUtility.getName(type),
+					type.getRace().toString().toLowerCase());
 		}
 	}
 
 	private static String getUpgradeCosts(UpgradeType type) {
-		String name = type.toString().replace("_", " ");
+		String name = BwapiUtility.getName(type);
 		String required = (type.whatUpgrades().getId() > 202) ? ""
 				: ("'" + BwapiUtility.getName(type.whatUpgrades()) + "'");
 		String returned = "";

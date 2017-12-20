@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.openbw.bwapi4j.Player;
 import org.openbw.bwapi4j.TilePosition;
+import org.openbw.bwapi4j.type.BulletType;
 import org.openbw.bwapi4j.type.TechType;
 import org.openbw.bwapi4j.type.UnitType;
 import org.openbw.bwapi4j.type.UpgradeType;
@@ -55,8 +56,20 @@ public class BwapiUtility {
 				|| unittype == UnitType.Terran_Siege_Tank_Siege_Mode) {
 			return "Terran Siege Tank";
 		} else {
-			return unittype.toString();
+			return unittype.toString().replace("_", " ");
 		}
+	}
+
+	public static String getName(TechType type) {
+		return type.toString().replace("_", " ");
+	}
+
+	public static String getName(UpgradeType type) {
+		return type.toString().replace("_", " ");
+	}
+
+	public static String getName(BulletType type) {
+		return type.toString().replace("_", " ");
 	}
 
 	public static UnitType getType(Unit unit) {
@@ -120,7 +133,7 @@ public class BwapiUtility {
 		}
 		if (unitTypeMap.isEmpty()) {
 			for (UnitType ut : UnitType.values()) {
-				unitTypeMap.put(ut.toString(), ut);
+				unitTypeMap.put(getName(ut), ut);
 			}
 		}
 		return unitTypeMap.get(type);
@@ -136,7 +149,7 @@ public class BwapiUtility {
 	public static TechType getTechType(String type) {
 		if (techTypeMap.isEmpty()) {
 			for (TechType tt : TechType.values()) {
-				techTypeMap.put(tt.toString(), tt);
+				techTypeMap.put(getName(tt), tt);
 			}
 		}
 		return techTypeMap.get(type);
@@ -152,7 +165,7 @@ public class BwapiUtility {
 	public static UpgradeType getUpgradeType(String type) {
 		if (upgradeTypeMap.isEmpty()) {
 			for (UpgradeType tt : UpgradeType.values()) {
-				upgradeTypeMap.put(tt.toString(), tt);
+				upgradeTypeMap.put(getName(tt), tt);
 			}
 		}
 		if (type.length() > 2 && Character.isDigit(type.charAt(type.length() - 1))) {
