@@ -2,12 +2,13 @@ package eisbw.actions;
 
 import java.util.List;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.unit.MobileUnit;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+
 import eis.iilang.Action;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
-import jnibwapi.types.UnitType.UnitTypes;
 
 /**
  * @author Danny & Harm - Stops a unit from what it was doing.
@@ -20,7 +21,7 @@ public class Stop extends StarcraftMovableAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Stop(JNIBWAPI api) {
+	public Stop(BW api) {
 		super(api);
 	}
 
@@ -32,12 +33,12 @@ public class Stop extends StarcraftMovableAction {
 
 	@Override
 	public boolean canExecute(UnitType type, Action action) {
-		return super.canExecute(type, action) || type == UnitTypes.Zerg_Larva;
+		return super.canExecute(type, action) || type == UnitType.Zerg_Larva;
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
-		unit.stop(false);
+	public void execute(PlayerUnit unit, Action action) {
+		((MobileUnit) unit).stop(false);
 	}
 
 	@Override

@@ -1,19 +1,20 @@
 package eisbw.actions;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.type.TechType;
+import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.type.UpgradeType;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+
 import eis.iilang.Action;
 import eisbw.BwapiUtility;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.TechType;
-import jnibwapi.types.UnitType;
-import jnibwapi.types.UpgradeType;
 
 /**
  * @author Danny & Harm - Abstract class for all the actions.
  *
  */
 public abstract class StarcraftAction {
-	protected final JNIBWAPI api;
+	protected final BW api;
 
 	/**
 	 * The StarcraftAction constructor.
@@ -21,7 +22,7 @@ public abstract class StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public StarcraftAction(JNIBWAPI api) {
+	public StarcraftAction(BW api) {
 		this.api = api;
 	}
 
@@ -64,7 +65,7 @@ public abstract class StarcraftAction {
 	 * @param action
 	 *            The evaluated action.
 	 */
-	public abstract void execute(Unit unit, Action action);
+	public abstract void execute(PlayerUnit unit, Action action);
 
 	@Override
 	public abstract String toString();

@@ -2,11 +2,12 @@ package eisbw.actions;
 
 import java.util.List;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.type.UnitType;
+
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Abstract class for some of the Movable actions.
@@ -19,7 +20,7 @@ public abstract class StarcraftMovableAction extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI.
 	 */
-	public StarcraftMovableAction(JNIBWAPI api) {
+	public StarcraftMovableAction(BW api) {
 		super(api);
 	}
 
@@ -35,6 +36,6 @@ public abstract class StarcraftMovableAction extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(UnitType type, Action action) {
-		return type.isCanMove() || type.isFlyingBuilding();
+		return type.canMove() || type.isFlyingBuilding();
 	}
 }

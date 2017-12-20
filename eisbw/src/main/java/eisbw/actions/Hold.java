@@ -2,10 +2,12 @@ package eisbw.actions;
 
 import java.util.List;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.unit.MobileUnit;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+
 import eis.iilang.Action;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - Makes the unit patrol between his current location and
@@ -19,7 +21,7 @@ public class Hold extends StarcraftMovableAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Hold(JNIBWAPI api) {
+	public Hold(BW api) {
 		super(api);
 	}
 
@@ -30,8 +32,8 @@ public class Hold extends StarcraftMovableAction {
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
-		unit.holdPosition(false);
+	public void execute(PlayerUnit unit, Action action) {
+		((MobileUnit) unit).holdPosition();
 	}
 
 	@Override

@@ -2,12 +2,14 @@ package eisbw.actions;
 
 import java.util.List;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.TilePosition;
+import org.openbw.bwapi4j.unit.MobileUnit;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - Makes the unit move to the specified location.
@@ -20,18 +22,17 @@ public class Move extends StarcraftMovableAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Move(JNIBWAPI api) {
+	public Move(BW api) {
 		super(api);
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
+	public void execute(PlayerUnit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		int xpos = ((Numeral) parameters.get(0)).getValue().intValue();
 		int ypos = ((Numeral) parameters.get(1)).getValue().intValue();
 
-		Position pos = new Position(xpos, ypos, Position.PosType.BUILD);
-		unit.move(pos, false);
+		((MobileUnit) unit).move(new TilePosition(xpos, ypos).toPosition());
 	}
 
 	@Override

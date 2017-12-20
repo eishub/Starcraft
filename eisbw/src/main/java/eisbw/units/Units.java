@@ -5,9 +5,11 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.openbw.bwapi4j.unit.PlayerUnit;
+import org.openbw.bwapi4j.unit.Unit;
+
 import eisbw.BwapiUtility;
 import eisbw.StarcraftEnvironmentImpl;
-import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - The data class which keeps track of all the units.
@@ -16,9 +18,9 @@ import jnibwapi.Unit;
 public class Units {
 	protected final StarcraftEnvironmentImpl environment;
 	protected final Map<Integer, String> unitNames;
-	protected final Map<String, Unit> unitMap;
-	protected final Map<Unit, StarcraftUnit> starcraftUnits;
-	protected final Queue<Unit> uninitializedUnits;
+	protected final Map<String, PlayerUnit> unitMap;
+	protected final Map<PlayerUnit, StarcraftUnit> starcraftUnits;
+	protected final Queue<PlayerUnit> uninitializedUnits;
 
 	/**
 	 * Constructor.
@@ -42,10 +44,10 @@ public class Units {
 	 * @param factory
 	 *            The object which creates all starcraft units.
 	 */
-	public void addUnit(Unit unit, StarcraftUnitFactory factory) {
-		if (BwapiUtility.isValid(unit) && !unit.isInvincible()) {
+	public void addUnit(PlayerUnit unit, StarcraftUnitFactory factory) {
+		if (BwapiUtility.isValid(unit) /* && !unit.isInvincible() FIELD IS THERE BUT NO GETTER */) {
 			String unitName = BwapiUtility.getName(unit);
-			this.unitNames.put(unit.getID(), unitName);
+			this.unitNames.put(unit.getId(), unitName);
 			this.unitMap.put(unitName, unit);
 			StarcraftUnit scUnit = factory.create(unit);
 			this.starcraftUnits.put(unit, scUnit);
@@ -59,21 +61,21 @@ public class Units {
 	 * @param unit
 	 *            The unit to delete.
 	 */
-	public void deleteUnit(Unit unit) {
+	public void deleteUnit(PlayerUnit unit) {
 		String unitName = BwapiUtility.getName(unit);
 		this.unitMap.remove(unitName);
-		this.unitNames.remove(unit.getID());
+		this.unitNames.remove(unit.getId());
 		this.starcraftUnits.remove(unit);
 		this.uninitializedUnits.remove(unit);
 
 		this.environment.deleteFromEnvironment(unitName);
 	}
 
-	public String getUnitName(int id) {
-		return this.unitNames.get(id);
+	public String getUnitName(PlayerUnit unit) {
+		return this.unitNames.get(unit.getId());
 	}
 
-	public Unit getUnit(String name) {
+	public PlayerUnit getUnit(String name) {
 		return this.unitMap.get(name);
 	}
 
@@ -81,7 +83,7 @@ public class Units {
 		return this.starcraftUnits.get(unit);
 	}
 
-	public Queue<Unit> getUninitializedUnits() {
+	public Queue<PlayerUnit> getUninitializedUnits() {
 		return this.uninitializedUnits;
 	}
 
@@ -89,7 +91,7 @@ public class Units {
 	 * Clean units, let garbage collector remove the remains.
 	 */
 	public void clean() {
-		for (Unit unit : this.unitMap.values()) {
+		for (PlayerUnit unit : this.unitMap.values()) {
 			deleteUnit(unit);
 		}
 	}

@@ -2,13 +2,14 @@ package eisbw.actions;
 
 import java.util.List;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.type.TechType;
+import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+
 import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.TechType;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Use a researched TechType.
@@ -21,7 +22,7 @@ public class Use extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI.
 	 */
-	public Use(JNIBWAPI api) {
+	public Use(BW api) {
 		super(api);
 	}
 
@@ -36,15 +37,16 @@ public class Use extends StarcraftAction {
 	public boolean canExecute(UnitType type, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
-		return !techType.isTargetsPosition() && !techType.isTargetsUnits();
+		return !techType.targetsPosition() && !techType.targetsUnit();
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
+	public void execute(PlayerUnit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
 
-		unit.useTech(techType);
+		// TODO: *sigh* need to enumerate through all techtypes here
+		// to call specific functions on specific units...
 	}
 
 	@Override

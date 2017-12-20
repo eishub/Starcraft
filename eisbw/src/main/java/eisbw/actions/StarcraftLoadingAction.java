@@ -2,11 +2,12 @@ package eisbw.actions;
 
 import java.util.List;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.type.UnitType;
+
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Abstract class for Load actions.
@@ -19,7 +20,7 @@ public abstract class StarcraftLoadingAction extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public StarcraftLoadingAction(JNIBWAPI api) {
+	public StarcraftLoadingAction(BW api) {
 		super(api);
 	}
 
@@ -31,6 +32,6 @@ public abstract class StarcraftLoadingAction extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(UnitType type, Action action) {
-		return type.getSpaceProvided() > 0;
+		return type.spaceProvided() > 0;
 	}
 }

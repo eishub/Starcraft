@@ -2,11 +2,14 @@ package eisbw.actions;
 
 import java.util.List;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.unit.MobileUnit;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+import org.openbw.bwapi4j.unit.Unit;
+
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - Makes the unit follow an other specified unit.
@@ -19,7 +22,7 @@ public class Follow extends StarcraftMovableAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Follow(JNIBWAPI api) {
+	public Follow(BW api) {
 		super(api);
 	}
 
@@ -30,12 +33,12 @@ public class Follow extends StarcraftMovableAction {
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
+	public void execute(PlayerUnit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		int targetId = ((Numeral) parameters.get(0)).getValue().intValue();
 		Unit target = this.api.getUnit(targetId);
 
-		unit.follow(target, false);
+		((MobileUnit) unit).follow(target, false);
 	}
 
 	@Override

@@ -6,17 +6,23 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.MapDrawer;
+import org.openbw.bwapi4j.Position;
+import org.openbw.bwapi4j.type.Color;
+import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.unit.Assimilator;
+import org.openbw.bwapi4j.unit.Building;
+import org.openbw.bwapi4j.unit.Extractor;
+import org.openbw.bwapi4j.unit.MineralPatch;
+import org.openbw.bwapi4j.unit.MobileUnit;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+import org.openbw.bwapi4j.unit.Refinery;
+import org.openbw.bwapi4j.unit.Unit;
+import org.openbw.bwapi4j.unit.VespeneGeyser;
+
 import eisbw.BwapiUtility;
 import eisbw.Game;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Position.PosType;
-import jnibwapi.Unit;
-import jnibwapi.types.TechType;
-import jnibwapi.types.UnitType;
-import jnibwapi.types.UnitType.UnitTypes;
-import jnibwapi.types.UpgradeType;
-import jnibwapi.util.BWColor;
 
 /**
  * @author Harm & Danny.
@@ -24,8 +30,9 @@ import jnibwapi.util.BWColor;
  */
 public class DrawUnitInfo extends IDraw {
 	private final static int barHeight = 18;
-	private final static BWColor barColor = BWColor.Blue;
-	private final List<Unit> alive = new LinkedList<>();
+	private final static Color barColor = Color.BLUE;
+	private final BW bwapi;
+	private final List<PlayerUnit> alive = new LinkedList<>();
 	private final Map<Integer, Integer> dead = new HashMap<>();
 
 	/**
@@ -34,12 +41,13 @@ public class DrawUnitInfo extends IDraw {
 	 * @param game
 	 *            The current game.
 	 */
-	public DrawUnitInfo(Game game) {
+	public DrawUnitInfo(Game game, BW bwapi) {
 		super(game);
+		this.bwapi = bwapi;
 	}
 
 	@Override
-	protected void doDraw(JNIBWAPI api) {
+	protected void doDraw(MapDrawer api) {
 		drawTimerInfo(api);
 		drawHealth(api);
 		drawTargets(api);
@@ -51,9 +59,10 @@ public class DrawUnitInfo extends IDraw {
 	 * Draws remaining research/upgrade times; unit building/training is already
 	 * covered by the health drawing
 	 */
-	private void drawTimerInfo(JNIBWAPI api) {
+	private void drawTimerInfo(MapDrawer api) {
 		int y = 45;
-		for (final Unit unit : api.getMyUnits()) {
+		for (final PlayerUnit punit : this.bwapi.getUnits(this.bwapi.getInteractionHandler().self())) {
+			Building unit = (punit instanceof Building) ? (Building) punit : null;
 			UnitType type = BwapiUtility.getType(unit);
 			if (type == null) {
 				continue;
@@ -62,37 +71,37 @@ public class DrawUnitInfo extends IDraw {
 			int done = 0;
 			String txt = "";
 			boolean bar = false;
-			if (unit.getRemainingResearchTime() > 0) {
-				TechType ttype = unit.getTech();
-				total = ttype.getResearchTime();
-				done = total - unit.getRemainingResearchTime();
-				txt = ttype.getName();
-				bar = true;
-			}
-			if (unit.getRemainingUpgradeTime() > 0) {
-				UpgradeType utype = unit.getUpgrade();
-				total = utype.getUpgradeTimeBase();
-				done = total - unit.getRemainingUpgradeTime();
-				txt = utype.getName();
-				bar = true;
-			}
-			if (unit.getRemainingBuildTimer() > 0) {
-				total = type.getBuildTime();
-				done = total - unit.getRemainingBuildTimer();
-				txt = (type == UnitTypes.Zerg_Egg) ? unit.getBuildType().getName() : BwapiUtility.getName(type);
+			// if (unit.getRemainingResearchTime() > 0) { FIXME cannot access Researcher
+			// TechType ttype = unit.getTech();
+			// total = ttype.researchTime();
+			// done = total - unit.getRemainingResearchTime();
+			// txt = ttype.toString();
+			// bar = true;
+			// }
+			// if (unit.getRemainingUpgradeTime() > 0) { FIXME cannot access Researcher
+			// UpgradeType utype = unit.getUpgrade();
+			// total = utype.upgradeTime(0); // ???
+			// done = total - unit.getRemainingUpgradeTime();
+			// txt = utype.toString();
+			// bar = true;
+			// }
+			if (unit.getRemainingBuildTime() > 0) {
+				total = type.buildTime();
+				done = total - unit.getRemainingBuildTime();
+				txt = BwapiUtility.getName(type); // TODO: zerg eggs not supported now
 			}
 			if (total > 0) {
 				if (bar) {
-					int width = type.getTileWidth() * 32;
+					int width = type.tileWidth() * 32;
 					Position start = new Position(unit.getX() - width / 2, unit.getY() - 20);
-					api.drawBox(start, new Position(start.getPX() + width, start.getPY() + barHeight), barColor, false,
+					api.drawBoxMap(start.getX(), start.getY(), start.getX() + width, start.getY() + barHeight, barColor,
 							false);
 					int progress = (int) ((double) done / (double) total * width);
-					api.drawBox(start, new Position(start.getPX() + progress, start.getPY() + barHeight), barColor,
-							true, false);
-					api.drawText(new Position(start.getPX() + 5, start.getPY() + 2), txt, false);
+					api.drawBoxMap(start.getX(), start.getY(), start.getX() + progress, start.getY() + barHeight,
+							barColor, true);
+					api.drawTextMap(new Position(start.getX() + 5, start.getY() + 2), txt);
 				}
-				api.drawText(new Position(10, y, PosType.PIXEL), (total - done) + " " + txt, true);
+				api.drawTextScreen(10, y, (total - done) + " " + txt);
 				y += 10;
 			}
 		}
@@ -102,46 +111,53 @@ public class DrawUnitInfo extends IDraw {
 	 * Draws health boxes for units (ported from JNIBWAPI native code); added a
 	 * max>0 check to prevent crashes on spell units (with health 255)
 	 */
-	private void drawHealth(JNIBWAPI api) {
-		for (final Unit unit : api.getAllUnits()) {
+	private void drawHealth(MapDrawer api) {
+		for (final Unit unit : this.bwapi.getAllUnits()) {
 			UnitType type = BwapiUtility.getType(unit);
 			if (type == null) {
 				continue;
 			}
-			int health = unit.getHitPoints();
-			int max = type.getMaxHitPoints();
-			if (type.isMineralField()) {
-				health = unit.getResources();
+			int health = 0;
+			int max = type.maxHitPoints();
+			if (unit instanceof PlayerUnit) {
+				health = ((PlayerUnit) unit).getHitPoints();
+			} else if (unit instanceof MineralPatch) {
+				health = ((MineralPatch) unit).getResources();
 				max = 1500;
-			}
-			if (type.isRefinery() || type == UnitTypes.Resource_Vespene_Geyser) {
-				health = unit.getResources();
+			} else if (unit instanceof VespeneGeyser) {
+				health = ((VespeneGeyser) unit).getResources();
+				max = 5000;
+			} else if (unit instanceof Refinery) {
+				health = ((Refinery) unit).getResources();
+				max = 5000;
+			} else if (unit instanceof Assimilator) {
+				health = ((Assimilator) unit).getResources();
+				max = 5000;
+			} else if (unit instanceof Extractor) {
+				health = ((Extractor) unit).getResources();
 				max = 5000;
 			}
+
 			if (health > 0 && max > 0) {
 				int x = unit.getX();
 				int y = unit.getY();
-				int l = type.getDimensionLeft();
-				int t = type.getDimensionUp();
-				int r = type.getDimensionRight();
-				int b = type.getDimensionDown();
+				int l = type.dimensionLeft();
+				int t = type.dimensionUp();
+				int r = type.dimensionRight();
+				int b = type.dimensionDown();
 				int width = ((r + l) * health) / max;
 				if (health * 3 < max) {
-					api.drawBox(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), BWColor.Red, true,
-							false);
+					api.drawBoxMap(x - l, y - t - 5, x - l + width, y - t, Color.RED, true);
 				} else if (health * 3 < 2 * max) {
-					api.drawBox(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), BWColor.Yellow,
-							true, false);
+					api.drawBoxMap(x - l, y - t - 5, x - l + width, y - t, Color.YELLOW, true);
 				} else {
-					api.drawBox(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), BWColor.Green, true,
-							false);
+					api.drawBoxMap(x - l, y - t - 5, x - l + width, y - t, Color.GREEN, true);
 				}
-				boolean self = (BwapiUtility.getPlayer(unit) == api.getSelf());
-				api.drawBox(new Position(x - l, y - t - 5), new Position(x + r, y - t),
-						self ? BWColor.White : BWColor.Red, false, false);
-				api.drawBox(new Position(x - l, y - t), new Position(x + r, y + b), self ? BWColor.White : BWColor.Red,
-						false, false);
-				api.drawText(new Position(x - l, y - t), type.getName(), false);
+				boolean self = (unit instanceof PlayerUnit
+						&& BwapiUtility.getPlayer((PlayerUnit) unit) == this.bwapi.getInteractionHandler().self());
+				api.drawBoxMap(x - l, y - t - 5, x + r, y - t, self ? Color.WHITE : Color.RED, false);
+				api.drawBoxMap(x - l, y - t, x + r, y + b, self ? Color.WHITE : Color.RED, false);
+				api.drawTextMap(x - l, y - t, type.toString());
 			}
 		}
 	}
@@ -149,19 +165,20 @@ public class DrawUnitInfo extends IDraw {
 	/**
 	 * Draws the targets of each unit. (ported from JNIBWAPI native code)
 	 */
-	private void drawTargets(JNIBWAPI api) {
-		for (final Unit unit : api.getAllUnits()) {
+	private void drawTargets(MapDrawer api) {
+		for (final Unit u : this.bwapi.getAllUnits()) {
+			MobileUnit unit = (u instanceof MobileUnit) ? (MobileUnit) u : null;
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
 			}
-			boolean self = (BwapiUtility.getPlayer(unit) == api.getSelf());
-			Unit target = (unit.getTarget() == null) ? unit.getOrderTarget() : unit.getTarget();
+			boolean self = (BwapiUtility.getPlayer(unit) == this.bwapi.getInteractionHandler().self());
+			Unit target = unit.getTargetUnit(); // FIXME: orderTarget not supported in lib atm.
 			if (target != null) {
-				api.drawLine(unit.getPosition(), target.getPosition(), self ? BWColor.Yellow : BWColor.Purple, false);
+				api.drawLineMap(unit.getPosition(), target.getPosition(), self ? Color.YELLOW : Color.PURPLE);
 			}
 			Position position = unit.getTargetPosition();
 			if (position != null) {
-				api.drawLine(unit.getPosition(), position, self ? BWColor.Yellow : BWColor.Purple, false);
+				api.drawLineMap(unit.getPosition(), position, self ? Color.YELLOW : Color.PURPLE);
 			}
 		}
 	}
@@ -169,12 +186,13 @@ public class DrawUnitInfo extends IDraw {
 	/**
 	 * Draws the IDs of each unit. (ported from JNIBWAPI native code)
 	 */
-	private void drawIDs(JNIBWAPI api) {
-		for (final Unit unit : api.getAllUnits()) {
+	private void drawIDs(MapDrawer api) {
+		for (final Unit u : this.bwapi.getAllUnits()) {
+			PlayerUnit unit = (u instanceof PlayerUnit) ? (PlayerUnit) u : null;
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
 			}
-			api.drawText(unit.getPosition(), Integer.toString(unit.getID()), false);
+			api.drawTextMap(unit.getPosition(), Integer.toString(unit.getId()));
 		}
 	}
 
@@ -182,24 +200,24 @@ public class DrawUnitInfo extends IDraw {
 	 * Draws a list of all unit types, counting how many are still alive and how
 	 * many have died (ported from native code of the tournament manager)
 	 */
-	private void drawUnitInformation(JNIBWAPI api, int x, int y) {
-		api.drawText(new Position(x, y + 20), api.getSelf().getName() + "'s Units", true);
-		api.drawText(new Position(x + 160, y + 20), "#", true);
-		api.drawText(new Position(x + 180, y + 20), "X", true);
+	private void drawUnitInformation(MapDrawer api, int x, int y) {
+		api.drawTextScreen(x, y + 20, this.bwapi.getInteractionHandler().self().getName() + "'s Units");
+		api.drawTextScreen(x + 160, y + 20, "#");
+		api.drawTextScreen(x + 180, y + 20, "X");
 
 		Map<Integer, Integer> count = new HashMap<>();
-		List<Unit> previous = new ArrayList<>(this.alive);
+		List<PlayerUnit> previous = new ArrayList<>(this.alive);
 		this.alive.clear();
-		for (final Unit unit : api.getMyUnits()) {
+		for (final PlayerUnit unit : this.bwapi.getUnits(this.bwapi.getInteractionHandler().self())) {
 			UnitType type = BwapiUtility.getType(unit);
 			if (type == null || !unit.isCompleted()) {
 				continue;
 			}
 			this.alive.add(unit);
-			if (type == UnitTypes.Terran_Siege_Tank_Siege_Mode) {
-				type = UnitTypes.Terran_Siege_Tank_Tank_Mode;
+			if (type == UnitType.Terran_Siege_Tank_Siege_Mode) {
+				type = UnitType.Terran_Siege_Tank_Tank_Mode;
 			}
-			int t = type.getID();
+			int t = type.getId();
 			if (count.containsKey(t)) {
 				count.put(t, count.get(t).intValue() + 1);
 			} else {
@@ -207,15 +225,15 @@ public class DrawUnitInfo extends IDraw {
 			}
 		}
 		previous.removeAll(this.alive);
-		for (final Unit unit : previous) {
+		for (final PlayerUnit unit : previous) {
 			UnitType type = BwapiUtility.getType(unit);
-			if (type == null || unit.isMorphing()) {
+			if (type == null /* || unit.isMorphing() FIXME: not supported in lib atm. */) {
 				continue;
 			}
-			if (type == UnitTypes.Terran_Siege_Tank_Siege_Mode) {
-				type = UnitTypes.Terran_Siege_Tank_Tank_Mode;
+			if (type == UnitType.Terran_Siege_Tank_Siege_Mode) {
+				type = UnitType.Terran_Siege_Tank_Tank_Mode;
 			}
-			int t = type.getID();
+			int t = type.getId();
 			if (this.dead.containsKey(t)) {
 				this.dead.put(t, this.dead.get(t).intValue() + 1);
 			} else {
@@ -224,14 +242,14 @@ public class DrawUnitInfo extends IDraw {
 		}
 
 		int yspace = 0;
-		for (final UnitType type : UnitTypes.getAllUnitTypes()) {
-			int t = type.getID();
+		for (final UnitType type : UnitType.values()) {
+			int t = type.getId();
 			int livecount = count.containsKey(t) ? count.get(t).intValue() : 0;
 			int deadcount = this.dead.containsKey(t) ? this.dead.get(t).intValue() : 0;
 			if (livecount > 0 || deadcount > 0) {
-				api.drawText(new Position(x, y + 40 + ((yspace) * 10)), BwapiUtility.getName(type), true);
-				api.drawText(new Position(x + 160, y + 40 + ((yspace) * 10)), Integer.toString(livecount), true);
-				api.drawText(new Position(x + 180, y + 40 + ((yspace++) * 10)), Integer.toString(deadcount), true);
+				api.drawTextScreen(x, y + 40 + ((yspace) * 10), BwapiUtility.getName(type));
+				api.drawTextScreen(x + 160, y + 40 + ((yspace) * 10), Integer.toString(livecount));
+				api.drawTextScreen(x + 180, y + 40 + ((yspace++) * 10), Integer.toString(deadcount));
 			}
 		}
 	}

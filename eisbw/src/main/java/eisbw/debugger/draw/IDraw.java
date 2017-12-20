@@ -2,8 +2,9 @@ package eisbw.debugger.draw;
 
 import java.util.logging.Logger;
 
+import org.openbw.bwapi4j.MapDrawer;
+
 import eisbw.Game;
-import jnibwapi.JNIBWAPI;
 
 /**
  * @author Danny & Harm - The abstract class for the drawing classes.
@@ -26,7 +27,7 @@ public abstract class IDraw {
 		this.game = game;
 	}
 
-	protected abstract void doDraw(JNIBWAPI api);
+	protected abstract void doDraw(MapDrawer api);
 
 	/**
 	 * Draw on the map.
@@ -34,7 +35,7 @@ public abstract class IDraw {
 	 * @param api
 	 *            - the StarCraft API.
 	 */
-	public void draw(JNIBWAPI api) {
+	public void draw(MapDrawer api) {
 		if (this.toggle) {
 			doDraw(api);
 		}

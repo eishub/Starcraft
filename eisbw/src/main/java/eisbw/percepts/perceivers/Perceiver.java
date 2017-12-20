@@ -1,19 +1,23 @@
 package eisbw.percepts.perceivers;
 
-import jnibwapi.JNIBWAPI;
+import org.openbw.bwapi4j.BW;
+
+import bwta.BWTA;
 
 /**
  * @author Danny & Harm - The abstract perceiver.
  *
  */
 public abstract class Perceiver implements IPerceiver {
-	protected final JNIBWAPI api;
+	protected final BW bwapi;
+	protected final BWTA bwta;
 
 	/**
 	 * @param api
 	 *            The BWAPI.
 	 */
-	public Perceiver(JNIBWAPI api) {
-		this.api = api;
+	public Perceiver(BW bwapi, BWTA bwta) {
+		this.bwapi = bwapi;
+		this.bwta = bwta;
 	}
 }

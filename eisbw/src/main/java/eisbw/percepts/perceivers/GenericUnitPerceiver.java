@@ -4,26 +4,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.TilePosition;
+import org.openbw.bwapi4j.type.Order;
+import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.unit.Bunker;
+import org.openbw.bwapi4j.unit.MobileUnit;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+import org.openbw.bwapi4j.unit.SpellCaster;
+import org.openbw.bwapi4j.unit.Transporter;
+import org.openbw.bwapi4j.unit.Unit;
+
+import bwta.BWTA;
 import eis.eis2java.translation.Filter;
 import eis.iilang.Percept;
 import eisbw.BwapiUtility;
-import eisbw.percepts.DefensiveMatrixPercept;
 import eisbw.percepts.OrderPercept;
 import eisbw.percepts.Percepts;
 import eisbw.percepts.QueueSizePercept;
 import eisbw.percepts.ResearchingPercept;
 import eisbw.percepts.SelfPercept;
 import eisbw.percepts.StatusPercept;
-import eisbw.percepts.UnitLoadedPercept;
 import eisbw.units.ConditionHandler;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Unit;
-import jnibwapi.types.OrderType;
-import jnibwapi.types.OrderType.OrderTypes;
 import jnibwapi.types.TechType.TechTypes;
-import jnibwapi.types.UnitType;
-import jnibwapi.types.UnitType.UnitTypes;
 import jnibwapi.types.UpgradeType.UpgradeTypes;
 
 /**
@@ -37,8 +40,8 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	 * @param unit
 	 *            The perceiving unit.
 	 */
-	public GenericUnitPerceiver(JNIBWAPI api, Unit unit) {
-		super(api, unit);
+	public GenericUnitPerceiver(BW bwapi, BWTA bwta, PlayerUnit unit) {
+		super(bwapi, bwta, unit);
 	}
 
 	@Override
@@ -50,7 +53,7 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 		unitLoadedPercept(toReturn);
 
 		UnitType type = BwapiUtility.getType(this.unit);
-		if (type.isProduceCapable() || type == UnitTypes.Terran_Nuclear_Silo || type == UnitTypes.Terran_Vulture) {
+		if (type.canProduce() || type == UnitType.Terran_Nuclear_Silo || type == UnitType.Terran_Vulture) {
 			queueSizePercept(toReturn);
 		}
 		if (type.isBuilding()) {
@@ -65,10 +68,11 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	private void statusPercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> statusPercept = new ArrayList<>(1);
 		long orientation = 45 * Math.round(Math.toDegrees(this.unit.getAngle()) / 45.0);
-		Position pos = this.unit.getPosition();
-		int region = BwapiUtility.getRegion(pos, this.api.getMap());
-		statusPercept.add(new StatusPercept(this.unit.getHitPoints(), this.unit.getShields(), this.unit.getEnergy(),
-				new ConditionHandler(this.api, this.unit).getConditions(), (int) orientation, pos.getBX(), pos.getBY(),
+		TilePosition pos = this.unit.getTilePosition();
+		int region = BwapiUtility.getRegion(pos, this.bwta);
+		statusPercept.add(new StatusPercept(this.unit.getHitPoints(), this.unit.getShields(),
+				(this.unit instanceof SpellCaster) ? ((SpellCaster) this.unit).getEnergy() : 0,
+				new ConditionHandler(this.bwapi, this.unit).getConditions(), (int) orientation, pos.getX(), pos.getY(),
 				region));
 		toReturn.put(new PerceptFilter(Percepts.STATUS, Filter.Type.ON_CHANGE), statusPercept);
 	}
@@ -80,7 +84,7 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	private void selfPercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> selfPercept = new ArrayList<>(1);
 		UnitType type = BwapiUtility.getType(this.unit);
-		selfPercept.add(new SelfPercept(this.unit.getID(), BwapiUtility.getName(type)));
+		selfPercept.add(new SelfPercept(this.unit.getId(), BwapiUtility.getName(type)));
 		toReturn.put(new PerceptFilter(Percepts.SELF, Filter.Type.ONCE), selfPercept);
 	}
 
@@ -89,10 +93,13 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	 *            The percept and reference of which kind of percept it is.
 	 */
 	private void defensiveMatrixPercept(Map<PerceptFilter, List<Percept>> toReturn) {
-		if (this.unit.isDefenseMatrixed()) {
-			List<Percept> defensiveMatrixPercept = new ArrayList<>(1);
-			defensiveMatrixPercept.add(new DefensiveMatrixPercept(this.unit.getDefenseMatrixPoints()));
-			toReturn.put(new PerceptFilter(Percepts.DEFENSIVEMATRIX, Filter.Type.ALWAYS), defensiveMatrixPercept);
+		if (this.unit instanceof MobileUnit && ((MobileUnit) this.unit).isDefenseMatrixed()) {
+			// List<Percept> defensiveMatrixPercept = new ArrayList<>(1);
+			// defensiveMatrixPercept.add(new DefensiveMatrixPercept(((MobileUnit)
+			// this.unit).getDefenseMatrixPoints()));
+			// toReturn.put(new PerceptFilter(Percepts.DEFENSIVEMATRIX, Filter.Type.ALWAYS),
+			// defensiveMatrixPercept);
+			// FIXME: not supported by lib atm.
 		}
 	}
 
@@ -101,16 +108,37 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	 *            The percept and reference of which kind of percept it is.
 	 */
 	private void unitLoadedPercept(Map<PerceptFilter, List<Percept>> toReturn) {
-		if (this.unit.isLoaded()) {
-			List<Unit> loadedUnits = this.unit.getLoadedUnits();
-			List<Percept> unitLoadedPercept = new ArrayList<>(loadedUnits.size());
-			for (Unit u : loadedUnits) {
-				if (BwapiUtility.isValid(u)) {
-					unitLoadedPercept.add(new UnitLoadedPercept(u.getID()));
-				}
+		if (this.unit instanceof Transporter) {
+			Transporter unit = (Transporter) this.unit;
+			if (unit.isLoaded()) {
+				// List<PlayerUnit> loadedUnits = unit.getLoadedUnits(); // TODO: not supported
+				// by lib atm.
+				// List<Percept> unitLoadedPercept = new ArrayList<>(loadedUnits.size());
+				// for (Unit u : loadedUnits) {
+				// if (BwapiUtility.isValid(u)) {
+				// unitLoadedPercept.add(new UnitLoadedPercept(u.getId()));
+				// }
+				// }
+				// if (!unitLoadedPercept.isEmpty()) {
+				// toReturn.put(new PerceptFilter(Percepts.UNITLOADED, Filter.Type.ALWAYS),
+				// unitLoadedPercept);
+				// }
 			}
-			if (!unitLoadedPercept.isEmpty()) {
-				toReturn.put(new PerceptFilter(Percepts.UNITLOADED, Filter.Type.ALWAYS), unitLoadedPercept);
+		} else if (this.unit instanceof Bunker) {
+			Bunker unit = (Bunker) this.unit;
+			if (unit.isLoaded()) {
+				// List<PlayerUnit> loadedUnits = unit.getLoadedUnits(); // TODO: not supported
+				// by lib atm.
+				// List<Percept> unitLoadedPercept = new ArrayList<>(loadedUnits.size());
+				// for (Unit u : loadedUnits) {
+				// if (BwapiUtility.isValid(u)) {
+				// unitLoadedPercept.add(new UnitLoadedPercept(u.getId()));
+				// }
+				// }
+				// if (!unitLoadedPercept.isEmpty()) {
+				// toReturn.put(new PerceptFilter(Percepts.UNITLOADED, Filter.Type.ALWAYS),
+				// unitLoadedPercept);
+				// }
 			}
 		}
 	}
@@ -121,13 +149,15 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	 */
 	private void orderPercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> orderPercept = new ArrayList<>(1);
-		OrderType primary = (this.unit.getOrder() == null) ? OrderTypes.None : this.unit.getOrder();
-		Unit targetUnit = (this.unit.getTarget() == null) ? this.unit.getOrderTarget() : this.unit.getTarget();
-		Position targetPos = this.unit.getTargetPosition();
-		OrderType secondary = (this.unit.getSecondaryOrder() == null) ? OrderTypes.None : this.unit.getSecondaryOrder();
-		orderPercept.add(new OrderPercept(primary.getName(), (targetUnit == null) ? -1 : targetUnit.getID(),
-				(targetPos == null) ? -1 : targetPos.getBX(), (targetPos == null) ? -1 : targetPos.getBY(),
-				secondary.getName()));
+		MobileUnit unit = (MobileUnit) this.unit;
+		Order primary = Order.None; // FIXME: (unit.getOrder() == null) ? Order.None : unit.getOrder();
+		Unit targetUnit = unit.getTargetUnit(); // TODO: orderTarget not supported by lib
+		TilePosition targetPos = unit.getTargetPosition().toTilePosition();
+		Order secondary = Order.None; // FIXME: (unit.getSecondaryOrder() == null) ? Order.None :
+										// unit.getSecondaryOrder();
+		orderPercept.add(new OrderPercept(primary.toString(), (targetUnit == null) ? -1 : targetUnit.getId(),
+				(targetPos == null) ? -1 : targetPos.getX(), (targetPos == null) ? -1 : targetPos.getY(),
+				secondary.toString()));
 		toReturn.put(new PerceptFilter(Percepts.ORDER, Filter.Type.ON_CHANGE), orderPercept);
 	}
 
@@ -149,16 +179,16 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	private void queueSizePercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> queueSizePercept = new ArrayList<>(1);
 		UnitType type = BwapiUtility.getType(this.unit);
-		if (type == UnitTypes.Zerg_Hatchery || type == UnitTypes.Zerg_Lair || type == UnitTypes.Zerg_Hive) {
+		if (type == UnitType.Zerg_Hatchery || type == UnitType.Zerg_Lair || type == UnitType.Zerg_Hive) {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getLarvaCount()));
-		} else if (type == UnitTypes.Terran_Nuclear_Silo) {
+		} else if (type == UnitType.Terran_Nuclear_Silo) {
 			queueSizePercept.add(new QueueSizePercept(this.unit.isNukeReady() ? 1 : 0));
-		} else if (type == UnitTypes.Terran_Vulture) {
+		} else if (type == UnitType.Terran_Vulture) {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getSpiderMineCount()));
-		} else if (type == UnitTypes.Protoss_Carrier) {
+		} else if (type == UnitType.Protoss_Carrier) {
 			queueSizePercept
 					.add(new QueueSizePercept(this.unit.getTrainingQueueSize() + this.unit.getInterceptorCount()));
-		} else if (type == UnitTypes.Protoss_Reaver) {
+		} else if (type == UnitType.Protoss_Reaver) {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getTrainingQueueSize() + this.unit.getScarabCount()));
 		} else {
 			queueSizePercept.add(new QueueSizePercept(this.unit.getTrainingQueueSize()));

@@ -2,11 +2,12 @@ package eisbw.actions;
 
 import java.util.List;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+
 import eis.iilang.Action;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Lifts up the unit, making it a flying unit until it
@@ -20,7 +21,7 @@ public class Lift extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Lift(JNIBWAPI api) {
+	public Lift(BW api) {
 		super(api);
 	}
 
@@ -36,8 +37,8 @@ public class Lift extends StarcraftAction {
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
-		unit.lift();
+	public void execute(PlayerUnit unit, Action action) {
+		// ((FlyingBuilding) unit).lift(); FIXME: interface not public in lib atm.
 	}
 
 	@Override

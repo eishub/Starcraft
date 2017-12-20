@@ -2,12 +2,15 @@ package eisbw.actions;
 
 import java.util.List;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.unit.CommandCenter;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+import org.openbw.bwapi4j.unit.ScienceFacility;
+
 import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Builds an addon for the (terran) building.
@@ -20,7 +23,7 @@ public class BuildAddon extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public BuildAddon(JNIBWAPI api) {
+	public BuildAddon(BW api) {
 		super(api);
 	}
 
@@ -40,11 +43,31 @@ public class BuildAddon extends StarcraftAction {
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
+	public void execute(PlayerUnit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		String type = ((Identifier) parameters.get(0)).getValue();
-
-		unit.buildAddon(getUnitType(type));
+		switch (getUnitType(type)) {
+		case Terran_Comsat_Station:
+			((CommandCenter) unit).buildComsatStation();
+			break;
+		case Terran_Nuclear_Silo:
+			((CommandCenter) unit).buildNuclearSilo();
+			break;
+		case Terran_Factory:
+			// ((MachineShop) unit).buildFactory(); FIXME: not implemented in lib
+			break;
+		case Terran_Starport:
+			// ((ControlTower) unit).buildStarport(); FIXME: not implemented in lib
+			break;
+		case Terran_Physics_Lab:
+			((ScienceFacility) unit).buildPhysicslab();
+			break;
+		case Terran_Covert_Ops:
+			((ScienceFacility) unit).buildCovertOps();
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override

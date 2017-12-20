@@ -2,16 +2,17 @@ package eisbw.actions;
 
 import java.util.List;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.unit.CommandCenter;
+import org.openbw.bwapi4j.unit.Factory;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+import org.openbw.bwapi4j.unit.ResearchingFacility;
+import org.openbw.bwapi4j.unit.ScienceFacility;
+import org.openbw.bwapi4j.unit.Starport;
+
 import eis.iilang.Action;
 import eis.iilang.Parameter;
-import eisbw.BwapiUtility;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.RaceType.RaceTypes;
-import jnibwapi.types.TechType.TechTypes;
-import jnibwapi.types.UnitType;
-import jnibwapi.types.UnitType.UnitTypes;
-import jnibwapi.types.UpgradeType.UpgradeTypes;
 
 /**
  * @author Danny & Harm - Cancels the action of the current unit.
@@ -24,7 +25,7 @@ public class Cancel extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Cancel(JNIBWAPI api) {
+	public Cancel(BW api) {
 		super(api);
 	}
 
@@ -36,19 +37,27 @@ public class Cancel extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(UnitType type, Action action) {
-		return type.isBuilding() || type.isProduceCapable() || type == UnitTypes.Terran_Nuclear_Silo;
+		return type.isBuilding() || type.canProduce() || type == UnitType.Terran_Nuclear_Silo;
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
-		if (unit.isTraining()) {
-			unit.cancelTrain();
-		} else if (unit.getTech() != null && unit.getTech() != TechTypes.None) {
-			unit.cancelResearch();
-		} else if (unit.getUpgrade() != null && unit.getUpgrade() != UpgradeTypes.None) {
-			unit.cancelUpgrade();
-		} else if (BwapiUtility.getType(unit).getRaceID() == RaceTypes.Terran.getID()) {
-			unit.cancelAddon();
+	public void execute(PlayerUnit unit, Action action) {
+		// if (unit instanceof TrainingFacility &&
+		// ((TrainingFacility)unit).isTraining()) {
+		// ((TrainingFacility)unit).cancelTrain();
+		// } else FIXME: interface is private atm.
+		if (unit instanceof ResearchingFacility && ((ResearchingFacility) unit).isResearching()) {
+			((ResearchingFacility) unit).cancelResearch();
+		} else if (unit instanceof ResearchingFacility && ((ResearchingFacility) unit).isUpgrading()) {
+			((ResearchingFacility) unit).cancelUpgrade();
+		} else if (unit instanceof CommandCenter) {
+			((CommandCenter) unit).cancelAddon();
+		} else if (unit instanceof Factory) {
+			((Factory) unit).cancelAddon();
+		} else if (unit instanceof ScienceFacility) {
+			((ScienceFacility) unit).cancelAddon();
+		} else if (unit instanceof Starport) {
+			((Starport) unit).cancelAddon();
 		}
 	}
 

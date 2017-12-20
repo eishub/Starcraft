@@ -2,12 +2,13 @@ package eisbw.actions;
 
 import java.util.List;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+
 import eis.iilang.Action;
 import eis.iilang.Parameter;
 import eisbw.Game;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 public class StartNewManager extends StarcraftAction {
 	private final Game game;
@@ -18,7 +19,7 @@ public class StartNewManager extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public StartNewManager(JNIBWAPI api, Game game) {
+	public StartNewManager(BW api, Game game) {
 		super(api);
 		this.game = game;
 	}
@@ -35,7 +36,7 @@ public class StartNewManager extends StarcraftAction {
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
+	public void execute(PlayerUnit unit, Action action) {
 		this.game.startNewManager();
 	}
 

@@ -3,9 +3,10 @@ package eisbw.actions;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.openbw.bwapi4j.BW;
+
 import eis.iilang.Action;
 import eisbw.Game;
-import jnibwapi.JNIBWAPI;
 
 /**
  * @author Danny & Harm - The ActionProvider.
@@ -36,7 +37,7 @@ public class ActionProvider {
 	 * @param api
 	 *            the API to pass into the actions.
 	 */
-	public void loadActions(JNIBWAPI api, Game game) {
+	public void loadActions(BW api, Game game) {
 		this.actions.put("attack/1", new Attack(api));
 		this.actions.put("attack/2", new AttackMove(api));
 		this.actions.put("build/3", new Build(api));

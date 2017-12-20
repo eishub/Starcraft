@@ -2,15 +2,18 @@ package eisbw.actions;
 
 import java.util.List;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.TilePosition;
+import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.unit.Drone;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+import org.openbw.bwapi4j.unit.Probe;
+import org.openbw.bwapi4j.unit.SCV;
+
 import eis.iilang.Action;
 import eis.iilang.Identifier;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Position.PosType;
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Makes the (worker) unit build on the specified (not
@@ -24,7 +27,7 @@ public class Build extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Build(JNIBWAPI api) {
+	public Build(BW api) {
 		super(api);
 	}
 
@@ -45,13 +48,19 @@ public class Build extends StarcraftAction {
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
+	public void execute(PlayerUnit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		String type = ((Identifier) parameters.get(0)).getValue();
 		int tx = ((Numeral) parameters.get(1)).getValue().intValue();
 		int ty = ((Numeral) parameters.get(2)).getValue().intValue();
 
-		unit.build(new Position(tx, ty, PosType.BUILD), getUnitType(type));
+		if (unit instanceof SCV) {
+			((SCV) unit).build(new TilePosition(tx, ty), getUnitType(type));
+		} else if (unit instanceof Probe) {
+			((Probe) unit).build(new TilePosition(tx, ty).toPosition(), getUnitType(type));
+		} else if (unit instanceof Drone) {
+			// TODO: build not supported for drones in lib atm.
+		}
 	}
 
 	@Override

@@ -4,17 +4,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.BWMap;
+import org.openbw.bwapi4j.TilePosition;
+import org.openbw.bwapi4j.type.Race;
+import org.openbw.bwapi4j.type.UnitType;
+
+import bwta.BWTA;
 import eis.eis2java.translation.Filter;
 import eis.iilang.Percept;
 import eisbw.BwapiUtility;
 import eisbw.percepts.ConstructionSitePercept;
 import eisbw.percepts.Percepts;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.types.RaceType;
-import jnibwapi.types.RaceType.RaceTypes;
-import jnibwapi.types.UnitType;
-import jnibwapi.types.UnitType.UnitTypes;
 
 /**
  * @author Danny & Harm - The perceiver which handles all the construction site
@@ -24,32 +25,25 @@ import jnibwapi.types.UnitType.UnitTypes;
 public class ConstructionSitePerceiver extends Perceiver {
 	public final static int steps = 2;
 
-	/**
-	 * The ConstructionSitePerceiver constructor.
-	 *
-	 * @param api
-	 *            The BWAPI.
-	 */
-	public ConstructionSitePerceiver(JNIBWAPI api) {
-		super(api);
+	public ConstructionSitePerceiver(BW bwapi, BWTA bwta) {
+		super(bwapi, bwta);
 	}
 
 	@Override
 	public void perceive(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> percepts = new LinkedList<>();
-		jnibwapi.Map map = this.api.getMap();
-		int mapWidth = map.getSize().getBX();
-		int mapHeight = map.getSize().getBY();
-		RaceType race = (this.api.getSelf() == null) ? RaceTypes.Unknown : this.api.getSelf().getRace();
-		for (int x = 0; x < mapWidth; x += steps) {
-			for (int y = 0; y < mapHeight; y += steps) {
-				Position pos = new Position(x, y, Position.PosType.BUILD);
-				if (map.isBuildable(pos) && this.api.isVisible(pos)) {
-					if (race == RaceTypes.Terran) {
+		BWMap map = this.bwapi.getBWMap();
+		Race race = (this.bwapi.getInteractionHandler() == null) ? Race.Unknown
+				: this.bwapi.getInteractionHandler().self().getRace();
+		for (int x = 0; x < map.mapWidth(); x += steps) {
+			for (int y = 0; y < map.mapHeight(); y += steps) {
+				TilePosition pos = new TilePosition(x, y);
+				if (map.isBuildable(pos, false) && map.isVisible(pos)) {
+					if (race == Race.Terran) {
 						perceiveTerran(pos, percepts);
-					} else if (race == RaceTypes.Protoss) {
+					} else if (race == Race.Protoss) {
 						perceiveProtosss(pos, percepts);
-					} else if (race == RaceTypes.Zerg) {
+					} else if (race == Race.Zerg) {
 						perceiveZerg(pos, percepts);
 					}
 				}
@@ -64,9 +58,9 @@ public class ConstructionSitePerceiver extends Perceiver {
 	 * @param percepts
 	 *            The list of perceived constructionsites
 	 */
-	private void perceiveTerran(Position pos, List<Percept> percepts) {
-		if (this.api.canBuildHere(pos, UnitType.UnitTypes.Terran_Missile_Turret, false)) {
-			percepts.add(new ConstructionSitePercept(pos.getBX(), pos.getBY(), getRegion(pos)));
+	private void perceiveTerran(TilePosition pos, List<Percept> percepts) {
+		if (this.bwapi.canBuildHere(pos, UnitType.Terran_Missile_Turret)) {
+			percepts.add(new ConstructionSitePercept(pos.getX(), pos.getY(), getRegion(pos)));
 		}
 	}
 
@@ -76,10 +70,10 @@ public class ConstructionSitePerceiver extends Perceiver {
 	 * @param percepts
 	 *            The list of perceived constructionsites
 	 */
-	private void perceiveProtosss(Position pos, List<Percept> percepts) {
-		boolean nearPylon = this.api.canBuildHere(pos, UnitType.UnitTypes.Protoss_Photon_Cannon, false);
-		if (nearPylon || this.api.canBuildHere(pos, UnitType.UnitTypes.Protoss_Pylon, false)) {
-			percepts.add(new ConstructionSitePercept(pos.getBX(), pos.getBY(), getRegion(pos), nearPylon));
+	private void perceiveProtosss(TilePosition pos, List<Percept> percepts) {
+		boolean nearPylon = this.bwapi.canBuildHere(pos, UnitType.Protoss_Photon_Cannon);
+		if (nearPylon || this.bwapi.canBuildHere(pos, UnitType.Protoss_Pylon)) {
+			percepts.add(new ConstructionSitePercept(pos.getX(), pos.getY(), getRegion(pos), nearPylon));
 		}
 	}
 
@@ -89,14 +83,14 @@ public class ConstructionSitePerceiver extends Perceiver {
 	 * @param percepts
 	 *            The list of perceived constructionsites
 	 */
-	private void perceiveZerg(Position pos, List<Percept> percepts) {
-		boolean onCreep = this.api.canBuildHere(pos, UnitTypes.Zerg_Creep_Colony, false);
-		if (onCreep || this.api.canBuildHere(pos, UnitTypes.Terran_Missile_Turret, false)) {
-			percepts.add(new ConstructionSitePercept(pos.getBX(), pos.getBY(), getRegion(pos), onCreep));
+	private void perceiveZerg(TilePosition pos, List<Percept> percepts) {
+		boolean onCreep = this.bwapi.canBuildHere(pos, UnitType.Zerg_Creep_Colony);
+		if (onCreep || this.bwapi.canBuildHere(pos, UnitType.Terran_Missile_Turret)) {
+			percepts.add(new ConstructionSitePercept(pos.getX(), pos.getY(), getRegion(pos), onCreep));
 		}
 	}
 
-	private int getRegion(Position pos) {
-		return BwapiUtility.getRegion(pos, this.api.getMap());
+	private int getRegion(TilePosition pos) {
+		return BwapiUtility.getRegion(pos, this.bwta);
 	}
 }

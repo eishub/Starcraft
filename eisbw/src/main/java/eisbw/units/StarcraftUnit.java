@@ -4,10 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openbw.bwapi4j.type.UnitType;
+
 import eis.iilang.Percept;
 import eisbw.percepts.perceivers.IPerceiver;
 import eisbw.percepts.perceivers.PerceptFilter;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - The class which gathers all the percepts of a

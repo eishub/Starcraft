@@ -11,6 +11,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.TilePosition;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+
 import eis.eis2java.translation.Filter;
 import eis.exceptions.ManagementException;
 import eis.iilang.Percept;
@@ -26,9 +30,6 @@ import eisbw.percepts.perceivers.UnitsPerceiver;
 import eisbw.units.StarcraftUnit;
 import eisbw.units.StarcraftUnitFactory;
 import eisbw.units.Units;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Position;
-import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - The game class where the percepts are updated.
@@ -77,23 +78,23 @@ public class Game {
 		return this.env.getAgents().size();
 	}
 
-	public void addUnit(Unit unit, StarcraftUnitFactory factory) {
+	public void addUnit(PlayerUnit unit, StarcraftUnitFactory factory) {
 		this.units.addUnit(unit, factory);
 	}
 
-	public void deleteUnit(Unit unit, int id) {
+	public void deleteUnit(PlayerUnit unit) {
 		if (unit != null) {
 			this.units.deleteUnit(unit);
 		}
-		this.enemies.remove(id);
+		this.enemies.remove(unit.getId());
 	}
 
-	public Unit getUnit(String name) {
+	public PlayerUnit getUnit(String name) {
 		return this.units.getUnit(name);
 	}
 
-	public String getUnitName(int id) {
-		return this.units.getUnitName(id);
+	public String getUnitName(PlayerUnit unit) {
+		return this.units.getUnitName(unit);
 	}
 
 	public List<IDraw> getDraws() {
@@ -106,16 +107,16 @@ public class Game {
 	 * @param bwapi
 	 *            - the game bridge
 	 */
-	public void update(JNIBWAPI bwapi) {
+	public void update(BW bwapi) {
 		processUninitializedUnits();
 		Map<String, Map<PerceptFilter, List<Percept>>> unitPerceptHolder = new HashMap<>();
 		Map<PerceptFilter, List<Percept>> globalPercepts = getGlobalPercepts(bwapi);
-		for (Unit unit : bwapi.getMyUnits()) {
+		for (PlayerUnit unit : bwapi.getUnits(bwapi.getInteractionHandler().self())) {
 			StarcraftUnit scUnit = this.units.getStarcraftUnit(unit);
 			if (scUnit == null) {
 				continue;
 			}
-			String unitname = this.units.getUnitName(unit.getID());
+			String unitname = this.units.getUnitName(unit);
 			String unittype = BwapiUtility.getEisUnitType(unit);
 			Map<PerceptFilter, List<Percept>> percepts = getUnitPercepts(unitname, unittype, globalPercepts);
 			percepts.putAll(scUnit.perceive());
@@ -162,8 +163,8 @@ public class Game {
 
 	private void processUninitializedUnits() {
 		if (this.units.getUninitializedUnits() != null) {
-			List<Unit> toAdd = new LinkedList<>();
-			Unit unit;
+			List<PlayerUnit> toAdd = new LinkedList<>();
+			PlayerUnit unit;
 			while ((unit = this.units.getUninitializedUnits().poll()) != null) {
 				String unitName = BwapiUtility.getName(unit);
 				if (unit.isCompleted() && isInitialized(unitName)) {
@@ -221,7 +222,7 @@ public class Game {
 	 * @param api
 	 *            - the API.
 	 */
-	private Map<PerceptFilter, List<Percept>> getGlobalPercepts(JNIBWAPI bwapi) {
+	private Map<PerceptFilter, List<Percept>> getGlobalPercepts(BW bwapi) {
 		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
 		new UnitsPerceiver(bwapi, this.enemies).perceive(toReturn);
 		return toReturn;
@@ -233,7 +234,7 @@ public class Game {
 	 * @param api
 	 *            - the API.
 	 */
-	public void updateMap(JNIBWAPI api) {
+	public void updateMap(BW api) {
 		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
 		new MapPerceiver(api).perceive(toReturn);
 		this.mapPercepts = toReturn;
@@ -245,7 +246,7 @@ public class Game {
 	 * @param bwapi
 	 *            - the JNIBWAPI
 	 */
-	public void updateConstructionSites(JNIBWAPI bwapi) {
+	public void updateConstructionSites(BW bwapi) {
 		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(1);
 		new ConstructionSitePerceiver(bwapi).perceive(toReturn);
 		this.constructionPercepts = toReturn;
@@ -257,13 +258,13 @@ public class Game {
 	 * @param bwapi
 	 *            - the JNIBWAPI
 	 */
-	public void updateNukePerceiver(Position pos) {
+	public void updateNukePerceiver(TilePosition pos) {
 		if (pos == null) {
 			this.nukePercepts = null;
 		} else {
 			Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(1);
 			List<Percept> nukepercept = new ArrayList<>(1);
-			nukepercept.add(new NukePercept(pos.getBX(), pos.getBY()));
+			nukepercept.add(new NukePercept(pos.getX(), pos.getY()));
 			toReturn.put(new PerceptFilter(Percepts.NUKE, Filter.Type.ON_CHANGE), nukepercept);
 			if (this.nukePercepts == null) {
 				this.nukePercepts = toReturn;

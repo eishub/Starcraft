@@ -1,115 +1,98 @@
 package eisbw;
 
-import jnibwapi.BWAPIEventListener;
-import jnibwapi.Position;
+import org.openbw.bwapi4j.BWEventListener;
+import org.openbw.bwapi4j.Player;
+import org.openbw.bwapi4j.Position;
+import org.openbw.bwapi4j.unit.Unit;
 
 /**
  * @author Danny & Harm - Stub class for all overriden event methods.
  *
  */
-public class BwapiEvents implements BWAPIEventListener {
+public class BwapiEvents implements BWEventListener {
+
 	@Override
-	public void connected() {
-		// Method stub
+	public void onEnd(boolean winner) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void matchStart() {
-		// Method stub
+	public void onFrame() {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void matchFrame() {
-		// Method stub
+	public void onNukeDetect(Position target) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void matchEnd(boolean winner) {
-		// Method stub
+	public void onPlayerLeft(Player player) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void keyPressed(int keyCode) {
-		// Method stub
+	public void onReceiveText(Player player, String text) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void sendText(String text) {
-		// Method stub
+	public void onSaveGame(String gameName) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void receiveText(String text) {
-		// Method stub
+	public void onSendText(String text) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void playerLeft(int playerId) {
-		// Method stub
+	public void onStart() {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void nukeDetect(Position pos) {
-		// Method stub
+	public void onUnitComplete(Unit unit) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void nukeDetect() {
-		// Method stub
+	public void onUnitCreate(Unit unit) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void unitDiscover(int unitId) {
-		// Method stub
+	public void onUnitDestroy(Unit unit) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void unitEvade(int unitId) {
-		// Method stub
+	public void onUnitDiscover(Unit unit) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void unitShow(int unitId) {
-		// Method stub
+	public void onUnitEvade(Unit unit) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void unitHide(int unitId) {
-		// Method stub
+	public void onUnitHide(Unit unit) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void unitCreate(int unitId) {
-		// Method stub
+	public void onUnitMorph(Unit unit) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void unitDestroy(int unitId) {
-		// Method stub
+	public void onUnitRenegade(Unit unit) {
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void unitMorph(int unitId) {
-		// Method stub
-	}
-
-	@Override
-	public void unitRenegade(int unitId) {
-		// Method stub
-	}
-
-	@Override
-	public void saveGame(String gameName) {
-		// Method stub
-	}
-
-	@Override
-	public void unitComplete(int unitId) {
-		// Method stub
-	}
-
-	@Override
-	public void playerDropped(int playerId) {
-		// Method stub
+	public void onUnitShow(Unit unit) {
+		// TODO Auto-generated method stub
 	}
 }

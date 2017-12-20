@@ -3,21 +3,23 @@ package eisbw.units;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.type.Race;
+import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.unit.MobileUnit;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+
 import eis.iilang.Identifier;
 import eis.iilang.Parameter;
 import eisbw.BwapiUtility;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.RaceType.RaceTypes;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - The condition perceiver.
  *
  */
 public class ConditionHandler {
-	protected final Unit unit;
-	protected final JNIBWAPI api;
+	protected final BW api;
+	protected final PlayerUnit unit;
 
 	/**
 	 * @param api
@@ -25,9 +27,9 @@ public class ConditionHandler {
 	 * @param unit
 	 *            The unit.
 	 */
-	public ConditionHandler(JNIBWAPI api, Unit unit) {
-		this.unit = unit;
+	public ConditionHandler(BW api, PlayerUnit unit) {
 		this.api = api;
+		this.unit = unit;
 	}
 
 	/**
@@ -102,20 +104,21 @@ public class ConditionHandler {
 	 *            The conditions of the unit
 	 */
 	private void terranAbilityConditions(List<Parameter> conditions) {
+		MobileUnit unit = (MobileUnit) this.unit;
 		// caused by a Medic
-		if (this.unit.isBlind()) {
+		if (unit.isBlind()) {
 			conditions.add(new Identifier("blinded"));
 		}
 		// caused by a Ghost
-		if (this.unit.isLockedDown()) {
+		if (unit.isLockedDown()) {
 			conditions.add(new Identifier("lockDowned"));
 		}
 		// caused by a Science Vessel
-		if (this.unit.isIrradiated()) {
+		if (unit.isIrradiated()) {
 			conditions.add(new Identifier("irradiated"));
 		}
 		// caused by Medic heal or SCV repair
-		if (this.unit.isBeingHealed()) {
+		if (unit.isBeingHealed()) {
 			conditions.add(new Identifier("beingHealed"));
 		}
 	}
@@ -127,20 +130,21 @@ public class ConditionHandler {
 	 *            The conditions of the unit
 	 */
 	private void protossAbilityConditions(List<Parameter> conditions) {
+		MobileUnit unit = (MobileUnit) this.unit;
 		// caused by a High Templar
-		if (this.unit.isUnderStorm()) {
+		if (unit.isUnderStorm()) {
 			conditions.add(new Identifier("underStorm"));
 		}
 		// caused by an Arbiter
-		if (this.unit.isStasised()) {
+		if (unit.isStasised()) {
 			conditions.add(new Identifier("stasised"));
 		}
 		// caused by a Dark Archon
-		if (this.unit.isMaelstrommed()) {
+		if (unit.isMaelstrommed()) {
 			conditions.add(new Identifier("maelstrommed"));
 		}
 		// caused by a Corsair
-		if (this.unit.isUnderDisruptionWeb()) {
+		if (unit.isUnderDisruptionWeb()) {
 			conditions.add(new Identifier("disruptionWebbed"));
 		}
 	}
@@ -152,24 +156,25 @@ public class ConditionHandler {
 	 *            The conditions of the unit
 	 */
 	private void zergAbilityConditions(List<Parameter> conditions) {
+		MobileUnit unit = (MobileUnit) this.unit;
 		// caused by a Queen
-		if (this.unit.isEnsnared()) {
+		if (unit.isEnsnared()) {
 			conditions.add(new Identifier("ensnared"));
 		}
 		// caused by a Queen
-		if (this.unit.isParasited()) {
+		if (unit.isParasited()) {
 			conditions.add(new Identifier("parasited"));
 		}
 		// caused by a Defiler
-		if (this.unit.isPlagued()) {
+		if (unit.isPlagued()) {
 			conditions.add(new Identifier("plagued"));
 		}
 		// caused by a Defiler
-		if (this.unit.isUnderDarkSwarm()) {
+		if (unit.isUnderDarkSwarm()) {
 			conditions.add(new Identifier("darkSwarmed"));
 		}
 		// caused by a Defiler
-		if (this.unit.getAcidSporeCount() > 0) {
+		if (unit.getAcidSporeCount() > 0) {
 			conditions.add(new Identifier("acidSpored"));
 		}
 	}
@@ -192,25 +197,26 @@ public class ConditionHandler {
 	 * @return The conditions of the (moving) unit.
 	 */
 	private void setMovingConditions(List<Parameter> conditions) {
-		if (this.unit.isMoving()) {
+		MobileUnit unit = (MobileUnit) this.unit;
+		if (unit.isMoving()) {
 			conditions.add(new Identifier("moving"));
 		}
 		// if (unit.isStuck()) {
 		// is generated quite a lot :(
 		// conditions.add(new Identifier("stuck"));
 		// }
-		if (this.unit.isFollowing()) {
+		if (unit.isFollowing()) {
 			conditions.add(new Identifier("following"));
 		}
-		if (this.unit.isPatrolling()) {
+		if (unit.isPatrolling()) {
 			conditions.add(new Identifier("patrolling"));
 		}
-		if (this.unit.isHoldingPosition()) {
+		if (unit.isHoldingPosition()) {
 			conditions.add(new Identifier("holding"));
 		}
-		if (this.unit.isLoaded()) {
-			conditions.add(new Identifier("loaded"));
-		}
+		// if (unit.isLoaded()) { FIXME: no supported by lib atm.
+		// conditions.add(new Identifier("loaded"));
+		// }
 	}
 
 	/**
@@ -232,7 +238,7 @@ public class ConditionHandler {
 		if (this.unit.isCloaked()) {
 			conditions.add(new Identifier("cloaked"));
 		}
-		if (BwapiUtility.getPlayer(this.unit) != this.api.getSelf() && this.unit.isDetected()) {
+		if (BwapiUtility.getPlayer(this.unit) != this.api.getInteractionHandler().self() && this.unit.isDetected()) {
 			conditions.add(new Identifier("detected"));
 		}
 		if (this.unit.isAttacking()) { // includes medic heal
@@ -282,18 +288,18 @@ public class ConditionHandler {
 
 		setGenericConditions(conditions, type);
 
-		if (type.getRaceID() == RaceTypes.Terran.getID()) {
+		if (type.getRace() == Race.Terran) {
 			setTerranConditions(conditions);
-		} else if (type.getRaceID() == RaceTypes.Protoss.getID()) {
+		} else if (type.getRace() == Race.Protoss) {
 			setProtossConditions(conditions);
-		} else if (type.getRaceID() == RaceTypes.Zerg.getID()) {
+		} else if (type.getRace() == Race.Zerg) {
 			setZergConditions(conditions);
 		}
 
 		if (type.isWorker()) {
 			setWorkerConditions(conditions);
 		}
-		if (type.isCanMove()) {
+		if (type.canMove()) {
 			setMovingConditions(conditions);
 			setAbilityConditions(conditions);
 		}

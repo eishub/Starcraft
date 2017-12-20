@@ -8,24 +8,19 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import jnibwapi.Position.PosType;
-import jnibwapi.types.RaceType;
-import jnibwapi.types.RaceType.RaceTypes;
-import jnibwapi.types.TechType;
-import jnibwapi.types.TechType.TechTypes;
-import jnibwapi.types.UnitType;
-import jnibwapi.types.UnitType.UnitTypes;
-import jnibwapi.types.UpgradeType;
-import jnibwapi.types.UpgradeType.UpgradeTypes;
-import jnibwapi.types.WeaponType;
-import jnibwapi.types.WeaponType.WeaponTypes;
+import org.openbw.bwapi4j.Position;
+import org.openbw.bwapi4j.type.Race;
+import org.openbw.bwapi4j.type.TechType;
+import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.type.UpgradeType;
+import org.openbw.bwapi4j.type.WeaponType;
 
 public class KnowledgeExport {
 
 	public static void export() {
 		String export = "";
-		for (final UnitType type : UnitTypes.getAllUnitTypes()) {
-			switch (type.getID()) {
+		for (final UnitType type : UnitType.values()) {
+			switch (type.getId()) {
 			// TERRAN UNITS
 			case 0: // marine
 			case 1: // ghost
@@ -136,7 +131,7 @@ public class KnowledgeExport {
 				export += getUnitCosts(type);
 				export += getUnitStats(type);
 				export += getUnitMetrics(type);
-				if (type.isAttackCapable()) {
+				if (type.canAttack()) {
 					export += getUnitCombat(type);
 				}
 				export += "\n";
@@ -145,16 +140,16 @@ public class KnowledgeExport {
 				break;
 			}
 		}
-		for (final TechType type : TechTypes.getAllTechTypes()) {
-			if ((type.getID() >= 0 && type.getID() <= 25) || (type.getID() >= 27 && type.getID() == 46)) {
+		for (final TechType type : TechType.values()) {
+			if ((type.getId() >= 0 && type.getId() <= 25) || (type.getId() >= 27 && type.getId() == 46)) {
 				export += getTechType(type);
 				export += getTechCosts(type);
 				export += getTechCombat(type);
 				export += "\n";
 			}
 		}
-		for (final UpgradeType type : UpgradeTypes.getAllUpgradeTypes()) {
-			if (type.getID() >= 0 && type.getID() <= 54) {
+		for (final UpgradeType type : UpgradeType.values()) {
+			if (type.getId() >= 0 && type.getId() <= 54) {
 				export += getUpgradeType(type);
 				export += getUpgradeCosts(type);
 				export += "\n";
@@ -169,36 +164,32 @@ public class KnowledgeExport {
 	}
 
 	private static String getUnitType(UnitType type) {
-		RaceType race = RaceTypes.getRaceType(type.getRaceID());
-		return String.format("unit('%s',%s).\n", BwapiUtility.getName(type), race.getName().toLowerCase());
+		final Race race = type.getRace();
+		return String.format("unit('%s',%s).\n", BwapiUtility.getName(type), race.toString().toLowerCase());
 	}
 
 	private static String getUnitCosts(UnitType type) {
 		String requirements = "[";
 		boolean hadFirst = false;
-		if (type.getRequiredTechID() <= 32) {
-			TechType required = TechTypes.getTechType(type.getRequiredTechID());
-			requirements += "'" + required.getName() + "'";
+		TechType tech = type.requiredTech();
+		if (tech.getId() <= 32) {
+			requirements += "'" + tech.toString() + "'";
 			hadFirst = true;
 		}
-		for (int requiredUnit : type.getRequiredUnits().keySet()) {
-			UnitType required = UnitTypes.getUnitType(requiredUnit);
-			if (required.getID() > 202) {
+		for (UnitType unit : type.requiredUnits()) {
+			if (unit.getId() > 202) {
 				continue;
 			}
-			for (int i = 0; i < type.getRequiredUnits().get(requiredUnit); ++i) {
-				if (hadFirst) {
-					requirements += ",";
-				} else {
-					hadFirst = true;
-				}
-				requirements += "'" + BwapiUtility.getName(required) + "'";
+			if (hadFirst) {
+				requirements += ",";
+			} else {
+				hadFirst = true;
 			}
+			requirements += "'" + BwapiUtility.getName(unit) + "'";
 		}
 		requirements += "]";
-		return String.format("costs('%s',%d,%d,%d,%d,%s).\n", BwapiUtility.getName(type), type.getMineralPrice(),
-				type.getGasPrice(), type.getSupplyRequired() - type.getSupplyProvided(), type.getBuildTime(),
-				requirements);
+		return String.format("costs('%s',%d,%d,%d,%d,%s).\n", BwapiUtility.getName(type), type.mineralPrice(),
+				type.gasPrice(), type.supplyRequired() - type.supplyProvided(), type.buildTime(), requirements);
 	}
 
 	private static String getUnitStats(UnitType type) {
@@ -206,7 +197,7 @@ public class KnowledgeExport {
 		if (type.isBuilding()) {
 			conditionlist.add("building");
 		}
-		if (type.isCanMove()) {
+		if (type.canMove()) {
 			conditionlist.add("canMove");
 		}
 		if (type.isFlyingBuilding()) {
@@ -227,10 +218,10 @@ public class KnowledgeExport {
 		if (type.isOrganic()) {
 			conditionlist.add("organic");
 		}
-		if (type.isRequiresCreep()) {
+		if (type.requiresCreep()) {
 			conditionlist.add("requiresCreep");
 		}
-		if (type.isRequiresPsi()) {
+		if (type.requiresPsi()) {
 			conditionlist.add("requiresPsi");
 		}
 		if (type.isRobotic()) {
@@ -242,7 +233,7 @@ public class KnowledgeExport {
 		if (type.isSpell()) {
 			conditionlist.add("spell");
 		}
-		if (type.isProduceCapable() || type == UnitTypes.Terran_Nuclear_Silo) {
+		if (type.canProduce() || type == UnitType.Terran_Nuclear_Silo) {
 			conditionlist.add("canTrain");
 		}
 		Collections.sort(conditionlist);
@@ -258,78 +249,76 @@ public class KnowledgeExport {
 		}
 		conditions += "]";
 		return String.format("stats('%s',%d,%d,%d,%d,%s).\n", BwapiUtility.getName(type),
-				type.isInvincible() ? 0 : type.getMaxHitPoints(), type.isInvincible() ? 0 : type.getMaxShields(),
-				type.getMaxEnergy(), (int) (type.getTopSpeed() * 10), conditions);
+				type.isInvincible() ? 0 : type.maxHitPoints(), type.isInvincible() ? 0 : type.maxShields(),
+				type.maxEnergy(), (int) (type.topSpeed() * 10), conditions);
 	}
 
 	private static String getUnitMetrics(UnitType type) {
-		int spaceRequired = (type.getSpaceRequired() >= 255) ? 0 : type.getSpaceRequired();
-		int spaceProvided = (type.getSpaceProvided() >= 255) ? 0 : type.getSpaceProvided();
-		return String.format("metrics('%s',%d,%d,%d,%d).\n", BwapiUtility.getName(type), type.getTileWidth(),
-				type.getTileHeight(), type.getSightRange() / PosType.BUILD.scale, spaceRequired - spaceProvided);
+		int spaceRequired = (type.spaceRequired() >= 255) ? 0 : type.spaceRequired();
+		int spaceProvided = (type.spaceProvided() >= 255) ? 0 : type.spaceProvided();
+		return String.format("metrics('%s',%d,%d,%d,%d).\n", BwapiUtility.getName(type), type.tileWidth(),
+				type.tileHeight(), new Position(type.sightRange(), 0).toTilePosition().getX(),
+				spaceRequired - spaceProvided);
 	}
 
 	private static String getUnitCombat(UnitType type) {
-		WeaponType ground = type.getGroundWeapon();
-		WeaponType air = WeaponTypes.getWeaponType(type.getAirWeaponID());
-		WeaponType generic = (ground == null || ground == WeaponTypes.Unknown || ground == WeaponTypes.None) ? air
+		WeaponType ground = type.groundWeapon();
+		WeaponType air = type.airWeapon();
+		WeaponType generic = (ground == null || ground == WeaponType.Unknown || ground == WeaponType.None) ? air
 				: ground;
 		return String.format("combat('%s',%d,%d,%d,%d,%d).\n", BwapiUtility.getName(type),
-				type.getMaxGroundHits() * ground.getDamageAmount() * ground.getDamageFactor(),
-				type.getMaxAirHits() * air.getDamageAmount() * air.getDamageFactor(), generic.getDamageCooldown(),
-				generic.getMaxRange() / PosType.BUILD.scale, generic.getMedianSplashRadius() / PosType.BUILD.scale);
+				type.maxGroundHits() * ground.damageAmount() * ground.damageFactor(),
+				type.maxAirHits() * air.damageAmount() * air.damageFactor(), generic.damageCooldown(),
+				new Position(generic.maxRange(), 0).toTilePosition().getX(),
+				new Position(generic.medianSplashRadius(), 0).toTilePosition().getX());
 	}
 
 	private static String getTechType(TechType type) {
-		RaceType race = RaceTypes.getRaceType(type.getRaceID());
-		return String.format("upgrade('%s',%s).\n", type.getName(), race.getName().toLowerCase());
+		return String.format("upgrade('%s',%s).\n", type.toString(), type.getRace().toString().toLowerCase());
 	}
 
 	private static String getTechCosts(TechType type) {
-		String required = (type.getWhatResearches().getID() > 202) ? ""
-				: ("'" + BwapiUtility.getName(type.getWhatResearches()) + "'");
-		return String.format("costs('%s',%d,%d,%d,%d,%s).\n", type.getName(), type.getMineralPrice(),
-				type.getGasPrice(), type.getEnergyUsed(), type.getResearchTime(), "[" + required + "]");
+		String required = (type.whatResearches().getId() > 202) ? ""
+				: ("'" + BwapiUtility.getName(type.whatResearches()) + "'");
+		return String.format("costs('%s',%d,%d,%d,%d,%s).\n", type.toString(), type.mineralPrice(), type.gasPrice(),
+				type.energyCost(), type.researchTime(), "[" + required + "]");
 	}
 
 	private static String getTechCombat(TechType type) {
-		WeaponType weapon = WeaponTypes.getWeaponType(type.getGetWeaponID());
-		if (weapon == WeaponTypes.Unknown || weapon == WeaponTypes.None) {
+		WeaponType weapon = type.getWeapon();
+		if (weapon == WeaponType.Unknown || weapon == WeaponType.None) {
 			return "";
 		} else {
-			return String.format("combat('%s',%d,%d,%d,%d,%d).\n", type.getName(),
-					weapon.isTargetsGround() ? (weapon.getDamageAmount() * weapon.getDamageFactor()) : 0,
-					weapon.isTargetsAir() ? (weapon.getDamageAmount() * weapon.getDamageFactor()) : 0,
-					weapon.getDamageCooldown(), weapon.getMaxRange() / PosType.BUILD.scale,
-					weapon.getMedianSplashRadius() / PosType.BUILD.scale);
+			return String.format("combat('%s',%d,%d,%d,%d,%d).\n", type.toString(),
+					weapon.targetsGround() ? (weapon.damageAmount() * weapon.damageFactor()) : 0,
+					weapon.targetsAir() ? (weapon.damageAmount() * weapon.damageFactor()) : 0, weapon.damageCooldown(),
+					new Position(weapon.maxRange(), 0).toTilePosition().getX(),
+					new Position(weapon.medianSplashRadius(), 0).toTilePosition().getX());
 		}
 	}
 
 	private static String getUpgradeType(UpgradeType type) {
-		RaceType race = RaceTypes.getRaceType(type.getRaceID());
-		if (type.getMaxRepeats() > 1) {
+		if (type.maxRepeats() > 1) {
 			String returned = "";
-			for (int i = 1; i <= type.getMaxRepeats(); ++i) {
-				returned += String.format("upgrade('%s',%s).\n", type.getName() + " " + i,
-						race.getName().toLowerCase());
+			for (int i = 1; i <= type.maxRepeats(); ++i) {
+				returned += String.format("upgrade('%s',%s).\n", type.toString() + " " + i,
+						type.getRace().toString().toLowerCase());
 			}
 			return returned;
 		} else {
-			return String.format("upgrade('%s',%s).\n", type.getName(), race.getName().toLowerCase());
+			return String.format("upgrade('%s',%s).\n", type.toString(), type.getRace().toString().toLowerCase());
 		}
 	}
 
 	private static String getUpgradeCosts(UpgradeType type) {
-		String name = type.getName().replace("_", " ");
-		String required = (type.getWhatUpgradesTypeID() > 202) ? ""
-				: ("'" + BwapiUtility.getName(UnitTypes.getUnitType(type.getWhatUpgradesTypeID())) + "'");
+		String name = type.toString().replace("_", " ");
+		String required = (type.whatUpgrades().getId() > 202) ? ""
+				: ("'" + BwapiUtility.getName(type.whatUpgrades()) + "'");
 		String returned = "";
-		for (int i = 0; i < type.getMaxRepeats(); ++i) {
-			String toAdd = (type.getMaxRepeats() == 1) ? "" : (" " + (i + 1));
-			returned += String.format("costs('%s',%d,%d,%d,%d,%s).\n", name + toAdd,
-					type.getMineralPriceBase() + (type.getMineralPriceFactor() * i),
-					type.getGasPriceBase() + (type.getGasPriceFactor() * i), 0,
-					type.getUpgradeTimeBase() + (type.getUpgradeTimeFactor() * i), "[" + required + "]");
+		for (int i = 0; i < type.maxRepeats(); ++i) {
+			String toAdd = (type.maxRepeats() == 1) ? "" : (" " + (i + 1));
+			returned += String.format("costs('%s',%d,%d,%d,%d,%s).\n", name + toAdd, type.mineralPrice(i),
+					type.gasPrice(i), 0, type.upgradeTime(i), "[" + required + "]");
 		}
 		return returned;
 	}

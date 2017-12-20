@@ -1,4 +1,0 @@
-To install this project, the jnibwapi.jar has to be installed on the local repository. 
-This can be done by using the following command:
-mvn install:install-file -Dfile=jnibwapi.jar -DgroupId=jnibwapi -DartifactId=jnibwapi -Dversion=1.0 -Dpackaging=maven-plugin
-Then just call 'mvn clean package' to build the (shaded) environment JAR.

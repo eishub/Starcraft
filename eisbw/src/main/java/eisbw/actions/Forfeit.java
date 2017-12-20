@@ -2,11 +2,12 @@ package eisbw.actions;
 
 import java.util.List;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+
 import eis.iilang.Action;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Forfeits the match (mapAgent only).
@@ -19,7 +20,7 @@ public class Forfeit extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Forfeit(JNIBWAPI api) {
+	public Forfeit(BW api) {
 		super(api);
 	}
 
@@ -35,8 +36,8 @@ public class Forfeit extends StarcraftAction {
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
-		this.api.leaveGame();
+	public void execute(PlayerUnit unit, Action action) {
+		this.api.exit();
 	}
 
 	@Override

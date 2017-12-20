@@ -2,12 +2,15 @@ package eisbw.actions;
 
 import java.util.List;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.unit.MobileUnit;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+import org.openbw.bwapi4j.unit.Unit;
+
 import eis.iilang.Action;
 import eis.iilang.Numeral;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
-import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Makes the unit attack the specified unit.
@@ -20,7 +23,7 @@ public class Attack extends StarcraftAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public Attack(JNIBWAPI api) {
+	public Attack(BW api) {
 		super(api);
 	}
 
@@ -32,16 +35,16 @@ public class Attack extends StarcraftAction {
 
 	@Override
 	public boolean canExecute(UnitType type, Action action) {
-		return type.isAttackCapable();
+		return type.canAttack();
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
+	public void execute(PlayerUnit unit, Action action) {
 		List<Parameter> parameters = action.getParameters();
 		int targetId = ((Numeral) parameters.get(0)).getValue().intValue();
 		Unit target = this.api.getUnit(targetId);
 
-		unit.attack(target, false);
+		((MobileUnit) unit).attack(target);
 	}
 
 	@Override

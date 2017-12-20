@@ -78,9 +78,9 @@
 		</dependency>
 
 		<dependency>
-			<groupId>jnibwapi</groupId>
-			<artifactId>jnibwapi</artifactId>
-			<version>1.0</version>
+			<groupId>openbw</groupId>
+			<artifactId>bwapi4j-wrapper</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>

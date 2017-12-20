@@ -7,8 +7,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.openbw.bwapi4j.InteractionHandler;
+
 import eisbw.Game;
-import jnibwapi.JNIBWAPI;
 
 /**
  * @author Danny & Harm.
@@ -68,14 +69,14 @@ public class DebugWindow extends JFrame {
 	 * @param bwapi
 	 *            - the API.
 	 */
-	public void debug(JNIBWAPI bwapi) {
+	public void debug(InteractionHandler bwapi) {
 		Iterator<String> actions = getActions().iterator();
 		while (actions.hasNext()) {
 			bwapi.sendText(actions.next());
 			actions.remove();
 		}
 		if (this.speedSlider.speedChanged()) {
-			bwapi.setGameSpeed(this.speedSlider.getSpeed());
+			bwapi.setLocalSpeed(this.speedSlider.getSpeed());
 		}
 	}
 }

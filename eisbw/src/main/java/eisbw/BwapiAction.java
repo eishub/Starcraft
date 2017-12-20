@@ -1,18 +1,19 @@
 package eisbw;
 
+import org.openbw.bwapi4j.unit.PlayerUnit;
+
 import eis.iilang.Action;
-import jnibwapi.Unit;
 
 public class BwapiAction {
-	private final Unit unit;
+	private final PlayerUnit unit;
 	private final Action action;
 
-	public BwapiAction(Unit unit, Action action) {
+	public BwapiAction(PlayerUnit unit, Action action) {
 		this.unit = unit;
 		this.action = action;
 	}
 
-	public Unit getUnit() {
+	public PlayerUnit getUnit() {
 		return this.unit;
 	}
 

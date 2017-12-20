@@ -5,17 +5,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.openbw.bwapi4j.Player;
+import org.openbw.bwapi4j.TilePosition;
+import org.openbw.bwapi4j.type.TechType;
+import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.type.UpgradeType;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+import org.openbw.bwapi4j.unit.Unit;
 
-import jnibwapi.Player;
-import jnibwapi.Position;
-import jnibwapi.Region;
-import jnibwapi.Unit;
-import jnibwapi.types.TechType;
-import jnibwapi.types.TechType.TechTypes;
-import jnibwapi.types.UnitType;
-import jnibwapi.types.UnitType.UnitTypes;
-import jnibwapi.types.UpgradeType;
-import jnibwapi.types.UpgradeType.UpgradeTypes;
+import bwta.BWTA;
+import bwta.Region;
 
 /**
  * @author Danny & Harm - The Utility class of the BWAPI.
@@ -34,7 +33,7 @@ public class BwapiUtility {
 	}
 
 	public static boolean isValid(Unit unit) {
-		return unit != null && unit.isExists() && unit.isVisible() && !(unit.isBeingConstructed() && unit.isLoaded());
+		return unit != null && unit.exists() && unit.isVisible();
 	}
 
 	/**
@@ -45,33 +44,33 @@ public class BwapiUtility {
 	 * @return the name of the unit.
 	 */
 	public static String getName(Unit unit) {
-		String name = StringUtils.deleteWhitespace(getName(getType(unit)) + unit.getID());
+		String name = StringUtils.deleteWhitespace(getName(getType(unit)) + unit.getId());
 		return name.substring(0, 1).toLowerCase() + name.substring(1);
 	}
 
 	public static String getName(UnitType unittype) {
 		if (unittype == null) {
 			return "";
-		} else if (unittype == UnitTypes.Terran_Siege_Tank_Tank_Mode
-				|| unittype == UnitTypes.Terran_Siege_Tank_Siege_Mode) {
+		} else if (unittype == UnitType.Terran_Siege_Tank_Tank_Mode
+				|| unittype == UnitType.Terran_Siege_Tank_Siege_Mode) {
 			return "Terran Siege Tank";
 		} else {
-			return unittype.getName();
+			return unittype.toString();
 		}
 	}
 
 	public static UnitType getType(Unit unit) {
-		int id = unit.getID();
+		int id = unit.getId();
 		UnitType type = typeCache.get(id);
 		if (type == null && isValid(unit)) {
-			type = unit.getType();
+			type = unit.getInitialType(); // INITIAL?
 			typeCache.put(id, type);
 		}
 		return type;
 	}
 
-	public static Player getPlayer(Unit unit) {
-		int id = unit.getID();
+	public static Player getPlayer(PlayerUnit unit) {
+		int id = unit.getId();
 		Player player = playerCache.get(id);
 		if (player == null && isValid(unit)) {
 			player = unit.getPlayer();
@@ -80,20 +79,20 @@ public class BwapiUtility {
 		return player;
 	}
 
-	public static int getRegion(Position position, jnibwapi.Map map) {
-		Point point = new Point(position.getBX(), position.getBY());
+	public static int getRegion(TilePosition position, BWTA map) {
+		Point point = new Point(position.getX(), position.getY());
 		Integer regionId = regionCache.get(point);
 		if (regionId == null) {
 			Region region = (map == null) ? null : map.getRegion(position);
-			regionId = (region == null) ? 0 : region.getID();
+			regionId = (region == null) ? 0 : region.hashCode(); // TODO: hack (no getID?)
 			regionCache.put(point, regionId);
 		}
 		return regionId.intValue();
 	}
 
-	public static void clearCache(int id) {
-		typeCache.remove(id);
-		playerCache.remove(id);
+	public static void clearCache(Unit unit) {
+		typeCache.remove(unit.getId());
+		playerCache.remove(unit.getId());
 	}
 
 	/**
@@ -120,8 +119,8 @@ public class BwapiUtility {
 			type += " Tank Mode";
 		}
 		if (unitTypeMap.isEmpty()) {
-			for (UnitType ut : UnitTypes.getAllUnitTypes()) {
-				unitTypeMap.put(ut.getName(), ut);
+			for (UnitType ut : UnitType.values()) {
+				unitTypeMap.put(ut.toString(), ut);
 			}
 		}
 		return unitTypeMap.get(type);
@@ -136,8 +135,8 @@ public class BwapiUtility {
 	 */
 	public static TechType getTechType(String type) {
 		if (techTypeMap.isEmpty()) {
-			for (TechType tt : TechTypes.getAllTechTypes()) {
-				techTypeMap.put(tt.getName(), tt);
+			for (TechType tt : TechType.values()) {
+				techTypeMap.put(tt.toString(), tt);
 			}
 		}
 		return techTypeMap.get(type);
@@ -152,8 +151,8 @@ public class BwapiUtility {
 	 */
 	public static UpgradeType getUpgradeType(String type) {
 		if (upgradeTypeMap.isEmpty()) {
-			for (UpgradeType tt : UpgradeTypes.getAllUpgradeTypes()) {
-				upgradeTypeMap.put(tt.getName(), tt);
+			for (UpgradeType tt : UpgradeType.values()) {
+				upgradeTypeMap.put(tt.toString(), tt);
 			}
 		}
 		if (type.length() > 2 && Character.isDigit(type.charAt(type.length() - 1))) {

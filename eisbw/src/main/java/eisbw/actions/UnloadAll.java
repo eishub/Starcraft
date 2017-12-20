@@ -2,10 +2,13 @@ package eisbw.actions;
 
 import java.util.List;
 
+import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.unit.Bunker;
+import org.openbw.bwapi4j.unit.PlayerUnit;
+import org.openbw.bwapi4j.unit.Transporter;
+
 import eis.iilang.Action;
 import eis.iilang.Parameter;
-import jnibwapi.JNIBWAPI;
-import jnibwapi.Unit;
 
 /**
  * @author Danny & Harm - Unloads all units.
@@ -18,7 +21,7 @@ public class UnloadAll extends StarcraftLoadingAction {
 	 * @param api
 	 *            The BWAPI
 	 */
-	public UnloadAll(JNIBWAPI api) {
+	public UnloadAll(BW api) {
 		super(api);
 	}
 
@@ -29,8 +32,12 @@ public class UnloadAll extends StarcraftLoadingAction {
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
-		unit.unloadAll(false);
+	public void execute(PlayerUnit unit, Action action) {
+		if (unit instanceof Transporter) {
+			((Transporter) unit).unloadAll();
+		} else if (unit instanceof Bunker) {
+			// ((Bunker) unit).unloadAll(); FIXME: unsupported in lib
+		}
 	}
 
 	@Override
