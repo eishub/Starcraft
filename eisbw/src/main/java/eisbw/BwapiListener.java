@@ -136,7 +136,7 @@ public class BwapiListener extends BwapiEvents {
 			} catch (InterruptedException ie) {
 				break;
 			} // wait until all the initial workers get an action request
-		} while (frame == 1 && isRunning() && this.pendingActions.size() < 4);
+		} while (frame == 0 && isRunning() && this.pendingActions.size() < 4);
 
 		// PERFORM ACTIONS
 		Iterator<BwapiAction> actions = this.pendingActions.iterator();

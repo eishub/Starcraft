@@ -9,12 +9,10 @@ import org.openbw.bwapi4j.BW;
 import org.openbw.bwapi4j.Player;
 import org.openbw.bwapi4j.TilePosition;
 import org.openbw.bwapi4j.type.UnitType;
-import org.openbw.bwapi4j.unit.Assimilator;
-import org.openbw.bwapi4j.unit.Extractor;
+import org.openbw.bwapi4j.unit.GasMiningFacility;
 import org.openbw.bwapi4j.unit.MineralPatch;
 import org.openbw.bwapi4j.unit.MobileUnit;
 import org.openbw.bwapi4j.unit.PlayerUnit;
-import org.openbw.bwapi4j.unit.Refinery;
 import org.openbw.bwapi4j.unit.SpellCaster;
 import org.openbw.bwapi4j.unit.Unit;
 import org.openbw.bwapi4j.unit.VespeneGeyser;
@@ -88,21 +86,9 @@ public class UnitsPerceiver extends Perceiver {
 				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getId(), (int) amount, pos.getX(), pos.getY(),
 						getRegion(u));
 				geysers.add(geyser);
-			} else if (u instanceof Refinery) {
+			} else if (u instanceof GasMiningFacility) {
 				TilePosition pos = u.getTilePosition();
-				double amount = 100 * Math.ceil(((Refinery) u).getResources() / 100.0);
-				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getId(), (int) amount, pos.getX(), pos.getY(),
-						getRegion(u));
-				geysers.add(geyser);
-			} else if (u instanceof Assimilator) {
-				TilePosition pos = u.getTilePosition();
-				double amount = 100 * Math.ceil(((Assimilator) u).getResources() / 100.0);
-				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getId(), (int) amount, pos.getX(), pos.getY(),
-						getRegion(u));
-				geysers.add(geyser);
-			} else if (u instanceof Extractor) {
-				TilePosition pos = u.getTilePosition();
-				double amount = 100 * Math.ceil(((Extractor) u).getResources() / 100.0);
+				double amount = 100 * Math.ceil(((GasMiningFacility) u).getResources() / 100.0);
 				VespeneGeyserPercept geyser = new VespeneGeyserPercept(u.getId(), (int) amount, pos.getX(), pos.getY(),
 						getRegion(u));
 				geysers.add(geyser);

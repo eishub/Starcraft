@@ -11,13 +11,11 @@ import org.openbw.bwapi4j.MapDrawer;
 import org.openbw.bwapi4j.Position;
 import org.openbw.bwapi4j.type.Color;
 import org.openbw.bwapi4j.type.UnitType;
-import org.openbw.bwapi4j.unit.Assimilator;
 import org.openbw.bwapi4j.unit.Building;
-import org.openbw.bwapi4j.unit.Extractor;
+import org.openbw.bwapi4j.unit.GasMiningFacility;
 import org.openbw.bwapi4j.unit.MineralPatch;
 import org.openbw.bwapi4j.unit.MobileUnit;
 import org.openbw.bwapi4j.unit.PlayerUnit;
-import org.openbw.bwapi4j.unit.Refinery;
 import org.openbw.bwapi4j.unit.Unit;
 import org.openbw.bwapi4j.unit.VespeneGeyser;
 
@@ -127,14 +125,8 @@ public class DrawUnitInfo extends IDraw {
 			} else if (unit instanceof VespeneGeyser) {
 				health = ((VespeneGeyser) unit).getResources();
 				max = 5000;
-			} else if (unit instanceof Refinery) {
-				health = ((Refinery) unit).getResources();
-				max = 5000;
-			} else if (unit instanceof Assimilator) {
-				health = ((Assimilator) unit).getResources();
-				max = 5000;
-			} else if (unit instanceof Extractor) {
-				health = ((Extractor) unit).getResources();
+			} else if (unit instanceof GasMiningFacility) {
+				health = ((GasMiningFacility) unit).getResources();
 				max = 5000;
 			}
 
