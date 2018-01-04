@@ -1,0 +1,7 @@
+use "../Shared" as knowledge.
+use ZergHatchery as knowledge.
+
+module ZergHatcheryInit {
+	% Initialize beliefs for on-change percepts
+	if true	then insert(resources(0,0,0,0), queued(0)).
+}
