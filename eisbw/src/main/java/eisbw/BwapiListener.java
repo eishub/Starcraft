@@ -164,11 +164,11 @@ public class BwapiListener extends BwapiEvents {
 
 	@Override
 	public void unitDestroy(int id) {
-		Unit unit = this.bwapi.getUnit(id);
-		this.game.deleteUnit(unit, id);
-		if (unit != null) {
-			this.game.removeDraw(BwapiUtility.getName(unit));
+		String name = this.game.getUnitName(id);
+		if (name != null) {
+			this.game.removeDraw(name);
 		}
+		this.game.deleteUnit(id);
 		BwapiUtility.clearCache(id);
 	}
 

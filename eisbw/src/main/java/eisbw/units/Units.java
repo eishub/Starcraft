@@ -59,14 +59,16 @@ public class Units {
 	 * @param unit
 	 *            The unit to delete.
 	 */
-	public void deleteUnit(Unit unit) {
-		String unitName = BwapiUtility.getName(unit);
-		this.unitMap.remove(unitName);
-		this.unitNames.remove(unit.getID());
-		this.starcraftUnits.remove(unit);
-		this.uninitializedUnits.remove(unit);
-
-		this.environment.deleteFromEnvironment(unitName);
+	public void deleteUnit(int id) {
+		String unitName = this.unitNames.remove(id);
+		if (unitName != null) {
+			Unit unit = this.unitMap.remove(unitName);
+			if (unit != null) {
+				this.starcraftUnits.remove(unit);
+				this.uninitializedUnits.remove(unit);
+			}
+			this.environment.deleteFromEnvironment(unitName);
+		}
 	}
 
 	public String getUnitName(int id) {
@@ -89,8 +91,8 @@ public class Units {
 	 * Clean units, let garbage collector remove the remains.
 	 */
 	public void clean() {
-		for (Unit unit : this.unitMap.values()) {
-			deleteUnit(unit);
+		for (int id : this.unitNames.keySet().toArray(new Integer[this.unitNames.size()])) {
+			deleteUnit(id);
 		}
 	}
 }
