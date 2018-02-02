@@ -20,7 +20,7 @@ public class CustomDrawUnit extends IDraw {
 	 *
 	 * @param game
 	 *            The current game.
-	 * @param text
+	 * @param unit
 	 *            The unit to draw text above. If null (i.e., the mapagent) the text
 	 *            will be drawn on the top left of the screen instead.
 	 * @param text
