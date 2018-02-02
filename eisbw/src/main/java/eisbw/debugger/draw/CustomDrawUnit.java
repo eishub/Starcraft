@@ -34,11 +34,11 @@ public class CustomDrawUnit extends IDraw {
 
 	@Override
 	protected void doDraw(JNIBWAPI api) {
-		if (BwapiUtility.isValid(this.unit)) {
+		if (this.unit == null) { // mapagent
+			api.drawText(new Position(10, 25, PosType.PIXEL), this.text, true);
+		} else if (BwapiUtility.isValid(this.unit)) {
 			Position aboveUnit = new Position(this.unit.getX(), this.unit.getY() - 30);
 			api.drawText(aboveUnit, this.text, false);
-		} else if (this.unit == null) { // mapagent
-			api.drawText(new Position(10, 25, PosType.PIXEL), this.text, true);
 		}
 	}
 }

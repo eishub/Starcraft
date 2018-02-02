@@ -17,7 +17,8 @@ import jnibwapi.Unit;
 import jnibwapi.types.UnitType;
 
 /**
- * @author Danny & Harm - Enable or disable drawing text above a certain unit.
+ * @author Danny & Harm - Enable or disable drawing text on a certain
+ *         (tile)position on the map.
  *
  */
 @SuppressWarnings("deprecation")
@@ -25,7 +26,7 @@ public class DebugDrawMap extends StarcraftAction {
 	private final Game game;
 
 	/**
-	 * The DebugText constructor.
+	 * The DebugDrawMap constructor.
 	 *
 	 * @param api
 	 *            The BWAPI

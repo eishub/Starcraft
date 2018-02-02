@@ -13,7 +13,7 @@ public class CustomDrawMap extends IDraw {
 	private final String text;
 
 	/**
-	 * The CustomDrawUnit constructor.
+	 * The CustomDrawMap constructor.
 	 *
 	 * @param game
 	 *            The current game.
