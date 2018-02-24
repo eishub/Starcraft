@@ -4,34 +4,70 @@ package eisbw.percepts;
  * @author Danny & Harm - The data class with all the percept names.
  *
  */
-public class Percepts {
-	public static final String DEFENSIVEMATRIX = "defensiveMatrix";
-	public static final String STATUS = "status";
-	public static final String RESOURCES = "resources";
-	public static final String MINERALFIELD = "mineralField";
-	public static final String BASE = "base";
-	public static final String CHOKEPOINT = "chokepoint";
-	public static final String MAP = "map";
-	public static final String VESPENEGEYSER = "vespeneGeyser";
-	public static final String SELF = "self";
-	public static final String QUEUESIZE = "queueSize";
-	public static final String ATTACKING = "attacking";
-	public static final String CONSTRUCTIONSITE = "constructionSite";
-	public static final String OWNRACE = "ownRace";
-	public static final String ENEMYPLAYER = "enemyPlayer";
-	public static final String ENEMY = "enemy";
-	public static final String FRIENDLY = "friendly";
-	public static final String UNDERCONSTRUCTION = "underConstruction";
+public enum Percepts {
+	// defensiveMatrix/1
+	DEFENSIVEMATRIX("defensiveMatrix", 1),
+	// status/8
+	STATUS("status", 8),
+	// resources/4
+	RESOURCES("resources", 4),
+	// mineralField/5
+	MINERALFIELD("mineralField", 5),
+	// base/6
+	BASE("base", 6),
+	// chokepoint/6
+	CHOKEPOINT("chokepoint", 6),
+	// map/3
+	MAP("map", 3),
+	// vespeneGeyser/5
+	VESPENEGEYSER("vespeneGeyser", 5),
+	// self/2
+	SELF("self", 2),
+	// queueSize/1
+	QUEUESIZE("queueSize", 1),
+	// attacking/2
+	ATTACKING("attacking", 2),
+	// constructionSite/3
+	CONSTRUCTIONSITE("constructionSite", 3),
+	// ownRace/1
+	OWNRACE("ownRace", 1),
+	// enemyPlayer/2
+	ENEMYPLAYER("enemyPlayer", 2),
+	// enemy/11
+	ENEMY("enemy", 11),
+	// friendly/2
+	FRIENDLY("friendly", 2),
+	// underConstruction/6
+	UNDERCONSTRUCTION("underConstruction", 6),
+	// unitLoaded/1
+	UNITLOADED("unitLoaded", 1),
+	// researching/1
+	RESEARCHING("researching", 1),
+	// winner/1
+	WINNER("winner", 1),
+	// gameframe/1
+	FRAME("gameframe", 1),
+	// nuke/3
+	NUKE("nuke", 3),
+	// region/5
+	REGION("region", 5),
+	// order/5
+	ORDER("order", 5);
 
-	public static final String UNITLOADED = "unitLoaded";
-	public static final String RESEARCHING = "researching";
-	public static final String WINNER = "winner";
-	public static final String FRAME = "gameframe";
-	public static final String NUKE = "nuke";
-	public static final String REGION = "region";
-	public static final String ORDER = "order";
+	private final String name;
+	private final int arity;
 
-	private Percepts() {
-		// Private constructor because this is a static class
+	private Percepts(String name, int arity) {
+		this.name = name;
+		this.arity = arity;
+	}
+
+	public int getArity() {
+		return this.arity;
+	}
+
+	@Override
+	public String toString() {
+		return this.name;
 	}
 }

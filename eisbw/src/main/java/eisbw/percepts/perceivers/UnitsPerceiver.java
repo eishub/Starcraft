@@ -163,8 +163,10 @@ public class UnitsPerceiver extends Perceiver {
 				unitpercepts.add(new FriendlyPercept(u.getID(), unittype));
 				if (!u.isCompleted()) {
 					Position pos = u.getPosition();
-					newunitpercepts.add(new UnderConstructionPercept(u.getID(), u.getHitPoints() + u.getShields(),
-							pos.getBX(), pos.getBY(), getRegion(u)));
+					Unit builder = u.getBuildUnit();
+					newunitpercepts
+							.add(new UnderConstructionPercept(u.getID(), (builder == null) ? -1 : builder.getID(),
+									u.getHitPoints() + u.getShields(), pos.getBX(), pos.getBY(), getRegion(u)));
 				}
 			} else { // enemy
 				long orientation = 45 * Math.round(Math.toDegrees(u.getAngle()) / 45.0);

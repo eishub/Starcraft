@@ -7,8 +7,8 @@ public class StarcraftPercept extends Percept {
 	private static final long serialVersionUID = 1L;
 	private final int hash;
 
-	public StarcraftPercept(String name, Parameter... parameters) {
-		super(name, parameters);
+	public StarcraftPercept(Percepts percept, Parameter... parameters) {
+		super(percept.toString(), parameters);
 		this.hash = super.hashCode();
 	}
 
