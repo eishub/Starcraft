@@ -20,7 +20,7 @@ public class PerceptFilter {
 	 *            The type of the percept.
 	 */
 	public PerceptFilter(Percepts percept, Type type) {
-		this.name = percept.name();
+		this.name = percept.toString();
 		this.type = type;
 	}
 
