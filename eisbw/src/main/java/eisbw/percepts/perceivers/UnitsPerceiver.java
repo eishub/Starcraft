@@ -1,6 +1,7 @@
 package eisbw.percepts.perceivers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 //import java.util.LinkedList;
 import java.util.List;
@@ -152,6 +153,12 @@ public class UnitsPerceiver extends Perceiver {
 	 */
 	private void setUnitPercepts(List<Unit> units, List<Percept> newunitpercepts, List<Percept> unitpercepts,
 			List<Percept> attackingpercepts) {
+		Map<Integer, Integer> constructing = new HashMap<>();
+		for (Unit u : units) {
+			if (newunitpercepts != null && (u.isConstructing() || u.isTraining())) {
+				constructing.put(u.getBuildUnit().getID(), u.getID());
+			}
+		}
 		for (Unit u : units) {
 			UnitType type = BwapiUtility.getType(u);
 			if (type == null) {
@@ -163,10 +170,9 @@ public class UnitsPerceiver extends Perceiver {
 				unitpercepts.add(new FriendlyPercept(u.getID(), unittype));
 				if (!u.isCompleted()) {
 					Position pos = u.getPosition();
-					Unit builder = u.getBuildUnit();
-					newunitpercepts
-							.add(new UnderConstructionPercept(u.getID(), (builder == null) ? -1 : builder.getID(),
-									u.getHitPoints() + u.getShields(), pos.getBX(), pos.getBY(), getRegion(u)));
+					int builderId = constructing.containsKey(u.getID()) ? constructing.get(u.getID()) : -1;
+					newunitpercepts.add(new UnderConstructionPercept(u.getID(), builderId,
+							u.getHitPoints() + u.getShields(), pos.getBX(), pos.getBY(), getRegion(u)));
 				}
 			} else { // enemy
 				long orientation = 45 * Math.round(Math.toDegrees(u.getAngle()) / 45.0);
