@@ -154,9 +154,11 @@ public class UnitsPerceiver extends Perceiver {
 	private void setUnitPercepts(List<Unit> units, List<Percept> newunitpercepts, List<Percept> unitpercepts,
 			List<Percept> attackingpercepts) {
 		Map<Integer, Integer> constructing = new HashMap<>();
-		for (Unit u : units) {
-			if (newunitpercepts != null && (u.isConstructing() || u.isTraining()) && u.getBuildUnit() != null) {
-				constructing.put(u.getBuildUnit().getID(), u.getID());
+		if (newunitpercepts != null) {
+			for (Unit u : units) {
+				if ((u.isConstructing() || u.isTraining()) && u.getBuildUnit() != null) {
+					constructing.put(u.getBuildUnit().getID(), u.getID());
+				}
 			}
 		}
 		for (Unit u : units) {
