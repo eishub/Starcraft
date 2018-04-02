@@ -1,23 +1,23 @@
-\chapter{Environment}
-This environment is the first Environment Interface Standard (EIS) compatible agent environment providing full access to StarCraft (Brood War). It brings the challenges of Real-Time Strategy (RTS) games to the field of multi-agent programming whilst also facilitating the development of AI solutions for such games, allowing the development of problem-solving techniques before being applied to similar but more complex real-world problems.
+\chapter{Connector}
+This connector is the first Environment Interface Standard (EIS) compatible connector that provides cognitive agents full access to StarCraft (Brood War). It brings the challenges of Real-Time Strategy (RTS) games to the field of multi-agent programming whilst also facilitating the development of AI solutions for such games, allowing the development of problem-solving techniques before being applied to similar but more complex real-world problems.
 
-The design of this environment was guided by two conflicting objectives:
+The design of this connector was guided by two conflicting objectives:
 \begin{enumerate}
- \item The environment should facilitate multi-agent systems that operate at a level of \textit{abstraction} that is as high as possible.
- \item The environment should facilitate multi-agent system implementations with as many different \textit{strategies} as possible.
+ \item The connector should facilitate multi-agent systems that operate at a level of \textit{abstraction} that is as high as possible.
+ \item The connector should facilitate multi-agent system implementations with as many different \textit{strategies} as possible.
 \end{enumerate}
 In other words, it does not aim for a multi-agent system that operates at the same level of detail as bots written in C or Java, but such a system should in contrast also not consist of a single action `\textit{win}' that will delegate the control to some other subsystem instead. To make optimal use of the reasoning typically employed by cognitive agents, low-level details are handled in the environment whilst still allowing agents sufficiently fine grained control.
 
-RTS games like StarCraft involve very large amounts of units that can come and go during the game and that have to deal with major challenges such as uncertainty and long-term (collaborative) goals, requiring multiple levels of abstraction and reasoning in the vast space of actions and game states that such games have. Therefore, a major factor that was also considered is the performance of the environment; a substantial performance impact caused by for example an enormous amount of percepts will limit the amount of viable implementations (and thus possible strategies).
+RTS games like StarCraft involve very large amounts of units that can come and go during the game and that have to deal with major challenges such as uncertainty and long-term (collaborative) goals, requiring multiple levels of abstraction and reasoning in the vast space of actions and game states that such games have. Therefore, a major factor that was also considered is the performance of the connector; a substantial performance impact caused by for example an enormous amount of percepts will limit the amount of viable implementations (and thus possible strategies).
 
-The remainder of this chapter will demonstrate how to set-up and start a bot with the StarCraft environment using a multi-agent system in the GOAL language. For the latest installation instructions, we refer to: \\ \url{https://github.com/eishub/StarCraft/wiki/Install-Guide}
+The remainder of this chapter will demonstrate how to set-up and start a bot with the StarCraft connector using a multi-agent system in the GOAL language. For the latest installation instructions, we refer to: \\ \url{https://github.com/eishub/StarCraft/wiki/Install-Guide}
 
 \section{Chaoslauncher}
-The Chaoslauncher facilitates plug-ins for StarCraft Brood War, like the \textit{BWAPI Injector} which is necessary for using the BWAPI library that connects our environment to the game. It is also recommended to make use of the \textit{APMAlert} plugin, which shows the current actions per minute of all your units together. It is also recommended to make use of the \textit{W-Mode} plugin. This plugin automatically starts your StarCraft game in windowed mode which is easier for debugging. You can also make use of the \textit{ChaosPlugin} to make use of its autoreplay function which automatically saves a replay at the end of each game. You can play these replays by first turning off the \textit{BWAPI Injector}. You can then start StarCraft (in the launcher) and select \textit{Single Player} with gametype \textit{Expansion}. Press the `Ok' button and then the `Load Replay' button. If you then open the \texttt{Autoreplay} directory in that screen you should be able to see all the replays which are saved by the autoreplay function.  Alternatively, view replays in your browser at \url{http://www.openbw.com/replay-viewer}
+The Chaoslauncher facilitates plug-ins for StarCraft Brood War, like the \textit{BWAPI Injector} which is necessary for using the BWAPI library that facilitates connecting to the internals of the game. It is recommended to make use of the \textit{APMAlert} plugin, which shows the current actions per minute of all your units together. It is also recommended to make use of the \textit{W-Mode} plugin. This plugin automatically starts your StarCraft game in windowed mode which is easier for debugging. You can also make use of the \textit{ChaosPlugin} to take advantage of its autoreplay function which automatically saves a replay at the end of each game. You can play these replays by turning off the \textit{BWAPI Injector}, starting StarCraft (with the Chaoslauncher), selecting \textit{Single Player} with gametype \textit{Expansion}, pressing the `Ok' button and then the `Load Replay' button. If you then open the \texttt{Autoreplay} directory in that screen, you should be able to see all the replays which were saved by the autoreplay function. Alternatively, view replays in your browser at \url{http://www.openbw.com/replay-viewer}
 
 \section{Init Parameters}
 \label{mas2g}
-The StarCraft environment offers multiple configurable items through the init parameters of a mas2g file. When updating any parameters, do not forget to close the Chaoslauncher before launching a new game, as otherwise your changes will not be applied. The example below demonstrates all parameters and their defaults.
+The StarCraft connector offers multiple configurable items through the init parameters of a mas2g file. When updating any parameters, do not forget to fully close the Chaoslauncher (i.e., closing it in the system tray) before launching a new game, as otherwise your changes will not be applied. The example below demonstrates all parameters and their defaults.
 
 \begin{verbatim}
     use "connector.jar" as environment with
@@ -32,7 +32,8 @@ The StarCraft environment offers multiple configurable items through the init pa
         draw_mapinfo="false",
         draw_unitinfo="false",
         invulnernable="false",
-        map_agent="true",
+        managers=0,
+        percepts=[].
 \end{verbatim}
 
 \subsection{Own Race}
@@ -45,18 +46,19 @@ The enemy race parameter can be used for specifying which race of the game's bui
 
 \subsection{Map}
 \label{map}
-You have to specify which map the Chaoslauncher will automatically load when starting the game. This can be done by inserting the following line: \textit{map = <filename>}, where \textit{<filename>} is the exact filename of the map (with extension). Please note that the environment only supports maps in the directory \textit{StarCraft/maps}, and that subdirectories (like \textit{sscait}) should be indicated. Also note that the first time the environment runs on a certain map, it will take some time (around 2 minutes) to generate a datafile for the given map (if not already present in \textit{StarCraft/AI/BWTA}).
+You have to specify which map the Chaoslauncher will automatically load when starting the game. This can be done by inserting the following line: \textit{map = <filename>}, where \textit{<filename>} is the exact filename of the map (with extension). Please note that the environment only supports maps that are located in the directory \textit{StarCraft/maps}, and that subdirectories (like \textit{sscait}) should be indicated. Also note that the first time the environment runs on a certain map, it will take some time (around 2 minutes) to generate a datafile for the given map (if it is not already present in the \textit{StarCraft/AI/BWTA} directory).
 
+\pagebreak
 \subsection{StarCraft Location}
 \label{StarCraft location}
-You have to specify the location of the StarCraft game if it is not installed in \textit{C:/Starcraft}. Using this location, the Chaoslauncher will automatically start when launching a MAS. When the Chaoslauncher is already running, it will not start again until you close it, but this is fine as long as you use the same init parameters (although you have to start the next game manually then). You can specify the location of StarCraft by inserting \textit{StarCraft\_location = <FilePath>}, where \textit{<FilePath>} is the absolute path to the StarCraft installation folder.
+You have to specify the location of the StarCraft game if it is not installed in \textit{C:/Starcraft}. Using this location, the Chaoslauncher will automatically start when launching a MAS. When the Chaoslauncher is already running, it will not start again until you close it (in the system tray), but this is fine as long as you use the same init parameters (although you have to start the next game manually in the existing Chaoslauncher instance then). You can specify the location of StarCraft by inserting \textit{StarCraft\_location = <FilePath>}, where \textit{<FilePath>} is the absolute path to the StarCraft installation folder.
 
 \subsection{Auto Menu}
 \label{auto menu}
 The auto menu parameter is used to automatically go through the menus of the game when starting a MAS. This can be used for single player games and multi player games. To use the auto menu function you can insert the following line: \textit{auto\_menu=<MenuChoice>}, where \textit{<MenuChoice>} can take the following values:\\
-\textit{SINGLE\_PLAYER}: for a single player game.\\
-\textit{Multi\_PLAYER}: for a multiplayer game.\\
-\textit{LAN}: for a local multiplayer game.
+\textit{SINGLE\_PLAYER}: for a single player game (against built-in AI).\\
+\textit{LAN}: for a local multiplayer game.\\
+\textit{OFF}: for disabling the auto menu.
 
 \subsection{Game Type}
 \label{game type}
@@ -64,11 +66,12 @@ The game type is used to indicate what kind of game the Chaoslauncher should sta
 
 \subsection{Game Speed}
 \label{game speed}
-The game speed parameter can be used to set the initial speed of the game when the StarCraft game is launched (the speed can be changed during the game by using the development tool; see the next item). StarCraft makes use of a logical frame rate, which means that the game\_speed depends on the amount of frames per second (fps) used to update the game. The higher the fps, the faster the game will go. For using the game\_speed parameter you can insert the following line: \textit{game\_speed=<FPS>}, where \textit{<FPS>}. If a number lower than 1 is given, there will be no limit on the amount of FPS used, and the game will thus run as fast as it possibly can.
+The game speed parameter can be used to set the initial speed of the game when the StarCraft game is launched (the speed can be changed during the game by using the development tool; see the next item). StarCraft makes use of a logical frame rate, which means that the game\_speed depends on the amount of frames per second (fps) used to update the game. The higher the fps, the faster the game will go. For using the game\_speed parameter you can insert the following line: \textit{game\_speed=<FPS>}, where \textit{<FPS>}. If a number lower than 1 is given, there will be no limit on the amount of FPS used, and the game will run as fast as it possibly can on your CPU.
 
+\pagebreak
 \subsection{Debug}
 \label{debug}
-The environment offers a development tool for debugging purposes. With this development tool, you can increase or decrease the game speed, enable cheats and toggle the drawing of map and/or unit details in the game. More information about the development tool can be found in \ref{development tool}. In order to enable or disable launching the development tool, you can insert \textit{debug=<Boolean>}.
+The environment offers a development tool for debugging purposes. With this development tool, you can increase or decrease the game speed, enable cheats and toggle the drawing of map and/or unit details in the game. More information about the development tool can be found in Section \ref{development tool}. In order to enable or disable launching the development tool, you can insert \textit{debug=<Boolean>}.
 
 \subsection{Draw Map Info}
 \label{draw map info}
@@ -82,42 +85,42 @@ This parameter can be used to draw info about units (counts, IDs, health, target
 \label{invulnerable}
 The invulnerable parameter can be used to automatically make your units invulnerable from the start of the game (which can also be done manually in the development tool). This can come in handy for testing purposes when you do not want to fight your opponent. To use the invulnerable function you can insert \textit{invulnerable=<Boolean>}.
 
-\subsection{Map Agent}
-\label{map agent}
-If enabled, the environment will generate an entity of name and type \textit{`mapAgent'}. This entity is not connected to a unit in the game, but will be the only entity to receive all global information: \textit{base/, chokepoint/6, enemyrace/1, map/2, region/5, attacking/2, constructionSite/3-4, enemy/10, friendly/2, gameframe/1, mineralField/5, nuke/2, resources/4, underConstruction/5, vepseneGeyser/5, winner/1}, and can even take a few actions: \textit{cancel/1, debugdraw/1, forfeit/0}. 
+\subsection{Managers}
+\label{managers}
+If higher than 0, the connector will generate the specified number of entities (N) with type `manager' and name `managerN' at the start of the game. Such manager entities will not receive any percepts by default, but can subscribe to global percepts (see the following subsection). Manager entities can even take a few actions: \textit{cancel/1, debugdraw/1, debugdraw/3, forfeit/0, startManager/0}. To use managers you can thus insert \textit{managers=<Integer>}.
 
-Thus, when the map agent is enabled, all other entities will only receive their local information: \textit{self/2, status/8, order/5, defensiveMatrix/1, queueSize/1, researching/1, unitLoaded/1}, whilst they can of course still take the same actions. The map agent entity can be enabled or disabled with \textit{map\_agent=<Boolean>}.
-
-\newpage
+\pagebreak
+\subsection{Percepts}
+\label{percepts}
+By default, the entity for any unit will only receive those percepts that are specific to it, i.e. generic unit and and unit-specific percepts (see the next chapter). Through this init parameter, however, it is possible to specify that units of a certain type (including managers) should receive certain global percepts (static or dynamic).  This is possible through a list of lists, where the first element of each sublist is the entity type (see Section \ref{unittype} and use the exact name for managers), and the following the names of the global percepts that should be received by corresponding units. For example, \textit{percepts: [ [manager1,base,chokepoint], [zergZergling,friendly,enemy] ]} will ensure that the first manager will receive base and chokepoint percepts, whilst any zergling will receive friendly and enemy percepts.
 
 \section{Entity Types}
-When defining a launch rule it is important that a correct entity type is used (see \ref{unittype}). This value has to be the same type of the StarCraft unit without spaces and where the first letter is uncapitalised. So when you for example want to connect an agent to a \texttt{Terran SCV}, this can be done by using the entity type \textit{terranSCV}. Note that each unit type starts with the race of the unit, followed by the exact name of the unit type, and please be aware that the environment will wait in the first game frame until \textit{at least four actions} have been requested, e.g., until all initial workers have called \textit{gather/1}. This will allow all initial agents (including the \textit{`mapAgent'}) to fully start-up (and possible execute a few cycles already) before the game starts.
+When defining a launch rule it is important that a correct entity type is used (see Section \ref{unittype}). This value has to be the same type of the StarCraft unit without spaces and where the first letter is uncapitalised. So when you for example want to connect an agent to a \texttt{Terran SCV}, this can be done by using the entity type \textit{terranSCV}. Note that each unit type starts with the race of the unit, followed by the exact name of the unit type, and please be aware that the environment will wait in the first game frame until \textit{at least four actions} have been requested, e.g., until all initial workers have called \textit{gather/1}. This will allow all initial agents (including managers) to fully start-up (and possible execute a few cycles already) before the game starts.
 
 \begin{verbatim}
     define myAgent as agent {
         ...
     }
-
     launchpolicy {
         when type = terranSCV launch myAgent.
     }
 \end{verbatim}
 
-With mind control (an advanced Protoss ability), units from other races can be taken over. These units will also get an entity. A possible way to accomodate such entities is by making sure any other unit type is connected to a generic agent through a wildcard launch rule at the end of your mas2g: \begin{verbatim}
+\noindent With mind control (an advanced Protoss ability), units from other races can be taken over. These units will also get an entity. A possible way to accomodate such entities is by making sure any other unit type is connected to a generic agent through a wildcard launch rule at the end of your mas2g: \begin{verbatim}
     when type=* launch ...
 \end{verbatim}
 
-\newpage
+\pagebreak
 
 \section{The Development Tool}
 \label{development tool}
 The development tool can be automatically launched by using the \textit{debug} init parameter. It provides several actions that are useful for debugging purposes.
 
 \subsection{Game Speed}
-The Game Speed slider can be found at the top of the development tool window. When the slider is used, the speed of the game will be changed immediately. The slider start on a value of 50 fps (this will not reflect the \textit{game\_speed} init parameter). The slowest speed is 20 fps, and from there you can set it as fast as you want. Please note that the agents are supposed to play at 50 fps, which is the default game speed for AI tournaments. When the speed is set to more than 100 fps, the agents can react slower than they would on the tournament speed. Setting the game speed to more than 100 fps should thus only be used for quick testing purposes.
+The Game Speed slider can be found at the top of the development tool window. When the slider is used, the speed of the game will be changed immediately. The slider always starts on a value of 50 fps (it will \textbf{not} reflect the \textit{game\_speed} init parameter if that was used). The slowest speed is 20 fps, and from there you can set it as fast as you want. Please note that the agents are supposed to play at 50 fps, as that is the default game speed for AI tournaments. Especially when the speed is set to more than 100 fps, your agents might act differently than they would on the tournament speed, as they have much less time to process each frame. Setting the game speed to more than 100 fps should thus only be used for quick testing purposes.
 
 \subsection{Cheat Actions}
-The development tool offers 3 buttons which instantly enable StarCraft cheats. Note that these cheats should be used for testing purposes only. The first cheat is called: \textit{Give resources} which gives the player 10000 minerals and 10000 gas. The second cheat is called: \textit{Enemy attacks deal 0 damage} which makes the units of the player immune for damage (note: this can be automatically enabled with the init parameter \textit{invulnerable}). The last cheat is called: \textit{Show map} which makes the whole map visible for the player. Note that  all your agents will then also perceive everything on the map.
+The development tool offers 3 buttons which instantly enable StarCraft cheats. Note that these cheats should be used for testing purposes only. The first cheat is called: \textit{Give resources} which gives the player 10000 minerals and 10000 gas. The second cheat is called: \textit{Enemy attacks deal 0 damage} which makes the units of the player immune for damage (note: this can be automatically enabled with the init parameter \textit{invulnerable}). The last cheat is called: \textit{Show map} which makes the whole map visible for the player. Note that all your agents will then also perceive everything on the map.
 
 \subsection{Draw Actions}
-The development tool can also be used to show map or unit details in StarCraft itself. There are 2 buttons to this end, reflecting the matching \textit{draw\_mapinfo} and \textit{draw\_unitinfo} parameters. Please see the information above on these parameters for more information.
+The development tool can also be used to show map or unit details in StarCraft itself. There are 2 buttons to this end, reflecting the matching \textit{draw\_mapinfo} and \textit{draw\_unitinfo} init parameters. Please see the information above on these parameters for more information.
