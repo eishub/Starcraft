@@ -6,7 +6,7 @@ This chapter lists all the actions that are usable in the StarCraft environment,
 
 %%%-------------------f---------------------------------------
 \section{All Units}
-The following actions can be executed by any unit.
+The following actions can be executed by any agent (i.e., including managers).
 %%%----------------------------------------------------------
 
 \subsection{cancel/1}
@@ -16,19 +16,18 @@ The following actions can be executed by any unit.
  Example & \verb|cancel(3)| \\
  Parameters & \verb|<TargetId>|: The ID of the unit of which the construction or morphing should be cancelled. \\
  Pre & The targeted unit is incomplete (not fully constructed or morphed). \\
- Post & The targeted unit's construction or morphing will be cancelled; 75\% of the invested resources will be refunded (and for Zerg the original unit will be restored). \\
- Note & It makes most sense for the \textit{`mapAgent'} to execute this.
+ Post & The targeted unit's construction or morphing will be cancelled; 75\% of the invested resources will be refunded (and for Zerg the original unit will be restored).
 \end{tabularx}
 
 \subsection{debugdraw/1}
 \begin{tabularx}{\textwidth}{lX}
- Description & Draw text above a unit in the game window. \\
+ Description & Draw text above the unit in the game window. \\
  Syntax & \verb|debugdraw(<Text>)| \\
  Example & \verb|debugdraw("Power Overwhelming")| \\
- Parameters & \verb|<Text>|: The text(string) that should be drawn. \\
+ Parameters & \verb|<Text>|: The text(string) that should be drawn; this can include characters like tabs and newlines. \\
  Pre & - \\
- Post & The given text will be drawn above the unit (i.e., it will stay with the unit) in the game window. If the given text is empty, the drawing will be cancelled. \\
- Note & For the \textit{`mapAgent'}, the text will be drawn on a fixed position on the left top of the game window.
+ Post & The given text will be drawn above the unit (i.e., it will stay with the unit in the game window). If the given text is empty, any existing drawing will be cancelled. \\
+ Note & For managers, the text will be drawn on a fixed position on the left top of the game window.
 \end{tabularx}
 
 \subsection{debugdraw/2}
@@ -37,10 +36,21 @@ The following actions can be executed by any unit.
  Syntax & \verb|debugdraw(<TargetId>,<Text>)| \\
  Example & \verb|debugdraw(5, "Power Overwhelming")| \\
  Parameters & \verb|<TargetId>|: The ID of the (possibly enemy or even neutral) unit above which the text should be drawn. \\
- 			& \verb|<Text>|: The text(string) that should be drawn. \\
+ 			& \verb|<Text>|: The text(string) that should be drawn; this can include characters like tabs and newlines.  \\
  Pre & - \\
- Post & The given text will be drawn above the unit (i.e., it will stay with the unit) in the game window, as long as it is visible (or becomes visible again). If the given text is empty, the drawing will be cancelled. \\
- Note & It makes most sense for the \textit{`mapAgent'} to execute this.
+ Post & The given text will be drawn above the unit (i.e., it will stay with the unit in the game window), as long as it is visible (or becomes visible again). If the given text is empty, any existing drawing will be cancelled.
+\end{tabularx}
+
+\subsection{debugdraw/3}
+\begin{tabularx}{\textwidth}{lX}
+ Description & Draw text on a specific location on the map (in the game window). \\
+ Syntax & \verb|debugdraw(<X>,<Y>,<Text>)| \\
+ Example & \verb|debugdraw(1, 23, "Important Location")| \\
+ Parameters & \verb|<X>|: The X coordinate of the location to draw on. \\
+ 			& \verb|<Y>|: The Y coordinate of the location to draw on.  \\
+ 			& \verb|<Text>|: The text(string) that should be drawn; this can include characters like tabs and newlines.  \\
+ Pre & - \\
+ Post & The given text will be drawn on the given location (i.e., it will stay on the location in the game window). If the given text is empty, any existing drawing will be cancelled.
 \end{tabularx}
 
 \subsection{forfeit/0}
@@ -48,19 +58,28 @@ The following actions can be executed by any unit.
  Description & Forfeit the game. \\
  Syntax & \verb|forfeit| \\
  Pre & The game is in progress. \\
- Post & The game ends with a loss for the player. \\
- Note & It makes most sense for the \textit{`mapAgent'} to execute this.
+ Post & The game ends with a loss for the player.
 \end{tabularx}
 
-\subsection{morph/1 (Zerg only)}
+\subsection{morph/1 (Zerg units only)}
 \begin{tabularx}{\textwidth}{lX}
  Description & Morph a unit into another unit(type). \\
  Syntax & \verb|morph(<Type>)| \\
  Example & \verb|morph(`Zerg Lurker')| \\
- Parameters & \verb|<Type>|: The type to morph into. See \ref{unittype}. \\
+ Parameters & \verb|<Type>|: The type to morph into. See Section \ref{unittype}. \\
  Pre & The unit is capable of morphing into the given unit type. \\
  Post & The unit's corresponding agent terminates and a new agent is created for the new unit when it is completed (with the same ID).
 \end{tabularx}
+
+\subsection{startNewManager/0}
+\begin{tabularx}{\textwidth}{lX}
+ Description & Starts a new manager entity. \\
+ Syntax & \verb|startNewManager| \\
+ Pre & - \\
+ Post & A new manager entity is launched (with a number that follows the existing sequence of mangers). To stop a manager entity, the corresponding agent's main module should be terminated (which can be done with either an exit condition or an exit-module action).
+\end{tabularx}
+
+\pagebreak
 
 %%%----------------------------------------------------------
 \section{Buildings}
@@ -72,7 +91,7 @@ The actions in this section can only be executed by buildings (or by some specia
  Description & Build an addon. \\
  Syntax & \verb|buildAddon(<Name>)| \\
  Example & \verb|buildAddon(`Terran Comsat Station')| \\
- Parameters & \verb|<Name>|: The name of the addon that is to be constructed. See \ref{unittype}. \\
+ Parameters & \verb|<Name>|: The name of the addon that is to be constructed. See Section \ref{unittype}. \\
  Pre & The building is capable of building the addon and does not already have an addon. \\
  Post & The building starts constructing the addon.
 \end{tabularx}
@@ -119,7 +138,7 @@ The actions in this section can only be executed by buildings (or by some specia
  Description & Research an upgrade. \\
  Syntax & \verb|research(<Type>)| \\
  Example & \verb|research(`Cloaking Field')| \\
- Parameters & \verb|<Type>|: The type of upgrade to research. See \ref{upgradetype}. \\
+ Parameters & \verb|<Type>|: The type of upgrade to research. See Section \ref{upgradetype}. \\
  Pre & The unit is capable of researching the given upgrade. \\
  Post & The unit starts researching the given upgrade. \\
  Note & The level of an upgrade (if applicable) is optional; this stacks automatically.
@@ -130,7 +149,7 @@ The actions in this section can only be executed by buildings (or by some specia
  Description & Train a unit. \\
  Syntax & \verb|train(<Type>)| \\
  Example & \verb|train(`Protoss Zealot')| \\
- Parameters & \verb|<Type>|: The type of unit to train. See \ref{unittype}. \\
+ Parameters & \verb|<Type>|: The type of unit to train. See Section \ref{unittype}. \\
  Pre & The unit is capable of producing the given unit. \\
  Post & The unit starts producing the given unit.
 \end{tabularx}
@@ -153,7 +172,7 @@ The actions in this section can only be executed by buildings (or by some specia
  Post & All loaded units are unloaded from the unit.
 \end{tabularx}
 
-\newpage
+\pagebreak
 
 %%%----------------------------------------------------------
 \section{Moving Units}
@@ -165,7 +184,7 @@ The action in this section can only be executed by moving units (i.e. non-buildi
  Description & Use an ability. \\
  Syntax & \verb|ability(<Type>)| \\
  Example & \verb|ability(`Burrowing')| \\
- Parameters & \verb|<Type>|: The type of ability to use. See \ref{abilities}. \\
+ Parameters & \verb|<Type>|: The type of ability to use. See Section \ref{abilities}. \\
  Pre & The unit is capable of performing the ability (on itself, i.e., without a target unit or location). \\
  Post & The unit performs the ability. \\
  Note & Behaviour that can be toggled on and off (e.g. Burrow/Cloak/Siege) is also executed by using this action (i.e. once for enabling and then again for disabling).
@@ -176,7 +195,7 @@ The action in this section can only be executed by moving units (i.e. non-buildi
  Description & Use an ability on a target unit. \\
  Syntax & \verb|ability(<Type>,<Target>)| \\
  Example & \verb|ability(`Archon Warp', 3)| \\
- Parameters & \verb|<Type>|: The type of ability to use. See \ref{abilities}. \\
+ Parameters & \verb|<Type>|: The type of ability to use. See Section \ref{abilities}. \\
             & \verb|<Target>|: The target to use the technology on.\\
  Pre & The unit is capable of performing the ability (with some target unit), and the target unit is visible \\
  Post & The unit performs the ability on the target unit.
@@ -187,7 +206,7 @@ The action in this section can only be executed by moving units (i.e. non-buildi
  Description & Use an ability on a location. \\
  Syntax & \verb|ability(<Type>, <X>, <Y>)| \\
  Example & \verb|ability(`Dark Swarm', 11, 8)| \\
- Parameters & \verb|<Type>|: The type of ability to use. See \ref{abilities}. \\
+ Parameters & \verb|<Type>|: The type of ability to use. See Section \ref{abilities}. \\
             & \verb|<X>|: The x-coordinate of the chosen location. \\
             & \verb|<Y>|: The y-coordinate of the chosen location. \\
  Pre & The unit is capable of performing the ability (with some target location), and the location is visible. \\
@@ -266,7 +285,7 @@ The action in this section can only be executed by moving units (i.e. non-buildi
  Post & The unit stops performing its current action.
 \end{tabularx}
 
-\newpage
+\pagebreak
 
 %%%----------------------------------------------------------
 \section{Workers}
@@ -287,7 +306,7 @@ The actions in this section can only be executed by worker units.
 
 \subsection{gather/1}
 \begin{tabularx}{\textwidth}{lX}
- Description & Gather a specific resource (minerals or vespene gas building). \\
+ Description & Gather a specific resource (i.e., from a mineral cluster or a vespene gas building). \\
  Syntax & \verb|gather(<Id>)| \\
  Example & \verb|gather(32)| \\
  Parameters & \verb|<Id>|: The ID of the chosen resource. \\

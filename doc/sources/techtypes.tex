@@ -1,6 +1,7 @@
+\newpage
 \section{Abilities}
 \label{abilities}
-All abilities that can be used by the indicated units (usually after having the researched the corresponding upgrade). The potential target(s) of an ability is/are indicated in brackets.
+All abilities that can be used by the indicated units of each race, usually after having the researched the corresponding upgrade (exceptions to this are noted). The potential target(s) is/are indicated in brackets.
 
 \subsection{Terran}
 
@@ -63,7 +64,7 @@ All abilities that can be used by the indicated units (usually after having the 
 
 \paragraph{Generic} \mbox{}\\
 \verb|Burrowing| (\textit{self}) \\
-\textit{Lurkers can use this ability without having it researched first; for Zerglings, Defilers, Hydralisks and Drones the upgrade needs to be researched.}
+\textit{Lurkers can use this ability without having it researched; for Zerglings, Defilers, Hydralisks and Drones the upgrade needs to be researched.}
 
 \paragraph{Defiler} \mbox{}\\
 \verb|Dark Swarm| (\textit{position or unit}) \\
@@ -75,3 +76,13 @@ All abilities that can be used by the indicated units (usually after having the 
 \verb|Parasite| (\textit{unit}) \\
 \verb|Ensnare| (\textit{position or unit}) \\
 \verb|Spawn Broodlings| (\textit{unit})
+
+\section{Known Limitations}
+Here we list functionalities that the connector does not support at this time:
+\begin{itemize}
+ \item Getting more detailed information about the map like the exact shapes of regions and non-walkable locations.
+ \item Detecting `bullets' like Psionic Storms and Subterranean Spikes.
+ \item Detecting upgrades performed by the enemy player.
+ \item Specifying the random seed used for a match.
+ \item Automatically pausing the game when a whole MAS is paused.
+\end{itemize}
