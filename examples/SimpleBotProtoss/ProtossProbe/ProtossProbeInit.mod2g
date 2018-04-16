@@ -1,7 +1,7 @@
-use "../Shared" as knowledge.
+use ProtossProbe as knowledge.
 
 module ProtossProbeInit {
-	% Let the mapAgent know we're here, initialize conditions belief, and subscribe to the 'workers' channel.
-	if percept(self(Id,Type)), percept(status(_,_,_,Conditions,_,_,_,_)) 
-		then (mapAgent).send(self(Id,Type)) + insert(conditions(Conditions)) +  subscribe(workers).
+	% Initialize the conditions belief (on-change percept)
+	if percept(status(_,_,_,Conditions,_,_,_,_)) 
+		then insert(conditions(Conditions)).
 }

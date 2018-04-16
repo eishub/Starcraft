@@ -19,6 +19,7 @@ import org.openbw.bwapi4j.unit.PlayerUnit;
 import org.openbw.bwapi4j.unit.Reaver;
 import org.openbw.bwapi4j.unit.ResearchingFacility;
 import org.openbw.bwapi4j.unit.SpellCaster;
+import org.openbw.bwapi4j.unit.TrainingFacility;
 import org.openbw.bwapi4j.unit.Transporter;
 import org.openbw.bwapi4j.unit.Unit;
 import org.openbw.bwapi4j.unit.Vulture;
@@ -156,11 +157,10 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	private void orderPercept(Map<PerceptFilter, List<Percept>> toReturn) {
 		List<Percept> orderPercept = new ArrayList<>(1);
 		MobileUnit unit = (MobileUnit) this.unit;
-		Order primary = Order.None; // FIXME: (unit.getOrder() == null) ? Order.None : unit.getOrder();
-		Unit targetUnit = unit.getTargetUnit(); // TODO: orderTarget not supported by lib
+		Order primary = (unit.getOrder() == null) ? Order.None : unit.getOrder();
+		Unit targetUnit = (unit.getTargetUnit() == null) ? unit.getOrderTarget() : unit.getTargetUnit();
 		TilePosition targetPos = unit.getTargetPosition().toTilePosition();
-		Order secondary = Order.None; // FIXME: (unit.getSecondaryOrder() == null) ? Order.None :
-										// unit.getSecondaryOrder();
+		Order secondary = (unit.getSecondaryOrder() == null) ? Order.None : unit.getSecondaryOrder();
 		orderPercept.add(new OrderPercept(primary.toString(), (targetUnit == null) ? -1 : targetUnit.getId(),
 				(targetPos == null) ? -1 : targetPos.getX(), (targetPos == null) ? -1 : targetPos.getY(),
 				secondary.toString()));
@@ -202,12 +202,9 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 			queueSizePercept.add(new QueueSizePercept(
 					/* ((Reaver) this.unit).getTrainingQueueSize() + FIXME: not supported by lib */ ((Reaver) this.unit)
 							.getScarabCount()));
+		} else if (this.unit instanceof TrainingFacility) {
+			queueSizePercept.add(new QueueSizePercept(((TrainingFacility) this.unit).getTrainingQueueSize()));
 		}
-		// else if (this.unit instanceof TrainingFacility) {
-		// FIXME: interface is not public in lib atm.
-		// queueSizePercept.add(new QueueSizePercept(((TrainingFacility)
-		// this.unit).getTrainingQueueSize()));
-		// }
 		toReturn.put(new PerceptFilter(Percepts.QUEUESIZE, Filter.Type.ON_CHANGE), queueSizePercept);
 	}
 }

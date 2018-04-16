@@ -1,4 +1,4 @@
-use "../Shared" as knowledge.
+use ProtossNexus as knowledge.
 use ProtossNexusActions.
 
 module ProtossNexus {

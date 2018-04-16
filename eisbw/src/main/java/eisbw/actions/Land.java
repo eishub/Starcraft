@@ -3,7 +3,9 @@ package eisbw.actions;
 import java.util.List;
 
 import org.openbw.bwapi4j.BW;
+import org.openbw.bwapi4j.TilePosition;
 import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.unit.FlyingBuilding;
 import org.openbw.bwapi4j.unit.PlayerUnit;
 
 import eis.iilang.Action;
@@ -36,8 +38,7 @@ public class Land extends StarcraftMovableAction {
 		int xpos = ((Numeral) parameters.get(0)).getValue().intValue();
 		int ypos = ((Numeral) parameters.get(1)).getValue().intValue();
 
-		// ((FlyingBuilding) unit).land(new Position(xpos, ypos, PosType.BUILD)); F
-		// FIXME: interface not public in lib atm.
+		((FlyingBuilding) unit).land(new TilePosition(xpos, ypos).toPosition());
 	}
 
 	@Override

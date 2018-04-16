@@ -16,8 +16,10 @@ public class NukePercept extends StarcraftPercept {
 	 *            The x-coordinate of the nuke drop point.
 	 * @param ypos
 	 *            The y-coordinate of the nuke drop point.
+	 * @param region
+	 *            The corresponding region.
 	 */
-	public NukePercept(int xpos, int ypos) {
-		super(Percepts.NUKE, new Numeral(xpos), new Numeral(ypos));
+	public NukePercept(int xpos, int ypos, int region) {
+		super(Percepts.NUKE, new Numeral(xpos), new Numeral(ypos), new Numeral(region));
 	}
 }

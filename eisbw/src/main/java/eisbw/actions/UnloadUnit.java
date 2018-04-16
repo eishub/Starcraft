@@ -36,7 +36,7 @@ public class UnloadUnit extends StarcraftLoadingAction {
 		if (unit instanceof Transporter) {
 			((Transporter) unit).unload((MobileUnit) target);
 		} else if (unit instanceof Bunker) {
-			// ((Bunker) unit).unload((MobileUnit) target); FIXME: unsupported in lib atm.
+			((Bunker) unit).unload((MobileUnit) target);
 		}
 	}
 

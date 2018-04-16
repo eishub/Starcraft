@@ -164,7 +164,7 @@ public class DrawUnitInfo extends IDraw {
 				continue;
 			}
 			boolean self = (BwapiUtility.getPlayer(unit) == this.bwapi.getInteractionHandler().self());
-			Unit target = unit.getTargetUnit(); // FIXME: orderTarget not supported in lib atm.
+			Unit target = (unit.getTargetUnit() == null) ? unit.getOrderTarget() : unit.getTargetUnit();
 			if (target != null) {
 				api.drawLineMap(unit.getPosition(), target.getPosition(), self ? Color.YELLOW : Color.PURPLE);
 			}

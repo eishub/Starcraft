@@ -36,7 +36,7 @@ public class UnloadAll extends StarcraftLoadingAction {
 		if (unit instanceof Transporter) {
 			((Transporter) unit).unloadAll();
 		} else if (unit instanceof Bunker) {
-			// ((Bunker) unit).unloadAll(); FIXME: unsupported in lib
+			((Bunker) unit).unloadAll();
 		}
 	}
 

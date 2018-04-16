@@ -1,4 +1,4 @@
-use "../Shared" as knowledge.
+use ZergHatchery as knowledge.
 use ZergHatcheryActions.
 
 module ZergHatchery {

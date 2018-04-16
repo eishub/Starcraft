@@ -54,7 +54,7 @@ public class Gather extends StarcraftAction {
 		} else if (target instanceof Refinery) {
 			((SCV) unit).gather((Refinery) target);
 		} else if (target instanceof Assimilator) {
-			// ((Probe) unit).gather((Assimilator) target); FIXME: mistake in lib
+			((Probe) unit).gather((Assimilator) target);
 		} else if (target instanceof MineralPatch) {
 			if (unit instanceof Drone) {
 				((Drone) unit).gather((MineralPatch) target);

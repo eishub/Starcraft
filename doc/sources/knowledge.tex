@@ -2,7 +2,7 @@
 \chapter{Knowledge}
 %%%----------------------------------------------------------
 
-This chapter lists the knowledge predicates that are supplied in a Prolog file with all the example agents in the environment installer. These represent static knowledge about StarCraft that does not change in between matches. For easy reference, this section also includes a list of all unit and upgrade types per race (and where they can be trained/researched). Moreover, the upgrade types that have a corresponding ability are listed at the end (including by which unit they can be used and at what target).
+This chapter lists the knowledge predicates that are supplied in a Prolog file with all the example agents in the connector's installer. These represent static knowledge about StarCraft that does not change in between matches. For easy reference, this section also includes a list of all unit and upgrade types per race (and where they can be trained/researched). Moreover, the upgrade types that have a corresponding ability are listed at the end (including by which unit they can be used and at what target). We end with listing some of the known limitations of the connector.
 
 \section{Predicates}
 \subsection{unit/2}
@@ -15,7 +15,7 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
  \cline{2-3}
  Parameters & \textbf{\verb|<Name>|} & The full name of the unit type (i.e. as used in actions and percepts). \\
             & \textbf{Type} & \verb|String| \\
-            & \textbf{Range} & See \ref{unittype} \\
+            & \textbf{Range} & See Section \ref{unittype} \\
             \cline{2-3}
  			& \textbf{\verb|<Race>|} & The race the unit type belongs to.\\
             & \textbf{Type} & \verb|String| \\
@@ -33,7 +33,7 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
  \cline{2-3}
  Parameters & \textbf{\verb|<Name>|} & The full name of the upgrade type (i.e. as used in the research actions and percepts). \\
             & \textbf{Type} & \verb|String| \\
-            & \textbf{Range} & See \ref{upgradetype} \\
+            & \textbf{Range} & See Section \ref{upgradetype} \\
             \cline{2-3}
  			& \textbf{\verb|<Race>|} & The race the upgrade type belongs to.\\
             & \textbf{Type} & \verb|String| \\
@@ -51,7 +51,7 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
  \cline{2-3}
  Parameters & \textbf{\verb|<Name>|} & The name of the unit or upgrade type. \\
             & \textbf{Type} & \verb|String| \\
-            & \textbf{Range} & See \ref{unittype} and \ref{upgradetype} \\
+            & \textbf{Range} & See Sections \ref{unittype} and \ref{upgradetype} \\
             \cline{2-3}
             & \textbf{\verb|<Minerals>|} & The required amount of minerals to train/research the type. \\
             & \textbf{Type} & \verb|Integer| \\
@@ -71,7 +71,7 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
             \cline{2-3}
             & \textbf{\verb|<RequiredUnitsOrUpgrades>|} & A (possibly empty) list of unit and/or upgrade types that are required to be present when starting to train/research the type. For upgrade types this is list is always either empty (for abilities that do not need to be research first) or of size one (indicating at which building type the upgrade needs to be researched). \\
             & \textbf{Type} & \verb|List of Strings| \\
-            & \textbf{Range} & See \ref{unittype} and \ref{upgradetype} \\
+            & \textbf{Range} & See Sections \ref{unittype} and \ref{upgradetype} \\
             \cline{2-3}
 \end{tabularx}
 
@@ -83,9 +83,9 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
  \cline{2-3}
- Parameters & \textbf{\verb|<Name>|} & The name of the unit. \\
+ Parameters & \textbf{\verb|<Name>|} & The name of the unit type. \\
             & \textbf{Name} & \verb|String| \\
-            & \textbf{Range} & See \ref{unittype} \\
+            & \textbf{Range} & See Section \ref{unittype} \\
             \cline{2-3}
             & \textbf{\verb|<MaxHealth>|} & The maximum amount of health for units of the type. Invincible units (like spells) have 0 here. \\
             & \textbf{Type} & \verb|Integer| \\
@@ -117,9 +117,9 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
  \cline{2-3}
- Parameters & \textbf{\verb|<Name>|} & The name of the unit.\\
+ Parameters & \textbf{\verb|<Name>|} & The name of the unit type.\\
             & \textbf{Name} & \verb|String| \\
-            & \textbf{Range} & See \ref{unittype} \\
+            & \textbf{Range} & See Section \ref{unittype} \\
             \cline{2-3}
             & \textbf{\verb|<Width>|} & The number of build tiles the unit is wide.\\
             & \textbf{Type} & \verb|Integer| \\
@@ -149,7 +149,7 @@ This chapter lists the knowledge predicates that are supplied in a Prolog file w
  \cline{2-3}
  Parameters & \textbf{\verb|<Name>|} & The name of the unit or upgrade type (that can be used as an ability)\\
             & \textbf{Name} & \verb|String| \\
-            & \textbf{Range} & See \ref{unittype} and \ref{upgradetype} \\
+            & \textbf{Range} & See Sections \ref{unittype} and \ref{upgradetype} \\
             \cline{2-3}
             & \textbf{\verb|<GroundDamage>|} & The amount of damage the type does to ground units. 0 means it cannot attack ground. \\
             & \textbf{Type} & \verb|Integer| \\

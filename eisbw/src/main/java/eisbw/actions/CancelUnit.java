@@ -54,7 +54,7 @@ public class CancelUnit extends StarcraftAction {
 		} else if (target instanceof LurkerEgg) {
 			((LurkerEgg) target).cancelMorph();
 		} else if (target instanceof Building) {
-			// ((Building)target).cancelConstruction(); FIXME: not supported
+			((Building) target).cancelConstruction();
 		}
 	}
 

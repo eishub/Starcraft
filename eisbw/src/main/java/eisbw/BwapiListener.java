@@ -123,7 +123,7 @@ public class BwapiListener extends BwapiEvents {
 			this.game.updateConstructionSites(this.bwapi, this.bwta);
 		}
 		if (this.nuke >= 0 && ++this.nuke == 50) {
-			this.game.updateNukePerceiver(null);
+			this.game.updateNukePerceiver(this.bwta, null);
 			this.nuke = -1;
 		}
 		do {
@@ -195,7 +195,7 @@ public class BwapiListener extends BwapiEvents {
 
 	@Override
 	public void onNukeDetect(Position pos) {
-		this.game.updateNukePerceiver(pos.toTilePosition());
+		this.game.updateNukePerceiver(this.bwta, pos.toTilePosition());
 		this.nuke = 0;
 	}
 

@@ -97,7 +97,7 @@ public class BwapiUtility {
 		Integer regionId = regionCache.get(point);
 		if (regionId == null) {
 			Region region = (map == null) ? null : map.getRegion(position);
-			regionId = (region == null) ? 0 : region.hashCode(); // TODO: hack (no getID?)
+			regionId = (region == null) ? 0 : region.hashCode();
 			regionCache.put(point, regionId);
 		}
 		return regionId.intValue();

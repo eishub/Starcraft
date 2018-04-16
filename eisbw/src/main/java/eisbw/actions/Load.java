@@ -36,7 +36,7 @@ public class Load extends StarcraftLoadingAction {
 		if (unit instanceof Transporter) {
 			((Transporter) unit).load((MobileUnit) target);
 		} else if (unit instanceof Bunker) {
-			// ((Bunker) unit).load((MobileUnit) target); FIXME: not supported in lib atm.
+			((Bunker) unit).load((MobileUnit) target);
 		}
 	}
 

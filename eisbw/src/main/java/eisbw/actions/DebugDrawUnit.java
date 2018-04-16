@@ -24,7 +24,7 @@ public class DebugDrawUnit extends StarcraftAction {
 	private final Game game;
 
 	/**
-	 * The DebugText constructor.
+	 * The DebugDrawUnit constructor.
 	 *
 	 * @param api
 	 *            The BWAPI

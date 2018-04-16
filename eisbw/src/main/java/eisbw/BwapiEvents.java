@@ -10,7 +10,6 @@ import org.openbw.bwapi4j.unit.Unit;
  *
  */
 public class BwapiEvents implements BWEventListener {
-
 	@Override
 	public void onEnd(boolean winner) {
 		// TODO Auto-generated method stub

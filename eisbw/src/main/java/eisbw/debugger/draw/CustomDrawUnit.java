@@ -1,7 +1,6 @@
 package eisbw.debugger.draw;
 
 import org.openbw.bwapi4j.MapDrawer;
-import org.openbw.bwapi4j.Position;
 import org.openbw.bwapi4j.unit.PlayerUnit;
 
 import eisbw.BwapiUtility;
@@ -34,11 +33,10 @@ public class CustomDrawUnit extends IDraw {
 
 	@Override
 	protected void doDraw(MapDrawer api) {
-		if (BwapiUtility.isValid(this.unit)) {
-			Position aboveUnit = new Position(this.unit.getX(), this.unit.getY() - 30);
-			api.drawTextMap(aboveUnit, this.text);
-		} else if (this.unit == null) { // mapagent
+		if (this.unit == null) { // mapagent
 			api.drawTextScreen(10, 25, this.text);
+		} else if (BwapiUtility.isValid(this.unit)) {
+			api.drawTextMap(this.unit.getX(), this.unit.getY() - 30, this.text);
 		}
 	}
 }

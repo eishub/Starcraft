@@ -1,6 +1,7 @@
 package eisbw.percepts.perceivers;
 
 import eis.eis2java.translation.Filter.Type;
+import eisbw.percepts.Percepts;
 
 /**
  * @author Danny & Harm - The class which classifies all the percepts.
@@ -13,13 +14,13 @@ public class PerceptFilter {
 	/**
 	 * The PerceptFilter constructor.
 	 *
-	 * @param name
-	 *            The name of the percept.
+	 * @param percept
+	 *            The name of the percept (from the Percepts enum).
 	 * @param type
 	 *            The type of the percept.
 	 */
-	public PerceptFilter(String name, Type type) {
-		this.name = name;
+	public PerceptFilter(Percepts percept, Type type) {
+		this.name = percept.toString();
 		this.type = type;
 	}
 

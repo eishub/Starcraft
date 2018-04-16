@@ -57,9 +57,9 @@ public class Build extends StarcraftAction {
 		if (unit instanceof SCV) {
 			((SCV) unit).build(new TilePosition(tx, ty), getUnitType(type));
 		} else if (unit instanceof Probe) {
-			((Probe) unit).build(new TilePosition(tx, ty).toPosition(), getUnitType(type));
+			((Probe) unit).build(new TilePosition(tx, ty), getUnitType(type));
 		} else if (unit instanceof Drone) {
-			// TODO: build not supported for drones in lib atm.
+			((Drone) unit).build(new TilePosition(tx, ty), getUnitType(type));
 		}
 	}
 

@@ -62,7 +62,7 @@ public class Morph extends StarcraftAction {
 		} else if (unit instanceof CreepColony) {
 			((CreepColony) unit).morph(type);
 		} else if (unit instanceof Mutalisk) {
-			((Mutalisk) unit).morph();
+			((Mutalisk) unit).morph(type);
 		} else if (unit instanceof Hydralisk) {
 			((Hydralisk) unit).morph();
 		} else if (unit instanceof Hatchery) {
@@ -70,7 +70,7 @@ public class Morph extends StarcraftAction {
 		} else if (unit instanceof Lair) {
 			((Lair) unit).morph();
 		} else if (unit instanceof Spire) {
-			((Spire) unit).morph();
+			((Spire) unit).morph(type);
 		}
 	}
 

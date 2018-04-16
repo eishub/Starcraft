@@ -11,6 +11,7 @@ import org.openbw.bwapi4j.unit.CommandCenter;
 import org.openbw.bwapi4j.unit.Drone;
 import org.openbw.bwapi4j.unit.Factory;
 import org.openbw.bwapi4j.unit.Firebat;
+import org.openbw.bwapi4j.unit.FlyingBuilding;
 import org.openbw.bwapi4j.unit.Marine;
 import org.openbw.bwapi4j.unit.MobileUnit;
 import org.openbw.bwapi4j.unit.NuclearSilo;
@@ -62,11 +63,9 @@ public class ConditionHandler {
 			conditions.add(new Identifier("sieged"));
 		}
 		// building-specific
-		// if (this.unit instanceof FlyingBuilding && ((FlyingBuilding)
-		// this.unit).isLifted()) {
-		// FIXME: FlyingBuilding is private in lib atm.
-		// conditions.add(new Identifier("lifted"));
-		// }
+		if (this.unit instanceof FlyingBuilding && ((FlyingBuilding) this.unit).isLifted()) {
+			conditions.add(new Identifier("lifted"));
+		}
 		if (this.unit instanceof CommandCenter && ((CommandCenter) this.unit).getComsatStation() != null) {
 			conditions.add(new Identifier(BwapiUtility.getName(UnitType.Terran_Comsat_Station)));
 		}
@@ -284,10 +283,11 @@ public class ConditionHandler {
 		// if (this.unit.isStartingAttack()) {
 		// conditions.add(new Identifier("startingAttack"));
 		// }
-		if (this.unit.getAirWeaponCooldown() > 0 || this.unit.getGroundWeaponCooldown() > 0
-				|| this.unit.getSpellCooldown() > 0) {
-			conditions.add(new Identifier("coolingDown"));
-		}
+		// if (this.unit.getAirWeaponCooldown() > 0 ||
+		// this.unit.getGroundWeaponCooldown() > 0
+		// || this.unit.getSpellCooldown() > 0) {
+		// conditions.add(new Identifier("coolingDown"));
+		// } FIXME: protected in API?
 	}
 
 	/**

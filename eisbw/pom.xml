@@ -74,19 +74,19 @@
 		<dependency>
 			<groupId>eishub</groupId>
 			<artifactId>eis</artifactId>
-			<version>0.5.0</version>
+			<version>0.6.0</version>
 		</dependency>
 
 		<dependency>
-			<groupId>openbw</groupId>
-			<artifactId>bwapi4j-wrapper</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>org.openbw</groupId>
+			<artifactId>bwapi4j</artifactId>
+			<version>0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.6</version>
+			<version>3.7</version>
 		</dependency>
 
 		<dependency>
@@ -111,10 +111,10 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.1</version>
+				<version>3.7.0</version>
 				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
+					<source>1.8</source>
+					<target>1.8</target>
 					<goals>install</goals>
 				</configuration>
 			</plugin>
@@ -134,7 +134,7 @@
 
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>3.0.0</version>
+				<version>3.1.0</version>
 				<configuration>
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>

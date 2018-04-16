@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.openbw.bwapi4j.BW;
 import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.unit.FlyingBuilding;
 import org.openbw.bwapi4j.unit.PlayerUnit;
 
 import eis.iilang.Action;
@@ -38,7 +39,7 @@ public class Lift extends StarcraftAction {
 
 	@Override
 	public void execute(PlayerUnit unit, Action action) {
-		// ((FlyingBuilding) unit).lift(); FIXME: interface not public in lib atm.
+		((FlyingBuilding) unit).lift();
 	}
 
 	@Override

@@ -1,2 +1,1 @@
-:-dynamic agent/2,
-	friendly/2.
+:-dynamic friendly/2.

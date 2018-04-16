@@ -1,6 +1,7 @@
 package eisbw.percepts.perceivers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -9,10 +10,12 @@ import org.openbw.bwapi4j.BW;
 import org.openbw.bwapi4j.Player;
 import org.openbw.bwapi4j.TilePosition;
 import org.openbw.bwapi4j.type.UnitType;
+import org.openbw.bwapi4j.unit.Building;
 import org.openbw.bwapi4j.unit.GasMiningFacility;
 import org.openbw.bwapi4j.unit.MineralPatch;
 import org.openbw.bwapi4j.unit.MobileUnit;
 import org.openbw.bwapi4j.unit.PlayerUnit;
+import org.openbw.bwapi4j.unit.SCV;
 import org.openbw.bwapi4j.unit.SpellCaster;
 import org.openbw.bwapi4j.unit.Unit;
 import org.openbw.bwapi4j.unit.VespeneGeyser;
@@ -152,6 +155,16 @@ public class UnitsPerceiver extends Perceiver {
 	 */
 	private void setUnitPercepts(List<PlayerUnit> units, List<Percept> newunitpercepts, List<Percept> unitpercepts,
 			List<Percept> attackingpercepts) {
+		Map<Integer, Integer> constructing = new HashMap<>();
+		if (newunitpercepts != null) {
+			for (PlayerUnit u : units) {
+				if (u instanceof SCV && ((SCV) u).getBuildUnit() != null) {
+					constructing.put(((SCV) u).getBuildUnit().getId(), u.getId());
+				} else if (u instanceof Building && ((Building) u).getBuildUnit() != null) {
+					constructing.put(((Building) u).getBuildUnit().getId(), u.getId());
+				}
+			}
+		}
 		for (PlayerUnit u : units) {
 			UnitType type = BwapiUtility.getType(u);
 			if (type == null) {
@@ -162,8 +175,9 @@ public class UnitsPerceiver extends Perceiver {
 				unitpercepts.add(new FriendlyPercept(u.getId(), unittype));
 				if (!u.isCompleted()) {
 					TilePosition pos = u.getTilePosition();
-					newunitpercepts.add(new UnderConstructionPercept(u.getId(), u.getHitPoints() + u.getShields(),
-							pos.getX(), pos.getY(), getRegion(u)));
+					int builderId = constructing.containsKey(u.getId()) ? constructing.get(u.getId()) : -1;
+					newunitpercepts.add(new UnderConstructionPercept(u.getId(), builderId,
+							u.getHitPoints() + u.getShields(), pos.getX(), pos.getY(), getRegion(u)));
 				}
 			} else { // enemy
 				long orientation = 45 * Math.round(Math.toDegrees(u.getAngle()) / 45.0);
@@ -174,7 +188,8 @@ public class UnitsPerceiver extends Perceiver {
 								new ConditionHandler(this.bwapi, u).getConditions(), (int) orientation, pos.getX(),
 								pos.getY(), getRegion(u), this.frame));
 				if (type.canAttack()) {
-					Unit target = ((MobileUnit) u).getTargetUnit(); // TODO: support orderTarget?
+					Unit target = (((MobileUnit) u).getTargetUnit() == null) ? u.getOrderTarget()
+							: ((MobileUnit) u).getTargetUnit();
 					if (target != null && !units.contains(target)) {
 						attackingpercepts.add(new AttackingPercept(u.getId(), target.getId()));
 					}

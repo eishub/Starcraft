@@ -84,9 +84,7 @@ public class Game {
 	}
 
 	public void deleteUnit(PlayerUnit unit) {
-		if (unit != null) {
-			this.units.deleteUnit(unit);
-		}
+		this.units.deleteUnit(unit.getId());
 		this.enemies.remove(unit.getId());
 	}
 
@@ -106,7 +104,7 @@ public class Game {
 	 * Updates the percepts.
 	 *
 	 * @param bwapi
-	 *            - the game bridge
+	 *            the game bridge
 	 */
 	public void update(BW bwapi, BWTA bwta) {
 		processUninitializedUnits();
@@ -217,11 +215,11 @@ public class Game {
 	}
 
 	/**
-	 * Get the global percepts (resources, mineralfield, vespenegeyser, friendly,
-	 * enemy, attacking, underconstruction)
+	 * Update the global percepts (gameframe, resources, mineralfield,
+	 * vespenegeyser, friendly, enemy, attacking, underConstruction)
 	 *
-	 * @param api
-	 *            - the API.
+	 * @param bwapi
+	 *            the JNIBWAPI
 	 */
 	private Map<PerceptFilter, List<Percept>> getGlobalPercepts(BW bwapi, BWTA bwta) {
 		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
@@ -230,10 +228,10 @@ public class Game {
 	}
 
 	/**
-	 * Update the map percepts (map, enemy, base, choke, region)
+	 * Update the map percepts (map, enemyPlayer, ownRace, base, chokepoint, region)
 	 *
-	 * @param api
-	 *            - the API.
+	 * @param bwapi
+	 *            the JNIBWAPI
 	 */
 	public void updateMap(BW bwapi, BWTA bwta) {
 		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
@@ -245,7 +243,7 @@ public class Game {
 	 * updates the constructionsites in the game.
 	 *
 	 * @param bwapi
-	 *            - the JNIBWAPI
+	 *            the JNIBWAPI
 	 */
 	public void updateConstructionSites(BW bwapi, BWTA bwta) {
 		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(1);
@@ -254,18 +252,21 @@ public class Game {
 	}
 
 	/**
-	 * Updates the endGame percept.
+	 * Updates the nuke percept(s)
 	 *
 	 * @param bwapi
-	 *            - the JNIBWAPI
+	 *            the JNIBWAPI
+	 * @param the
+	 *            position of a nuke
 	 */
-	public void updateNukePerceiver(TilePosition pos) {
+	public void updateNukePerceiver(BWTA bwta, TilePosition pos) {
 		if (pos == null) {
 			this.nukePercepts = null;
 		} else {
 			Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(1);
 			List<Percept> nukepercept = new ArrayList<>(1);
-			nukepercept.add(new NukePercept(pos.getX(), pos.getY()));
+			int region = BwapiUtility.getRegion(pos, bwta);
+			nukepercept.add(new NukePercept(pos.getX(), pos.getY(), region));
 			toReturn.put(new PerceptFilter(Percepts.NUKE, Filter.Type.ON_CHANGE), nukepercept);
 			if (this.nukePercepts == null) {
 				this.nukePercepts = toReturn;
@@ -276,10 +277,10 @@ public class Game {
 	}
 
 	/**
-	 * Updates the endGame percept.
+	 * Updates the winner percept.
 	 *
-	 * @param bwapi
-	 *            - the JNIBWAPI
+	 * @param winner
+	 *            True iff we won
 	 */
 	public void updateEndGamePerceiver(boolean winner) {
 		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>(1);

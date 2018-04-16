@@ -10,6 +10,7 @@ import org.openbw.bwapi4j.unit.PlayerUnit;
 import org.openbw.bwapi4j.unit.ResearchingFacility;
 import org.openbw.bwapi4j.unit.ScienceFacility;
 import org.openbw.bwapi4j.unit.Starport;
+import org.openbw.bwapi4j.unit.TrainingFacility;
 
 import eis.iilang.Action;
 import eis.iilang.Parameter;
@@ -42,10 +43,9 @@ public class Cancel extends StarcraftAction {
 
 	@Override
 	public void execute(PlayerUnit unit, Action action) {
-		// if (unit instanceof TrainingFacility &&
-		// ((TrainingFacility)unit).isTraining()) {
-		// ((TrainingFacility)unit).cancelTrain();
-		// } else FIXME: interface is private atm.
+		if (unit instanceof TrainingFacility && ((TrainingFacility) unit).isTraining()) {
+			((TrainingFacility) unit).cancelTrain();
+		}
 		if (unit instanceof ResearchingFacility && ((ResearchingFacility) unit).isResearching()) {
 			((ResearchingFacility) unit).cancelResearch();
 		} else if (unit instanceof ResearchingFacility && ((ResearchingFacility) unit).isUpgrading()) {
