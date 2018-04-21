@@ -1,6 +1,5 @@
 use "..\..\connector.jar" as environment with
 	map="sscai\(2)Destination.scx",
-	%map="sscai\(4)CircuitBreaker.scx",
 	own_race="Terran",
 	starcraft_location="C:\Starcraft",
 	auto_menu="Single_Player",
