@@ -18,9 +18,12 @@ test MapAgent with
 		% Check if we trained at least 4 more workers again (on top of the initial 7 we should have had for star 2).
 		eventually bel(aggregate_all(count,friendly(_,'Terran SCV'),N), N >= 11).
 		%%% Star 3 %%%
+		% Check if we have built an Engineering Bay (and assume it starts upgrading something)
+		eventually bel(friendly(_,'Terran Engineering Bay')).
+		%%% Star 4 %%%
 		% Check if we built sufficient offensive units
 		eventually bel(aggregate_all(count,friendly(_,'Terran Marine'),N), N >= 10).
-		%%% Star 4 %%%
+		%%% Star 5 %%%
 		% Cannot test here: be as quick as possible with all the above :)
 	}
 
