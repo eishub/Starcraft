@@ -92,21 +92,25 @@ These percepts represent global information (i.e., not specific to a certain uni
  Description & The name and race of the opponent (it is assumed there is only one opponent in this connector). \\
  Type & Send once \\
  Syntax &  \verb|enemyPlayer(<Name>,<Race>)| \\
- Example & \verb|enemyRace('ForceBot', zerg)| \\
+ Example & \verb|enemyPlayer('ForceBot', zerg)| \\
  Note & When playing against a random race (\textit{<Race>=unknown}), you can use something like:
  \end{tabularx}
  \begin{lstlisting}
- if bel(enemyRace(unknown), enemy(Type,_,_,_,_),
+ if bel(enemyPlayer(Name,unknown), enemy(_,Type,_,_,_,_,_,_,_,_,_),
  sub_string(Type,0,1,_,Race)) then {
-   if bel(Race = "z") then delete(enemyRace(unknown))
-   + insert(enemyRace(zerg)).
-   if bel(Race = "p") then delete(enemyRace(unknown))
-   + insert(enemyRace(protoss)).
-   if bel(Race = "t") then delete(enemyRace(unknown))
-   + insert(enemyRace(terran)).
+   if bel(Race = "z") then delete(enemyPlayer(Name,unknown))
+   + insert(enemyPlayer(Name,zerg)).
+   if bel(Race = "p") then delete(enemyPlayer(Name,unknown))
+   + insert(enemyPlayer(Name,protoss)).
+   if bel(Race = "t") then delete(enemyPlayer(Name,unknown))
+   + insert(enemyPlayer(Name,terran)).
   }
  \end{lstlisting}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
+ \cline{2-3}
+  Parameters & \textbf{\verb|<Name>|} & The name of the enemy player. \\
+             & \textbf{Type} & \verb|String| \\
+            \cline{2-3}
  \cline{2-3}
   Parameters & \textbf{\verb|<Race>|} & The enemy race. \\
              & \textbf{Type} & \verb|String| \\
