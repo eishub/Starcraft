@@ -52,7 +52,9 @@ public enum Percepts {
 	// region/5
 	REGION("region", 5),
 	// order/5
-	ORDER("order", 5);
+	ORDER("order", 5),
+	// researched/1
+	RESEARCHED("researched", 1);
 
 	private final String name;
 	private final int arity;

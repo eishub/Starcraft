@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import eis.eis2java.translation.Filter;
+import eis.iilang.Identifier;
+import eis.iilang.Parameter;
 //import eis.iilang.Identifier;
 //import eis.iilang.Parameter;
 import eis.iilang.Percept;
@@ -18,6 +20,7 @@ import eisbw.percepts.FramePercept;
 import eisbw.percepts.FriendlyPercept;
 import eisbw.percepts.MineralFieldPercept;
 import eisbw.percepts.Percepts;
+import eisbw.percepts.ResearchedPercept;
 import eisbw.percepts.ResourcesPercept;
 import eisbw.percepts.UnderConstructionPercept;
 import eisbw.percepts.VespeneGeyserPercept;
@@ -26,8 +29,12 @@ import jnibwapi.JNIBWAPI;
 import jnibwapi.Player;
 import jnibwapi.Position;
 import jnibwapi.Unit;
+import jnibwapi.types.TechType;
+import jnibwapi.types.TechType.TechTypes;
 import jnibwapi.types.UnitType;
 import jnibwapi.types.UnitType.UnitTypes;
+import jnibwapi.types.UpgradeType;
+import jnibwapi.types.UpgradeType.UpgradeTypes;
 
 /**
  * @author Danny & Harm - The perceiver which handles all the unit percepts.
@@ -51,6 +58,7 @@ public class UnitsPerceiver extends Perceiver {
 	public void perceive(Map<PerceptFilter, List<Percept>> toReturn) {
 		framePercept(toReturn);
 		resourcesPercepts(toReturn);
+		researchedPercept(toReturn);
 		unitsPercepts(toReturn);
 	}
 
@@ -99,6 +107,34 @@ public class UnitsPerceiver extends Perceiver {
 		}
 		toReturn.put(new PerceptFilter(Percepts.MINERALFIELD, Filter.Type.ALWAYS), minerals);
 		toReturn.put(new PerceptFilter(Percepts.VESPENEGEYSER, Filter.Type.ALWAYS), geysers);
+	}
+
+	private void researchedPercept(Map<PerceptFilter, List<Percept>> toReturn) {
+		Player self = this.api.getSelf();
+		List<Parameter> researched = new LinkedList<>();
+		for (UpgradeType upgrade : UpgradeTypes.getAllUpgradeTypes()) {
+			if (upgrade.getUpgradeTimeBase() > 0) {
+				// TODO: can do this for enemy too (but that doesn't seem to work)
+				int level = self.getUpgradeLevel(upgrade);
+				if (level > 0) {
+					if (upgrade.getMaxRepeats() > 1) {
+						researched.add(new Identifier(upgrade.getName() + " " + level));
+					} else {
+						researched.add(new Identifier(upgrade.getName()));
+					}
+				}
+			}
+		}
+		for (TechType tech : TechTypes.getAllTechTypes()) {
+			if (tech.getResearchTime() > 0) {
+				if (self.isResearched(tech)) {
+					researched.add(new Identifier(tech.getName()));
+				}
+			}
+		}
+		List<Percept> ownPercept = new ArrayList<>(1);
+		ownPercept.add(new ResearchedPercept(researched));
+		toReturn.put(new PerceptFilter(Percepts.RESEARCHED, Filter.Type.ON_CHANGE), ownPercept);
 	}
 
 	private void unitsPercepts(Map<PerceptFilter, List<Percept>> toReturn) {
