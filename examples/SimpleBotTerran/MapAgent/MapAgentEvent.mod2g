@@ -5,6 +5,8 @@ module MapAgentEvent {
 	% UPDATE PERCEPT INFORMATION (used in test)
 	if percept(resources(M,G,CS,TS)), bel(resources(OldM,OldG,OldCS,OldTS)) 
 		then delete(resources(OldM,OldG,OldCS,OldTS)) + insert(resources(M,G,CS,TS)).
+	if percept(researched(L)), bel(researched(OldL)) 
+		then delete(researched(OldL)) + insert(researched(L)).
 	forall bel(friendly(Id,Type)), not(percept(friendly(Id,Type)))
 		do delete(friendly(Id,Type)).
 	forall percept(friendly(Id,Type)), not(bel(friendly(Id,Type)))

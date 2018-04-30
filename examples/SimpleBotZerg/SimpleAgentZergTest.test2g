@@ -20,8 +20,8 @@ test MapAgent with
 		% for Zerg we also count the buildings a drone could have morphed into already.
 		eventually bel(aggregate_all(count,(friendly(_,Type), member(Type,['Zerg Drone','Zerg Extractor','Zerg Spawning Pool','Zerg Hatchery','Zerg Evolution Chamber'])),N), N >= 11).
 		%%% Star 3 %%%
-		% Check if we have built an Evolution Chamber (and assume it starts upgrading something)
-		eventually bel(friendly(_,'Zerg Evolution Chamber')).
+		% Check if we have built an Evolution Chamber and upgraded something
+		eventually bel(friendly(_,'Zerg Evolution Chamber'), researched([_|_])).
 		%%% Star 4 %%%
 		% Check if we built sufficient offensive units
 		eventually bel(aggregate_all(count,friendly(_,'Zerg Zergling'),N), N >= 20).
@@ -30,5 +30,5 @@ test MapAgent with
 	}
 
 mapAgent {
-	do MapAgent until bel(aggregate_all(count,friendly(_,'Zerg Zergling'),N), N >= 20).
+	do MapAgent until bel(researched([_|_]), aggregate_all(count,friendly(_,'Zerg Zergling'),N), N >= 20).
 }

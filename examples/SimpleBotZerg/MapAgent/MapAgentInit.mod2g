@@ -4,4 +4,6 @@ module MapAgentInit {
 	% Initialize the resources belief (on-change percept)
 	if percept(resources(M,G,CS,TS)) 
 		then insert(resources(M,G,CS,TS)).
+	if percept(researched(L)) 
+		then insert(researched(L)).
 }
