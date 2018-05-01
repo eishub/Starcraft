@@ -422,9 +422,9 @@ These percepts represent information that changes during a match, but is still g
 
 \subsection{underConstruction/6}
 \begin{tabularx}{\textwidth}{lX}
- Description & Indicates a new friendly unit that is under construction (i.e. by a worker, through morphing, or warping in). This percept allows getting information about unfinished units that do not have an entity (and thus agent) yet. \\
+ Description & Indicates a new friendly unit (i.e. either a building or a moving unit) that is under construction (i.e. by another unit, or morphing, or warping in). This percept allows getting information about unfinished units that do not have an entity (and thus agent) yet. \\
  Type & Send always \\
- Syntax & \verb|underConstruction(<Id>,<BuilderId><Vitality>,<X>,<Y>,<Region>)| \\
+ Syntax & \verb|underConstruction(<Id>,<BuilderId>,<Vitality>,<X>,<Y>,<Region>)| \\
  Example & \verb|underConstruction(44, 3, 74, 22, 37, 2)|   \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
