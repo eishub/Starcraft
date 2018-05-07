@@ -301,7 +301,8 @@ The actions in this section can only be executed by worker units.
             & \verb|<X>|: The x-coordinate of the build location. \\
             & \verb|<Y>|: The y-coordinate of the build location. \\
  Pre & The unit is capable of constructing the chosen building. \\
- Post & The unit goes moves the build location (if needed) and starts constructing the building there if this is possible considering the location and the requested building. Zerg Drones will morph (i.e., the drone will be lost), Terran SCVs will be busy constructing for a while, and Protoss Probes will instantiate a warp (i.e., the probe does not have to remain at the build location). See also \textit{cancel/1} and \textit{repair/1}.
+ Post & The unit goes moves the build location (if needed) and starts constructing the building there if this is possible considering the location and the requested building. Zerg Drones will morph (i.e., the drone will be lost), Terran SCVs will be busy constructing for a while, and Protoss Probes will instantiate a warp (i.e., the probe does not have to remain at the build location). See also \textit{cancel/1} and \textit{repair/1}. \\
+ Note & The eventual location of the building may not match the location given in the action, as constructions are started at the left top of a grid, but building locations are given by their center (and thus depend on their size).
 \end{tabularx}
 
 \subsection{gather/1}
