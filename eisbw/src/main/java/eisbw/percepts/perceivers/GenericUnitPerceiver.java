@@ -101,7 +101,8 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 	 *            The percept and reference of which kind of percept it is.
 	 */
 	private void unitLoadedPercept(Map<PerceptFilter, List<Percept>> toReturn) {
-		if (this.unit.isLoaded()) {
+		UnitType type = BwapiUtility.getType(this.unit);
+		if (type.getSpaceProvided() > 0) {
 			List<Unit> loadedUnits = this.unit.getLoadedUnits();
 			List<Percept> unitLoadedPercept = new ArrayList<>(loadedUnits.size());
 			for (Unit u : loadedUnits) {
