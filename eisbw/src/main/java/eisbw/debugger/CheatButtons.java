@@ -31,7 +31,7 @@ public class CheatButtons extends JPanel implements ActionListener {
 		add(label, BorderLayout.NORTH);
 
 		JButton resources = new JButton("Give resources");
-		resources.setActionCommand("SHOW ME THE MONEY");
+		resources.setActionCommand("show me the money");
 		resources.addActionListener(this);
 
 		JButton mapview = new JButton("Show map");
@@ -42,15 +42,31 @@ public class CheatButtons extends JPanel implements ActionListener {
 		godmode.setActionCommand("power overwhelming");
 		godmode.addActionListener(this);
 
+		JButton buildfaster = new JButton("Reduce build times");
+		buildfaster.setActionCommand("operation cwal");
+		buildfaster.addActionListener(this);
+
+		JButton norestrictions = new JButton("No tech restrictions");
+		norestrictions.setActionCommand("modify the phase variance");
+		norestrictions.addActionListener(this);
+
+		JButton nosupplycap = new JButton("No supply cap");
+		nosupplycap.setActionCommand("food for thought");
+		nosupplycap.addActionListener(this);
+
 		this.buttonBackground = resources.getBackground();
 
-		JPanel cheatbuttons = new JPanel();
+		JPanel cheatbuttons1 = new JPanel();
+		cheatbuttons1.add(resources);
+		cheatbuttons1.add(godmode);
+		cheatbuttons1.add(mapview);
+		JPanel cheatbuttons2 = new JPanel();
+		cheatbuttons2.add(buildfaster);
+		cheatbuttons2.add(norestrictions);
+		cheatbuttons2.add(nosupplycap);
 
-		cheatbuttons.add(resources);
-		cheatbuttons.add(godmode);
-		cheatbuttons.add(mapview);
-
-		add(cheatbuttons);
+		add(cheatbuttons1, BorderLayout.CENTER);
+		add(cheatbuttons2, BorderLayout.SOUTH);
 	}
 
 	@Override

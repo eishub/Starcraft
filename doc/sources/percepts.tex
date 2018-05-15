@@ -87,26 +87,30 @@ These percepts represent global information (i.e., not specific to a certain uni
 
 \pagebreak
 
-\subsection{enemyPlayer/1}
+\subsection{enemyPlayer/2}
 \begin{tabularx}{\textwidth}{lX}
  Description & The name and race of the opponent (it is assumed there is only one opponent in this connector). \\
  Type & Send once \\
  Syntax &  \verb|enemyPlayer(<Name>,<Race>)| \\
- Example & \verb|enemyRace('ForceBot', zerg)| \\
+ Example & \verb|enemyPlayer('ForceBot', zerg)| \\
  Note & When playing against a random race (\textit{<Race>=unknown}), you can use something like:
  \end{tabularx}
  \begin{lstlisting}
- if bel(enemyRace(unknown), enemy(Type,_,_,_,_),
+ if bel(enemyPlayer(Name,unknown), enemy(_,Type,_,_,_,_,_,_,_,_,_),
  sub_string(Type,0,1,_,Race)) then {
-   if bel(Race = "z") then delete(enemyRace(unknown))
-   + insert(enemyRace(zerg)).
-   if bel(Race = "p") then delete(enemyRace(unknown))
-   + insert(enemyRace(protoss)).
-   if bel(Race = "t") then delete(enemyRace(unknown))
-   + insert(enemyRace(terran)).
+   if bel(Race = "z") then delete(enemyPlayer(Name,unknown))
+   + insert(enemyPlayer(Name,zerg)).
+   if bel(Race = "p") then delete(enemyPlayer(Name,unknown))
+   + insert(enemyPlayer(Name,protoss)).
+   if bel(Race = "t") then delete(enemyPlayer(Name,unknown))
+   + insert(enemyPlayer(Name,terran)).
   }
  \end{lstlisting}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
+ \cline{2-3}
+  Parameters & \textbf{\verb|<Name>|} & The name of the enemy player. \\
+             & \textbf{Type} & \verb|String| \\
+            \cline{2-3}
  \cline{2-3}
   Parameters & \textbf{\verb|<Race>|} & The enemy race. \\
              & \textbf{Type} & \verb|String| \\
@@ -389,6 +393,23 @@ These percepts represent information that changes during a match, but is still g
             \cline{2-3}
 \end{tabularx}
 
+
+
+\subsection{researched/1}
+\begin{tabularx}{\textwidth}{lX}
+ Description & A list of all upgrade types that have been completed. \\
+ Type & Send on change \\
+ Syntax & \verb|researched(<CompletedList>)| \\
+ Example & \verb|researched(['Grooved Spines', 'Lurker Aspect'])| \\
+ \end{tabularx}
+ \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
+ \cline{2-3}
+ Parameters & \textbf{\verb|<CompletedList>|} & All finished upgrades. \\
+            & \textbf{Type} & \verb|List| \\
+            & \textbf{Range} & See Section \ref{upgradetype} \\
+            \cline{2-3}
+\end{tabularx}
+
 \subsection{resources/4}
 \begin{tabularx}{\textwidth}{lX}
  Description & The amount of minerals, gas and supply available to the player (i.e. shared by all units). Note that in order to avoid halves, supply is multiplied by 2 throughout this interface, so 10 supply in-game corresponds with 20 supply in this environment. \\
@@ -418,9 +439,9 @@ These percepts represent information that changes during a match, but is still g
 
 \subsection{underConstruction/6}
 \begin{tabularx}{\textwidth}{lX}
- Description & Indicates a new friendly unit that is under construction (i.e. by a worker, through morphing, or warping in). This percept allows getting information about unfinished units that do not have an entity (and thus agent) yet. \\
+ Description & Indicates a new friendly unit (i.e. either a building or a moving unit) that is under construction (i.e. by another unit, or morphing, or warping in). This percept allows getting information about unfinished units that do not have an entity (and thus agent) yet. \\
  Type & Send always \\
- Syntax & \verb|underConstruction(<Id>,<BuilderId><Vitality>,<X>,<Y>,<Region>)| \\
+ Syntax & \verb|underConstruction(<Id>,<BuilderId>,<Vitality>,<X>,<Y>,<Region>)| \\
  Example & \verb|underConstruction(44, 3, 74, 22, 37, 2)|   \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
@@ -501,7 +522,7 @@ These percepts represent information that changes during a match, but is still g
  
 %%%----------------------------------------------------------
 \section{Generic Unit Percepts}
-These percepts are generated for all individual units in the game (thus excluding managers). Although the \textit{self/2} percept represents static information that does not change during the match, the \textit{status/7} and the \textit{order/3} percepts are updated frequently.
+These percepts are generated for all individual units in the game (thus excluding managers). Although the \textit{self} percept represents static information that does not change during the match, the \textit{status} and the \textit{order} percepts are updated frequently.
 %%%----------------------------------------------------------
 
 \subsection{self/2}

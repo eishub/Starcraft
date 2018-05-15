@@ -91,11 +91,17 @@ stats('Terran Vulture Spider Mine',20,0,0,160,['canMove']).
 metrics('Terran Vulture Spider Mine',1,1,3,0).
 combat('Terran Vulture Spider Mine',125,0,22,0,2).
 
+unit('Terran Nuclear Missile',terran).
+costs('Terran Nuclear Missile',200,200,16,1500,['Terran Command Center','Terran Nuclear Silo']).
+stats('Terran Nuclear Missile',0,0,0,333,['canMove','flies']).
+metrics('Terran Nuclear Missile',1,1,3,0).
+combat('Terran Nuclear Missile',0,0,0,0,0).
+
 unit('Terran Firebat',terran).
 costs('Terran Firebat',50,25,2,360,['Terran Academy','Terran Barracks']).
 stats('Terran Firebat',50,0,0,40,['canMove','organic']).
 metrics('Terran Firebat',1,1,7,1).
-combat('Terran Firebat',8,0,22,1,0).
+combat('Terran Firebat',24,0,22,1,0).
 
 unit('Spell Scanner Sweep',terran).
 costs('Spell Scanner Sweep',0,0,0,1,[]).
@@ -178,7 +184,7 @@ unit('Terran Valkyrie',terran).
 costs('Terran Valkyrie',250,125,6,750,['Terran Starport','Terran Control Tower','Terran Armory']).
 stats('Terran Valkyrie',200,0,0,66,['canMove','flies','mechanical']).
 metrics('Terran Valkyrie',2,2,8,0).
-combat('Terran Valkyrie',0,12,64,6,1).
+combat('Terran Valkyrie',0,48,64,6,1).
 
 unit('Zerg Cocoon',zerg).
 costs('Zerg Cocoon',1,1,0,1,['Zerg Greater Spire','Zerg Mutalisk']).
@@ -218,7 +224,7 @@ unit('Protoss Zealot',protoss).
 costs('Protoss Zealot',100,0,4,600,['Protoss Gateway']).
 stats('Protoss Zealot',100,60,0,40,['canMove','organic']).
 metrics('Protoss Zealot',1,1,7,2).
-combat('Protoss Zealot',8,0,22,0,0).
+combat('Protoss Zealot',16,0,22,0,0).
 
 unit('Protoss Dragoon',protoss).
 costs('Protoss Dragoon',125,50,4,750,['Protoss Gateway','Protoss Cybernetics Core']).
@@ -654,6 +660,31 @@ combat('Restoration',20,20,22,6,0).
 upgrade('Disruption Web',protoss).
 costs('Disruption Web',200,200,125,1200,['Protoss Fleet Beacon']).
 combat('Disruption Web',0,0,22,9,0).
+
+upgrade('Mind Control',protoss).
+costs('Mind Control',200,200,150,1800,['Protoss Templar Archives']).
+combat('Mind Control',8,8,22,8,0).
+
+upgrade('Dark Archon Meld',protoss).
+costs('Dark Archon Meld',0,0,0,0,[]).
+
+upgrade('Feedback',protoss).
+costs('Feedback',0,0,50,0,[]).
+combat('Feedback',8,8,22,10,0).
+
+upgrade('Optical Flare',terran).
+costs('Optical Flare',100,100,75,1800,['Terran Academy']).
+combat('Optical Flare',8,0,22,9,0).
+
+upgrade('Maelstrom',protoss).
+costs('Maelstrom',100,100,100,1500,['Protoss Templar Archives']).
+combat('Maelstrom',0,0,1,10,0).
+
+upgrade('Lurker Aspect',zerg).
+costs('Lurker Aspect',200,200,0,1800,['Zerg Hydralisk Den']).
+
+upgrade('Healing',terran).
+costs('Healing',0,0,1,0,[]).
 
 upgrade('Nuclear Strike',terran).
 costs('Nuclear Strike',0,0,0,0,[]).

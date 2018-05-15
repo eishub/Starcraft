@@ -60,7 +60,7 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 				this.listener = new BwapiListener(this.game, this.config.getScDir(), this.config.getDebug(),
 						this.config.getDrawMapInfo(), this.config.getDrawUnitInfo(), this.config.getInvulnerable(),
 						this.config.getSpeed());
-				if (!"OFF".equals(this.config.getAutoMenu()) && !WindowsTools.isProcessRunning("Chaoslauncher.exe")) {
+				if (!"OFF".equals(this.config.getAutoMenu())) {
 					WindowsTools.startChaoslauncher(this.config.getOwnRace(), this.config.getMap(),
 							this.config.getScDir(), this.config.getAutoMenu(), this.config.getGameType(),
 							this.config.getEnemyRace(), this.config.getSeed());
@@ -70,6 +70,12 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 		} catch (Exception ex) {
 			this.logger.log(Level.SEVERE, null, ex);
 		}
+	}
+
+	@Override
+	public void kill() throws ManagementException {
+		WindowsTools.Client_KillStarcraft();
+		super.kill();
 	}
 
 	@Override

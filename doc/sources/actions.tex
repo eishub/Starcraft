@@ -197,7 +197,7 @@ The action in this section can only be executed by moving units (i.e. non-buildi
  Example & \verb|ability(`Archon Warp', 3)| \\
  Parameters & \verb|<Type>|: The type of ability to use. See Section \ref{abilities}. \\
             & \verb|<Target>|: The target to use the technology on.\\
- Pre & The unit is capable of performing the ability (with some target unit), and the target unit is visible \\
+ Pre & The unit is capable of performing the ability (with some target unit), and the target unit is visible. \\
  Post & The unit performs the ability on the target unit.
 \end{tabularx}
 
@@ -209,8 +209,8 @@ The action in this section can only be executed by moving units (i.e. non-buildi
  Parameters & \verb|<Type>|: The type of ability to use. See Section \ref{abilities}. \\
             & \verb|<X>|: The x-coordinate of the chosen location. \\
             & \verb|<Y>|: The y-coordinate of the chosen location. \\
- Pre & The unit is capable of performing the ability (with some target location), and the location is visible. \\
- Post & The unit performs the ability on the given location.
+ Pre & The unit is capable of performing the ability (with some target location).  \\
+ Post & The unit performs the ability (on the given location), first moving closer to the location if required.
 \end{tabularx}
 
 \subsection{attack/1}
@@ -298,10 +298,11 @@ The actions in this section can only be executed by worker units.
  Syntax & \verb|build(<Type>,<X>,<Y>)| \\
  Example & \verb|build(`Terran Supply Depot', 24, 6)| \\
  Parameters & \verb|<Type>|: The type of building that should be built. See \ref{unittype}. \\
-            & \verb|<X>|: The x-coordinate of the build location \\
-            & \verb|<Y>|: The y-coordinate of the build location \\
- Pre & The unit is capable of constructing the chosen building and the build location is visible, not obstructed, and fitting for the given building. \\
- Post & The unit goes moves the build location (if needed) and starts constructing the building there. Zerg Drones will morph (i.e., the drone will be lost), Terran SCVs will be busy constructing for a while, and Protoss Probes will instantiate a warp (i.e., the probe does not have to remain at the build location). See also \textit{cancel/1} and \textit{repair/1}.
+            & \verb|<X>|: The x-coordinate of the build location. \\
+            & \verb|<Y>|: The y-coordinate of the build location. \\
+ Pre & The unit is capable of constructing the chosen building. \\
+ Post & The unit goes moves the build location (if needed) and starts constructing the building there if this is possible considering the location and the requested building. Zerg Drones will morph (i.e., the drone will be lost), Terran SCVs will be busy constructing for a while, and Protoss Probes will instantiate a warp (i.e., the probe does not have to remain at the build location). See also \textit{cancel/1} and \textit{repair/1}. \\
+ Note & The eventual location of the building may not match the location given in the action, as constructions are started at the left top of a grid, but building locations are given by their center (and thus depend on their size).
 \end{tabularx}
 
 \subsection{gather/1}
@@ -310,8 +311,8 @@ The actions in this section can only be executed by worker units.
  Syntax & \verb|gather(<Id>)| \\
  Example & \verb|gather(32)| \\
  Parameters & \verb|<Id>|: The ID of the chosen resource. \\
- Pre & The given resource is visible and reachable. \\
- Post & The unit starts gathering the chosen resource. It automatically moves back and forth between the resource and the closest resource center.
+ Pre & - \\
+ Post & The unit starts gathering the chosen resource (if it can reach it). It automatically moves back and forth between the resource and the closest resource center.
 \end{tabularx}
 
 \subsection{repair/1 (Terran only)}
@@ -320,6 +321,6 @@ The actions in this section can only be executed by worker units.
  Syntax & \verb|repair(<Id>)| \\
  Example & \verb|repair(17)| \\
  Parameters & \verb|<Id>|: The ID of the unit to repair or of the building to complete construction of. \\
- Pre & The unit is a Terran SCV, has the resources to repair, and the target unit is visible (and reachable) \\
+ Pre & The unit is a Terran SCV, has the resources to repair, and the target unit is visible (and reachable). \\
  Post & The SCV moves towards the selected unit (if needed) and repairs it or resumes its construction.
 \end{tabularx}
