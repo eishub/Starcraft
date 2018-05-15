@@ -87,7 +87,7 @@ These percepts represent global information (i.e., not specific to a certain uni
 
 \pagebreak
 
-\subsection{enemyPlayer/1}
+\subsection{enemyPlayer/2}
 \begin{tabularx}{\textwidth}{lX}
  Description & The name and race of the opponent (it is assumed there is only one opponent in this connector). \\
  Type & Send once \\
@@ -390,6 +390,23 @@ These percepts represent information that changes during a match, but is still g
             & \textbf{\verb|<Region>|} & The corresponding region for the incoming nuclear strike.\\
             & \textbf{Type} & \verb|Integer| \\
             &\textbf{Range} & [1--$\infty$] \\
+            \cline{2-3}
+\end{tabularx}
+
+
+
+\subsection{researched/1}
+\begin{tabularx}{\textwidth}{lX}
+ Description & A list of all upgrade types that have been completed. \\
+ Type & Send on change \\
+ Syntax & \verb|researched(<CompletedList>)| \\
+ Example & \verb|researched(['Grooved Spines', 'Lurker Aspect'])| \\
+ \end{tabularx}
+ \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
+ \cline{2-3}
+ Parameters & \textbf{\verb|<CompletedList>|} & All finished upgrades. \\
+            & \textbf{Type} & \verb|List| \\
+            & \textbf{Range} & See Section \ref{upgradetype} \\
             \cline{2-3}
 \end{tabularx}
 
