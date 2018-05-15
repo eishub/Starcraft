@@ -87,25 +87,38 @@ public class SendText extends StarcraftAction {
 		List<Parameter> parameters = action.getParameters();
 		String text = ((Identifier) parameters.get(0)).getValue().trim();
 
+		if(isValidChatString(text)) {
+			// Everything is okay, send the message.
+			this.api.sendText(text);
+		}
+	}
+
+	/**
+	 * Checks if the string is valid and meets the required conditions. It checks for rate limiting (max. 1 message per
+	 * second), possible cheats, possible commands and the length of the text.
+	 * @param text The string that wants to be send
+	 * @return Whether it is a valid string
+	 */
+	protected boolean isValidChatString(String text) {
 		// Deny chats that are too long.
-		if (text.length() > 140) return;
+		if (text.length() > 140) return false;
 
 		// Deny mission selects.
 		if (text.toLowerCase().startsWith("terran")
-			|| text.toLowerCase().startsWith("zerg")
-			|| text.toLowerCase().startsWith("protoss")) return;
+				|| text.toLowerCase().startsWith("zerg")
+				|| text.toLowerCase().startsWith("protoss")) return false;
 
 		// Deny any slash commands.
-		if (text.toLowerCase().startsWith("/")) return;
+		if (text.toLowerCase().startsWith("/")) return false;
 
 		// Deny any cheats.
-		if (CHEATS.contains(text.toLowerCase())) return;
+		if (CHEATS.contains(text.toLowerCase())) return false;
 
 		// Only allow up to 1 message a second.
-		if (!this.rateLimit.tryAcquire()) return;
+		if (!this.rateLimit.tryAcquire()) return false;
 
-		// Everything is okay, send the message.
-		this.api.sendText(text);
+		// If everything succeeds, return true.
+		return true;
 	}
 
 	/**

@@ -65,6 +65,49 @@ public class SendTextTest {
     }
 
     @Test
+    public void isValidChatString_too_long() {
+        String too_long = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+        assertFalse(this.action.isValidChatString(too_long));
+    }
+
+    @Test
+    public void isValidChatString_accepted() {
+        String accepted_string = "Test string!";
+        assertTrue(this.action.isValidChatString(accepted_string));
+    }
+
+    @Test
+    public void isValidChatString_containsRaceName() {
+        String terran = "TeRrAn";
+        assertFalse(this.action.isValidChatString(terran));
+        String zerg = "zerG";
+        assertFalse(this.action.isValidChatString(zerg));
+        String protoss = "Protoss";
+        assertFalse(this.action.isValidChatString(protoss));
+    }
+
+    @Test
+    public void isValidChatString_containsSlash() {
+        String slash = "/command";
+        assertFalse(this.action.isValidChatString(slash));
+    }
+
+    @Test
+    public void isValidChatString_isCheat() {
+        String cheat = "there is no cow level";
+        assertFalse(this.action.isValidChatString(cheat));
+    }
+
+    @Test
+    public void isValidChatString_checkRateLimit() {
+        String message = "Test";
+        assertTrue(this.action.isValidChatString(message));
+        this.action.execute(unit, act);
+        assertFalse(this.action.isValidChatString(message));
+        this.action.execute(unit, act);
+    }
+
+    @Test
     public void canExecute_is_true() {
         assertTrue(this.action.canExecute(this.unitType, this.act));
     }
