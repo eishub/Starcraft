@@ -38,6 +38,7 @@ public class KnowledgeExport {
 			case 11: // dropship
 			case 12: // battlecruiser
 			case 13: // spider mine (given to vultures)
+			case 14: // nuclear missile (trained in silos)
 			case 32: // firebat
 			case 34: // medic
 			case 58: // valkyrie
@@ -146,7 +147,8 @@ public class KnowledgeExport {
 			}
 		}
 		for (final TechType type : TechTypes.getAllTechTypes()) {
-			if ((type.getID() >= 0 && type.getID() <= 25) || (type.getID() >= 27 && type.getID() == 46)) {
+			if ((type.getID() >= 0 && type.getID() <= 25) || (type.getID() >= 27 && type.getID() <= 32)
+					|| type.getID() == 34 || type.getID() == 46) {
 				export += getTechType(type);
 				export += getTechCosts(type);
 				export += getTechCombat(type);
