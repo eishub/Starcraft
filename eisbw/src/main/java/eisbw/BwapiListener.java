@@ -199,8 +199,7 @@ public class BwapiListener extends BwapiEvents {
 		this.game.updateEndGamePerceiver(winner);
 		this.game.update(this.bwapi);
 
-		// have the winner percept perceived for 1 second before all agents
-		// are removed
+		// have the winner percept perceived for 1 second
 		try {
 			TimeUnit.SECONDS.sleep(1);
 		} catch (InterruptedException ignore) {
@@ -210,7 +209,8 @@ public class BwapiListener extends BwapiEvents {
 		if (this.debugwindow != null) {
 			this.debugwindow.dispose();
 		}
-		this.bwapi.leaveGame();
+
+		// this.bwapi.leaveGame();
 		this.game.clean();
 	}
 

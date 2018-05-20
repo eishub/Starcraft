@@ -74,7 +74,9 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 
 	@Override
 	public void kill() throws ManagementException {
-		WindowsTools.Client_KillStarcraft();
+		if ("SINGLE_PLAYER".equals(this.config.getAutoMenu())) {
+			WindowsTools.Client_KillStarcraft();
+		}
 		super.kill();
 	}
 
