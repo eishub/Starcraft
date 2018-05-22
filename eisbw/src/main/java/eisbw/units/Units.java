@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import eisbw.BwapiUtility;
 import eisbw.StarcraftEnvironmentImpl;
 import jnibwapi.Unit;
+import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - The data class which keeps track of all the units.
@@ -43,7 +44,8 @@ public class Units {
 	 *            The object which creates all starcraft units.
 	 */
 	public void addUnit(Unit unit, StarcraftUnitFactory factory) {
-		if (BwapiUtility.isValid(unit) && !unit.isInvincible()) {
+		UnitType type = BwapiUtility.getType(unit);
+		if (BwapiUtility.isValid(unit) && !type.isInvincible() && !type.isSpell()) {
 			String unitName = BwapiUtility.getName(unit);
 			this.unitNames.put(unit.getID(), unitName);
 			this.unitMap.put(unitName, unit);
