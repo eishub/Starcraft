@@ -147,6 +147,7 @@ public class UnitsPerceiver extends Perceiver {
 		setUnitPercepts(this.api.getMyUnits(), newunitpercepts, friendlypercepts, attackingpercepts);
 		// perceive enemy units
 		setUnitPercepts(this.api.getEnemyUnits(), null, enemypercepts, attackingpercepts);
+		// TODO: dark swarms and disruption webs (not sweeps) are neutral units
 
 		if (!friendlypercepts.isEmpty()) {
 			toReturn.put(new PerceptFilter(Percepts.FRIENDLY, Filter.Type.ALWAYS), friendlypercepts);
