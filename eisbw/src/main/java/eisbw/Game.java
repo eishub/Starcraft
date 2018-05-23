@@ -45,6 +45,7 @@ public class Game {
 	protected volatile Map<PerceptFilter, List<Percept>> constructionPercepts;
 	protected volatile Map<PerceptFilter, List<Percept>> nukePercepts;
 	protected volatile Map<PerceptFilter, List<Percept>> endGamePercepts;
+	private volatile boolean startedManagers = false;
 	private final Map<String, Map<String, List<Percept>>> previous;
 	private final Map<Integer, EnemyPercept> enemies;
 
@@ -62,6 +63,12 @@ public class Game {
 	public void startManagers() {
 		for (int i = 1; i <= this.managers; ++i) {
 			this.env.addToEnvironment("manager" + i, "manager");
+		}
+		try { // give the managers some time to start-up
+			Thread.sleep(100);
+		} catch (final InterruptedException ignore) {
+		} finally {
+			this.startedManagers = true;
 		}
 	}
 
@@ -159,7 +166,7 @@ public class Game {
 	}
 
 	private void processUninitializedUnits() {
-		if (this.units.getUninitializedUnits() != null) {
+		if (this.startedManagers && this.units.getUninitializedUnits() != null) {
 			List<Unit> toAdd = new LinkedList<>();
 			Unit unit;
 			while ((unit = this.units.getUninitializedUnits().poll()) != null) {
