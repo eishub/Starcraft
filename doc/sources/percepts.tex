@@ -248,7 +248,7 @@ These percepts represent information that changes during a match, but is still g
 
 \subsection{enemy/11}
 \begin{tabularx}{\textwidth}{lX}
- Description & Information about all enemy units. Note that this also includes unfinished units (like buildings under construction) or cloaked units that cannot be attacked until they are detected (see \mbox{\textit{<Conditions>}}). Moreover, this percept will be sent for any enemy unit that has ever been visible (see \mbox{\textit{<LastUpdated>}}); percepts will no longer be sent for only those enemy units that were destroyed in our view.\\
+ Description & Information about all enemy units. Note that this also includes unfinished units (like buildings under construction), cloaked units that cannot be attacked until they are detected (see \mbox{\textit{<Conditions>}}), or even units that cannot be attacked at all (like spells). Moreover, this percept will be sent for any enemy unit that has ever been visible (see \mbox{\textit{<LastUpdated>}}); percepts will no longer be sent for only those enemy units that were destroyed in our view. Neutral buildings on the map are also regarded as enemy units. \\
  Type & Send always \\
  Syntax & \verb|enemy(<Id>,<Type>,<Health>,<Shield>,<Energy>,<Conditions>| \\ & \quad \verb|<Orientation>,<X>,<Y>,<Region>,<LastUpdated>)| \\
  Example & \verb|enemy(12, `Zerg Overlord', 100, 0, 0, [flying], 0, 12, 96, 3, 50)| \\
