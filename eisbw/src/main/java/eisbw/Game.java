@@ -64,8 +64,8 @@ public class Game {
 		for (int i = 1; i <= this.managers; ++i) {
 			this.env.addToEnvironment("manager" + i, "manager");
 		}
-		try { // give the managers some time to start-up
-			Thread.sleep(100);
+		try { // give the managers a second to start-up
+			Thread.sleep(1000);
 		} catch (final InterruptedException ignore) {
 		} finally {
 			this.startedManagers = true;

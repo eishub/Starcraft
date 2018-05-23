@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -201,7 +200,7 @@ public class BwapiListener extends BwapiEvents {
 
 		// have the winner percept perceived for 1 second
 		try {
-			TimeUnit.SECONDS.sleep(1);
+			Thread.sleep(1000);
 		} catch (InterruptedException ignore) {
 		}
 
