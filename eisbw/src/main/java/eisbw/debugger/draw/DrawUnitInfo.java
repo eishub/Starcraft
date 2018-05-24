@@ -209,7 +209,7 @@ public class DrawUnitInfo extends IDraw {
 		previous.removeAll(this.alive);
 		for (final Unit unit : previous) {
 			UnitType type = BwapiUtility.getType(unit);
-			if (type == null || unit.isMorphing()) {
+			if (type == null || unit.isMorphing() || type == UnitTypes.Resource_Vespene_Geyser) {
 				continue;
 			}
 			if (type == UnitTypes.Terran_Siege_Tank_Siege_Mode) {
