@@ -71,6 +71,10 @@ public class ConditionHandler {
 		if (this.unit.isUnpowered()) {
 			conditions.add(new Identifier("unpowered"));
 		}
+		// for Carriers
+		if (this.unit.getInterceptorCount() > 0) {
+			conditions.add(new Identifier("hasInterceptors"));
+		}
 		// for Reavers
 		if (this.unit.getScarabCount() > 0) {
 			conditions.add(new Identifier("hasScarabs"));
