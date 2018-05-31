@@ -192,7 +192,7 @@ public class DrawUnitInfo extends IDraw {
 		this.alive.clear();
 		for (final Unit unit : api.getMyUnits()) {
 			UnitType type = BwapiUtility.getType(unit);
-			if (type == null || !unit.isCompleted()) {
+			if (type == null) {
 				continue;
 			}
 			this.alive.add(unit);
@@ -208,10 +208,7 @@ public class DrawUnitInfo extends IDraw {
 		}
 		previous.removeAll(this.alive);
 		for (final Unit unit : previous) {
-			UnitType type = BwapiUtility.getType(unit);
-			if (type == null || unit.isMorphing() || type == UnitTypes.Resource_Vespene_Geyser) {
-				continue;
-			}
+			UnitType type = unit.getType(); // manual because unit is dead
 			if (type == UnitTypes.Terran_Siege_Tank_Siege_Mode) {
 				type = UnitTypes.Terran_Siege_Tank_Tank_Mode;
 			}

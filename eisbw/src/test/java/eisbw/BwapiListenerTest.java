@@ -133,7 +133,6 @@ public class BwapiListenerTest {
 		list[0] = new Identifier("fail");
 		this.listener.performEntityAction("unit", new Action("setRallyPoint", list));
 		when(this.unit.isBeingConstructed()).thenReturn(true);
-		this.listener.performEntityAction("unit", new Action("stop"));
 		assertTrue(this.listener.pendingActions.size() == 1);
 		this.listener.debugwindow = this.debugwindow;
 		this.listener.matchFrame();
