@@ -7,6 +7,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.apache.commons.collections4.queue.CircularFifoQueue;
+
 import eis.exceptions.ActException;
 import eis.iilang.Action;
 import eis.iilang.EnvironmentState;
@@ -34,6 +36,8 @@ public class BwapiListener extends BwapiEvents {
 	protected final Game game;
 	protected final ActionProvider actionProvider;
 	protected final Queue<BwapiAction> pendingActions;
+	protected final Queue<Integer> frameTimes;
+	protected final Queue<Integer> actionCounts;
 	protected final StarcraftUnitFactory factory;
 	protected final boolean debug;
 	protected final boolean invulnerable;
@@ -59,6 +63,8 @@ public class BwapiListener extends BwapiEvents {
 		this.actionProvider = new ActionProvider();
 		this.actionProvider.loadActions(this.bwapi, this.game);
 		this.pendingActions = new ConcurrentLinkedQueue<>();
+		this.frameTimes = new CircularFifoQueue<>(100);
+		this.actionCounts = new CircularFifoQueue<>(100);
 		this.factory = new StarcraftUnitFactory(this.bwapi);
 		this.debug = debug;
 		this.invulnerable = invulnerable;
@@ -114,6 +120,7 @@ public class BwapiListener extends BwapiEvents {
 
 	@Override
 	public void matchFrame() {
+		long start = System.nanoTime();
 		// GENERATE PERCEPTS
 		int frame = this.bwapi.getFrameCount();
 		if ((frame % 50) == 0) {
@@ -136,6 +143,7 @@ public class BwapiListener extends BwapiEvents {
 		} while (frame == 1 && isRunning() && this.pendingActions.size() < 4);
 
 		// PERFORM ACTIONS
+		this.actionCounts.add(this.pendingActions.size());
 		Iterator<BwapiAction> actions = this.pendingActions.iterator();
 		while (actions.hasNext()) {
 			BwapiAction act = actions.next();
@@ -151,6 +159,9 @@ public class BwapiListener extends BwapiEvents {
 		for (IDraw draw : this.game.getDraws()) {
 			draw.draw(this.bwapi);
 		}
+		this.frameTimes.add((int) (System.nanoTime() - start) / 1000000);
+		this.bwapi.drawText(new Position(0, 0),
+				"avg/100 [t:" + getAverage(this.frameTimes) + ", a:" + getAverage(this.actionCounts) + "]", true);
 	}
 
 	@Override
@@ -259,5 +270,14 @@ public class BwapiListener extends BwapiEvents {
 	private boolean isRunning() {
 		return this.game != null && this.game.getEnvironment() != null
 				&& this.game.getEnvironment().getState() != EnvironmentState.KILLED;
+	}
+
+	private static String getAverage(Queue<Integer> queue) {
+		int total = 0;
+		for (Integer integer : queue) {
+			total += integer.intValue();
+		}
+		double average = (total / (double) queue.size());
+		return String.format("%.1f", average);
 	}
 }
