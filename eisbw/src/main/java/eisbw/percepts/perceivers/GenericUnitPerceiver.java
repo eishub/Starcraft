@@ -24,6 +24,7 @@ import jnibwapi.types.OrderType.OrderTypes;
 import jnibwapi.types.TechType.TechTypes;
 import jnibwapi.types.UnitType;
 import jnibwapi.types.UnitType.UnitTypes;
+import jnibwapi.types.UpgradeType;
 import jnibwapi.types.UpgradeType.UpgradeTypes;
 
 /**
@@ -140,7 +141,12 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 		}
 		if (this.unit.getUpgrade() != null && this.unit.getUpgrade() != UpgradeTypes.None
 				&& this.unit.getUpgrade() != UpgradeTypes.Unknown) {
-			researchPercepts.add(new ResearchingPercept(this.unit.getUpgrade().getName()));
+			UpgradeType upgrade = this.unit.getUpgrade();
+			String name = upgrade.getName();
+			if (upgrade.getMaxRepeats() > 1) {
+				name += " " + (this.api.getSelf().getUpgradeLevel(upgrade) + 1);
+			}
+			researchPercepts.add(new ResearchingPercept(name));
 		}
 		if (!researchPercepts.isEmpty()) {
 			toReturn.put(new PerceptFilter(Percepts.RESEARCHING, Filter.Type.ALWAYS), researchPercepts);

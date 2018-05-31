@@ -116,15 +116,16 @@ public class UnitsPerceiver extends Perceiver {
 	}
 
 	private void researchedPercept(Map<PerceptFilter, List<Percept>> toReturn) {
-		Player self = this.api.getSelf();
+		Player self = this.api.getSelf(); // TODO: should do this for enemy too (but that doesn't seem to work)
 		List<Parameter> researched = new LinkedList<>();
 		for (UpgradeType upgrade : UpgradeTypes.getAllUpgradeTypes()) {
 			if (upgrade.getUpgradeTimeBase() > 0) {
-				// TODO: should do this for enemy too (but that doesn't seem to work)
 				int level = self.getUpgradeLevel(upgrade);
 				if (level > 0) {
 					if (upgrade.getMaxRepeats() > 1) {
-						researched.add(new Identifier(upgrade.getName() + " " + level));
+						for (int i = level; i > 0; --i) {
+							researched.add(new Identifier(upgrade.getName() + " " + i));
+						}
 					} else {
 						researched.add(new Identifier(upgrade.getName()));
 					}
@@ -132,10 +133,8 @@ public class UnitsPerceiver extends Perceiver {
 			}
 		}
 		for (TechType tech : TechTypes.getAllTechTypes()) {
-			if (tech.getResearchTime() > 0) {
-				if (self.isResearched(tech)) {
-					researched.add(new Identifier(tech.getName()));
-				}
+			if (tech.getResearchTime() > 0 && self.isResearched(tech)) {
+				researched.add(new Identifier(tech.getName()));
 			}
 		}
 		List<Percept> ownPercept = new ArrayList<>(1);

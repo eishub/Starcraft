@@ -237,9 +237,7 @@ public class BwapiListener extends BwapiEvents {
 		Unit unit = this.game.getUnit(name); // can be null for the mapagent
 		if (isSupportedByEntity(action, name)) {
 			BwapiAction apiAction = new BwapiAction(unit, action);
-			if (!this.pendingActions.contains(apiAction)) {
-				this.pendingActions.add(apiAction);
-			}
+			this.pendingActions.add(apiAction);
 		} else {
 			this.logger.log(Level.WARNING,
 					"The entity " + name + " is not able to perform the action " + action.getName());
