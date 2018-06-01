@@ -51,8 +51,8 @@ public enum Percepts {
 	NUKE("nuke", 3),
 	// region/5
 	REGION("region", 5),
-	// order/5
-	ORDER("order", 5),
+	// order/6
+	ORDER("order", 6),
 	// researched/1
 	RESEARCHED("researched", 1);
 

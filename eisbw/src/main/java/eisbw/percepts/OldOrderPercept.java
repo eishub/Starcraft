@@ -7,7 +7,7 @@ import eis.iilang.Numeral;
  * @author Danny & Harm - The Order Percept.
  *
  */
-public class OrderPercept extends StarcraftPercept {
+public class OldOrderPercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -19,13 +19,11 @@ public class OrderPercept extends StarcraftPercept {
 	 *            The X coordinate of the primary order target (-1 if none)
 	 * @param targetY
 	 *            The Y coordinate of the primary order target (-1 if none)
-	 * @param region
-	 *            The region of the primary order target's coordinates (-1 if none)
 	 * @param secondary
 	 *            The name of the secondary order.
 	 */
-	public OrderPercept(String primary, int targetUnit, int targetX, int targetY, int targetRegion, String secondary) {
+	public OldOrderPercept(String primary, int targetUnit, int targetX, int targetY, String secondary) {
 		super(Percepts.ORDER, new Identifier(primary), new Numeral(targetUnit), new Numeral(targetX),
-				new Numeral(targetY), new Numeral(targetRegion), new Identifier(secondary));
+				new Numeral(targetY), new Identifier(secondary));
 	}
 }
