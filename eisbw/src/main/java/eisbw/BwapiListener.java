@@ -2,6 +2,7 @@ package eisbw;
 
 import java.io.File;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
@@ -278,6 +279,6 @@ public class BwapiListener extends BwapiEvents {
 			total += integer.intValue();
 		}
 		double average = (total / (double) queue.size());
-		return String.format("%.1f", average);
+		return String.format(Locale.ROOT, "%.1f", average);
 	}
 }
