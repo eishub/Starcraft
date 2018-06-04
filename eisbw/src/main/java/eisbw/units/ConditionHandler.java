@@ -236,7 +236,8 @@ public class ConditionHandler {
 		if (this.unit.isCloaked()) {
 			conditions.add(new Identifier("cloaked"));
 		}
-		if (BwapiUtility.getPlayer(this.unit) != this.api.getSelf() && this.unit.isDetected()) {
+		if (BwapiUtility.getPlayer(this.unit) != this.api.getSelf() && (this.unit.isCloaked() || this.unit.isBurrowed())
+				&& this.unit.isDetected()) {
 			conditions.add(new Identifier("detected"));
 		}
 		if (this.unit.isAttacking()) { // includes medic heal
