@@ -182,7 +182,7 @@ public class UnitsPerceiver extends Perceiver {
 		}
 		for (Unit u : this.myUnits) {
 			UnitType type = BwapiUtility.getType(u);
-			if (type == null) {
+			if (type == null || type.isAddon()) {
 				continue;
 			}
 			String unittype = (type == UnitTypes.Zerg_Egg) ? u.getBuildType().getName() : BwapiUtility.getName(type);
@@ -201,7 +201,7 @@ public class UnitsPerceiver extends Perceiver {
 		units.addAll(this.neutralUnits);
 		for (Unit u : units) {
 			UnitType type = BwapiUtility.getType(u);
-			if (type == null || type.isMineralField() || type == UnitTypes.Resource_Vespene_Geyser
+			if (type == null || type.isAddon() || type.isMineralField() || type == UnitTypes.Resource_Vespene_Geyser
 					|| type == UnitTypes.Critter_Bengalaas || type == UnitTypes.Critter_Kakaru
 					|| type == UnitTypes.Critter_Ragnasaur || type == UnitTypes.Critter_Rhynadon
 					|| type == UnitTypes.Critter_Scantid || type == UnitTypes.Critter_Ursadon) {
