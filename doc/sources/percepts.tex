@@ -588,12 +588,12 @@ These percepts are generated for all individual units in the game (thus excludin
             \cline{2-3}
 \end{tabularx}
 
-\subsection{order/5}
+\subsection{order/6}
 \begin{tabularx}{\textwidth}{lX}
  Description & Indicates what order(s) a unit is executing. A unit always has an order (e.g., even `Nothing' is an order). \\
  Type & Send on change \\
- Syntax & \verb|order(<Primary>,<TargetUnit>,<TargetX>,<TargetY>,<Secondary>)| \\
- Example & \verb|order(`AttackMove', -1, 34, 8, `None')|   \\
+ Syntax & \verb|order(<Primary>,<TargetUnit>,<TargetX>,<TargetY>,<TargetRegion>,<Secondary>)| \\
+ Example & \verb|order(`AttackMove', -1, 34, 8, 5, `None')|   \\
  \end{tabularx}
  \begin{tabularx}{\textwidth}{l | c | p{8cm}|}
  \cline{2-3}
@@ -610,6 +610,10 @@ These percepts are generated for all individual units in the game (thus excludin
             &\textbf{Range} &  [-1--$\infty$] \\
             \cline{2-3}
             & \textbf{\verb|<TargetY>|} & The Y coordinate of the position the order is targeted at if any; -1 otherwise. \\
+            & \textbf{Type} & \verb|Integer| \\
+            &\textbf{Range} &  [-1--$\infty$] \\
+            \cline{2-3}
+            & \textbf{\verb|<TargetRegion>|} & The region of the position the order is targeted at if any; -1 otherwise. \\
             & \textbf{Type} & \verb|Integer| \\
             &\textbf{Range} &  [-1--$\infty$] \\
             \cline{2-3}
