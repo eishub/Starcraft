@@ -8,7 +8,6 @@ import eis.eis2java.translation.Filter;
 import eis.iilang.Percept;
 import eisbw.BwapiUtility;
 import eisbw.percepts.DefensiveMatrixPercept;
-import eisbw.percepts.OldOrderPercept;
 import eisbw.percepts.OrderPercept;
 import eisbw.percepts.Percepts;
 import eisbw.percepts.QueueSizePercept;
@@ -128,9 +127,6 @@ public class GenericUnitPerceiver extends UnitPerceiver {
 		Unit targetUnit = (this.unit.getTarget() == null) ? this.unit.getOrderTarget() : this.unit.getTarget();
 		Position targetPos = this.unit.getTargetPosition();
 		OrderType secondary = (this.unit.getSecondaryOrder() == null) ? OrderTypes.None : this.unit.getSecondaryOrder();
-		orderPercept.add(new OldOrderPercept(primary.getName(), (targetUnit == null) ? -1 : targetUnit.getID(),
-				(targetPos == null) ? -1 : targetPos.getBX(), (targetPos == null) ? -1 : targetPos.getBY(),
-				secondary.getName()));
 		orderPercept.add(new OrderPercept(primary.getName(), (targetUnit == null) ? -1 : targetUnit.getID(),
 				(targetPos == null) ? -1 : targetPos.getBX(), (targetPos == null) ? -1 : targetPos.getBY(),
 				(targetPos == null) ? -1 : BwapiUtility.getRegion(targetPos, this.api.getMap()), secondary.getName()));
