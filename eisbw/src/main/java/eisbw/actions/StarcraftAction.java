@@ -1,6 +1,7 @@
 package eisbw.actions;
 
 import eis.iilang.Action;
+import eisbw.BwapiAction;
 import eisbw.BwapiUtility;
 import jnibwapi.JNIBWAPI;
 import jnibwapi.Unit;
@@ -65,6 +66,18 @@ public abstract class StarcraftAction {
 	 *            The evaluated action.
 	 */
 	public abstract void execute(Unit unit, Action action);
+
+	/**
+	 * Executes this action with the specified BwapiAction. Can be
+	 * overridden by subclasses if they need access to the raw
+	 * BwapiAction object.
+	 *
+	 * @param action
+	 *              The action to execute.
+	 */
+	public void execute(BwapiAction action) {
+		this.execute(action.getUnit(), action.getAction());
+	}
 
 	@Override
 	public abstract String toString();

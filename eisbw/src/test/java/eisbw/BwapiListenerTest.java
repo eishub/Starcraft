@@ -119,10 +119,10 @@ public class BwapiListenerTest {
 
 	@Test
 	public void matchFrame_test() throws ActException {
-		this.listener.pendingActions.add(new BwapiAction(new Unit(1, null), new Action("stub")));
-		this.listener.pendingActions.add(new BwapiAction(new Unit(2, null), new Action("stub")));
-		this.listener.pendingActions.add(new BwapiAction(new Unit(3, null), new Action("stub")));
-		this.listener.pendingActions.add(new BwapiAction(new Unit(4, null), new Action("stub")));
+		this.listener.pendingActions.add(new BwapiAction("unit_0", new Unit(1, null), new Action("stub")));
+		this.listener.pendingActions.add(new BwapiAction("unit_1", new Unit(2, null), new Action("stub")));
+		this.listener.pendingActions.add(new BwapiAction("unit_2", new Unit(3, null), new Action("stub")));
+		this.listener.pendingActions.add(new BwapiAction("unit_3", new Unit(4, null), new Action("stub")));
 		this.listener.matchFrame();
 		verify(this.game, times(1)).updateConstructionSites(this.bwapi);
 		when(this.bwapi.getFrameCount()).thenReturn(50);
