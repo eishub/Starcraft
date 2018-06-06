@@ -51,7 +51,7 @@ public class BwapiListener extends BwapiEvents {
 	 *
 	 * @param game
 	 *            - the game data class
-	 * @param debugmode
+	 * @param debug
 	 *            - true iff debugger should be attached
 	 */
 	public BwapiListener(Game game, String scDir, boolean debug, boolean drawMapInfo, boolean drawUnitInfo,
@@ -150,7 +150,7 @@ public class BwapiListener extends BwapiEvents {
 			BwapiAction act = actions.next();
 			StarcraftAction action = this.actionProvider.getAction(act.getAction());
 			if (action != null) {
-				action.execute(act.getUnit(), act.getAction());
+				action.execute(act);
 			}
 			actions.remove();
 		}
@@ -240,7 +240,7 @@ public class BwapiListener extends BwapiEvents {
 	 *
 	 * @param name
 	 *            - the name of the unit.
-	 * @param act
+	 * @param action
 	 *            - the action.
 	 * @throws ActException
 	 *             - mandatory from EIS
@@ -248,7 +248,7 @@ public class BwapiListener extends BwapiEvents {
 	public void performEntityAction(String name, Action action) throws ActException {
 		Unit unit = this.game.getUnit(name); // can be null for the mapagent
 		if (isSupportedByEntity(action, name)) {
-			BwapiAction apiAction = new BwapiAction(unit, action);
+			BwapiAction apiAction = new BwapiAction(name, unit, action);
 			this.pendingActions.add(apiAction);
 		} else {
 			this.logger.log(Level.WARNING,
