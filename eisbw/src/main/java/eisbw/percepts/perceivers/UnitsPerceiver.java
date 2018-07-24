@@ -204,7 +204,8 @@ public class UnitsPerceiver extends Perceiver {
 			if (type == null || type.isAddon() || type.isMineralField() || type == UnitTypes.Resource_Vespene_Geyser
 					|| type == UnitTypes.Critter_Bengalaas || type == UnitTypes.Critter_Kakaru
 					|| type == UnitTypes.Critter_Ragnasaur || type == UnitTypes.Critter_Rhynadon
-					|| type == UnitTypes.Critter_Scantid || type == UnitTypes.Critter_Ursadon) {
+					|| type == UnitTypes.Critter_Scantid || type == UnitTypes.Critter_Ursadon
+					|| type == UnitTypes.Zerg_Egg) {
 				continue;
 			}
 			long orientation = 45 * Math.round(Math.toDegrees(u.getAngle()) / 45.0);
