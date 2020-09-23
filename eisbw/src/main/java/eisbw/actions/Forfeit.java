@@ -10,32 +10,30 @@ import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Forfeits the match (mapAgent only).
- *
  */
 public class Forfeit extends StarcraftAction {
 	/**
 	 * The Forfeit constructor.
 	 *
-	 * @param api
-	 *            The BWAPI
+	 * @param api The BWAPI
 	 */
-	public Forfeit(JNIBWAPI api) {
+	public Forfeit(final JNIBWAPI api) {
 		super(api);
 	}
 
 	@Override
-	public boolean isValid(Action action) {
-		List<Parameter> parameters = action.getParameters();
+	public boolean isValid(final Action action) {
+		final List<Parameter> parameters = action.getParameters();
 		return parameters.isEmpty();
 	}
 
 	@Override
-	public boolean canExecute(UnitType type, Action action) {
+	public boolean canExecute(final UnitType type, final Action action) {
 		return true;
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
+	public void execute(final Unit unit, final Action action) {
 		this.api.leaveGame();
 	}
 

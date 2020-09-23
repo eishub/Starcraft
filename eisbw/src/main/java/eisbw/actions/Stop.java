@@ -11,32 +11,30 @@ import jnibwapi.types.UnitType.UnitTypes;
 
 /**
  * @author Danny & Harm - Stops a unit from what it was doing.
- *
  */
 public class Stop extends StarcraftMovableAction {
 	/**
 	 * The Stop constructor.
 	 *
-	 * @param api
-	 *            The BWAPI
+	 * @param api The BWAPI
 	 */
-	public Stop(JNIBWAPI api) {
+	public Stop(final JNIBWAPI api) {
 		super(api);
 	}
 
 	@Override
-	public boolean isValid(Action action) {
-		List<Parameter> parameters = action.getParameters();
+	public boolean isValid(final Action action) {
+		final List<Parameter> parameters = action.getParameters();
 		return parameters.isEmpty();
 	}
 
 	@Override
-	public boolean canExecute(UnitType type, Action action) {
+	public boolean canExecute(final UnitType type, final Action action) {
 		return super.canExecute(type, action) || type == UnitTypes.Zerg_Larva;
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
+	public void execute(final Unit unit, final Action action) {
 		unit.stop(false);
 	}
 

@@ -47,7 +47,7 @@ public class ConstructionSitePercieverTest {
 	public void start() {
 		MockitoAnnotations.initMocks(this);
 
-		List<Unit> neutrals = new ArrayList<>();
+		final List<Unit> neutrals = new ArrayList<>();
 		neutrals.add(this.unit);
 		when(this.unit.getType()).thenReturn(this.unitType);
 		when(this.unit.isExists()).thenReturn(true);
@@ -69,7 +69,7 @@ public class ConstructionSitePercieverTest {
 
 	@Test
 	public void terran_test() {
-		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
+		final Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
 		this.perciever.perceive(toReturn);
 		assertTrue(!toReturn.isEmpty());
 
@@ -81,7 +81,7 @@ public class ConstructionSitePercieverTest {
 
 	@Test
 	public void zerg_test() {
-		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
+		final Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
 		when(this.player.getRace()).thenReturn(RaceTypes.Zerg);
 		this.perciever.perceive(toReturn);
 		assertTrue(!toReturn.isEmpty());
@@ -99,7 +99,7 @@ public class ConstructionSitePercieverTest {
 
 	@Test
 	public void protoss_test() {
-		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
+		final Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
 		when(this.player.getRace()).thenReturn(RaceTypes.Protoss);
 		this.perciever.perceive(toReturn);
 		assertTrue(!toReturn.isEmpty());
@@ -121,7 +121,7 @@ public class ConstructionSitePercieverTest {
 		when(this.player.getRace()).thenReturn(RaceTypes.None);
 		when(this.unit.isExists()).thenReturn(false);
 		when(this.unitType.getName()).thenReturn("not illegal");
-		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
+		final Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
 		this.perciever.perceive(toReturn);
 		assertTrue(!toReturn.isEmpty());
 	}

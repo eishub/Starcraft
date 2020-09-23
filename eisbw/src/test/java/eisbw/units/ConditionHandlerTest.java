@@ -16,7 +16,6 @@ import jnibwapi.types.RaceType.RaceTypes;
 import jnibwapi.types.UnitType;
 
 public class ConditionHandlerTest {
-
 	private ConditionHandler handler;
 
 	@Mock
@@ -270,5 +269,4 @@ public class ConditionHandlerTest {
 
 		assertEquals(0, this.handler.getConditions().size());
 	}
-
 }

@@ -8,21 +8,20 @@ import eisbw.configuration.BooleanString;
 
 /**
  * @author Danny & Harm - The translator which translates strings to booleans.
- *
  */
 public class BooleanStringTranslator implements Parameter2Java<BooleanString> {
 	@Override
-	public BooleanString translate(Parameter param) throws TranslationException {
+	public BooleanString translate(final Parameter param) throws TranslationException {
 		if (!(param instanceof Identifier)) {
 			throw new TranslationException("Invalid parameter " + param + ", must be a string");
 		}
-		String id = ((Identifier) param).getValue();
 
+		final String id = ((Identifier) param).getValue();
 		if ("false".equals(id) || "true".equals(id)) {
 			return new BooleanString(id);
+		} else {
+			throw new TranslationException("Parameter " + param + " should be either true or false.");
 		}
-
-		throw new TranslationException("Parameter " + param + " should be either true or false.");
 	}
 
 	@Override

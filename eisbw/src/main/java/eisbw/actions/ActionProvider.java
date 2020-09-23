@@ -9,7 +9,6 @@ import jnibwapi.JNIBWAPI;
 
 /**
  * @author Danny & Harm - The ActionProvider.
- *
  */
 public class ActionProvider {
 	private final Map<String, StarcraftAction> actions;
@@ -22,21 +21,19 @@ public class ActionProvider {
 	}
 
 	/**
-	 * @param action
-	 *            An EIS action.
+	 * @param action An EIS action.
 	 * @return The StarcraftAction for the given EIS action
 	 */
-	public StarcraftAction getAction(Action action) {
+	public StarcraftAction getAction(final Action action) {
 		return this.actions.get(action.getName() + "/" + action.getParameters().size());
 	}
 
 	/**
 	 * Load all actions to the EIS environment.
 	 *
-	 * @param api
-	 *            the API to pass into the actions.
+	 * @param api the API to pass into the actions.
 	 */
-	public void loadActions(JNIBWAPI api, Game game) {
+	public void loadActions(final JNIBWAPI api, final Game game) {
 		this.actions.put("attack/1", new Attack(api));
 		this.actions.put("attack/2", new AttackMove(api));
 		this.actions.put("build/3", new Build(api));

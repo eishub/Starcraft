@@ -5,7 +5,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,7 +26,7 @@ import jnibwapi.types.UnitType;
 
 public class UseOnTargetTest {
 	private UseOnTarget action;
-	private LinkedList<Parameter> params;
+	private List<Parameter> params;
 	private String techType;
 
 	@Mock
@@ -49,7 +50,7 @@ public class UseOnTargetTest {
 
 		this.techType = "Stim Packs";
 
-		this.params = new LinkedList<>();
+		this.params = new ArrayList<>(2);
 		this.params.add(new Identifier("Stim Packs"));
 		this.params.add(new Numeral(2));
 
@@ -60,7 +61,7 @@ public class UseOnTargetTest {
 
 	@Test
 	public void isValid_test() {
-		StarcraftAction spyAction = Mockito.spy(this.action);
+		final StarcraftAction spyAction = Mockito.spy(this.action);
 
 		when(spyAction.getTechType(this.techType)).thenReturn(this.tech);
 
@@ -80,7 +81,7 @@ public class UseOnTargetTest {
 
 	@Test
 	public void canExecute_test() {
-		StarcraftAction spyAction = Mockito.spy(this.action);
+		final StarcraftAction spyAction = Mockito.spy(this.action);
 
 		when(spyAction.getTechType(this.techType)).thenReturn(this.tech);
 

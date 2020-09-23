@@ -39,5 +39,4 @@ public class BooleanStringTranslatorTest {
 	public void translatesTo_test() {
 		assertEquals(BooleanString.class, this.translator.translatesTo());
 	}
-
 }

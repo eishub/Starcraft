@@ -77,7 +77,7 @@ public class GenericUnitPerceiverTest {
 
 	@Test
 	public void size_test() {
-		Map<PerceptFilter, List<Percept>> ret = new HashMap<>();
+		final Map<PerceptFilter, List<Percept>> ret = new HashMap<>();
 		when(this.race.getName()).thenReturn("race");
 		when(this.self.getRace()).thenReturn(this.race);
 		this.perciever.perceive(ret);
@@ -95,5 +95,4 @@ public class GenericUnitPerceiverTest {
 		this.perciever.perceive(ret);
 		assertEquals(4, ret.size());
 	}
-
 }

@@ -8,14 +8,14 @@ public class BwapiAction {
 	private final Unit unit;
 	private final Action action;
 
-	public BwapiAction(String agentName, Unit unit, Action action) {
+	public BwapiAction(final String agentName, final Unit unit, final Action action) {
 		this.agentName = agentName;
 		this.unit = unit;
 		this.action = action;
 	}
 
 	public String getAgentName() {
-		return agentName;
+		return this.agentName;
 	}
 
 	public Unit getUnit() {
@@ -37,13 +37,13 @@ public class BwapiAction {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		} else if (obj == null || !(obj instanceof BwapiAction)) {
 			return false;
 		}
-		BwapiAction other = (BwapiAction) obj;
+		final BwapiAction other = (BwapiAction) obj;
 		if (this.agentName == null) {
 			if (other.agentName != null) {
 				return false;

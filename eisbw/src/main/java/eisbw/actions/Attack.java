@@ -12,35 +12,33 @@ import jnibwapi.types.UnitType.UnitTypes;
 
 /**
  * @author Danny & Harm - Makes the unit attack the specified unit.
- *
  */
 public class Attack extends StarcraftAction {
 	/**
 	 * The Attack constructor.
 	 *
-	 * @param api
-	 *            The BWAPI
+	 * @param api The BWAPI
 	 */
-	public Attack(JNIBWAPI api) {
+	public Attack(final JNIBWAPI api) {
 		super(api);
 	}
 
 	@Override
-	public boolean isValid(Action action) {
-		List<Parameter> parameters = action.getParameters();
+	public boolean isValid(final Action action) {
+		final List<Parameter> parameters = action.getParameters();
 		return parameters.size() == 1 && parameters.get(0) instanceof Numeral;
 	}
 
 	@Override
-	public boolean canExecute(UnitType type, Action action) {
+	public boolean canExecute(final UnitType type, final Action action) {
 		return (type.isAttackCapable() || type == UnitTypes.Terran_Medic);
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
-		List<Parameter> parameters = action.getParameters();
-		int targetId = ((Numeral) parameters.get(0)).getValue().intValue();
-		Unit target = this.api.getUnit(targetId);
+	public void execute(final Unit unit, final Action action) {
+		final List<Parameter> parameters = action.getParameters();
+		final int targetId = ((Numeral) parameters.get(0)).getValue().intValue();
+		final Unit target = this.api.getUnit(targetId);
 
 		unit.attack(target, false);
 	}

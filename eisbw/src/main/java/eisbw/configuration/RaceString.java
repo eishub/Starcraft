@@ -2,7 +2,6 @@ package eisbw.configuration;
 
 /**
  * @author Danny & Harm - A race as a string.
- *
  */
 public class RaceString {
 	private final String data;
@@ -10,10 +9,9 @@ public class RaceString {
 	/**
 	 * The RaceString constructor.
 	 *
-	 * @param data
-	 *            The race string.
+	 * @param data The race string.
 	 */
-	public RaceString(String data) {
+	public RaceString(final String data) {
 		this.data = data;
 	}
 

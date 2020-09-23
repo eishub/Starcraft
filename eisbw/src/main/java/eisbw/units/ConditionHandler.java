@@ -13,29 +13,25 @@ import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - The condition perceiver.
- *
  */
 public class ConditionHandler {
 	protected final Unit unit;
 	protected final JNIBWAPI api;
 
 	/**
-	 * @param api
-	 *            The BWAPI.
-	 * @param unit
-	 *            The unit.
+	 * @param api  The BWAPI.
+	 * @param unit The unit.
 	 */
-	public ConditionHandler(JNIBWAPI api, Unit unit) {
+	public ConditionHandler(final JNIBWAPI api, final Unit unit) {
 		this.unit = unit;
 		this.api = api;
 	}
 
 	/**
-	 * @param conditions
-	 *            The conditions of the unit
+	 * @param conditions The conditions of the unit
 	 * @return The conditions of a terran unit.
 	 */
-	private void setTerranConditions(List<Parameter> conditions) {
+	private void setTerranConditions(final List<Parameter> conditions) {
 		if (this.unit.isStimmed()) {
 			conditions.add(new Identifier("stimmed"));
 		}
@@ -50,7 +46,7 @@ public class ConditionHandler {
 			conditions.add(new Identifier("lifted"));
 		}
 		if (this.unit.getAddon() != null) {
-			UnitType addon = BwapiUtility.getType(this.unit.getAddon());
+			final UnitType addon = BwapiUtility.getType(this.unit.getAddon());
 			conditions.add(new Identifier(addon.getName()));
 		}
 		if (this.unit.isNukeReady()) {
@@ -63,11 +59,10 @@ public class ConditionHandler {
 	}
 
 	/**
-	 * @param conditions
-	 *            The conditions of the unit
+	 * @param conditions The conditions of the unit
 	 * @return The conditions of a protoss unit.
 	 */
-	private void setProtossConditions(List<Parameter> conditions) {
+	private void setProtossConditions(final List<Parameter> conditions) {
 		if (this.unit.isUnpowered()) {
 			conditions.add(new Identifier("unpowered"));
 		}
@@ -86,11 +81,10 @@ public class ConditionHandler {
 	}
 
 	/**
-	 * @param conditions
-	 *            The conditions of the unit
+	 * @param conditions The conditions of the unit
 	 * @return The conditions of a protoss unit.
 	 */
-	private void setZergConditions(List<Parameter> conditions) {
+	private void setZergConditions(final List<Parameter> conditions) {
 		if (this.unit.isMorphing()) {
 			conditions.add(new Identifier("morphing"));
 		}
@@ -102,10 +96,9 @@ public class ConditionHandler {
 	/**
 	 * Sets all conditions caused by Terran units.
 	 *
-	 * @param conditions
-	 *            The conditions of the unit
+	 * @param conditions The conditions of the unit
 	 */
-	private void terranAbilityConditions(List<Parameter> conditions) {
+	private void terranAbilityConditions(final List<Parameter> conditions) {
 		// caused by a Medic
 		if (this.unit.isBlind()) {
 			conditions.add(new Identifier("blinded"));
@@ -127,10 +120,9 @@ public class ConditionHandler {
 	/**
 	 * Sets all conditions caused by Protoss units.
 	 *
-	 * @param conditions
-	 *            The conditions of the unit
+	 * @param conditions The conditions of the unit
 	 */
-	private void protossAbilityConditions(List<Parameter> conditions) {
+	private void protossAbilityConditions(final List<Parameter> conditions) {
 		// caused by a High Templar
 		if (this.unit.isUnderStorm()) {
 			conditions.add(new Identifier("underStorm"));
@@ -152,10 +144,9 @@ public class ConditionHandler {
 	/**
 	 * Sets all conditions caused by Zerg units.
 	 *
-	 * @param conditions
-	 *            The conditions of the unit
+	 * @param conditions The conditions of the unit
 	 */
-	private void zergAbilityConditions(List<Parameter> conditions) {
+	private void zergAbilityConditions(final List<Parameter> conditions) {
 		// caused by a Queen
 		if (this.unit.isEnsnared()) {
 			conditions.add(new Identifier("ensnared"));
@@ -181,21 +172,19 @@ public class ConditionHandler {
 	/**
 	 * Sets all the conditions caused by abilities.
 	 *
-	 * @param conditions
-	 *            The conditions of the unit
+	 * @param conditions The conditions of the unit
 	 */
-	private void setAbilityConditions(List<Parameter> conditions) {
+	private void setAbilityConditions(final List<Parameter> conditions) {
 		terranAbilityConditions(conditions);
 		protossAbilityConditions(conditions);
 		zergAbilityConditions(conditions);
 	}
 
 	/**
-	 * @param conditions
-	 *            The conditions of the unit
+	 * @param conditions The conditions of the unit
 	 * @return The conditions of the (moving) unit.
 	 */
-	private void setMovingConditions(List<Parameter> conditions) {
+	private void setMovingConditions(final List<Parameter> conditions) {
 		if (this.unit.isMoving()) {
 			conditions.add(new Identifier("moving"));
 		}
@@ -218,11 +207,10 @@ public class ConditionHandler {
 	}
 
 	/**
-	 * @param conditions
-	 *            The conditions of the unit
+	 * @param conditions The conditions of the unit
 	 * @return The conditions of generic unit.
 	 */
-	private void setGenericConditions(List<Parameter> conditions, UnitType type) {
+	private void setGenericConditions(final List<Parameter> conditions, final UnitType type) {
 		if (this.unit.isIdle()) {
 			conditions.add(new Identifier("idle"));
 		}
@@ -256,11 +244,10 @@ public class ConditionHandler {
 	}
 
 	/**
-	 * @param conditions
-	 *            The conditions of the unit
+	 * @param conditions The conditions of the unit
 	 * @return The conditions of the worker units.
 	 */
-	private void setWorkerConditions(List<Parameter> conditions) {
+	private void setWorkerConditions(final List<Parameter> conditions) {
 		if (this.unit.isCarryingGas() || this.unit.isCarryingMinerals()) {
 			conditions.add(new Identifier("carrying"));
 		}
@@ -279,8 +266,8 @@ public class ConditionHandler {
 	 * @return A list of conditions of the unit.
 	 */
 	public List<Parameter> getConditions() {
-		List<Parameter> conditions = new LinkedList<>();
-		UnitType type = BwapiUtility.getType(this.unit);
+		final List<Parameter> conditions = new LinkedList<>();
+		final UnitType type = BwapiUtility.getType(this.unit);
 		if (type == null) {
 			return conditions;
 		}

@@ -6,7 +6,6 @@ import eis.iilang.Numeral;
 /**
  * @author Danny & Harm - The Friendly percept which gives information about
  *         your own units.
- *
  */
 public class FriendlyPercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
@@ -14,12 +13,10 @@ public class FriendlyPercept extends StarcraftPercept {
 	/**
 	 * Constructor FriendlyPercept.
 	 *
-	 * @param id
-	 *            The ID of the unit
-	 * @param type
-	 *            The unit type
+	 * @param id   The ID of the unit
+	 * @param type The unit type
 	 */
-	public FriendlyPercept(int id, String type) {
+	public FriendlyPercept(final int id, final String type) {
 		super(Percepts.FRIENDLY, new Numeral(id), new Identifier(type));
 	}
 }

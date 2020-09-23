@@ -5,7 +5,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +27,7 @@ import jnibwapi.types.UnitType;
 
 public class MorphTest {
 	private Morph action;
-	private LinkedList<Parameter> params;
+	private List<Parameter> params;
 
 	@Mock
 	private JNIBWAPI bwapi;
@@ -49,7 +50,7 @@ public class MorphTest {
 		MockitoAnnotations.initMocks(this);
 		this.action = new Morph(this.bwapi);
 
-		this.params = new LinkedList<>();
+		this.params = new ArrayList<>(2);
 		this.params.add(new Identifier("Zerg Hydralisk"));
 		this.params.add(new Numeral(2));
 
@@ -61,11 +62,11 @@ public class MorphTest {
 
 	@Test
 	public void isValid_test() {
-		StarcraftAction spyAction = Mockito.spy(this.action);
+		final StarcraftAction spyAction = Mockito.spy(this.action);
 
 		when(spyAction.getUnitType("Zerg Hydralisk")).thenReturn(this.unitType);
 
-		this.params.removeLast();
+		this.params.remove(1);
 		assertTrue(spyAction.isValid(this.act));
 		this.params.add(new Numeral(2));
 

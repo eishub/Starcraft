@@ -55,14 +55,14 @@ public class MapPerceiverTest {
 
 	@Test
 	public void mapsize_test() {
-		Map<PerceptFilter, List<Percept>> ret = new HashMap<>();
+		final Map<PerceptFilter, List<Percept>> ret = new HashMap<>();
 		this.perciever.perceive(ret);
 		assertFalse(ret.isEmpty());
 	}
 
 	@Test
 	public void baseLocation_test() {
-		List<BaseLocation> locs = new ArrayList<>(1);
+		final List<BaseLocation> locs = new ArrayList<>(1);
 		locs.add(this.baselocation);
 		when(this.map.getBaseLocations()).thenReturn(locs);
 		when(this.baselocation.getPosition()).thenReturn(new Position(3, 4, PosType.BUILD));
@@ -70,14 +70,14 @@ public class MapPerceiverTest {
 		when(this.baselocation.getRegion()).thenReturn(this.region);
 		when(this.region.getID()).thenReturn(5);
 
-		Map<PerceptFilter, List<Percept>> ret = new HashMap<>();
+		final Map<PerceptFilter, List<Percept>> ret = new HashMap<>();
 		this.perciever.perceive(ret);
 		assertFalse(ret.isEmpty());
 	}
 
 	@Test
 	public void chokepoint_test() {
-		List<ChokePoint> locs = new ArrayList<>(1);
+		final List<ChokePoint> locs = new ArrayList<>(1);
 		locs.add(this.chokepoint);
 		when(this.map.getChokePoints()).thenReturn(locs);
 		when(this.chokepoint.getFirstSide()).thenReturn(new Position(5, 6, PosType.BUILD));
@@ -86,7 +86,7 @@ public class MapPerceiverTest {
 		when(this.chokepoint.getFirstRegion()).thenReturn(new Region(new int[] { 1, 1, 1 }, 0, new int[] {}));
 		when(this.chokepoint.getSecondRegion()).thenReturn(new Region(new int[] { 2, 2, 2 }, 0, new int[] {}));
 
-		Map<PerceptFilter, List<Percept>> ret = new HashMap<>();
+		final Map<PerceptFilter, List<Percept>> ret = new HashMap<>();
 		this.perciever.perceive(ret);
 		assertFalse(ret.isEmpty());
 	}

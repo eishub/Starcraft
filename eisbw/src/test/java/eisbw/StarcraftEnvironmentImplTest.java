@@ -32,15 +32,14 @@ public class StarcraftEnvironmentImplTest {
 	/**
 	 * init environment and mocks.
 	 *
-	 * @throws ManagementException
-	 *             - from environment
+	 * @throws ManagementException - from environment
 	 */
 	@Before
 	public void start() throws ManagementException {
 		MockitoAnnotations.initMocks(this);
 
 		this.env = new StarcraftEnvironmentImpl();
-		Map<String, Parameter> parameters = new HashMap<>();
+		final Map<String, Parameter> parameters = new HashMap<>();
 		parameters.put("debug", new Identifier("true"));
 		parameters.put("own_race", new Identifier("test"));
 		parameters.put("map", new Identifier("map"));
@@ -54,14 +53,13 @@ public class StarcraftEnvironmentImplTest {
 		this.env.addToEnvironment("none", "type");
 		this.env.registerAgent("none");
 		this.env.associateEntity("none", "none");
-		this.env.getAllPercepts("none", "none");
+		this.env.getPercepts("none", "none");
 		this.env.listener = this.bwapiListener;
 		when(this.bwapiListener.isSupportedByEnvironment(new Action("lift"))).thenReturn(true);
-		doNothing().when(this.bwapiListener).performEntityAction(any(String.class), any(Action.class));
-		assertTrue(this.env.performEntityAction("entity", new Action("lift")) == null);
+		doNothing().when(this.bwapiListener).performEntityAction(any(Action.class), any(String.class));
+		this.env.performEntityAction(new Action("lift"), "entity");
 		this.env.deleteFromEnvironment("none");
 		when(this.bwapiListener.isSupportedByEntity(any(Action.class), any(String.class))).thenReturn(true);
 		assertTrue(this.env.isSupportedByEntity(new Action("action"), "action"));
 	}
-
 }

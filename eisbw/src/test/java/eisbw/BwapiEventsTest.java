@@ -6,8 +6,7 @@ import org.junit.Test;
 import jnibwapi.Position;
 
 public class BwapiEventsTest {
-
-	BwapiEvents events;
+	private BwapiEvents events;
 
 	@Before
 	public void start() {

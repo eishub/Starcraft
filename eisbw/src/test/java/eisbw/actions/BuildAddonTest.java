@@ -5,7 +5,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +25,7 @@ import jnibwapi.types.UnitType;
 
 public class BuildAddonTest {
 	private BuildAddon action;
-	private LinkedList<Parameter> params;
+	private List<Parameter> params;
 	private String unitType2;
 
 	@Mock
@@ -48,7 +49,7 @@ public class BuildAddonTest {
 
 		this.unitType2 = "Terran SCV";
 
-		this.params = new LinkedList<>();
+		this.params = new ArrayList<>(2);
 		this.params.add(new Identifier("Terran SCV"));
 		this.params.add(new Numeral(2));
 
@@ -59,12 +60,12 @@ public class BuildAddonTest {
 
 	@Test
 	public void isValid_test() {
-		StarcraftAction spyAction = Mockito.spy(this.action);
+		final StarcraftAction spyAction = Mockito.spy(this.action);
 
 		when(spyAction.getUnitType(this.unitType2)).thenReturn(this.type);
 		when(this.type.isAddon()).thenReturn(true);
 
-		this.params.removeLast();
+		this.params.remove(1);
 		assertTrue(spyAction.isValid(this.act));
 
 		when(this.type.isAddon()).thenReturn(false);

@@ -5,7 +5,6 @@ import java.util.List;
 
 /**
  * @author Danny & Harm - The data class with all race definition input.
- *
  */
 public class Races {
 	private static List<String> raceNames;

@@ -13,26 +13,24 @@ import jnibwapi.types.UpgradeType;
 
 /**
  * @author Danny & Harm - Researches a specified Tech Type.
- *
  */
 public class Research extends StarcraftAction {
 	/**
 	 * The Research constructor.
 	 *
-	 * @param api
-	 *            The BWAPI
+	 * @param api The BWAPI
 	 */
-	public Research(JNIBWAPI api) {
+	public Research(final JNIBWAPI api) {
 		super(api);
 	}
 
 	@Override
-	public boolean isValid(Action action) {
-		List<Parameter> parameters = action.getParameters();
-		boolean valid = parameters.size() == 1 && parameters.get(0) instanceof Identifier;
+	public boolean isValid(final Action action) {
+		final List<Parameter> parameters = action.getParameters();
+		final boolean valid = parameters.size() == 1 && parameters.get(0) instanceof Identifier;
 		if (valid) {
-			TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
-			UpgradeType upgradeType = getUpgradeType(((Identifier) parameters.get(0)).getValue());
+			final TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
+			final UpgradeType upgradeType = getUpgradeType(((Identifier) parameters.get(0)).getValue());
 			return techType != null || upgradeType != null;
 		} else {
 			return false;
@@ -40,15 +38,15 @@ public class Research extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(UnitType type, Action action) {
+	public boolean canExecute(final UnitType type, final Action action) {
 		return type.isBuilding();
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
-		List<Parameter> parameters = action.getParameters();
-		TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
-		UpgradeType upgradeType = getUpgradeType(((Identifier) parameters.get(0)).getValue());
+	public void execute(final Unit unit, final Action action) {
+		final List<Parameter> parameters = action.getParameters();
+		final TechType techType = getTechType(((Identifier) parameters.get(0)).getValue());
+		final UpgradeType upgradeType = getUpgradeType(((Identifier) parameters.get(0)).getValue());
 
 		if (techType == null) {
 			unit.upgrade(upgradeType);

@@ -10,27 +10,25 @@ import jnibwapi.Unit;
 /**
  * @author Danny & Harm - Makes the unit patrol between his current location and
  *         the specified location.
- *
  */
 public class Hold extends StarcraftMovableAction {
 	/**
 	 * The Patrol constructor.
 	 *
-	 * @param api
-	 *            The BWAPI
+	 * @param api The BWAPI
 	 */
-	public Hold(JNIBWAPI api) {
+	public Hold(final JNIBWAPI api) {
 		super(api);
 	}
 
 	@Override
-	public boolean isValid(Action action) {
-		List<Parameter> parameters = action.getParameters();
+	public boolean isValid(final Action action) {
+		final List<Parameter> parameters = action.getParameters();
 		return parameters.isEmpty();
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
+	public void execute(final Unit unit, final Action action) {
 		unit.holdPosition(false);
 	}
 

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,40 +28,40 @@ public class CheatButtons extends JPanel implements ActionListener {
 	public CheatButtons() {
 		setLayout(new BorderLayout());
 
-		JLabel label = new JLabel("Cheat actions", SwingConstants.CENTER);
+		final JLabel label = new JLabel("Cheat actions", SwingConstants.CENTER);
 		add(label, BorderLayout.NORTH);
 
-		JButton resources = new JButton("Give resources");
+		final JButton resources = new JButton("Give resources");
 		resources.setActionCommand("show me the money");
 		resources.addActionListener(this);
 
-		JButton mapview = new JButton("Show map");
+		final JButton mapview = new JButton("Show map");
 		mapview.setActionCommand("black sheep wall");
 		mapview.addActionListener(this);
 
-		JButton godmode = new JButton("Enemy attacks deal 0 damage");
+		final JButton godmode = new JButton("Enemy attacks deal 0 damage");
 		godmode.setActionCommand("power overwhelming");
 		godmode.addActionListener(this);
 
-		JButton buildfaster = new JButton("Reduce build times");
+		final JButton buildfaster = new JButton("Reduce build times");
 		buildfaster.setActionCommand("operation cwal");
 		buildfaster.addActionListener(this);
 
-		JButton norestrictions = new JButton("No tech restrictions");
+		final JButton norestrictions = new JButton("No tech restrictions");
 		norestrictions.setActionCommand("modify the phase variance");
 		norestrictions.addActionListener(this);
 
-		JButton nosupplycap = new JButton("No supply cap");
+		final JButton nosupplycap = new JButton("No supply cap");
 		nosupplycap.setActionCommand("food for thought");
 		nosupplycap.addActionListener(this);
 
 		this.buttonBackground = resources.getBackground();
 
-		JPanel cheatbuttons1 = new JPanel();
+		final JPanel cheatbuttons1 = new JPanel();
 		cheatbuttons1.add(resources);
 		cheatbuttons1.add(godmode);
 		cheatbuttons1.add(mapview);
-		JPanel cheatbuttons2 = new JPanel();
+		final JPanel cheatbuttons2 = new JPanel();
 		cheatbuttons2.add(buildfaster);
 		cheatbuttons2.add(norestrictions);
 		cheatbuttons2.add(nosupplycap);
@@ -70,9 +71,9 @@ public class CheatButtons extends JPanel implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent event) {
+	public void actionPerformed(final ActionEvent event) {
 		this.actions.add(event.getActionCommand());
-		JButton buttonPressed = (JButton) event.getSource();
+		final JButton buttonPressed = (JButton) event.getSource();
 		if (buttonPressed.getBackground().equals(Color.GRAY)) {
 			buttonPressed.setBackground(this.buttonBackground);
 		} else {
@@ -81,11 +82,11 @@ public class CheatButtons extends JPanel implements ActionListener {
 	}
 
 	public List<String> getActions() {
-		return new LinkedList<>(this.actions);
+		return new ArrayList<>(this.actions);
 	}
 
 	/**
-	 * Clean the actionqueue.
+	 * Clean the action queue.
 	 */
 	public void clean() {
 		this.actions.clear();

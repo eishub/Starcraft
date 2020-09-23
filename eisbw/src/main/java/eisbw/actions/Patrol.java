@@ -12,26 +12,24 @@ import jnibwapi.Unit;
 /**
  * @author Danny & Harm - Makes the unit patrol between his current location and
  *         the specified location.
- *
  */
 public class Patrol extends StarcraftMovableAction {
 	/**
 	 * The Patrol constructor.
 	 *
-	 * @param api
-	 *            The BWAPI
+	 * @param api The BWAPI
 	 */
-	public Patrol(JNIBWAPI api) {
+	public Patrol(final JNIBWAPI api) {
 		super(api);
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
-		List<Parameter> parameters = action.getParameters();
-		int xpos = ((Numeral) parameters.get(0)).getValue().intValue();
-		int ypos = ((Numeral) parameters.get(1)).getValue().intValue();
+	public void execute(final Unit unit, final Action action) {
+		final List<Parameter> parameters = action.getParameters();
+		final int xpos = ((Numeral) parameters.get(0)).getValue().intValue();
+		final int ypos = ((Numeral) parameters.get(1)).getValue().intValue();
 
-		Position pos = new Position(xpos, ypos, Position.PosType.BUILD);
+		final Position pos = new Position(xpos, ypos, Position.PosType.BUILD);
 		unit.patrol(pos, false);
 	}
 

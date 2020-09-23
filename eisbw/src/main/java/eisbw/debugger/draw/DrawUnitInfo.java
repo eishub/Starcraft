@@ -20,7 +20,6 @@ import jnibwapi.util.BWColor;
 
 /**
  * @author Harm & Danny.
- *
  */
 public class DrawUnitInfo extends IDraw {
 	private final static int barHeight = 18;
@@ -31,15 +30,14 @@ public class DrawUnitInfo extends IDraw {
 	/**
 	 * Draw unit information (health, movement, counts).
 	 *
-	 * @param game
-	 *            The current game.
+	 * @param game The current game.
 	 */
-	public DrawUnitInfo(Game game) {
+	public DrawUnitInfo(final Game game) {
 		super(game);
 	}
 
 	@Override
-	protected void doDraw(JNIBWAPI api) {
+	protected void doDraw(final JNIBWAPI api) {
 		drawTimerInfo(api);
 		drawHealth(api);
 		drawTargets(api);
@@ -51,10 +49,10 @@ public class DrawUnitInfo extends IDraw {
 	 * Draws remaining research/upgrade times; unit building/training is already
 	 * covered by the health drawing
 	 */
-	private void drawTimerInfo(JNIBWAPI api) {
+	private void drawTimerInfo(final JNIBWAPI api) {
 		int y = 45;
 		for (final Unit unit : api.getMyUnits()) {
-			UnitType type = BwapiUtility.getType(unit);
+			final UnitType type = BwapiUtility.getType(unit);
 			if (type == null) {
 				continue;
 			}
@@ -63,14 +61,14 @@ public class DrawUnitInfo extends IDraw {
 			String txt = "";
 			boolean bar = false;
 			if (unit.getRemainingResearchTime() > 0) {
-				TechType ttype = unit.getTech();
+				final TechType ttype = unit.getTech();
 				total = ttype.getResearchTime();
 				done = total - unit.getRemainingResearchTime();
 				txt = ttype.getName();
 				bar = true;
 			}
 			if (unit.getRemainingUpgradeTime() > 0) {
-				UpgradeType utype = unit.getUpgrade();
+				final UpgradeType utype = unit.getUpgrade();
 				total = utype.getUpgradeTimeBase();
 				done = total - unit.getRemainingUpgradeTime();
 				txt = utype.getName();
@@ -83,11 +81,11 @@ public class DrawUnitInfo extends IDraw {
 			}
 			if (total > 0) {
 				if (bar) {
-					int width = type.getTileWidth() * 32;
-					Position start = new Position(unit.getX() - width / 2, unit.getY() - 20);
+					final int width = type.getTileWidth() * 32;
+					final Position start = new Position(unit.getX() - width / 2, unit.getY() - 20);
 					api.drawBox(start, new Position(start.getPX() + width, start.getPY() + barHeight), barColor, false,
 							false);
-					int progress = (int) ((double) done / (double) total * width);
+					final int progress = (int) ((double) done / (double) total * width);
 					api.drawBox(start, new Position(start.getPX() + progress, start.getPY() + barHeight), barColor,
 							true, false);
 					api.drawText(new Position(start.getPX() + 5, start.getPY() + 2), txt, false);
@@ -102,9 +100,9 @@ public class DrawUnitInfo extends IDraw {
 	 * Draws health boxes for units (ported from JNIBWAPI native code); added a
 	 * max>0 check to prevent crashes on spell units (with health 255)
 	 */
-	private void drawHealth(JNIBWAPI api) {
+	private void drawHealth(final JNIBWAPI api) {
 		for (final Unit unit : api.getAllUnits()) {
-			UnitType type = BwapiUtility.getType(unit);
+			final UnitType type = BwapiUtility.getType(unit);
 			if (type == null) {
 				continue;
 			}
@@ -119,13 +117,13 @@ public class DrawUnitInfo extends IDraw {
 				max = 5000;
 			}
 			if (health > 0 && max > 0) {
-				int x = unit.getX();
-				int y = unit.getY();
-				int l = type.getDimensionLeft();
-				int t = type.getDimensionUp();
-				int r = type.getDimensionRight();
-				int b = type.getDimensionDown();
-				int width = ((r + l) * health) / max;
+				final int x = unit.getX();
+				final int y = unit.getY();
+				final int l = type.getDimensionLeft();
+				final int t = type.getDimensionUp();
+				final int r = type.getDimensionRight();
+				final int b = type.getDimensionDown();
+				final int width = ((r + l) * health) / max;
 				if (health * 3 < max) {
 					api.drawBox(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), BWColor.Red, true,
 							false);
@@ -136,7 +134,7 @@ public class DrawUnitInfo extends IDraw {
 					api.drawBox(new Position(x - l, y - t - 5), new Position(x - l + width, y - t), BWColor.Green, true,
 							false);
 				}
-				boolean self = (BwapiUtility.getPlayer(unit) == api.getSelf());
+				final boolean self = (BwapiUtility.getPlayer(unit) == api.getSelf());
 				api.drawBox(new Position(x - l, y - t - 5), new Position(x + r, y - t),
 						self ? BWColor.White : BWColor.Red, false, false);
 				api.drawBox(new Position(x - l, y - t), new Position(x + r, y + b), self ? BWColor.White : BWColor.Red,
@@ -149,17 +147,17 @@ public class DrawUnitInfo extends IDraw {
 	/**
 	 * Draws the targets of each unit. (ported from JNIBWAPI native code)
 	 */
-	private void drawTargets(JNIBWAPI api) {
+	private void drawTargets(final JNIBWAPI api) {
 		for (final Unit unit : api.getAllUnits()) {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
 			}
-			boolean self = (BwapiUtility.getPlayer(unit) == api.getSelf());
-			Unit target = (unit.getTarget() == null) ? unit.getOrderTarget() : unit.getTarget();
+			final boolean self = (BwapiUtility.getPlayer(unit) == api.getSelf());
+			final Unit target = (unit.getTarget() == null) ? unit.getOrderTarget() : unit.getTarget();
 			if (target != null) {
 				api.drawLine(unit.getPosition(), target.getPosition(), self ? BWColor.Yellow : BWColor.Purple, false);
 			}
-			Position position = unit.getTargetPosition();
+			final Position position = unit.getTargetPosition();
 			if (position != null) {
 				api.drawLine(unit.getPosition(), position, self ? BWColor.Yellow : BWColor.Purple, false);
 			}
@@ -169,7 +167,7 @@ public class DrawUnitInfo extends IDraw {
 	/**
 	 * Draws the IDs of each unit. (ported from JNIBWAPI native code)
 	 */
-	private void drawIDs(JNIBWAPI api) {
+	private void drawIDs(final JNIBWAPI api) {
 		for (final Unit unit : api.getAllUnits()) {
 			if (!BwapiUtility.isValid(unit)) {
 				continue;
@@ -182,13 +180,13 @@ public class DrawUnitInfo extends IDraw {
 	 * Draws a list of all unit types, counting how many are still alive and how
 	 * many have died (ported from native code of the tournament manager)
 	 */
-	private void drawUnitInformation(JNIBWAPI api, int x, int y) {
+	private void drawUnitInformation(final JNIBWAPI api, final int x, final int y) {
 		api.drawText(new Position(x, y + 20), api.getSelf().getName() + "'s Units", true);
 		api.drawText(new Position(x + 160, y + 20), "#", true);
 		api.drawText(new Position(x + 180, y + 20), "X", true);
 
-		Map<Integer, Integer> count = new HashMap<>();
-		List<Unit> previous = new ArrayList<>(this.alive);
+		final Map<Integer, Integer> count = new HashMap<>();
+		final List<Unit> previous = new ArrayList<>(this.alive);
 		this.alive.clear();
 		for (final Unit unit : api.getMyUnits()) {
 			UnitType type = BwapiUtility.getType(unit);
@@ -199,7 +197,7 @@ public class DrawUnitInfo extends IDraw {
 			if (type == UnitTypes.Terran_Siege_Tank_Siege_Mode) {
 				type = UnitTypes.Terran_Siege_Tank_Tank_Mode;
 			}
-			int t = type.getID();
+			final int t = type.getID();
 			if (count.containsKey(t)) {
 				count.put(t, count.get(t).intValue() + 1);
 			} else {
@@ -212,7 +210,7 @@ public class DrawUnitInfo extends IDraw {
 			if (type == UnitTypes.Terran_Siege_Tank_Siege_Mode) {
 				type = UnitTypes.Terran_Siege_Tank_Tank_Mode;
 			}
-			int t = type.getID();
+			final int t = type.getID();
 			if (this.dead.containsKey(t)) {
 				this.dead.put(t, this.dead.get(t).intValue() + 1);
 			} else {
@@ -222,9 +220,9 @@ public class DrawUnitInfo extends IDraw {
 
 		int yspace = 0;
 		for (final UnitType type : UnitTypes.getAllUnitTypes()) {
-			int t = type.getID();
-			int livecount = count.containsKey(t) ? count.get(t).intValue() : 0;
-			int deadcount = this.dead.containsKey(t) ? this.dead.get(t).intValue() : 0;
+			final int t = type.getID();
+			final int livecount = count.containsKey(t) ? count.get(t) : 0;
+			final int deadcount = this.dead.containsKey(t) ? this.dead.get(t) : 0;
 			if (livecount > 0 || deadcount > 0) {
 				api.drawText(new Position(x, y + 40 + ((yspace) * 10)), BwapiUtility.getName(type), true);
 				api.drawText(new Position(x + 160, y + 40 + ((yspace) * 10)), Integer.toString(livecount), true);

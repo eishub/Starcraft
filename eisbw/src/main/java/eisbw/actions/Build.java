@@ -15,24 +15,22 @@ import jnibwapi.types.UnitType;
 /**
  * @author Danny & Harm - Makes the (worker) unit build on the specified (not
  *         obstructed) location.
- *
  */
 public class Build extends StarcraftAction {
 	/**
 	 * The Build constructor.
 	 *
-	 * @param api
-	 *            The BWAPI
+	 * @param api The BWAPI
 	 */
-	public Build(JNIBWAPI api) {
+	public Build(final JNIBWAPI api) {
 		super(api);
 	}
 
 	@Override
-	public boolean isValid(Action action) {
-		List<Parameter> parameters = action.getParameters();
+	public boolean isValid(final Action action) {
+		final List<Parameter> parameters = action.getParameters();
 		if (parameters.size() == 3 && parameters.get(0) instanceof Identifier) {
-			UnitType ut = getUnitType(((Identifier) parameters.get(0)).getValue());
+			final UnitType ut = getUnitType(((Identifier) parameters.get(0)).getValue());
 			return ut != null && ut.isBuilding() && parameters.get(1) instanceof Numeral
 					&& parameters.get(2) instanceof Numeral;
 		}
@@ -40,16 +38,16 @@ public class Build extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(UnitType type, Action action) {
+	public boolean canExecute(final UnitType type, final Action action) {
 		return type.isWorker();
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
-		List<Parameter> parameters = action.getParameters();
-		String type = ((Identifier) parameters.get(0)).getValue();
-		int tx = ((Numeral) parameters.get(1)).getValue().intValue();
-		int ty = ((Numeral) parameters.get(2)).getValue().intValue();
+	public void execute(final Unit unit, final Action action) {
+		final List<Parameter> parameters = action.getParameters();
+		final String type = ((Identifier) parameters.get(0)).getValue();
+		final int tx = ((Numeral) parameters.get(1)).getValue().intValue();
+		final int ty = ((Numeral) parameters.get(2)).getValue().intValue();
 
 		unit.build(new Position(tx, ty, PosType.BUILD), getUnitType(type));
 	}

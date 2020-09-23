@@ -2,7 +2,6 @@ package eisbw.configuration;
 
 /**
  * @author Danny & Harm - The parameter enums.
- *
  */
 public enum ParamEnum {
 	MAP("map"), OWN_RACE("own_race"), DEBUG("debug"), DRAWMAPINFO("draw_mapinfo"), SEED("seed"),
@@ -15,7 +14,7 @@ public enum ParamEnum {
 
 	private final String parameter;
 
-	private ParamEnum(String name) {
+	private ParamEnum(final String name) {
 		this.parameter = name;
 	}
 

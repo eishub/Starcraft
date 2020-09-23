@@ -29,7 +29,7 @@ public class StarcraftUnitTest {
 	public void start() {
 		MockitoAnnotations.initMocks(this);
 
-		List<IPerceiver> list = new ArrayList<>(1);
+		final List<IPerceiver> list = new ArrayList<>(1);
 		list.add(this.perceiver);
 		this.unit = new StarcraftUnit(list, this.type);
 	}

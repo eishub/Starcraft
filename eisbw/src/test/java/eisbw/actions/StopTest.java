@@ -5,7 +5,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +23,7 @@ import jnibwapi.types.UnitType;
 
 public class StopTest {
 	private Stop action;
-	private LinkedList<Parameter> params;
+	private List<Parameter> params;
 
 	@Mock
 	private JNIBWAPI bwapi;
@@ -41,7 +42,7 @@ public class StopTest {
 		MockitoAnnotations.initMocks(this);
 		this.action = new Stop(this.bwapi);
 
-		this.params = new LinkedList<>();
+		this.params = new ArrayList<>(1);
 		this.params.add(new Identifier("Working"));
 
 		when(this.act.getParameters()).thenReturn(this.params);

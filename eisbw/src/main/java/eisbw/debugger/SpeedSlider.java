@@ -1,8 +1,6 @@
 package eisbw.debugger;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Hashtable;
 
 import javax.swing.JButton;
@@ -10,19 +8,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 /**
  * @author Danny & Harm - Class which handles the Speedslider of the dev. tool.
- *
  */
 public class SpeedSlider extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private int initialSpeed = 20;
-	private int slowest = 50;
-	private int fastest = 0;
+	private final int initialSpeed = 20;
+	private final int slowest = 50;
+	private final int fastest = 0;
 
 	private boolean changed = false;
 	private int speed = this.initialSpeed;
@@ -36,16 +31,13 @@ public class SpeedSlider extends JPanel {
 		final JLabel showSpeed = new JLabel("Current FPS: " + getFPS());
 
 		final JSlider slider = new JSlider(SwingConstants.HORIZONTAL, this.fastest, this.slowest, this.initialSpeed);
-		slider.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent event) {
-				SpeedSlider.this.changed = true;
-				SpeedSlider.this.speed = slider.getValue();
-				if (slider.getValue() == 0) {
-					showSpeed.setText("Current FPS: MAX");
-				} else {
-					showSpeed.setText("Current FPS: " + getFPS());
-				}
+		slider.addChangeListener(event -> {
+			SpeedSlider.this.changed = true;
+			SpeedSlider.this.speed = slider.getValue();
+			if (slider.getValue() == 0) {
+				showSpeed.setText("Current FPS: MAX");
+			} else {
+				showSpeed.setText("Current FPS: " + getFPS());
 			}
 		});
 
@@ -53,7 +45,7 @@ public class SpeedSlider extends JPanel {
 		slider.setMinorTickSpacing(1);
 		slider.setPaintTicks(true);
 
-		Hashtable<Integer, JLabel> labels = new Hashtable<>();
+		final Hashtable<Integer, JLabel> labels = new Hashtable<>();
 		labels.put(0, new JLabel("MAX"));
 		labels.put(10, new JLabel("100"));
 		labels.put(20, new JLabel("50"));
@@ -65,28 +57,14 @@ public class SpeedSlider extends JPanel {
 
 		slider.setPaintLabels(true);
 
-		// JButton defaultSpeed = new JButton("Default speed");
-		// defaultSpeed.addActionListener(new ActionListener() {
-		// @Override
-		// public void actionPerformed(ActionEvent event) {
-		// slider.setValue(30);
-		// }
-		// });
+		final JButton tournamentSpeed = new JButton("Tournament Speed");
+		tournamentSpeed.addActionListener(event -> slider.setValue(20));
 
-		JButton tournamentSpeed = new JButton("Tournament Speed");
-		tournamentSpeed.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent event) {
-				slider.setValue(20);
-			}
-		});
-
-		JLabel label = new JLabel("Game Speed");
+		final JLabel label = new JLabel("Game Speed");
 		add(label);
 		add(slider);
 
 		add(showSpeed);
-		// add(defaultSpeed);
 		add(tournamentSpeed);
 	}
 
@@ -99,8 +77,9 @@ public class SpeedSlider extends JPanel {
 		if (this.changed) {
 			this.changed = false;
 			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 
 	public int getSpeed() {
@@ -110,8 +89,7 @@ public class SpeedSlider extends JPanel {
 	public int getFPS() {
 		if (this.speed > 0) {
 			return (1000 / this.speed);
-		} else {
-			// max fps
+		} else { // max fps
 			return 1000;
 		}
 	}

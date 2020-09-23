@@ -9,17 +9,16 @@ import eisbw.configuration.ParamEnum;
 /**
  * @author Danny & Harm - The translator which translates a parameter to a
  *         ParamEnum.
- *
  */
 public class ParamEnumTranslator implements Parameter2Java<ParamEnum> {
 	@Override
-	public ParamEnum translate(Parameter param) throws TranslationException {
+	public ParamEnum translate(final Parameter param) throws TranslationException {
 		if (!(param instanceof Identifier)) {
 			throw new TranslationException("Invalid parameter");
 		}
-		String id = ((Identifier) param).getValue();
 
-		for (ParamEnum params : ParamEnum.values()) {
+		final String id = ((Identifier) param).getValue();
+		for (final ParamEnum params : ParamEnum.values()) {
 			if (params.getParam().equals(id)) {
 				return params;
 			}

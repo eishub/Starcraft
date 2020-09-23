@@ -19,29 +19,27 @@ import jnibwapi.util.BWColor;
 
 /**
  * @author Harm & Danny.
- *
  */
 public class DrawMapInfo extends IDraw {
 	/**
 	 * Draw map information (bases, chokepoints, construction sites).
 	 *
-	 * @param game
-	 *            The current game.
+	 * @param game The current game.
 	 */
-	public DrawMapInfo(Game game) {
+	public DrawMapInfo(final Game game) {
 		super(game);
 	}
 
 	@Override
-	protected void doDraw(JNIBWAPI api) {
+	protected void doDraw(final JNIBWAPI api) {
 		drawRegions(api);
 		drawBases(api);
 		drawChokepoints(api);
 		drawConstructionSites(api);
 	}
 
-	private void drawRegions(JNIBWAPI api) {
-		for (Region region : api.getMap().getRegions()) {
+	private void drawRegions(final JNIBWAPI api) {
+		for (final Region region : api.getMap().getRegions()) {
 			// FIXME: very expensive draw
 			// Position[] p = region.getPolygon();
 			// for (int j = 0; j < p.length; ++j) {
@@ -52,10 +50,10 @@ public class DrawMapInfo extends IDraw {
 		}
 	}
 
-	private void drawBases(JNIBWAPI api) {
-		for (BaseLocation base : api.getMap().getBaseLocations()) {
+	private void drawBases(final JNIBWAPI api) {
+		for (final BaseLocation base : api.getMap().getBaseLocations()) {
 			api.drawCircle(base.getCenter(), 75, BWColor.Purple, false, false);
-			Position pos = base.getPosition();
+			final Position pos = base.getPosition();
 			api.drawText(pos, pos.getBX() + ", " + pos.getBY(), false);
 			if (base.isStartLocation()) {
 				api.drawText(base.getCenter(), "Starting Location", false);
@@ -63,27 +61,27 @@ public class DrawMapInfo extends IDraw {
 		}
 	}
 
-	private void drawChokepoints(JNIBWAPI api) {
-		for (ChokePoint cp : api.getMap().getChokePoints()) {
+	private void drawChokepoints(final JNIBWAPI api) {
+		for (final ChokePoint cp : api.getMap().getChokePoints()) {
 			api.drawLine(cp.getFirstSide(), cp.getSecondSide(), BWColor.Yellow, false);
 			api.drawCircle(cp.getCenter(), (int) cp.getRadius(), BWColor.Red, false, false);
 			api.drawText(cp.getCenter(), "(" + cp.getCenter().getBX() + "," + cp.getCenter().getBY() + ")", false);
 		}
 	}
 
-	private void drawConstructionSites(JNIBWAPI api) {
-		List<Percept> percepts = this.game.getConstructionSites();
-		int size = ConstructionSitePerceiver.steps;
-		boolean isTerran = (api.getSelf().getRace() == RaceTypes.Terran);
-		for (Percept percept : percepts) {
-			List<Parameter> params = percept.getParameters();
-			int xpos = ((Numeral) params.get(0)).getValue().intValue();
-			int ypos = ((Numeral) params.get(1)).getValue().intValue();
+	private void drawConstructionSites(final JNIBWAPI api) {
+		final List<Percept> percepts = this.game.getConstructionSites();
+		final int size = ConstructionSitePerceiver.steps;
+		final boolean isTerran = (api.getSelf().getRace() == RaceTypes.Terran);
+		for (final Percept percept : percepts) {
+			final List<Parameter> params = percept.getParameters();
+			final int xpos = ((Numeral) params.get(0)).getValue().intValue();
+			final int ypos = ((Numeral) params.get(1)).getValue().intValue();
 			if (isTerran) {
 				api.drawBox(new Position(xpos, ypos, PosType.BUILD),
 						new Position(xpos + size, ypos + size, PosType.BUILD), BWColor.Blue, false, false);
 			} else {
-				boolean bool = ((TruthValue) params.get(3)).getBooleanValue();
+				final boolean bool = ((TruthValue) params.get(3)).getBooleanValue();
 				if (bool) {
 					api.drawBox(new Position(xpos, ypos, PosType.BUILD),
 							new Position(xpos + size, ypos + size, PosType.BUILD), BWColor.Blue, false, false);

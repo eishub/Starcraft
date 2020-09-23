@@ -2,7 +2,6 @@ package eisbw.percepts;
 
 /**
  * @author Danny & Harm - The data class with all the percept names.
- *
  */
 public enum Percepts {
 	// defensiveMatrix/1
@@ -59,7 +58,7 @@ public enum Percepts {
 	private final String name;
 	private final int arity;
 
-	private Percepts(String name, int arity) {
+	private Percepts(final String name, final int arity) {
 		this.name = name;
 		this.arity = arity;
 	}

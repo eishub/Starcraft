@@ -27,7 +27,6 @@ import jnibwapi.types.RaceType.RaceTypes;
 import jnibwapi.types.UnitType;
 
 public class BwapiListenerTest {
-
 	private BwapiListener listener;
 	private List<Unit> list;
 
@@ -128,10 +127,10 @@ public class BwapiListenerTest {
 		when(this.bwapi.getFrameCount()).thenReturn(50);
 		this.listener.matchFrame();
 		verify(this.game, times(2)).updateConstructionSites(this.bwapi);
-		this.listener.performEntityAction("unit", new Action("stop"));
-		eis.iilang.Parameter[] list = new eis.iilang.Parameter[1];
+		this.listener.performEntityAction(new Action("stop"), "unit");
+		final eis.iilang.Parameter[] list = new eis.iilang.Parameter[1];
 		list[0] = new Identifier("fail");
-		this.listener.performEntityAction("unit", new Action("setRallyPoint", list));
+		this.listener.performEntityAction(new Action("setRallyPoint", list), "unit");
 		when(this.unit.isBeingConstructed()).thenReturn(true);
 		assertTrue(this.listener.pendingActions.size() == 1);
 		this.listener.debugwindow = this.debugwindow;
@@ -139,5 +138,4 @@ public class BwapiListenerTest {
 		assertTrue(this.listener.pendingActions.size() == 0);
 		verify(this.debugwindow, times(1)).debug(this.bwapi);
 	}
-
 }

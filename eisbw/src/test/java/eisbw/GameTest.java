@@ -55,7 +55,7 @@ public class GameTest {
 		MockitoAnnotations.initMocks(this);
 
 		this.percepts = new HashMap<>(1);
-		List<Percept> perc = new ArrayList<>(1);
+		final List<Percept> perc = new ArrayList<>(1);
 		perc.add(new ConstructionSitePercept(1, 2, 3));
 		this.percepts.put(new PerceptFilter(Percepts.CONSTRUCTIONSITE, Filter.Type.ALWAYS), perc);
 
@@ -76,7 +76,7 @@ public class GameTest {
 		this.game = new Game(this.env, 0, new HashMap<String, Set<String>>(0));
 		this.game.units = this.units;
 
-		List<Unit> units = new ArrayList<>(1);
+		final List<Unit> units = new ArrayList<>(1);
 		units.add(this.unit);
 		when(this.bwapi.getMyUnits()).thenReturn(units);
 	}
@@ -86,7 +86,7 @@ public class GameTest {
 		this.game.update(this.bwapi);
 		// assertTrue(this.game.getUnits() == this.units);
 		assertTrue(this.game.getPercepts("null").isEmpty());
-		assertEquals(1, this.game.getPercepts("unit").size());
+		assertEquals(1, this.game.getPercepts("unit").getAddList().size());
 	}
 
 	@Test

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
 import eisbw.Game;
 import jnibwapi.JNIBWAPI;
@@ -23,15 +24,14 @@ public class DebugWindow extends JFrame {
 	/**
 	 * Constructs a debug window for the game.
 	 *
-	 * @param game
-	 *            - the game data.
+	 * @param game - the game data.
 	 */
-	public DebugWindow(Game game) {
+	public DebugWindow(final Game game) {
 		setTitle("StarCraft GOAL development tools");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setSize(500, 300);
 
-		JPanel contentPane = new JPanel();
+		final JPanel contentPane = new JPanel();
 		setContentPane(contentPane);
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 
@@ -48,7 +48,7 @@ public class DebugWindow extends JFrame {
 	}
 
 	private List<String> getActions() {
-		List<String> result = this.cheats.getActions();
+		final List<String> result = this.cheats.getActions();
 		this.cheats.clean();
 		return result;
 	}
@@ -65,11 +65,10 @@ public class DebugWindow extends JFrame {
 	/**
 	 * Iterates over the debug options and executes.
 	 *
-	 * @param bwapi
-	 *            - the API.
+	 * @param bwapi - the API.
 	 */
-	public void debug(JNIBWAPI bwapi) {
-		Iterator<String> actions = getActions().iterator();
+	public void debug(final JNIBWAPI bwapi) {
+		final Iterator<String> actions = getActions().iterator();
 		while (actions.hasNext()) {
 			bwapi.sendText(actions.next());
 			actions.remove();

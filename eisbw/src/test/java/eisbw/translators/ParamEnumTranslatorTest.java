@@ -11,7 +11,6 @@ import eis.iilang.Numeral;
 import eisbw.configuration.ParamEnum;
 
 public class ParamEnumTranslatorTest {
-
 	private ParamEnumTranslator translator;
 
 	@Before
@@ -38,5 +37,4 @@ public class ParamEnumTranslatorTest {
 	public void translatesTo_test() {
 		assertEquals(ParamEnum.class, this.translator.translatesTo());
 	}
-
 }

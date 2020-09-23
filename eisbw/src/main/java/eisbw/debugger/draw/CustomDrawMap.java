@@ -6,7 +6,6 @@ import jnibwapi.Position;
 
 /**
  * @author Harm & Danny.
- *
  */
 public class CustomDrawMap extends IDraw {
 	private final Position pos;
@@ -15,21 +14,18 @@ public class CustomDrawMap extends IDraw {
 	/**
 	 * The CustomDrawMap constructor.
 	 *
-	 * @param game
-	 *            The current game.
-	 * @param pos
-	 *            The position on the map to draw text on,
-	 * @param text
-	 *            The text to draw.
+	 * @param game The current game.
+	 * @param pos  The position on the map to draw text on,
+	 * @param text The text to draw.
 	 */
-	public CustomDrawMap(Game game, Position pos, String text) {
+	public CustomDrawMap(final Game game, final Position pos, final String text) {
 		super(game);
 		this.pos = pos;
 		this.text = text;
 	}
 
 	@Override
-	protected void doDraw(JNIBWAPI api) {
+	protected void doDraw(final JNIBWAPI api) {
 		api.drawText(this.pos, this.text, false);
 	}
 }

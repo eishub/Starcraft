@@ -11,32 +11,30 @@ import jnibwapi.types.UnitType;
 /**
  * @author Danny & Harm - Lifts up the unit, making it a flying unit until it
  *         lands.
- *
  */
 public class Lift extends StarcraftAction {
 	/**
 	 * The Lift constructor.
 	 *
-	 * @param api
-	 *            The BWAPI
+	 * @param api The BWAPI
 	 */
-	public Lift(JNIBWAPI api) {
+	public Lift(final JNIBWAPI api) {
 		super(api);
 	}
 
 	@Override
-	public boolean isValid(Action action) {
-		List<Parameter> parameters = action.getParameters();
+	public boolean isValid(final Action action) {
+		final List<Parameter> parameters = action.getParameters();
 		return parameters.isEmpty();
 	}
 
 	@Override
-	public boolean canExecute(UnitType type, Action action) {
+	public boolean canExecute(final UnitType type, final Action action) {
 		return type.isFlyingBuilding();
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
+	public void execute(final Unit unit, final Action action) {
 		unit.lift();
 	}
 

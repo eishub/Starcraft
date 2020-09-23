@@ -7,22 +7,19 @@ import jnibwapi.JNIBWAPI;
 
 /**
  * @author Danny & Harm - The abstract class for the drawing classes.
- *
  */
 public abstract class IDraw {
 	protected Logger logger = Logger.getLogger("StarCraft Logger"); // overriden
 																	// in test
-
 	protected final Game game;
 	private boolean toggle = false;
 
 	/**
 	 * The IDraw constructor.
 	 *
-	 * @param game
-	 *            the current game.
+	 * @param game the current game.
 	 */
-	public IDraw(Game game) {
+	public IDraw(final Game game) {
 		this.game = game;
 	}
 
@@ -31,10 +28,9 @@ public abstract class IDraw {
 	/**
 	 * Draw on the map.
 	 *
-	 * @param api
-	 *            - the StarCraft API.
+	 * @param api - the StarCraft API.
 	 */
-	public void draw(JNIBWAPI api) {
+	public void draw(final JNIBWAPI api) {
 		if (this.toggle) {
 			doDraw(api);
 		}

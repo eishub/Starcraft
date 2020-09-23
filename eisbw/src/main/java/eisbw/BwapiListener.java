@@ -29,7 +29,6 @@ import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - The Listener of the BWAPI Events.
- *
  */
 public class BwapiListener extends BwapiEvents {
 	protected final Logger logger = Logger.getLogger("StarCraft Logger");
@@ -49,15 +48,13 @@ public class BwapiListener extends BwapiEvents {
 	/**
 	 * Event listener for BWAPI.
 	 *
-	 * @param game
-	 *            - the game data class
-	 * @param debug
-	 *            - true iff debugger should be attached
+	 * @param game  - the game data class
+	 * @param debug - true iff debugger should be attached
 	 */
-	public BwapiListener(Game game, String scDir, boolean debug, boolean drawMapInfo, boolean drawUnitInfo,
-			boolean invulnerable, int speed) {
-		File dll = (scDir.isEmpty()) ? new File("bwapi-data" + File.separator + "AI") : new File(scDir);
-		File bwta = (scDir.isEmpty()) ? new File(dll + File.separator + "mapData")
+	public BwapiListener(final Game game, final String scDir, final boolean debug, final boolean drawMapInfo,
+			final boolean drawUnitInfo, final boolean invulnerable, final int speed) {
+		final File dll = (scDir.isEmpty()) ? new File("bwapi-data" + File.separator + "AI") : new File(scDir);
+		final File bwta = (scDir.isEmpty()) ? new File(dll + File.separator + "mapData")
 				: new File(scDir + File.separator + "bwapi-data" + File.separator + "BWTA");
 		this.bwapi = new JNIBWAPI(this, dll, bwta);
 		this.game = game;
@@ -71,12 +68,12 @@ public class BwapiListener extends BwapiEvents {
 		this.invulnerable = invulnerable;
 		this.speed = speed;
 
-		IDraw mapInfo = new DrawMapInfo(game);
+		final IDraw mapInfo = new DrawMapInfo(game);
 		game.addDraw(Draw.MAP.name(), mapInfo);
 		if (drawMapInfo) {
 			mapInfo.toggle();
 		}
-		IDraw unitInfo = new DrawUnitInfo(game);
+		final IDraw unitInfo = new DrawUnitInfo(game);
 		game.addDraw(Draw.UNITS.name(), unitInfo);
 		if (drawUnitInfo) {
 			unitInfo.toggle();
@@ -121,9 +118,9 @@ public class BwapiListener extends BwapiEvents {
 
 	@Override
 	public void matchFrame() {
-		long start = System.nanoTime();
+		final long start = System.nanoTime();
 		// GENERATE PERCEPTS
-		int frame = this.bwapi.getFrameCount();
+		final int frame = this.bwapi.getFrameCount();
 		if ((frame % 50) == 0) {
 			this.game.updateConstructionSites(this.bwapi);
 		}
@@ -138,17 +135,17 @@ public class BwapiListener extends BwapiEvents {
 			}
 			try { // always sleep 5ms to better facilitate running at speed 0
 				Thread.sleep(5);
-			} catch (InterruptedException ie) {
+			} catch (final InterruptedException ie) {
 				break;
 			} // wait until all the initial workers get an action request
 		} while (frame == 1 && isRunning() && this.pendingActions.size() < 4);
 
 		// PERFORM ACTIONS
 		this.actionCounts.add(this.pendingActions.size());
-		Iterator<BwapiAction> actions = this.pendingActions.iterator();
+		final Iterator<BwapiAction> actions = this.pendingActions.iterator();
 		while (actions.hasNext()) {
-			BwapiAction act = actions.next();
-			StarcraftAction action = this.actionProvider.getAction(act.getAction());
+			final BwapiAction act = actions.next();
+			final StarcraftAction action = this.actionProvider.getAction(act.getAction());
 			if (action != null) {
 				action.execute(act);
 			}
@@ -157,7 +154,7 @@ public class BwapiListener extends BwapiEvents {
 		if (this.debugwindow != null) {
 			this.debugwindow.debug(this.bwapi);
 		}
-		for (IDraw draw : this.game.getDraws()) {
+		for (final IDraw draw : this.game.getDraws()) {
 			draw.draw(this.bwapi);
 		}
 		this.frameTimes.add((int) (System.nanoTime() - start) / 1000000);
@@ -166,16 +163,16 @@ public class BwapiListener extends BwapiEvents {
 	}
 
 	@Override
-	public void unitComplete(int id) {
-		Unit unit = this.bwapi.getUnit(id);
+	public void unitComplete(final int id) {
+		final Unit unit = this.bwapi.getUnit(id);
 		if (unit != null && unit.getPlayer() == this.bwapi.getSelf() && this.game.getUnitName(id) == null) {
 			this.game.addUnit(unit, this.factory);
 		}
 	}
 
 	@Override
-	public void unitDestroy(int id) {
-		String name = this.game.getUnitName(id);
+	public void unitDestroy(final int id) {
+		final String name = this.game.getUnitName(id);
 		if (name != null) {
 			this.game.removeDraw(name);
 		}
@@ -184,10 +181,10 @@ public class BwapiListener extends BwapiEvents {
 	}
 
 	@Override
-	public void unitMorph(int id) {
-		Unit unit = this.bwapi.getUnit(id);
-		UnitType type = BwapiUtility.getType(unit);
-		boolean isTerran = (type != null && type.getRaceID() == RaceTypes.Terran.getID());
+	public void unitMorph(final int id) {
+		final Unit unit = this.bwapi.getUnit(id);
+		final UnitType type = BwapiUtility.getType(unit);
+		final boolean isTerran = (type != null && type.getRaceID() == RaceTypes.Terran.getID());
 		if (unit != null && !isTerran) { // siege tank hack
 			unitDestroy(id);
 			unitComplete(id);
@@ -195,25 +192,25 @@ public class BwapiListener extends BwapiEvents {
 	}
 
 	@Override
-	public void unitRenegade(int id) {
+	public void unitRenegade(final int id) {
 		unitDestroy(id);
 	}
 
 	@Override
-	public void nukeDetect(Position pos) {
+	public void nukeDetect(final Position pos) {
 		this.game.updateNukePerceiver(this.bwapi, pos);
 		this.nuke = 0;
 	}
 
 	@Override
-	public void matchEnd(boolean winner) {
+	public void matchEnd(final boolean winner) {
 		this.game.updateEndGamePerceiver(winner);
 		this.game.update(this.bwapi);
 
 		// have the winner percept perceived for 1 second
 		try {
 			Thread.sleep(1000);
-		} catch (InterruptedException ignore) {
+		} catch (final InterruptedException ignore) {
 		}
 
 		this.pendingActions.clear();
@@ -238,17 +235,14 @@ public class BwapiListener extends BwapiEvents {
 	 * Adds an action to the action queue, the action is then executed on the next
 	 * frame.
 	 *
-	 * @param name
-	 *            - the name of the unit.
-	 * @param action
-	 *            - the action.
-	 * @throws ActException
-	 *             - mandatory from EIS
+	 * @param action - the action.
+	 * @param name   - the name of the unit.
+	 * @throws ActException - mandatory from EIS
 	 */
-	public void performEntityAction(String name, Action action) throws ActException {
-		Unit unit = this.game.getUnit(name); // can be null for the mapagent
+	public void performEntityAction(final Action action, final String name) throws ActException {
+		final Unit unit = this.game.getUnit(name); // can be null for the mapagent
 		if (isSupportedByEntity(action, name)) {
-			BwapiAction apiAction = new BwapiAction(name, unit, action);
+			final BwapiAction apiAction = new BwapiAction(name, unit, action);
 			this.pendingActions.add(apiAction);
 		} else {
 			this.logger.log(Level.WARNING,
@@ -256,14 +250,14 @@ public class BwapiListener extends BwapiEvents {
 		}
 	}
 
-	public boolean isSupportedByEnvironment(Action action) {
-		StarcraftAction act = this.actionProvider.getAction(action);
+	public boolean isSupportedByEnvironment(final Action action) {
+		final StarcraftAction act = this.actionProvider.getAction(action);
 		return act != null && act.isValid(action);
 	}
 
-	public boolean isSupportedByEntity(Action action, String name) {
-		StarcraftAction act = this.actionProvider.getAction(action);
-		Unit unit = this.game.getUnit(name);
+	public boolean isSupportedByEntity(final Action action, final String name) {
+		final StarcraftAction act = this.actionProvider.getAction(action);
+		final Unit unit = this.game.getUnit(name);
 		return isSupportedByEnvironment(action)
 				&& act.canExecute((unit == null) ? null : BwapiUtility.getType(unit), action);
 	}
@@ -273,12 +267,12 @@ public class BwapiListener extends BwapiEvents {
 				&& this.game.getEnvironment().getState() != EnvironmentState.KILLED;
 	}
 
-	private static String getAverage(Queue<Integer> queue) {
+	private static String getAverage(final Queue<Integer> queue) {
 		int total = 0;
-		for (Integer integer : queue) {
-			total += integer.intValue();
+		for (final Integer integer : queue) {
+			total += integer;
 		}
-		double average = (total / (double) queue.size());
+		final double average = (total / (double) queue.size());
 		return String.format(Locale.ROOT, "%.1f", average);
 	}
 }

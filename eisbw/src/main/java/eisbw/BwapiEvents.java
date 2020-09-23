@@ -5,7 +5,6 @@ import jnibwapi.Position;
 
 /**
  * @author Danny & Harm - Stub class for all overriden event methods.
- *
  */
 public class BwapiEvents implements BWAPIEventListener {
 	@Override
@@ -24,32 +23,32 @@ public class BwapiEvents implements BWAPIEventListener {
 	}
 
 	@Override
-	public void matchEnd(boolean winner) {
+	public void matchEnd(final boolean winner) {
 		// Method stub
 	}
 
 	@Override
-	public void keyPressed(int keyCode) {
+	public void keyPressed(final int keyCode) {
 		// Method stub
 	}
 
 	@Override
-	public void sendText(String text) {
+	public void sendText(final String text) {
 		// Method stub
 	}
 
 	@Override
-	public void receiveText(String text) {
+	public void receiveText(final String text) {
 		// Method stub
 	}
 
 	@Override
-	public void playerLeft(int playerId) {
+	public void playerLeft(final int playerId) {
 		// Method stub
 	}
 
 	@Override
-	public void nukeDetect(Position pos) {
+	public void nukeDetect(final Position pos) {
 		// Method stub
 	}
 
@@ -59,57 +58,57 @@ public class BwapiEvents implements BWAPIEventListener {
 	}
 
 	@Override
-	public void unitDiscover(int unitId) {
+	public void unitDiscover(final int unitId) {
 		// Method stub
 	}
 
 	@Override
-	public void unitEvade(int unitId) {
+	public void unitEvade(final int unitId) {
 		// Method stub
 	}
 
 	@Override
-	public void unitShow(int unitId) {
+	public void unitShow(final int unitId) {
 		// Method stub
 	}
 
 	@Override
-	public void unitHide(int unitId) {
+	public void unitHide(final int unitId) {
 		// Method stub
 	}
 
 	@Override
-	public void unitCreate(int unitId) {
+	public void unitCreate(final int unitId) {
 		// Method stub
 	}
 
 	@Override
-	public void unitDestroy(int unitId) {
+	public void unitDestroy(final int unitId) {
 		// Method stub
 	}
 
 	@Override
-	public void unitMorph(int unitId) {
+	public void unitMorph(final int unitId) {
 		// Method stub
 	}
 
 	@Override
-	public void unitRenegade(int unitId) {
+	public void unitRenegade(final int unitId) {
 		// Method stub
 	}
 
 	@Override
-	public void saveGame(String gameName) {
+	public void saveGame(final String gameName) {
 		// Method stub
 	}
 
 	@Override
-	public void unitComplete(int unitId) {
+	public void unitComplete(final int unitId) {
 		// Method stub
 	}
 
 	@Override
-	public void playerDropped(int playerId) {
+	public void playerDropped(final int playerId) {
 		// Method stub
 	}
 }

@@ -5,7 +5,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +27,7 @@ import jnibwapi.types.UnitType;
 
 public class BuildTest {
 	private Build action;
-	private LinkedList<Parameter> params;
+	private List<Parameter> params;
 
 	@Mock
 	private JNIBWAPI bwapi;
@@ -45,7 +46,7 @@ public class BuildTest {
 		MockitoAnnotations.initMocks(this);
 		this.action = new Build(this.bwapi);
 
-		this.params = new LinkedList<>();
+		this.params = new ArrayList<>(2);
 		this.params.add(new Identifier("Working"));
 		this.params.add(new Numeral(2));
 
@@ -56,7 +57,7 @@ public class BuildTest {
 
 	@Test
 	public void isValid_test() {
-		StarcraftAction spyAction = Mockito.spy(this.action);
+		final StarcraftAction spyAction = Mockito.spy(this.action);
 
 		when(spyAction.getUnitType("Working")).thenReturn(this.unitType);
 		when(this.unitType.isBuilding()).thenReturn(true);

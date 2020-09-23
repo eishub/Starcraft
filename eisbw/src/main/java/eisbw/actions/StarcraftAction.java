@@ -11,7 +11,6 @@ import jnibwapi.types.UpgradeType;
 
 /**
  * @author Danny & Harm - Abstract class for all the actions.
- *
  */
 public abstract class StarcraftAction {
 	protected final JNIBWAPI api;
@@ -19,63 +18,55 @@ public abstract class StarcraftAction {
 	/**
 	 * The StarcraftAction constructor.
 	 *
-	 * @param api
-	 *            The BWAPI
+	 * @param api The BWAPI
 	 */
-	public StarcraftAction(JNIBWAPI api) {
+	public StarcraftAction(final JNIBWAPI api) {
 		this.api = api;
 	}
 
 	// Mocked in tests
-	protected UnitType getUnitType(String name) {
+	protected UnitType getUnitType(final String name) {
 		return BwapiUtility.getUnitType(name);
 	}
 
 	// Mocked in tests
-	protected TechType getTechType(String name) {
+	protected TechType getTechType(final String name) {
 		return BwapiUtility.getTechType(name);
 	}
 
 	// Mocked in tests
-	protected UpgradeType getUpgradeType(String name) {
+	protected UpgradeType getUpgradeType(final String name) {
 		return BwapiUtility.getUpgradeType(name);
 	}
 
 	/**
-	 * @param action
-	 *            The evaluated action.
+	 * @param action The evaluated action.
 	 * @return A boolean which indicates whether the parameters of the action are
 	 *         valid.
 	 */
 	public abstract boolean isValid(Action action);
 
 	/**
-	 * @param type
-	 *            The type of the unit performing the action.
-	 * @param action
-	 *            The evaluated action.
+	 * @param type   The type of the unit performing the action.
+	 * @param action The evaluated action.
 	 * @return A boolean which indicated wheter the specified unit can execute the
 	 *         action.
 	 */
 	public abstract boolean canExecute(UnitType type, Action action);
 
 	/**
-	 * @param unit
-	 *            The unit performing the action.
-	 * @param action
-	 *            The evaluated action.
+	 * @param unit   The unit performing the action.
+	 * @param action The evaluated action.
 	 */
 	public abstract void execute(Unit unit, Action action);
 
 	/**
-	 * Executes this action with the specified BwapiAction. Can be
-	 * overridden by subclasses if they need access to the raw
-	 * BwapiAction object.
+	 * Executes this action with the specified BwapiAction. Can be overridden by
+	 * subclasses if they need access to the raw BwapiAction object.
 	 *
-	 * @param action
-	 *              The action to execute.
+	 * @param action The action to execute.
 	 */
-	public void execute(BwapiAction action) {
+	public void execute(final BwapiAction action) {
 		this.execute(action.getUnit(), action.getAction());
 	}
 
@@ -88,7 +79,7 @@ public abstract class StarcraftAction {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		} else if (obj == null || !(obj instanceof StarcraftAction)) {

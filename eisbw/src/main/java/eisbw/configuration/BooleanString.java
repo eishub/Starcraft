@@ -2,7 +2,6 @@ package eisbw.configuration;
 
 /**
  * @author Danny & Harm - A boolean as a string.
- *
  */
 public class BooleanString {
 	private final String data;
@@ -10,10 +9,9 @@ public class BooleanString {
 	/**
 	 * The BooleanString constructor.
 	 *
-	 * @param data
-	 *            The boolean string.
+	 * @param data The boolean string.
 	 */
-	public BooleanString(String data) {
+	public BooleanString(final String data) {
 		this.data = data;
 	}
 

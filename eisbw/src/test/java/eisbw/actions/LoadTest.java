@@ -5,7 +5,8 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +24,7 @@ import jnibwapi.types.UnitType;
 
 public class LoadTest {
 	private Load action;
-	private LinkedList<Parameter> params;
+	private List<Parameter> params;
 
 	@Mock
 	private JNIBWAPI bwapi;
@@ -42,7 +43,7 @@ public class LoadTest {
 		MockitoAnnotations.initMocks(this);
 		this.action = new Load(this.bwapi);
 
-		this.params = new LinkedList<>();
+		this.params = new ArrayList<>(2);
 		this.params.add(new Identifier("Working"));
 		this.params.add(new Numeral(2));
 

@@ -12,7 +12,6 @@ import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - The data class which keeps track of all the units.
- *
  */
 public class Units {
 	protected final StarcraftEnvironmentImpl environment;
@@ -24,10 +23,9 @@ public class Units {
 	/**
 	 * Constructor.
 	 *
-	 * @param environment
-	 *            - the SC environment
+	 * @param environment - the SC environment
 	 */
-	public Units(StarcraftEnvironmentImpl environment) {
+	public Units(final StarcraftEnvironmentImpl environment) {
 		this.environment = environment;
 		this.unitNames = new ConcurrentHashMap<>();
 		this.unitMap = new ConcurrentHashMap<>();
@@ -38,18 +36,16 @@ public class Units {
 	/**
 	 * Adds a unit to the game data.
 	 *
-	 * @param unit
-	 *            The unit to add.
-	 * @param factory
-	 *            The object which creates all starcraft units.
+	 * @param unit    The unit to add.
+	 * @param factory The object which creates all starcraft units.
 	 */
-	public void addUnit(Unit unit, StarcraftUnitFactory factory) {
-		UnitType type = BwapiUtility.getType(unit);
+	public void addUnit(final Unit unit, final StarcraftUnitFactory factory) {
+		final UnitType type = BwapiUtility.getType(unit);
 		if (BwapiUtility.isValid(unit) && !type.isInvincible() && !type.isSpell()) {
-			String unitName = BwapiUtility.getName(unit);
+			final String unitName = BwapiUtility.getName(unit);
 			this.unitNames.put(unit.getID(), unitName);
 			this.unitMap.put(unitName, unit);
-			StarcraftUnit scUnit = factory.create(unit);
+			final StarcraftUnit scUnit = factory.create(unit);
 			this.starcraftUnits.put(unit, scUnit);
 			this.uninitializedUnits.add(unit);
 		}
@@ -58,13 +54,12 @@ public class Units {
 	/**
 	 * Removes a unit from game data.
 	 *
-	 * @param unit
-	 *            The unit to delete.
+	 * @param unit The unit to delete.
 	 */
-	public void deleteUnit(int id) {
-		String unitName = this.unitNames.remove(id);
+	public void deleteUnit(final int id) {
+		final String unitName = this.unitNames.remove(id);
 		if (unitName != null) {
-			Unit unit = this.unitMap.remove(unitName);
+			final Unit unit = this.unitMap.remove(unitName);
 			if (unit != null) {
 				this.starcraftUnits.remove(unit);
 				this.uninitializedUnits.remove(unit);
@@ -73,15 +68,15 @@ public class Units {
 		}
 	}
 
-	public String getUnitName(int id) {
+	public String getUnitName(final int id) {
 		return this.unitNames.get(id);
 	}
 
-	public Unit getUnit(String name) {
+	public Unit getUnit(final String name) {
 		return this.unitMap.get(name);
 	}
 
-	public StarcraftUnit getStarcraftUnit(Unit unit) {
+	public StarcraftUnit getStarcraftUnit(final Unit unit) {
 		return this.starcraftUnits.get(unit);
 	}
 
@@ -93,7 +88,7 @@ public class Units {
 	 * Clean units, let garbage collector remove the remains.
 	 */
 	public void clean() {
-		for (int id : this.unitNames.keySet().toArray(new Integer[this.unitNames.size()])) {
+		for (final int id : this.unitNames.keySet().toArray(new Integer[this.unitNames.size()])) {
 			deleteUnit(id);
 		}
 	}

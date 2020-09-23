@@ -14,7 +14,6 @@ import eis.iilang.ParameterList;
 
 /**
  * @author Danny & Harm - This class handles all the possible configurations.
- *
  */
 public class Configuration {
 	protected RaceString ownRace = null;
@@ -35,19 +34,17 @@ public class Configuration {
 	/**
 	 * The Configuration constructor.
 	 *
-	 * @param parameters
-	 *            The given config parameters.
-	 * @throws TranslationException
-	 *             One of the config parameters is not valid.
+	 * @param parameters The given config parameters.
+	 * @throws TranslationException One of the config parameters is not valid.
 	 */
-	public Configuration(Map<String, Parameter> parameters) throws TranslationException {
+	public Configuration(final Map<String, Parameter> parameters) throws TranslationException {
 		parseParams(parameters);
 	}
 
-	private void parseParams(Map<String, Parameter> parameters) throws TranslationException {
-		Translator translator = Translator.getInstance();
-		for (Entry<String, Parameter> entry : parameters.entrySet()) {
-			ParamEnum param = translator.translate2Java(new Identifier(entry.getKey()), ParamEnum.class);
+	private void parseParams(final Map<String, Parameter> parameters) throws TranslationException {
+		final Translator translator = Translator.getInstance();
+		for (final Entry<String, Parameter> entry : parameters.entrySet()) {
+			final ParamEnum param = translator.translate2Java(new Identifier(entry.getKey()), ParamEnum.class);
 			switch (param) {
 			case OWN_RACE:
 				this.ownRace = translator.translate2Java(entry.getValue(), RaceString.class);
@@ -90,8 +87,7 @@ public class Configuration {
 				break;
 			case PERCEPTS:
 				this.percepts = (ParameterList) entry.getValue();
-			default:
-				// Unreachable clause.
+			default: // Should be unreachable.
 				break;
 			}
 		}
@@ -150,13 +146,13 @@ public class Configuration {
 	}
 
 	public Map<String, Set<String>> getPercepts() {
-		Map<String, Set<String>> returned = new HashMap<>();
-		for (Parameter rawentries : this.percepts) {
-			ParameterList entries = (ParameterList) rawentries;
-			Set<String> percepts = new HashSet<>(entries.size() - 1);
+		final Map<String, Set<String>> returned = new HashMap<>();
+		for (final Parameter rawentries : this.percepts) {
+			final ParameterList entries = (ParameterList) rawentries;
+			final Set<String> percepts = new HashSet<>(entries.size() - 1);
 			String type = null;
-			for (Parameter rawentry : entries) {
-				String entry = ((Identifier) rawentry).getValue();
+			for (final Parameter rawentry : entries) {
+				final String entry = ((Identifier) rawentry).getValue();
 				if (type == null) {
 					type = entry;
 				} else {

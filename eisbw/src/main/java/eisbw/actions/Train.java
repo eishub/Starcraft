@@ -12,36 +12,34 @@ import jnibwapi.types.UnitType.UnitTypes;
 
 /**
  * @author Danny & Harm - Trains a specified unit from a production facility.
- *
  */
 public class Train extends StarcraftAction {
 	/**
 	 * The Train constructor.
 	 *
-	 * @param api
-	 *            The BWAPI
+	 * @param api The BWAPI
 	 */
-	public Train(JNIBWAPI api) {
+	public Train(final JNIBWAPI api) {
 		super(api);
 	}
 
 	@Override
-	public boolean isValid(Action action) {
-		List<Parameter> parameters = action.getParameters();
+	public boolean isValid(final Action action) {
+		final List<Parameter> parameters = action.getParameters();
 		return parameters.size() == 1 && parameters.get(0) instanceof Identifier
 				&& getUnitType(((Identifier) parameters.get(0)).getValue()) != null;
 	}
 
 	@Override
-	public boolean canExecute(UnitType type, Action action) {
+	public boolean canExecute(final UnitType type, final Action action) {
 		return type.isProduceCapable() || type == UnitTypes.Terran_Nuclear_Silo;
 	}
 
 	@Override
-	public void execute(Unit unit, Action action) {
-		List<Parameter> parameters = action.getParameters();
-		String tobuild = ((Identifier) parameters.get(0)).getValue();
-		UnitType unitType = getUnitType(tobuild);
+	public void execute(final Unit unit, final Action action) {
+		final List<Parameter> parameters = action.getParameters();
+		final String tobuild = ((Identifier) parameters.get(0)).getValue();
+		final UnitType unitType = getUnitType(tobuild);
 
 		unit.train(unitType);
 	}
@@ -50,5 +48,4 @@ public class Train extends StarcraftAction {
 	public String toString() {
 		return "train(Type)";
 	}
-
 }

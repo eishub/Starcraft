@@ -12,7 +12,6 @@ import jnibwapi.types.UnitType;
 /**
  * @author Danny & Harm - The class which gathers all the percepts of a
  *         starcraft unit.
- *
  */
 public class StarcraftUnit {
 	protected final List<IPerceiver> perceivers;
@@ -21,12 +20,10 @@ public class StarcraftUnit {
 	/**
 	 * A starcraft unit with perceivers.
 	 *
-	 * @param perceivers
-	 *            - list with perceivers to percept from.
-	 * @param worker
-	 *            - true iff the unit is a worker
+	 * @param perceivers - list with perceivers to percept from.
+	 * @param worker     - true iff the unit is a worker
 	 */
-	public StarcraftUnit(List<IPerceiver> perceivers, UnitType type) {
+	public StarcraftUnit(final List<IPerceiver> perceivers, final UnitType type) {
 		this.perceivers = perceivers;
 		this.worker = (type != null && type.isWorker());
 	}
@@ -37,8 +34,8 @@ public class StarcraftUnit {
 	 * @return - a list of percepts.
 	 */
 	public Map<PerceptFilter, List<Percept>> perceive() {
-		Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
-		for (IPerceiver perceiver : this.perceivers) {
+		final Map<PerceptFilter, List<Percept>> toReturn = new HashMap<>();
+		for (final IPerceiver perceiver : this.perceivers) {
 			perceiver.perceive(toReturn);
 		}
 		return toReturn;

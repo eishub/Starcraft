@@ -5,7 +5,6 @@ import eisbw.percepts.Percepts;
 
 /**
  * @author Danny & Harm - The class which classifies all the percepts.
- *
  */
 public class PerceptFilter {
 	private final String name;
@@ -14,12 +13,10 @@ public class PerceptFilter {
 	/**
 	 * The PerceptFilter constructor.
 	 *
-	 * @param percept
-	 *            The name of the percept (from the Percepts enum).
-	 * @param type
-	 *            The type of the percept.
+	 * @param percept The name of the percept (from the Percepts enum).
+	 * @param type    The type of the percept.
 	 */
-	public PerceptFilter(Percepts percept, Type type) {
+	public PerceptFilter(final Percepts percept, final Type type) {
 		this.name = percept.toString();
 		this.type = type;
 	}
@@ -38,14 +35,14 @@ public class PerceptFilter {
 	}
 
 	@Override
-	public boolean equals(Object other) {
+	public boolean equals(final Object other) {
 		if (other == null) {
 			return false;
 		}
 		if (!(other instanceof PerceptFilter)) {
 			return false;
 		}
-		PerceptFilter that = (PerceptFilter) other;
+		final PerceptFilter that = (PerceptFilter) other;
 		return this.name.equals(that.getName());
 	}
 

@@ -20,6 +20,9 @@ import jnibwapi.types.UpgradeType.UpgradeTypes;
 import jnibwapi.types.WeaponType;
 import jnibwapi.types.WeaponType.WeaponTypes;
 
+/**
+ * @author Vincent
+ */
 public class KnowledgeExport {
 
 	public static void export() {
@@ -165,26 +168,26 @@ public class KnowledgeExport {
 		try {
 			Files.write(Paths.get(new File("export.pl").toURI()), export.getBytes("utf-8"), StandardOpenOption.CREATE,
 					StandardOpenOption.TRUNCATE_EXISTING);
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	private static String getUnitType(UnitType type) {
-		RaceType race = RaceTypes.getRaceType(type.getRaceID());
+	private static String getUnitType(final UnitType type) {
+		final RaceType race = RaceTypes.getRaceType(type.getRaceID());
 		return String.format("unit('%s',%s).\n", BwapiUtility.getName(type), race.getName().toLowerCase());
 	}
 
-	private static String getUnitCosts(UnitType type) {
+	private static String getUnitCosts(final UnitType type) {
 		String requirements = "[";
 		boolean hadFirst = false;
 		if (type.getRequiredTechID() <= 32) {
-			TechType required = TechTypes.getTechType(type.getRequiredTechID());
+			final TechType required = TechTypes.getTechType(type.getRequiredTechID());
 			requirements += "'" + required.getName() + "'";
 			hadFirst = true;
 		}
-		for (int requiredUnit : type.getRequiredUnits().keySet()) {
-			UnitType required = UnitTypes.getUnitType(requiredUnit);
+		for (final int requiredUnit : type.getRequiredUnits().keySet()) {
+			final UnitType required = UnitTypes.getUnitType(requiredUnit);
 			if (required.getID() > 202) {
 				continue;
 			}
@@ -203,8 +206,8 @@ public class KnowledgeExport {
 				requirements);
 	}
 
-	private static String getUnitStats(UnitType type) {
-		List<String> conditionlist = new LinkedList<>();
+	private static String getUnitStats(final UnitType type) {
+		final List<String> conditionlist = new LinkedList<>();
 		if (type.isBuilding()) {
 			conditionlist.add("building");
 		}
@@ -250,7 +253,7 @@ public class KnowledgeExport {
 		Collections.sort(conditionlist);
 		String conditions = "[";
 		boolean hadFirst = false;
-		for (String condition : conditionlist) {
+		for (final String condition : conditionlist) {
 			if (hadFirst) {
 				conditions += ",";
 			} else {
@@ -264,17 +267,17 @@ public class KnowledgeExport {
 				type.getMaxEnergy(), (int) (type.getTopSpeed() * 10), conditions);
 	}
 
-	private static String getUnitMetrics(UnitType type) {
-		int spaceRequired = (type.getSpaceRequired() >= 255) ? 0 : type.getSpaceRequired();
-		int spaceProvided = (type.getSpaceProvided() >= 255) ? 0 : type.getSpaceProvided();
+	private static String getUnitMetrics(final UnitType type) {
+		final int spaceRequired = (type.getSpaceRequired() >= 255) ? 0 : type.getSpaceRequired();
+		final int spaceProvided = (type.getSpaceProvided() >= 255) ? 0 : type.getSpaceProvided();
 		return String.format("metrics('%s',%d,%d,%d,%d).\n", BwapiUtility.getName(type), type.getTileWidth(),
 				type.getTileHeight(), type.getSightRange() / PosType.BUILD.scale, spaceRequired - spaceProvided);
 	}
 
-	private static String getUnitCombat(UnitType type) {
-		WeaponType ground = type.getGroundWeapon();
-		WeaponType air = WeaponTypes.getWeaponType(type.getAirWeaponID());
-		WeaponType generic = (ground == null || ground == WeaponTypes.Unknown || ground == WeaponTypes.None) ? air
+	private static String getUnitCombat(final UnitType type) {
+		final WeaponType ground = type.getGroundWeapon();
+		final WeaponType air = WeaponTypes.getWeaponType(type.getAirWeaponID());
+		final WeaponType generic = (ground == null || ground == WeaponTypes.Unknown || ground == WeaponTypes.None) ? air
 				: ground;
 		return String.format("combat('%s',%d,%d,%d,%d,%d).\n", BwapiUtility.getName(type),
 				type.getMaxGroundHits() * ground.getDamageAmount() * ground.getDamageFactor(),
@@ -282,20 +285,20 @@ public class KnowledgeExport {
 				generic.getMaxRange() / PosType.BUILD.scale, generic.getMedianSplashRadius() / PosType.BUILD.scale);
 	}
 
-	private static String getTechType(TechType type) {
-		RaceType race = RaceTypes.getRaceType(type.getRaceID());
+	private static String getTechType(final TechType type) {
+		final RaceType race = RaceTypes.getRaceType(type.getRaceID());
 		return String.format("upgrade('%s',%s).\n", type.getName(), race.getName().toLowerCase());
 	}
 
-	private static String getTechCosts(TechType type) {
-		String required = (type.getWhatResearches().getID() > 202) ? ""
+	private static String getTechCosts(final TechType type) {
+		final String required = (type.getWhatResearches().getID() > 202) ? ""
 				: ("'" + BwapiUtility.getName(type.getWhatResearches()) + "'");
 		return String.format("costs('%s',%d,%d,%d,%d,%s).\n", type.getName(), type.getMineralPrice(),
 				type.getGasPrice(), type.getEnergyUsed(), type.getResearchTime(), "[" + required + "]");
 	}
 
-	private static String getTechCombat(TechType type) {
-		WeaponType weapon = WeaponTypes.getWeaponType(type.getGetWeaponID());
+	private static String getTechCombat(final TechType type) {
+		final WeaponType weapon = WeaponTypes.getWeaponType(type.getGetWeaponID());
 		if (weapon == WeaponTypes.Unknown || weapon == WeaponTypes.None) {
 			return "";
 		} else {
@@ -307,8 +310,8 @@ public class KnowledgeExport {
 		}
 	}
 
-	private static String getUpgradeType(UpgradeType type) {
-		RaceType race = RaceTypes.getRaceType(type.getRaceID());
+	private static String getUpgradeType(final UpgradeType type) {
+		final RaceType race = RaceTypes.getRaceType(type.getRaceID());
 		if (type.getMaxRepeats() > 1) {
 			String returned = "";
 			for (int i = 1; i <= type.getMaxRepeats(); ++i) {
@@ -321,13 +324,13 @@ public class KnowledgeExport {
 		}
 	}
 
-	private static String getUpgradeCosts(UpgradeType type) {
-		String name = type.getName().replace("_", " ");
-		String required = (type.getWhatUpgradesTypeID() > 202) ? ""
+	private static String getUpgradeCosts(final UpgradeType type) {
+		final String name = type.getName().replace("_", " ");
+		final String required = (type.getWhatUpgradesTypeID() > 202) ? ""
 				: ("'" + BwapiUtility.getName(UnitTypes.getUnitType(type.getWhatUpgradesTypeID())) + "'");
 		String returned = "";
 		for (int i = 0; i < type.getMaxRepeats(); ++i) {
-			String toAdd = (type.getMaxRepeats() == 1) ? "" : (" " + (i + 1));
+			final String toAdd = (type.getMaxRepeats() == 1) ? "" : (" " + (i + 1));
 			returned += String.format("costs('%s',%d,%d,%d,%d,%s).\n", name + toAdd,
 					type.getMineralPriceBase() + (type.getMineralPriceFactor() * i),
 					type.getGasPriceBase() + (type.getGasPriceFactor() * i), 0,

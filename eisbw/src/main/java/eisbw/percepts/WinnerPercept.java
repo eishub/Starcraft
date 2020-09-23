@@ -4,7 +4,6 @@ import eis.iilang.TruthValue;
 
 /**
  * @author Danny & Harm - The Winner percept.
- *
  */
 public class WinnerPercept extends StarcraftPercept {
 	private static final long serialVersionUID = 1L;
@@ -12,10 +11,9 @@ public class WinnerPercept extends StarcraftPercept {
 	/**
 	 * The WinnerPercept constructor.
 	 *
-	 * @param boolean
-	 *            true if won, false if lost.
+	 * @param boolean true if won, false if lost.
 	 */
-	public WinnerPercept(boolean winner) {
+	public WinnerPercept(final boolean winner) {
 		super(Percepts.WINNER, new TruthValue(winner));
 	}
 }

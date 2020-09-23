@@ -10,22 +10,20 @@ import jnibwapi.types.UnitType;
 
 /**
  * @author Danny & Harm - Abstract class for some of the Movable actions.
- *
  */
 public abstract class StarcraftMovableAction extends StarcraftAction {
 	/**
 	 * The Starcraft MovableAction constructor.
 	 *
-	 * @param api
-	 *            The BWAPI.
+	 * @param api The BWAPI.
 	 */
-	public StarcraftMovableAction(JNIBWAPI api) {
+	public StarcraftMovableAction(final JNIBWAPI api) {
 		super(api);
 	}
 
 	@Override
-	public boolean isValid(Action action) {
-		List<Parameter> parameters = action.getParameters();
+	public boolean isValid(final Action action) {
+		final List<Parameter> parameters = action.getParameters();
 		if (parameters.size() == 2) {
 			return parameters.get(0) instanceof Numeral && parameters.get(1) instanceof Numeral;
 		} else {
@@ -34,7 +32,7 @@ public abstract class StarcraftMovableAction extends StarcraftAction {
 	}
 
 	@Override
-	public boolean canExecute(UnitType type, Action action) {
+	public boolean canExecute(final UnitType type, final Action action) {
 		return type.isCanMove() || type.isFlyingBuilding();
 	}
 }

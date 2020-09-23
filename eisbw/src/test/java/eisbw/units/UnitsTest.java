@@ -21,7 +21,6 @@ import jnibwapi.Unit;
 import jnibwapi.types.UnitType;
 
 public class UnitsTest {
-
 	private Units units;
 
 	@Mock
