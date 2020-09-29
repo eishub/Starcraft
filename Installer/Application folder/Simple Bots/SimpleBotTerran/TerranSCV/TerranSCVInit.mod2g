@@ -1,7 +1,0 @@
-use TerranSCV as knowledge.
-
-module TerranSCVInit {
-	% Initialize the conditions belief (on-change percept)
-	if percept(status(_,_,_,Conditions,_,_,_,_)) 
-		then insert(conditions(Conditions)).
-}

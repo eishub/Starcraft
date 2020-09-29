@@ -1,7 +1,0 @@
-use "../Shared" as knowledge.
-
-module MapAgentInit {
-	% Initialize the resources belief (on-change percept)
-	if percept(resources(M,G,CS,TS)) 
-		then insert(resources(M,G,CS,TS)).
-}

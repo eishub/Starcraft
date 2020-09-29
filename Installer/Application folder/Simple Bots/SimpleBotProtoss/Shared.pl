@@ -1,1 +1,0 @@
-:-dynamic resources/4.

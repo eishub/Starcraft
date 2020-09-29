@@ -1,8 +1,0 @@
-use "../Shared" as knowledge.
-use "../../../knowledge" as knowledge.
-
-% Train a unit of the given type.
-% Checks if we can train this unit and if we have enough minerals, gas and supply to do so.
-define train(Type) with
-	pre{ unit(Type,zerg), costs(Type,M,G,S,_,_), resources(GotM,GotG,GotS,Smax), GotM >= M, GotG >= G, (GotS+S) =< Smax }
-	post{ true }

@@ -1,14 +1,19 @@
 package eisbw;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * @author Danny & Harm - The windowstool for starting the chaoslauncher and
@@ -17,6 +22,17 @@ import java.util.logging.Logger;
 public class WindowsTools {
 	private WindowsTools() {
 		// Private constructor to hide the public one.
+	}
+
+	public static void loadRequirements(final String scDir) {
+		if (System.getProperty("os.arch").contains("64")) {
+			UnZip("x64.zip", scDir);
+		} else {
+			UnZip("x86.zip", scDir);
+		}
+		final File bwapiData = new File(scDir, "bwapi-data");
+		bwapiData.mkdirs();
+		UnZip("bwapi-data.zip", bwapiData.getPath());
 	}
 
 	/**
@@ -31,30 +47,25 @@ public class WindowsTools {
 	 * @param seed      the seed (overrides the game seed if > 0)
 	 * @throws IOException throws exception when BWAPI.ini cannot be written.
 	 */
-	public static void startChaoslauncher(final String race, final String map, String scDir, final String autoMenu,
-			final String gameType, final String enemyRace, final int seed) throws IOException {
-		if (!scDir.endsWith("\\")) {
-			scDir = scDir + "\\";
-		}
+	public static void startChaoslauncher(final String race, final String map, final String scDir,
+			final String autoMenu, final String gameType, final String enemyRace, final int seed) throws IOException {
 		populateInitFile(race, map, scDir, autoMenu, gameType, enemyRace, seed);
 		Client_InitialSetup(scDir);
 		if (autoMenu.toLowerCase().equals("lan")) {
-			Runtime.getRuntime().exec(new String[] { scDir + "Chaoslauncher\\Chaoslauncher - MultiInstance.exe" }, null,
-					new File(scDir + "Chaoslauncher\\"));
+			Runtime.getRuntime().exec(new String[] { scDir + "\\Chaoslauncher\\Chaoslauncher - MultiInstance.exe" },
+					null, new File(scDir, "Chaoslauncher"));
 		} else {
-			Runtime.getRuntime().exec(scDir + "Chaoslauncher\\Chaoslauncher.exe", null,
-					new File(scDir + "Chaoslauncher\\"));
+			Runtime.getRuntime().exec(scDir + "\\Chaoslauncher\\Chaoslauncher.exe", null,
+					new File(scDir, "Chaoslauncher"));
 		}
 	}
 
 	private static void populateInitFile(final String race, final String map, final String scDir, final String autoMenu,
 			final String gameType, final String enemyRace, final int seed) {
-		final String bwapiDest = scDir + "bwapi-data\\bwapi.ini";
 		final String iniFile = getIniFile(race, map, autoMenu, gameType, enemyRace, seed);
 		try {
-			final BufferedWriter out = new BufferedWriter(new FileWriter(new File(bwapiDest)));
-			out.write(iniFile);
-			out.close();
+			Files.write(Paths.get(scDir, "bwapi-data", "bwapi.ini"), iniFile.getBytes(), StandardOpenOption.CREATE,
+					StandardOpenOption.TRUNCATE_EXISTING);
 		} catch (final Exception exception) {
 			Logger.getLogger("StarCraft Logger").log(Level.SEVERE, "Could not write config file.", exception);
 		}
@@ -119,7 +130,7 @@ public class WindowsTools {
 		Client_KillStarcraft();
 		// Set up local firewall access
 		RunWindowsCommand("netsh firewall add allowedprogram program = " + scPath
-				+ "starcraft.exe name = Starcraft mode = ENABLE scope = ALL");
+				+ "\\starcraft.exe name = Starcraft mode = ENABLE scope = AL");
 		// Make sure all Starcraft and Chaoslauncher settings are correct
 		Client_RegisterStarCraft(scPath);
 	}
@@ -128,16 +139,16 @@ public class WindowsTools {
 		// 32-bit machine StarCraft settings
 		final String sc32KeyName = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Blizzard Entertainment\\Starcraft";
 		final String sc32UserKeyName = "HKEY_CURRENT_USER\\SOFTWARE\\Blizzard Entertainment\\Starcraft";
-		RegEdit(sc32KeyName, "InstallPath", "REG_SZ", scPath + "\\");
-		RegEdit(sc32KeyName, "Program", "REG_SZ", scPath + "StarCraft.exe");
-		RegEdit(sc32KeyName, "GamePath", "REG_SZ", scPath + "StarCraft.exe");
+		RegEdit(sc32KeyName, "InstallPath", "REG_SZ", scPath);
+		RegEdit(sc32KeyName, "Program", "REG_SZ", scPath + "\\StarCraft.exe");
+		RegEdit(sc32KeyName, "GamePath", "REG_SZ", scPath + "\\StarCraft.exe");
 		RegEdit(sc32UserKeyName, "introX", "REG_DWORD", "00000000");
 		// 64-bit machine StarCraft settings
 		final String sc64KeyName = "HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\Starcraft";
 		final String sc64UserKeyName = "HKEY_CURRENT_USER\\SOFTWARE\\Wow6432Node\\Blizzard Entertainment\\Starcraft";
-		RegEdit(sc64KeyName, "InstallPath", "REG_SZ", scPath + "\\");
-		RegEdit(sc64KeyName, "Program", "REG_SZ", scPath + "StarCraft.exe");
-		RegEdit(sc64KeyName, "GamePath", "REG_SZ", scPath + "StarCraft.exe");
+		RegEdit(sc64KeyName, "InstallPath", "REG_SZ", scPath);
+		RegEdit(sc64KeyName, "Program", "REG_SZ", scPath + "\\StarCraft.exe");
+		RegEdit(sc64KeyName, "GamePath", "REG_SZ", scPath + "\\StarCraft.exe");
 		RegEdit(sc64UserKeyName, "introX", "REG_DWORD", "00000000");
 		// Chaoslauncher Settings
 		final String clKeyName = "HKEY_CURRENT_USER\\Software\\Chaoslauncher\\Launcher";
@@ -153,7 +164,6 @@ public class WindowsTools {
 		final String clpKeyName = "HKEY_CURRENT_USER\\Software\\Chaoslauncher\\PluginsEnabled";
 		RegEdit(clpKeyName, "BWAPI Injector (1.16.1) RELEASE", "REG_SZ", "1");
 		RegEdit(clpKeyName, "W-MODE 1.02", "REG_SZ", "1");
-		/* RegEdit(clpKeyName, "Chaosplugin for 1.16.1", "REG_SZ", "0"); */
 	}
 
 	public static void Client_KillStarcraft() {
@@ -208,18 +218,30 @@ public class WindowsTools {
 		}
 	}
 
-	private static void RegEdit(String keyName, String valueName, final String type, String data) {
-		final String q = "\"";
-		// make sure there are no quotations in the input strings
-		keyName.replaceAll(q, "");
-		valueName.replaceAll(q, "");
-		type.replaceAll(q, "");
-		data.replaceAll(q, "");
-		// wrap quotations around the values to be sure
-		keyName = q + keyName + q;
-		valueName = q + valueName + q;
-		data = q + data + q;
-		// run the command
-		RunWindowsCommand("reg add " + keyName + " /f /v " + valueName + " /t " + type + " /d " + data);
+	private static void RegEdit(final String keyName, final String valueName, final String type, final String data) {
+		final String regadd = "\"" + keyName + "\" /f /v \"" + valueName + "\" /t " + type + " /d \"" + data + "\"";
+		RunWindowsCommand("reg add " + regadd);
+	}
+
+	private static void UnZip(final String zipfilename, final String path) {
+		try {
+			final InputStream fis = Thread.currentThread().getContextClassLoader().getResourceAsStream(zipfilename);
+			final ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis));
+			ZipEntry entry = null;
+			while ((entry = zis.getNextEntry()) != null) {
+				final File fileInDir = new File(path, entry.getName());
+				if (entry.isDirectory()) {
+					fileInDir.mkdirs();
+				} else {
+					Files.write(fileInDir.toPath(), zis.readAllBytes(), StandardOpenOption.CREATE,
+							StandardOpenOption.TRUNCATE_EXISTING);
+				}
+				zis.closeEntry();
+			}
+			zis.close();
+			fis.close();
+		} catch (final Exception exception) {
+			Logger.getLogger("StarCraft Logger").log(Level.SEVERE, "Could not extract required files.", exception);
+		}
 	}
 }

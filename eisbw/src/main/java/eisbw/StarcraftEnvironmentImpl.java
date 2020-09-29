@@ -55,6 +55,7 @@ public class StarcraftEnvironmentImpl extends EIDefaultImpl {
 			this.config = new Configuration(parameters);
 			this.game = new Game(this, this.config.getManagers(), this.config.getPercepts());
 			if (!"test".equals(this.config.getOwnRace())) {
+				WindowsTools.loadRequirements(this.config.getScDir());
 				this.listener = new BwapiListener(this.game, this.config.getScDir(), this.config.getDebug(),
 						this.config.getDrawMapInfo(), this.config.getDrawUnitInfo(), this.config.getInvulnerable(),
 						this.config.getSpeed());

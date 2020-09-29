@@ -1,9 +1,0 @@
-use ProtossProbe as knowledge.
-use ProtossProbeActions.
-order=linearrandom.
-
-module ProtossProbe {
-	% If we're not doing anything, go gather a random mineral field
-	if bel(conditions(Conditions), member('idle',Conditions), mineralField(Id,_,_)) 
-		then gather(Id).
-}

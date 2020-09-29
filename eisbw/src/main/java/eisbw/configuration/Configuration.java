@@ -19,7 +19,7 @@ public class Configuration {
 	protected RaceString ownRace = null;
 	protected RaceString enemyRace = new RaceString("random");
 	protected String map = null;
-	protected String scDir = "C:\\Starcraft";
+	protected String scDir = "C:\\Program Files (x86)\\Starcraft";
 	protected String autoMenu = "SINGLE_PLAYER";
 	protected String gameType = "MELEE";
 	protected int speed = 50;
