@@ -1,8 +1,6 @@
 use "..\..\connector.jar" as environment with
-	map="sscai\(2)Destination.scx",
+	map="(2)Destination.scx",
 	own_race="Protoss",
-	starcraft_location="C:\Starcraft",
-	auto_menu="Single_Player",
 	enemy_race="random",
 	debug="true", % launch the development tool
 	draw_mapinfo="false",
