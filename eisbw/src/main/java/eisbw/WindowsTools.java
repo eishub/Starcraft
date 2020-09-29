@@ -233,7 +233,13 @@ public class WindowsTools {
 				if (entry.isDirectory()) {
 					fileInDir.mkdirs();
 				} else {
-					Files.write(fileInDir.toPath(), zis.readAllBytes(), StandardOpenOption.CREATE,
+					final int size = (int) entry.getSize();
+					final byte[] bytes = new byte[size];
+					int read = 0;
+					while (read < size) {
+						read += zis.read(bytes, read, (size - read));
+					}
+					Files.write(fileInDir.toPath(), bytes, StandardOpenOption.CREATE,
 							StandardOpenOption.TRUNCATE_EXISTING);
 				}
 				zis.closeEntry();
